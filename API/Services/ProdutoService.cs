@@ -1,15 +1,16 @@
-﻿using API.Models;
+﻿using API.Interfaces;
+using API.Models;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Services
 {
-    public class ProdutoFirebaseService
+    public class ProdutoService : IProdutoService
     {
         private readonly FirebaseClient _firebaseClient;
 
-        public ProdutoFirebaseService(IConfiguration configuration)
+        public ProdutoService(IConfiguration configuration)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
@@ -39,9 +40,18 @@ namespace API.Services
         // Adicionar um novo produto
         public async Task AddProdutoAsync(Produto produto)
         {
+            var result = await _firebaseClient
+            .Child("produtos")
+            .PostAsync(produto);
+
+            // Atualizar o ID do produto com a chave gerada
+            produto.Id = result.Key;
+
+            // Se quiser, você pode atualizar no Firebase também:
             await _firebaseClient
                 .Child("produtos")
-                .PostAsync(produto);
+                .Child(produto.Id)
+                .PutAsync(produto);
         }
 
         // Atualizar um produto pelo ID

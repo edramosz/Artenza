@@ -8,9 +8,9 @@ namespace API.Controllers
     [Route("[controller]")]
     public class ProdutoController : ControllerBase
     {
-        private readonly ProdutoFirebaseService _produtoService;
+        private readonly ProdutoService _produtoService;
 
-        public ProdutoController(ProdutoFirebaseService produtoService)
+        public ProdutoController(ProdutoService produtoService)
         {
             _produtoService = produtoService;
         }
