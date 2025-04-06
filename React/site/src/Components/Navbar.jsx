@@ -1,23 +1,28 @@
 import React from 'react'
+
+import { Link, useLocation } from 'react-router';  
 import './Navbar.css'
 
 const Navbar = () => {
   return (
-<div>
-  <nav>
-    <button popovertarget="modal">Menu</button>
-    <div id="modal" popover="auto">
-      <ul>
-        <li>Home</li>
-        <li>Sobre</li>
-        <li>Homens</li>
-        <li>Mulheres</li>
-        <li>Contato</li>
-      </ul> 
-      <button popovertarget="modal" popovertargetaction="hide">Close</button>
+    <div className="main-menu">
+      <header>
+        <div className="logo">
+            <Link to="/"> <img src="" alt="" /> </Link>       
+        </div>
+
+        <nav>
+          <ul>
+            <Link to="/"><li>Home</li></Link>
+          </ul>
+        </nav>
+        
+        <div className="buttons">
+          <button>Login</button> 
+        </div>
+      </header>
     </div>
-  </nav>
-</div>
+
   )
 }
 
