@@ -1,6 +1,7 @@
-﻿using API.Models;
+﻿using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Core.Interfaces;
 
 namespace API.Controllers
 {
@@ -8,9 +9,9 @@ namespace API.Controllers
     [Route("[controller]")]
     public class ProdutoController : ControllerBase
     {
-        private readonly ProdutoService _produtoService;
+        private readonly IProdutoService _produtoService;
 
-        public ProdutoController(ProdutoService produtoService)
+        public ProdutoController(IProdutoService produtoService)
         {
             _produtoService = produtoService;
         }

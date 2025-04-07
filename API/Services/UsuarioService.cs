@@ -1,5 +1,5 @@
-﻿using API.Interfaces;
-using API.Models;
+﻿using Core.Interfaces;
+using Core.Models;
 using Firebase.Database;
 using Firebase.Database.Query;
 
