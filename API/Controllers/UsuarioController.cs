@@ -16,12 +16,23 @@ namespace API.Controllers
             _usuarioService = usuarioService;
         }
 
+        /// <summary>
+        /// Endpoint para listar todos os usuários.
+        /// </summary>
+        /// <returns></returns>
+        /// 
         [HttpGet]
         public async Task<ActionResult<List<Usuario>>> GetUsuarios()
         {
             return await _usuarioService.GetUsuariosAsync();
         }
 
+        /// <summary>
+        /// Endpoint para listar algum usuário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// 
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(string id)
         {
@@ -32,6 +43,11 @@ namespace API.Controllers
             return usuario;
         }
 
+        /// <summary>
+        /// Endpoint para adicionar usuário.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// 
         [HttpPost]
         public async Task<ActionResult> CreateUsuario(Usuario usuario)
         {
@@ -39,6 +55,12 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
         }
 
+        /// <summary>
+        /// Endpoint para editar algum usuário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="usuario"></param>
+        /// 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUsuario(string id, Usuario usuario)
         {
@@ -50,6 +72,11 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint para deletar algum usuário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUsuario(string id)
         {
