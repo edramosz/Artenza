@@ -2,8 +2,17 @@ import React from "react";
 
 import { Link } from "react-router";
 import "./Navbar.css";
+import NavItem from "./NavItem";
 
 const Navbar = () => {
+
+  const items =[
+    {id: 1, url: '/', label:'Home'},
+    {id: 2, url: '/Sobre', label:'Sobre'},
+    {id: 3, url: '/Contato', label:'Contato'},
+    {id: 4, url: '/Empresa', label:'Empresa'}
+  ]
+
   return (
     <div className="main-menu">
       <header>
@@ -14,18 +23,9 @@ const Navbar = () => {
         </div>
         <nav>
           <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/sobre">Sobre</Link>
-            </li>
-            <li>
-              <Link to="/contate-nos">Contate-nos</Link>
-            </li>
-            <li>
-              <Link to="/empresa">Empresa</Link>
-            </li>
+            {items.map((item) => (
+              <NavItem key={item.id} url={item.url} label={item.label} />
+            ))}
           </ul>
         </nav>
         <div className="buttons">

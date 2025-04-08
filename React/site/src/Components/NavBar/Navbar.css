@@ -14,7 +14,7 @@ body{
     max-width: 1900px;
     height: auto;
     margin: auto;
-    background-color: cadetblue;
+    background-color: rgba(245, 245, 245, 0.966);
     padding: 10px 30px;  
     position: fixed;
     margin-left: 50%;
@@ -41,8 +41,14 @@ body{
 
 .main-menu a{
     text-decoration: none;
-    color: #ffffffc2;
+    color: #272626d7;
     font: 500 1.1rem "Poppins", serif;
+    padding: 0px 8px 17px 8px;
+    
+}
+
+.main-menu a:hover{
+    border-bottom: 2px solid #1d1d11;
 }
 
 .main-menu .buttons button{
