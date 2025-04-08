@@ -5,53 +5,54 @@
     font-family: "Poppins", sans-serif;
 }
 
-body{
+body {
     height: 900vh;
 }
 
-.main-menu{
+.main-menu {
     width: 100%;
     max-width: 1900px;
     height: auto;
     margin: auto;
     background-color: rgba(245, 245, 245, 0.966);
-    padding: 10px 30px;  
+    padding: 10px 30px;
     position: fixed;
     margin-left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
-.main-menu header{
+.main-menu header {
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
 }
 
 .main-menu ul {
     flex-direction: row;
-    display: flex; 
-    gap: 30px;
+    display: flex;
+    gap: 15px;
 }
 
-.main-menu li{    
-    list-style: none;   
+.main-menu li {
+    list-style: none;
 }
 
-.main-menu a{
+.main-menu a {
     text-decoration: none;
     color: #272626d7;
     font: 500 1.1rem "Poppins", serif;
     padding: 0px 8px 17px 8px;
-    
 }
 
-.main-menu a:hover{
+.main-menu a:hover,
+.main-menu a.active {
+    color: #000;
     border-bottom: 2px solid #1d1d11;
 }
 
-.main-menu .buttons button{
+.main-menu .buttons button {
     padding: 8px 16px;
     border-radius: 10px;
     font: 600 1rem "Poppins", serif;
@@ -61,44 +62,45 @@ body{
     color: #ffffff;
 }
 
-.main-menu .icon-bars {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 1.3rem;    
-}
-
-
-.main-menu .icon-bars li:hover .reponsive-menu{    
-    display: block;    
-    background-color: cadetblue;    
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.reponsive-menu{
+.btn-mob {
     display: none;
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
-@media (min-width: 670px)  {
-    .main-menu .icon-bars {
-        display: none;
-    }
-}
 
-@media (max-width: 670px)  {
-    .main-menu nav, .main-menu .buttons{
+
+@media (max-width: 640px) {
+    .main-menu .nav-items,
+    .main-menu .buttons {
         display: none;
     }
 
-    .main-menu .logo{
+    .main-menu li{        
+        margin-bottom: 15px;    
+    }
+    .main-menu a {
+        padding: 0px 2px 3px 2px; 
+    }
+
+    .main-menu .nav-items.open {
+        display: block;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        max-height: 0;
+    }
+
+    .btn-mob {
+        display: block;
+    }
+
+    .main-menu .logo {
         margin-left: 10%;
     }
 }
-
-

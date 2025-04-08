@@ -5,7 +5,7 @@ const NavItem = (props) => {
   return (
     <>
       <li>
-        <Link to={props.url}> {props.label} </Link>
+        <Link to={props.url} className={`nav-item ${props.IsActive ? 'active' : ''}`}> {props.label} </Link>
       </li>
     </>
   );
