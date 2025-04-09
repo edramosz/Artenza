@@ -1,5 +1,7 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 using Firebase.Database;
 using Firebase.Database.Query;
 
@@ -8,11 +10,13 @@ namespace API.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly IMapper _mapper;
 
-        public UsuarioService(IConfiguration configuration)
+        public UsuarioService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+            _mapper = mapper;
         }
 
         // Obter todos os usuarios
@@ -37,14 +41,22 @@ namespace API.Services
         }
 
         // Adicionar um novo usuario
-        public async Task AddUsuarioAsync(Usuario usuario)
+        public async Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto)
         {
+            var usuario = _mapper.Map<Usuario>(usuarioDto);
+
+            // (Opcional) Gera DataCadastro
+            usuario.DataCadastro = DateOnly.FromDateTime(DateTime.UtcNow);
+
+            // Primeiro cria o documento no Firebase
             var response = await _firebaseClient
                 .Child("usuarios")
                 .PostAsync(usuario);
 
+            // Agora que o Firebase gerou a chave, seta o Id no objeto
             usuario.Id = response.Key;
-
+            usuario.IdEndereco = "teste";
+            // Atualiza o registro no Firebase já com o Id
             await _firebaseClient
                 .Child("usuarios")
                 .Child(usuario.Id)
@@ -52,6 +64,7 @@ namespace API.Services
 
             // Adicionar o ID do endereco ao usuario atraves de algum modo (ou add os dois juntos em um unico metodo,
             // ou usuario já ter id de endereco salvo, faltando apenas adicionar este valor no objeto endereco)
+            return usuario;
         }
 
         // Atualizar um usuario pelo ID

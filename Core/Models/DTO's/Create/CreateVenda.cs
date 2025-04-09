@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Models
+namespace Core.Models.DTO_s.Create
 {
-    public class Venda
+    public class CreateVenda
     {
-        public string Id { get; set; }
-        public string UsuarioId { get; set; }
         public DateTime DataVenda { get; set; }
         public decimal ValorTotal { get; set; }
     }
-
 }

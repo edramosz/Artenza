@@ -1,11 +1,13 @@
 using Core.Interfaces;
 using API.Services;
+using Core.Models.DTO_s;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSingleton<ProdutoService>();
 builder.Services.AddSingleton<UsuarioService>();
@@ -25,7 +27,15 @@ builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Add Swagger documentation
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
+
 
 var app = builder.Build();
 

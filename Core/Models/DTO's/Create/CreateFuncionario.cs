@@ -1,15 +1,21 @@
-﻿namespace Core.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Core.Models.DTO_s.Create
 {
-    public class Funcionario
+    public class CreateFuncionario
     {
-        public string Id { get; set; }
         public string NomeCompleto { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
         public string Telefone { get; set; }
         public string CPF { get; set; }
         public DateOnly DataNascimento { get; set; }
         public string SenhaHash { get; set; }
-        public DateOnly DataContratacao { get; set; }
         public decimal Salario { get; set; }
     }
 }

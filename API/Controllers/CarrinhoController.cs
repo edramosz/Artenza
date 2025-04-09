@@ -15,12 +15,23 @@ namespace API.Controllers
             _carrinhoService = carrinhoService;
         }
 
+        /// <summary>
+        /// Endpoint para listar todos os carrinhos.
+        /// </summary>
+        /// <returns></returns>
+        ///
         [HttpGet]
         public async Task<ActionResult<List<Carrinho>>> GetCarrinhos()
         {
             return await _carrinhoService.GetCarrinhosAsync();
         }
 
+        /// <summary>
+        /// Endpoint para listar carrinho pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        ///
         [HttpGet("{id}")]
         public async Task<ActionResult<Carrinho>> GetCarrinho(string id)
         {
@@ -31,6 +42,12 @@ namespace API.Controllers
             return carrinho;
         }
 
+        /// <summary>
+        /// Endpoint para adicionar um carrinho.
+        /// </summary>
+        /// <param name="carrinho"></param>
+
+        ///
         [HttpPost]
         public async Task<ActionResult> CreateCarrinho(Carrinho carrinho)
         {
@@ -38,6 +55,12 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetCarrinho), new { id = carrinho.Id }, carrinho);
         }
 
+        /// <summary>
+        /// Endpoint para editar algum carrinho pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="carrinho"></param>
+        ///
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCarrinho(string id, Carrinho carrinho)
         {
@@ -49,6 +72,11 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint para deletar algum carrinho pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        ///
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCarrinho(string id)
         {

@@ -10,8 +10,8 @@ namespace Core.Models
     public class Transacao
     {
         public string Id { get; set; }
-        public string CompraId { get; set; }
-        public DataType Data { get; set; }
+        public string VendaId { get; set; }
+        public DateOnly Data { get; set; }
         public int Parcelamento { get; set; }
         public string MetodoPagamento { get; set; }
     }

@@ -2,6 +2,7 @@
 using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Core.Models.DTO_s.Create;
 
 namespace API.Controllers
 {
@@ -16,12 +17,23 @@ namespace API.Controllers
             _usuarioService = usuarioService;
         }
 
+        /// <summary>
+        /// Endpoint para listar todos os usuários.
+        /// </summary>
+        /// <returns></returns>
+        /// 
         [HttpGet]
         public async Task<ActionResult<List<Usuario>>> GetUsuarios()
         {
             return await _usuarioService.GetUsuariosAsync();
         }
 
+        /// <summary>
+        /// Endpoint para listar algum usuário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// 
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(string id)
         {
@@ -32,13 +44,27 @@ namespace API.Controllers
             return usuario;
         }
 
+        /// <summary>
+        /// Endpoint para adicionar usuário.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// 
         [HttpPost]
-        public async Task<ActionResult> CreateUsuario(Usuario usuario)
+        public async Task<ActionResult> CreateUsuario([FromBody] CreateUsuario usuarioDto)
         {
-            await _usuarioService.AddUsuarioAsync(usuario);
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var usuarioCriado = await _usuarioService.AddUsuarioAsync(usuarioDto);
+            return CreatedAtAction(nameof(GetUsuario), new { id = usuarioCriado.Id }, usuarioCriado);
         }
 
+        /// <summary>
+        /// Endpoint para editar algum usuário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="usuario"></param>
+        /// 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUsuario(string id, Usuario usuario)
         {
@@ -50,6 +76,11 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint para deletar algum usuário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUsuario(string id)
         {
