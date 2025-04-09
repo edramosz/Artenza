@@ -15,12 +15,23 @@ namespace API.Controllers
             _transacaoService = transacaoService;
         }
 
+        /// <summary>
+        /// Endpoint para listar todas as transações.
+        /// </summary>
+        /// <returns></returns>
+        /// 
         [HttpGet]
         public async Task<ActionResult<List<Transacao>>> GetTransacaos()
         {
             return await _transacaoService.GetTransacaosAsync();
         }
 
+        /// <summary>
+        /// Endpoint para listar alguma transação pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// 
         [HttpGet("{id}")]
         public async Task<ActionResult<Transacao>> GetTransacao(string id)
         {
@@ -31,6 +42,11 @@ namespace API.Controllers
             return transacao;
         }
 
+        /// <summary>
+        /// Endpoint para adicionar uma transação.
+        /// </summary>
+        /// <param name="transacao"></param>
+        /// 
         [HttpPost]
         public async Task<ActionResult> CreateTransacao(Transacao transacao)
         {
@@ -38,6 +54,12 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetTransacao), new { id = transacao.Id }, transacao);
         }
 
+        /// <summary>
+        /// Endpoint para editar alguma transação pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="transacao"></param>
+        /// 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateTransacao(string id, Transacao transacao)
         {
@@ -49,6 +71,11 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint para deletar alguma transação pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        ///
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTransacao(string id)
         {
