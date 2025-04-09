@@ -34,6 +34,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
