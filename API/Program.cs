@@ -1,11 +1,13 @@
 using Core.Interfaces;
 using API.Services;
+using Core.Models.DTO_s;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSingleton<ProdutoService>();
 builder.Services.AddSingleton<UsuarioService>();

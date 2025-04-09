@@ -2,6 +2,7 @@
 using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Core.Models.DTO_s.Create;
 
 namespace API.Controllers
 {
@@ -49,10 +50,13 @@ namespace API.Controllers
         /// <param name="usuario"></param>
         /// 
         [HttpPost]
-        public async Task<ActionResult> CreateUsuario(Usuario usuario)
+        public async Task<ActionResult> CreateUsuario([FromBody] CreateUsuario usuarioDto)
         {
-            await _usuarioService.AddUsuarioAsync(usuario);
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var usuarioCriado = await _usuarioService.AddUsuarioAsync(usuarioDto);
+            return CreatedAtAction(nameof(GetUsuario), new { id = usuarioCriado.Id }, usuarioCriado);
         }
 
         /// <summary>
