@@ -14,6 +14,7 @@ body {
     max-width: 1900px;
     height: auto;
     margin: auto;
+    border-bottom:1px solid #77777775;
     background-color: rgba(245, 245, 245, 0.966);
     padding: 10px 30px;
     position: fixed;
@@ -46,7 +47,7 @@ body {
     padding: 0px 8px 17px 8px;
 }
 
-.main-menu a:hover,
+.main-menu li a:hover,
 .main-menu a.active {
     color: #000;
     border-bottom: 2px solid #1d1d11;

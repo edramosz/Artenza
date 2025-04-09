@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom"; // Corrigido para 'react-router-dom'
 import "./Navbar.css";
 import NavItem from "./NavItem";
+import Cadastro from "../../Routes/Cadastro/Cadastro";
 
 const Navbar = () => {
   const location = useLocation();
@@ -31,7 +32,7 @@ const Navbar = () => {
           </ul>
         </nav>
         <div className="buttons">
-          <button>Login</button>
+          <Link to="/Cadastro"><button>Cadastre-se</button></Link>
         </div>
         <button className="btn-mob" onClick={() => setOpenMenu(!openMenu)}>
           {openMenu ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-bars"></i>}
