@@ -47,7 +47,7 @@ namespace API.Controllers
         /// <summary>
         /// Endpoint para adicionar usuário.
         /// </summary>
-        /// <param name="usuario"></param>
+        /// <param name="usuarioDto"></param>
         /// 
         [HttpPost]
         public async Task<ActionResult> CreateUsuario([FromBody] CreateUsuario usuarioDto)
