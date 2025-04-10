@@ -17,8 +17,10 @@ body {
     border-bottom:1px solid #77777775;
     background-color: rgba(245, 245, 245, 0.966);
     padding: 10px 30px;
+    position: fixed;
     margin-left: 50%;
     transform: translateX(-50%);
+    z-index: 10;
 }
 
 .main-menu header {
@@ -27,8 +29,6 @@ body {
     align-items: center;
     text-align: center;
 }
-
-
 
 .main-menu ul {
     flex-direction: row;
@@ -63,10 +63,6 @@ body {
     color: #ffffff;
 }
 
-.nav-btn{
-    display: none;
-}
-
 .btn-mob {
     display: none;
     background-color: transparent;
@@ -77,7 +73,7 @@ body {
 
 
 
-@media (max-width: 750px) {
+@media (max-width: 640px) {
     .main-menu .nav-items,
     .main-menu .buttons {
         display: none;
@@ -105,8 +101,7 @@ body {
         display: block;
     }
 
-    .nav-btn{
-        display: block;
+    .main-menu .logo {
+        margin-left: 10%;
     }
-
 }

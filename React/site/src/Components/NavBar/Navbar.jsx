@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom"; 
+import { Link, useLocation } from "react-router-dom"; // Corrigido para 'react-router-dom'
 import "./Navbar.css";
 import NavItem from "./NavItem";
+import Cadastro from "../../Routes/Cadastro/Cadastro";
 
 const Navbar = () => {
   const location = useLocation();
@@ -19,7 +20,7 @@ const Navbar = () => {
       <header>
         <div className="logo">
           <Link to="/">
-            <img src="../img/logo.png" alt="Logo" width={170}/>
+            <img src="caminho/da/imagem.png" alt="Logo" />
           </Link>
         </div>
         <nav>
@@ -28,7 +29,6 @@ const Navbar = () => {
               <NavItem key={item.id} url={item.url} label={item.label}
                 IsActive={location.pathname === item.url} />
             ))}
-            <button className="nav-btn"><Link to={"/Cadastro"}>Cadastre-se</Link></button>
           </ul>
         </nav>
         <div className="buttons">
