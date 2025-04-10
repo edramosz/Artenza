@@ -6,7 +6,7 @@ const Cadastro = () => {
     Email: '',
     Telefone: '',
     DataNascimento: '',
-    Senha: ''
+    SenhaHash: ''
   })
 
   const handleChange = (e) => {
@@ -20,6 +20,8 @@ const Cadastro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    console.log('Enviando para o back-end:', formData) // <-- Adicionado aqui
+
     try {
       const response = await fetch('https://localhost:7294/Usuario', {
         method: 'POST',
@@ -30,14 +32,16 @@ const Cadastro = () => {
       })
 
       if (!response.ok) {
+        const errorData = await response.text(); // lê a resposta como texto se der erro
+        console.error('Erro detalhado do servidor:', errorData) // <-- Adicionado aqui
         throw new Error('Erro ao cadastrar usuário')
       }
 
       const data = await response.json()
       alert('Usuário cadastrado com sucesso!')
-      console.log(data)
+      console.log('Resposta do back-end:', data)
     } catch (error) {
-      console.error(error)
+      console.error('Erro no catch:', error)
       alert('Erro ao cadastrar usuário.')
     }
   }
@@ -64,7 +68,7 @@ const Cadastro = () => {
         </div>
         <div className="form-group">
           <label htmlFor="Senha">Senha:</label>
-          <input type="password" name="Senha" id="Senha" value={formData.Senha} onChange={handleChange} />
+          <input type="password" name="SenhaHash" id="SenhaHash" value={formData.SenhaHash} onChange={handleChange} />
         </div>
         <div className="form-group">
           <input type="submit" value="Cadastrar" className="form-button" />
