@@ -32,12 +32,34 @@ namespace API.Controllers
             return usuario;
         }
 
+
         [HttpPost]
-        public async Task<ActionResult> CreateUsuario(Usuario usuario)
+        public async Task<ActionResult> CreateUsuario([FromBody] Usuario usuario)
         {
+            // Preenche o ID antes da validação
+            usuario.Id = Guid.NewGuid().ToString();
+            usuario.DataCadastro = DateTime.Now;
+
+            // Limpa o estado anterior e força nova validação com os dados atualizados
+            ModelState.Clear();
+            TryValidateModel(usuario);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             await _usuarioService.AddUsuarioAsync(usuario);
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
         }
+
+
+
+
+
+
+
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUsuario(string id, Usuario usuario)
