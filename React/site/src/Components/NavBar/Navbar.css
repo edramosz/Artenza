@@ -17,10 +17,8 @@ body {
     border-bottom:1px solid #77777775;
     background-color: rgba(245, 245, 245, 0.966);
     padding: 10px 30px;
-    position: fixed;
     margin-left: 50%;
     transform: translateX(-50%);
-    z-index: 10;
 }
 
 .main-menu header {
