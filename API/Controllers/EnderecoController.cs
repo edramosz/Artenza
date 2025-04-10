@@ -1,5 +1,5 @@
-﻿using API.Interfaces;
-using API.Models;
+﻿using Core.Interfaces;
+using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +16,23 @@ namespace API.Controllers
             _enderecoService = enderecoService;
         }
 
+        /// <summary>
+        /// Endpoint para listar todos os endereços.
+        /// </summary>
+        /// <returns></returns>
+        ///
         [HttpGet]
         public async Task<ActionResult<List<Endereco>>> GetEnderecos()
         {
             return await _enderecoService.GetEnderecosAsync();
         }
 
+        /// <summary>
+        /// Endpoint para listar algum endereço pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        ///
         [HttpGet("{id}")]
         public async Task<ActionResult<Endereco>> GetEndereco(string id)
         {
@@ -32,6 +43,11 @@ namespace API.Controllers
             return endereco;
         }
 
+        /// <summary>
+        /// Endpoint para adicionar um endereço.
+        /// </summary>
+        /// <param name="endereco"></param>
+        ///
         [HttpPost]
         public async Task<ActionResult> CreateEndereco(Endereco endereco)
         {
@@ -39,6 +55,12 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetEndereco), new { id = endereco.Id }, endereco);
         }
 
+        /// <summary>
+        /// Endpoint para editar algum endereço pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="endereco"></param>
+        ///
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEndereco(string id, Endereco endereco)
         {
@@ -50,6 +72,11 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint para deletar algum endereço pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        ///
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEndereco(string id)
         {

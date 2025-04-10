@@ -1,5 +1,5 @@
-﻿using API.Interfaces;
-using API.Models;
+﻿using Core.Interfaces;
+using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +16,23 @@ namespace API.Controllers
             _funcionarioService = funcionarioService;
         }
 
+        /// <summary>
+        /// Endpoint para listar todos os funcionários.
+        /// </summary>
+        /// <returns></returns>
+        ///
         [HttpGet]
         public async Task<ActionResult<List<Funcionario>>> GetFuncionarios()
         {
             return await _funcionarioService.GetFuncionariosAsync();
         }
 
+        /// <summary>
+        /// Endpoint para listar algum funcionário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        ///
         [HttpGet("{id}")]
         public async Task<ActionResult<Funcionario>> GetFuncionario(string id)
         {
@@ -32,6 +43,11 @@ namespace API.Controllers
             return funcionario;
         }
 
+        /// <summary>
+        /// Endpoint para cadastrar um funcionário.
+        /// </summary>
+        /// <param name="funcionario"></param>
+        ///
         [HttpPost]
         public async Task<ActionResult> CreateFuncionario(Funcionario funcionario)
         {
@@ -39,6 +55,12 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetFuncionario), new { id = funcionario.Id }, funcionario);
         }
 
+        /// <summary>
+        /// Endpoint para editar algum funcionário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="funcionario"></param>
+        ///
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFuncionario(string id, Funcionario funcionario)
         {
@@ -50,6 +72,11 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint para deletar algum funcionário pelo id.
+        /// </summary>
+        /// <param name="id"></param>
+        ///
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFuncionario(string id)
         {
