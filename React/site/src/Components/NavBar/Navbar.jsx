@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom"; // Corrigido para 'react-router-dom'
 import "./Navbar.css";
 import NavItem from "./NavItem";
-import Cadastro from "../../Routes/Cadastro/Cadastro";
 
 const Navbar = () => {
   const location = useLocation();
@@ -31,7 +30,8 @@ const Navbar = () => {
             ))}
           </ul>
         </nav>
-        <div className="buttons">
+        <div className="buttons">          
+          <Link to="/Login"><button>Login</button></Link>
           <Link to="/Cadastro"><button>Cadastre-se</button></Link>
         </div>
         <button className="btn-mob" onClick={() => setOpenMenu(!openMenu)}>

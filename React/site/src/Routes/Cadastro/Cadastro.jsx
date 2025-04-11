@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "./CadastroForm.css";
+import { auth } from "../../Components/Db/FireBase"; // ajuste o caminho se necessário
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
@@ -34,45 +36,51 @@ const Cadastro = () => {
     e.preventDefault();
     console.log("Enviando dados do usuário:", formData);
     console.log("Enviando dados do endereço:", formDataEndereco);
-
+  
     try {
+      // Cria o usuário no Firebase Authentication
+      await createUserWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
+      console.log("Usuário criado no Firebase!");
+  
+      // Cadastra o usuário na sua API
       const responseUsuario = await fetch("https://localhost:7294/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData, formDataEndereco),
+        body: JSON.stringify(formData),
       });
-
+  
       if (!responseUsuario.ok) {
         const error = await responseUsuario.text();
         console.error("Erro no cadastro de usuário:", error);
-        throw new Error("Erro ao cadastrar usuário");
+        throw new Error("Erro ao cadastrar usuário na API");
       }
-
+  
       const usuario = await responseUsuario.json();
-      console.log("Usuário cadastrado:", usuario);
-
+      console.log("Usuário cadastrado na API:", usuario);
+  
+      // Cadastra o endereço
       const responseEndereco = await fetch("https://localhost:7294/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataEndereco),
       });
-
+  
       if (!responseEndereco.ok) {
         const error = await responseEndereco.text();
         console.error("Erro no cadastro de endereço:", error);
         throw new Error("Erro ao cadastrar endereço");
       }
-
+  
       const endereco = await responseEndereco.json();
       console.log("Endereço cadastrado:", endereco);
-
+  
       alert("Usuário e endereço cadastrados com sucesso!");
     } catch (error) {
       console.error("Erro geral:", error);
       alert("Erro ao realizar cadastro completo.");
     }
   };
-
+  
   return (
     <div className="form-container">
       <h2 className="title">Cadastre-se</h2>
@@ -203,8 +211,7 @@ const Cadastro = () => {
           </div>
           <div className="form-group">
             <label htmlFor="Complemento">Complemento:</label>
-            <input
-              type="text"
+            <textarea
               name="Complemento"
               id="Complemento"
               placeholder="Digite o complemento (opcional)"
