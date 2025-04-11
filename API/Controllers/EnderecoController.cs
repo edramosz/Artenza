@@ -2,6 +2,7 @@
 using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Core.Models.DTO_s.Create;
 
 namespace API.Controllers
 {
@@ -46,14 +47,28 @@ namespace API.Controllers
         /// <summary>
         /// Endpoint para adicionar um endereço.
         /// </summary>
-        /// <param name="endereco"></param>
+        /// <param name="enderecoDto"></param>
         ///
         [HttpPost]
-        public async Task<ActionResult> CreateEndereco(Endereco endereco)
+        public async Task<ActionResult> CreateEndereco([FromBody] CreateEndereco enderecoDto)
         {
+            var endereco = new Endereco
+            {
+                CEP = enderecoDto.CEP,
+                Estado = enderecoDto.Estado,
+                Cidade = enderecoDto.Cidade,
+                Bairro = enderecoDto.Bairro,
+                Rua = enderecoDto.Rua,
+                Numero = enderecoDto.Numero,
+                Complemento = enderecoDto.Complemento
+            };
+
             await _enderecoService.AddEnderecoAsync(endereco);
+
             return CreatedAtAction(nameof(GetEndereco), new { id = endereco.Id }, endereco);
         }
+
+
 
         /// <summary>
         /// Endpoint para editar algum endereço pelo id.
