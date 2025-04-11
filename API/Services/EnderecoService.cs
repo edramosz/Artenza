@@ -1,5 +1,7 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Microsoft.AspNetCore.Identity;
@@ -9,11 +11,13 @@ namespace API.Services
     public class EnderecoService : IEnderecoService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly IMapper _mapper;
 
-        public EnderecoService(IConfiguration configuration)
+        public EnderecoService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+            _mapper = mapper;
         }
 
         // Obter todos os Enderecos
@@ -38,8 +42,9 @@ namespace API.Services
         }
 
         // Adicionar um novo Endereco
-        public async Task AddEnderecoAsync(Endereco endereco)
+        public async Task<Endereco> AddEnderecoAsync(CreateEndereco enderecoDto)
         {
+            var endereco = _mapper.Map<Endereco>(enderecoDto);
             var response = await _firebaseClient
                 .Child("enderecos")
                 .PostAsync(endereco);
@@ -50,6 +55,8 @@ namespace API.Services
                 .Child("enderecos")
                 .Child(endereco.Id)
                 .PutAsync(endereco);
+
+            return endereco;
         }
 
         // Atualizar um Endereco pelo ID

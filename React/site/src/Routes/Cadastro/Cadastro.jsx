@@ -8,9 +8,11 @@ const Cadastro = () => {
     Telefone: "",
     DataNascimento: "",
     SenhaHash: "",
+    IdEndereco: "",
   });
 
   const [formDataEndereco, setFormDataEndereco] = useState({
+    Id: "",
     CEP: "",
     Estado: "",
     Cidade: "",
@@ -39,7 +41,7 @@ const Cadastro = () => {
       const responseUsuario = await fetch("https://localhost:7294/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData, formDataEndereco),
+        body: JSON.stringify(usuarioComEndereco),
       });
 
       if (!responseUsuario.ok) {
@@ -65,6 +67,10 @@ const Cadastro = () => {
 
       const endereco = await responseEndereco.json();
       console.log("Endereço cadastrado:", endereco);
+
+      const enderecoId = enderecoData.id;
+
+      const usuarioComEndereco = { ...formData, IdEndereco: enderecoId };
 
       alert("Usuário e endereço cadastrados com sucesso!");
     } catch (error) {
