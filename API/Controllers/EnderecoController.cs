@@ -47,20 +47,20 @@ namespace API.Controllers
         /// <summary>
         /// Endpoint para adicionar um endereço.
         /// </summary>
-        /// <param name="endereco"></param>
+        /// <param name="enderecoDto"></param>
         ///
         [HttpPost]
-        public async Task<ActionResult> CreateEndereco([FromBody] CreateEndereco dto)
+        public async Task<ActionResult> CreateEndereco([FromBody] CreateEndereco enderecoDto)
         {
             var endereco = new Endereco
             {
-                CEP = dto.CEP,
-                Estado = dto.Estado,
-                Cidade = dto.Cidade,
-                Bairro = dto.Bairro,
-                Rua = dto.Rua,
-                Numero = dto.Numero,
-                Complemento = dto.Complemento
+                CEP = enderecoDto.CEP,
+                Estado = enderecoDto.Estado,
+                Cidade = enderecoDto.Cidade,
+                Bairro = enderecoDto.Bairro,
+                Rua = enderecoDto.Rua,
+                Numero = enderecoDto.Numero,
+                Complemento = enderecoDto.Complemento
             };
 
             await _enderecoService.AddEnderecoAsync(endereco);

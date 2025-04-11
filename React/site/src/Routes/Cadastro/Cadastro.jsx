@@ -39,7 +39,7 @@ const Cadastro = () => {
       const responseUsuario = await fetch("https://localhost:7294/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData, formDataEndereco),
       });
 
       if (!responseUsuario.ok) {
@@ -75,7 +75,7 @@ const Cadastro = () => {
 
   return (
     <div className="form-container">
-      <h2>Cadastro Completo</h2>
+      <h2 className="title">Cadastre-se</h2>
       <form onSubmit={handleSubmitCompleto} className="form">
         <div className="form-user">
           <div className="form-group">
