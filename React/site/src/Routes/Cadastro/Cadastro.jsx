@@ -12,7 +12,6 @@ const Cadastro = () => {
   });
 
   const [formDataEndereco, setFormDataEndereco] = useState({
-    Id: "",
     CEP: "",
     Estado: "",
     Cidade: "",
@@ -38,10 +37,40 @@ const Cadastro = () => {
     console.log("Enviando dados do endereço:", formDataEndereco);
 
     try {
+      
+
+      const responseEndereco = await fetch("https://localhost:7294/Endereco", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formDataEndereco),  // possível erro por conta de IdEndereco
+      });
+
+      if (!responseEndereco.ok) {
+        const error = await responseEndereco.text();
+        console.error("Erro no cadastro de endereço:", error);
+        throw new Error("Erro ao cadastrar endereço");
+      }
+
+      const enderecoData = await responseEndereco.json();
+      console.log("Endereço criado:", enderecoData);
+
+      // 2. Pega o Id do endereço criado
+      const enderecoId = enderecoData.id; // <-- confere se o backend retorna `id` ou `Id`
+
+      // 3. Atualiza o formData com o Id do endereço
+      const formDataComEndereco = {
+        ...formData,
+        IdEndereco: enderecoId,
+      };
+      console.log("FormData atualizado com IdEndereco:", formDataComEndereco);
+      // const endereco = await responseEndereco.json();
+      // console.log("Endereço cadastrado:", endereco);
+
+
       const responseUsuario = await fetch("https://localhost:7294/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuarioComEndereco),
+        body: JSON.stringify(formDataComEndereco),
       });
 
       if (!responseUsuario.ok) {
@@ -52,25 +81,6 @@ const Cadastro = () => {
 
       const usuario = await responseUsuario.json();
       console.log("Usuário cadastrado:", usuario);
-
-      const responseEndereco = await fetch("https://localhost:7294/Endereco", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formDataEndereco),
-      });
-
-      if (!responseEndereco.ok) {
-        const error = await responseEndereco.text();
-        console.error("Erro no cadastro de endereço:", error);
-        throw new Error("Erro ao cadastrar endereço");
-      }
-
-      const endereco = await responseEndereco.json();
-      console.log("Endereço cadastrado:", endereco);
-
-      const enderecoId = enderecoData.id;
-
-      const usuarioComEndereco = { ...formData, IdEndereco: enderecoId };
 
       alert("Usuário e endereço cadastrados com sucesso!");
     } catch (error) {
