@@ -27,17 +27,15 @@ namespace API.Controllers
         {
             try
             {
-                // Chama o serviço para buscar todos os usuários
                 var usuarios = await _usuarioService.GetUsuariosAsync();
 
                 if (usuarios == null || !usuarios.Any())
                     return NotFound("Nenhum usuário encontrado.");
 
-                return Ok(usuarios); // Retorna a lista de usuários com status 200 OK
+                return Ok(usuarios);
             }
             catch (Exception ex)
             {
-                // Caso algum erro aconteça ao tentar buscar os usuários, retorna erro
                 return StatusCode(500, $"Erro ao buscar usuários: {ex.Message}");
             }
         }

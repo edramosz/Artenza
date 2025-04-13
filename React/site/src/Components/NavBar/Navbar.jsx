@@ -1,17 +1,18 @@
+// Importa os hooks e componentes do React e Firebase
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { onAuthStateChanged, signOut } from "firebase/auth"; //  Funções do Firebase Auth
-import { auth } from "../Db/FireBase"; //  Autenticação do Firebase
-import "./Navbar.css";
-import NavItem from "./NavItem";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../Db/FireBase"; // Importa a configuração do Firebase
+import "./Navbar.css"; // Importa os estilos da navbar
+import NavItem from "./NavItem"; // Componente que renderiza os itens do menu principal
 
 const Navbar = () => {
-  const location = useLocation();
-  const navigate = useNavigate(); //  Para redirecionar após logout
-  const [openMenu, setOpenMenu] = useState(false);
-  const [usuarioLogado, setUsuarioLogado] = useState(null); //  Estado para controlar se há usuário logado
+  const location = useLocation(); // Hook do React Router para saber a rota atual
+  const navigate = useNavigate(); // Hook para redirecionar o usuário
+  const [openMenu, setOpenMenu] = useState(false); // Estado para controlar o menu mobile (hamburger)
+  const [usuarioLogado, setUsuarioLogado] = useState(null); // Estado para armazenar o nome do usuário logado
 
-  //  Itens do menu principal
+  // Lista de itens do menu principal
   const items = [
     { id: 1, url: "/", label: "Home" },
     { id: 2, url: "/Sobre", label: "Sobre" },
@@ -19,35 +20,41 @@ const Navbar = () => {
     { id: 4, url: "/Empresa", label: "Empresa" },
   ];
 
-  //  Verifica se o usuário está logado no Firebase e pega o nome salvo no localStorage
+  // Efeito que observa mudanças de autenticação no Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const nome = localStorage.getItem("nomeUsuario") || "Usuário"; // Pega nome do localStorage
-        setUsuarioLogado(nome); // Define no estado
+        // Se o usuário estiver logado, pega o nome do localStorage
+        const nomeCompleto = localStorage.getItem("nomeUsuario");
+
+        // Armazena o nome ou "Usuário" como fallback
+        setUsuarioLogado(nomeCompleto || "Usuário");
       } else {
-        setUsuarioLogado(null); // Se não estiver logado
+        // Se não estiver logado, limpa o estado
+        setUsuarioLogado(null);
       }
     });
 
-    return () => unsubscribe(); //  Limpa o listener ao desmontar
+    // Cleanup da autenticação quando o componente desmontar
+    return () => unsubscribe();
   }, []);
 
-  //  Função de logout
+  // Função para deslogar o usuário
   const handleLogout = async () => {
-    await signOut(auth); // Desloga do Firebase
+    await signOut(auth); // Firebase: faz o logout
     localStorage.removeItem("nomeUsuario"); // Remove o nome salvo
-    setUsuarioLogado(null); // Limpa estado
-    navigate("/"); // Redireciona para a home
+    setUsuarioLogado(null); // Limpa o estado local
+    navigate("/"); // Redireciona para a página inicial
   };
 
   return (
     <div>
+      {/* Menu superior (exibe nome do usuário e links de login/cadastro ou logout) */}
       <div className="top-menu">
-        <nav>
+        <nav className="menu-usuario">
           <ul>
-            {/* Se estiver logado, mostra nome, link do perfil e botão de sair */}
             {usuarioLogado ? (
+              // Se estiver logado, mostra nome, link para perfil e botão de sair
               <>
                 <li>Olá, {usuarioLogado}</li>
                 <li>
@@ -60,7 +67,7 @@ const Navbar = () => {
                 </li>
               </>
             ) : (
-              //  Se não estiver logado, mostra links de Cadastro e Login
+              // Se não estiver logado, mostra links para cadastro e login
               <>
                 <li>
                   <Link to="/Cadastro">Junte-se a nós</Link>
@@ -74,28 +81,31 @@ const Navbar = () => {
         </nav>
       </div>
 
+      {/* Menu principal (com logo e itens de navegação) */}
       <div className="main-menu">
         <header>
+          {/* Logo do site */}
           <div className="logo">
             <Link to="/">
-              <img src="caminho/da/imagem.png" alt="Logo" />
+              <img src="./img/logo.png" alt="Logo" width={180} />
             </Link>
           </div>
+
+          {/* Lista de itens do menu de navegação */}
           <nav>
             <ul className={`nav-items ${openMenu ? "open" : ""}`}>
-              {/* Menu principal com os itens configurados */}
               {items.map((item) => (
                 <NavItem
                   key={item.id}
                   url={item.url}
                   label={item.label}
-                  IsActive={location.pathname === item.url}
+                  IsActive={location.pathname === item.url} // Ativa o item conforme a rota atual
                 />
               ))}
             </ul>
           </nav>
 
-          {/* Botão mobile */}
+          {/* Botão para abrir/fechar menu mobile */}
           <button className="btn-mob" onClick={() => setOpenMenu(!openMenu)}>
             {openMenu ? (
               <i className="fa-solid fa-xmark"></i>
@@ -109,4 +119,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar; 

@@ -15,25 +15,29 @@ export default function Login() {
     setErro("");
 
     try {
-      // 🔹 Faz login com Firebase
+      // Tentando fazer login
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-
-      // 🔹 Consulta a sua API para obter os dados do usuário pelo e-mail
+      console.log('Usuário autenticado no Firebase:', userCredential.user);
+      
+      // Consultando a API para obter dados do usuário
       const response = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
+      
       if (!response.ok) {
         throw new Error("Usuário não encontrado na API");
       }
-
-      const usuario = await response.json();
       
-      // 🔹 Salva o nome no localStorage
-      localStorage.setItem("nomeUsuario", usuario.NomeCompleto); // ← ATENÇÃO ao nome da propriedade que vem da API
-
+      const usuario = await response.json();
+      console.log('Dados do usuário na API:', usuario);
+      
+      // Pega apenas o primeiro nome
+      const primeiroNome = usuario.nomeCompleto.split(" ")[0];
+      localStorage.setItem("nomeUsuario", primeiroNome);
+    
       alert("Login feito com sucesso!");
-      navigate("/"); // Redireciona para home ou dashboard
-
+      navigate("/"); // Redireciona para a home ou dashboard
+    
     } catch (error) {
-      console.error("Erro no login:", error.message);
+      console.error("Erro no login:", error);  // Mostra o erro completo no console
       if (error.code === "auth/invalid-credential") {
         setErro("Email ou senha inválidos.");
       } else {
@@ -45,17 +49,19 @@ export default function Login() {
   return (
     <div className="login-container">
       <form onSubmit={handleLogin}>
-        <h2 className="title">Login</h2>
+        <h2 className="title">Login</h2>        
+        <label htmlFor="Email">Email:</label>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Digite seu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        />
+        />        
+        <label htmlFor="Senha">Senha:</label>
         <input
           type="password"
-          placeholder="Senha"
+          placeholder="Digite sua senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           required

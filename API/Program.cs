@@ -40,9 +40,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("PermitirTudo",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5174") // Porta do seu front-end
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
+            policy.WithOrigins("http://localhost:5173")//porta do front - end
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
 });
 

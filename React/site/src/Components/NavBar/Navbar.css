@@ -16,7 +16,7 @@ body {
   margin: auto;
   border-bottom: 1px solid #77777775;
   background-color: rgba(245, 245, 245, 0.966);
-  padding: 17px 30px;
+  padding: 6px 30px;
   margin-left: 50%;
   transform: translateX(-50%);
 }
@@ -38,7 +38,7 @@ body {
   text-align: center;
 }
 
-.top-menu nav{    
+.top-menu .menu-usuario{    
   display: flex;
   justify-content: end;
   align-items: center;
@@ -59,14 +59,14 @@ body {
 
 .top-menu a {
   text-decoration: none;
-  color: #272626d7;
+  color: #000000;
   font: 400 0.87rem "Poppins", serif;
   border-left: 1px solid #000000;
   padding-left: 20px;
 }
 
 .top-menu a:hover{
-    color: #999797;
+    color: #5a5757;
     transition: color 0.2s;
 }
 
@@ -78,7 +78,7 @@ body {
   text-decoration: none;
   color: #272626d7;
   font: 500 1.2rem "Poppins", serif;
-  padding: 0px 8px 17px 8px;
+  padding: 0px 8px 14px 8px;
 }
 
 .main-menu li a:hover,
