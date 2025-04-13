@@ -1,0 +1,15 @@
+:root {
+    /* Paleta Artenza Street */
+    --preto-base: #000000;
+    --cinza-grafite: #2F2F2F;
+    --bege-urbano: #C4B7A6;
+    --vermelho-queimado: #B02E0C;
+    --azul-royal-escuro: #1E3A8A;
+  
+    /* Variações (tons mais claros e escuros) */
+    --preto-claro: #1A1A1A;
+    --cinza-grafite-claro: #4D4D4D;
+    --bege-urbano-claro: #D8CEC0;
+    --vermelho-queimado-claro: #CC3F20;
+    --azul-royal-profundo: #162A61;
+  }
