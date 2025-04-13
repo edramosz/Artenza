@@ -7,6 +7,7 @@ namespace Core.Interfaces
     {
         Task<List<Usuario>> GetUsuariosAsync();
         Task<Usuario> GetUsuarioAsync(string id);
+        Task<Usuario> GetUsuarioByEmailAsync(string email);
         Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto);
         Task UpdateUsuarioAsync(string id, Usuario usuario);
         Task DeleteUsuarioAsync(string id);

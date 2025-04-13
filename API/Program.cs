@@ -5,10 +5,10 @@ using Core.Models.DTO_s;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+// Registro dos serviços
 builder.Services.AddSingleton<ProdutoService>();
 builder.Services.AddSingleton<UsuarioService>();
 builder.Services.AddSingleton<FuncionarioService>();
@@ -25,10 +25,8 @@ builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<IVendaService, VendaService>();
 builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
-
-// Add Swagger documentation
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -42,30 +40,26 @@ builder.Services.AddCors(options =>
     options.AddPolicy("PermitirTudo",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
+            policy.WithOrigins("http://localhost:5173")//porta do front - end
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
 });
 
-
 var app = builder.Build();
 
-// Permite requisições de qualquer origem (CORS)
-app.UseCors("PermitirTudo");
-
-// Configure the HTTP request pipeline.
+// Configure o pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
+
+    app.UseCors("PermitirTudo"); // Colocado no local correto
 
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

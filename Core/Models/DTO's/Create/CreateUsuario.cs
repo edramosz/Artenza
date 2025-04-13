@@ -18,7 +18,7 @@ namespace Core.Models.DTO_s.Create
         [Required]
         public string Telefone { get; set; }
         [Required]
-        public DateOnly DataNascimento { get; set; }
+        public string DataNascimento { get; set; }
    
         public string SenhaHash { get; set; }
     }

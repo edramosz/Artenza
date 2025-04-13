@@ -4,6 +4,8 @@ using Core.Models;
 using Core.Models.DTO_s.Create;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace API.Services
 {
@@ -20,14 +22,44 @@ namespace API.Services
         }
 
         // Obter todos os usuarios
+
         public async Task<List<Usuario>> GetUsuariosAsync()
         {
-            var usuarios = await _firebaseClient
-                .Child("usuarios")
-                .OnceAsync<Usuario>();
+            try
+            {
+                var response = await _firebaseClient
+                    .Child("usuarios")
+                    .OnceAsJsonAsync(); // ← aqui é JSON bruto
 
-            return usuarios.Select(item => item.Object).ToList();
+                var usuarios = new List<Usuario>();
+
+                var jsonObject = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(response);
+
+                foreach (var item in jsonObject)
+                {
+                    try
+                    {
+                        var usuario = item.Value.ToObject<Usuario>();
+                        usuario.Id = item.Key; // setar o ID manualmente
+                        usuarios.Add(usuario);
+                    }
+                    catch (Exception exItem)
+                    {
+                        Console.WriteLine($"Erro ao desserializar usuário {item.Key}: {exItem.Message}");
+                        // aqui podemos ignorar ou tratar o erro
+                    }
+                }
+
+                return usuarios;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro geral ao buscar usuários:");
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
+
 
         // Obter um usuario pelo ID
         public async Task<Usuario> GetUsuarioAsync(string id)
@@ -39,6 +71,21 @@ namespace API.Services
 
             return usuario;
         }
+
+        public async Task<Usuario> GetUsuarioByEmailAsync(string email)
+        {
+            var usuarios = await _firebaseClient
+                .Child("usuarios")
+                .OrderBy("Email")
+                .EqualTo(email)
+                .OnceAsync<Usuario>();
+
+            var usuario = usuarios.FirstOrDefault()?.Object;
+
+            return usuario;
+        }
+
+
 
         // Adicionar um novo usuario
         public async Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto)

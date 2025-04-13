@@ -25,7 +25,19 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Usuario>>> GetUsuarios()
         {
-            return await _usuarioService.GetUsuariosAsync();
+            try
+            {
+                var usuarios = await _usuarioService.GetUsuariosAsync();
+
+                if (usuarios == null || !usuarios.Any())
+                    return NotFound("Nenhum usuário encontrado.");
+
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao buscar usuários: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -42,6 +54,18 @@ namespace API.Controllers
                 return NotFound();
 
             return usuario;
+        }
+
+        // Endpoint para listar um usuário pelo e-mail
+        [HttpGet("por-email/{email}")]
+        public async Task<ActionResult<Usuario>> GetUsuarioPorEmail(string email)
+        {
+            var usuario = await _usuarioService.GetUsuarioByEmailAsync(email);
+
+            if (usuario == null)
+                return NotFound();
+
+            return Ok(usuario);  // Retorna o usuário encontrado
         }
 
         /// <summary>
