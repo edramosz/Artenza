@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "./CadastroForm.css";
-import { auth } from "../../Components/Db/FireBase"; // ajuste o caminho se necessário
+import { auth } from "../../Components/Db/FireBase"; 
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
@@ -75,6 +75,9 @@ const Cadastro = () => {
       console.log("Endereço cadastrado:", endereco);
   
       alert("Usuário e endereço cadastrados com sucesso!");
+
+      
+    localStorage.setItem("nomeUsuario", formData.NomeCompleto);
     } catch (error) {
       console.error("Erro geral:", error);
       alert("Erro ao realizar cadastro completo.");

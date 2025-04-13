@@ -40,6 +40,20 @@ namespace API.Services
             return usuario;
         }
 
+        // Obter um usuário pelo email
+        public async Task<Usuario> GetUsuarioByEmailAsync(string email)
+        {
+            // Buscando o usuário na coleção "usuarios" usando o filtro por email
+            var usuario = await _firebaseClient
+                .Child("usuarios")
+                .OrderBy("Email") // Ordena pelo campo "Email"
+                .EqualTo(email)   // Busca pelo valor do email
+                .OnceSingleAsync<Usuario>();
+
+            return usuario; // Retorna o usuário encontrado ou null se não encontrado
+        }
+
+
         // Adicionar um novo usuario
         public async Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto)
         {
