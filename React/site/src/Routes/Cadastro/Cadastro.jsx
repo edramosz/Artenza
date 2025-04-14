@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./CadastroForm.css";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../Components/Db/FireBase"; // importa o auth
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
@@ -37,6 +39,10 @@ const Cadastro = () => {
     console.log("Enviando dados do endereço:", formDataEndereco);
 
     try {
+      await createUserWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
+
+      console.log("Usuário criado no Firebase com sucesso!");
+      
       const responseEndereco = await fetch("https://localhost:7294/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
