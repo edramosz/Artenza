@@ -15,7 +15,7 @@ body {
   height: auto;
   margin: auto;
   border-bottom: 1px solid #77777775;
-  background-color: rgba(245, 245, 245, 0.966);
+  background-color: var(--bege-urbano);
   padding: 6px 30px;
   margin-left: 50%;
   transform: translateX(-50%);
@@ -29,6 +29,7 @@ body {
   padding: 10px 30px 8px 30px;
   margin-left: 50%;
   transform: translateX(-50%);
+  background-color: #FFF;
 }
 
 .main-menu header {
@@ -79,7 +80,7 @@ body {
 
 .main-menu a {
   text-decoration: none;
-  color: #272626d7;
+  color: #5a5757;
   font: 500 1.2rem "Poppins", serif;
   padding: 0px 8px 14px 8px;
 }

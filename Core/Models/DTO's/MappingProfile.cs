@@ -15,6 +15,8 @@ namespace Core.Models.DTO_s
             CreateMap<Usuario, CreateUsuario>();
             CreateMap<CreateUsuario, Usuario>();
 
+            CreateMap<Endereco, CreateEndereco>();
+            CreateMap<CreateEndereco, Endereco>();
         }
     }
 }

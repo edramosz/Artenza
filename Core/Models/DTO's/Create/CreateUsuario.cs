@@ -9,6 +9,7 @@ namespace Core.Models.DTO_s.Create
 {
     public class CreateUsuario
     {
+        public string IdEndereco { get; set; }
         [Required]
         public string NomeCompleto { get; set; }
         [Required]

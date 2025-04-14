@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import "./CadastroForm.css";
-import { auth } from "../../Components/Db/FireBase"; 
 
 const Cadastro = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +8,7 @@ const Cadastro = () => {
     Telefone: "",
     DataNascimento: "",
     SenhaHash: "",
+    IdEndereco: "",
   });
 
   const [formDataEndereco, setFormDataEndereco] = useState({
@@ -36,40 +35,20 @@ const Cadastro = () => {
     e.preventDefault();
     console.log("Enviando dados do usuário:", formData);
     console.log("Enviando dados do endereço:", formDataEndereco);
-  
+
     try {
-      // Cria o usuário no Firebase Authentication
-      await createUserWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
-      console.log("Usuário criado no Firebase!");
-  
-      // Cadastra o usuário na sua API
-      const responseUsuario = await fetch("https://localhost:7294/Usuario", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-  
-      if (!responseUsuario.ok) {
-        const error = await responseUsuario.text();
-        console.error("Erro no cadastro de usuário:", error);
-        throw new Error("Erro ao cadastrar usuário na API");
-      }
-  
-      const usuario = await responseUsuario.json();
-      console.log("Usuário cadastrado na API:", usuario);
-  
-      // Cadastra o endereço
       const responseEndereco = await fetch("https://localhost:7294/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formDataEndereco),
+        body: JSON.stringify(formDataEndereco),  // possível erro por conta de IdEndereco
       });
-  
+
       if (!responseEndereco.ok) {
         const error = await responseEndereco.text();
         console.error("Erro no cadastro de endereço:", error);
         throw new Error("Erro ao cadastrar endereço");
       }
+
   
       const endereco = await responseEndereco.json();
       console.log("Endereço cadastrado:", endereco);
@@ -79,13 +58,46 @@ const Cadastro = () => {
       localStorage.setItem("nomeUsuario", formData.NomeCompleto);
       window.location.href = "/";
   
+
+
+      const enderecoData = await responseEndereco.json();
+      console.log("Endereço criado:", enderecoData);
+
+      // 2. Pega o Id do endereço criado
+      const enderecoId = enderecoData.id; // <-- confere se o backend retorna `id` ou `Id`
+
+      // 3. Atualiza o formData com o Id do endereço
+      const formDataComEndereco = {
+        ...formData,
+        IdEndereco: enderecoId,
+      };
+      console.log("FormData atualizado com IdEndereco:", formDataComEndereco);
+      // const endereco = await responseEndereco.json();
+      // console.log("Endereço cadastrado:", endereco);
+
+
+      const responseUsuario = await fetch("https://localhost:7294/Usuario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formDataComEndereco),
+      });
+
+      if (!responseUsuario.ok) {
+        const error = await responseUsuario.text();
+        console.error("Erro no cadastro de usuário:", error);
+        throw new Error("Erro ao cadastrar usuário");
+      }
+
+      const usuario = await responseUsuario.json();
+      console.log("Usuário cadastrado:", usuario);
+
+      alert("Usuário e endereço cadastrados com sucesso!");
+
     } catch (error) {
       console.error("Erro geral:", error);
       alert("Erro ao realizar cadastro completo.");
     }
   };
-  
-  
   return (
     <div className="form-container">
       <h2 className="title">Cadastre-se</h2>
@@ -216,7 +228,8 @@ const Cadastro = () => {
           </div>
           <div className="form-group">
             <label htmlFor="Complemento">Complemento:</label>
-            <textarea
+            <input
+              type="text"
               name="Complemento"
               id="Complemento"
               placeholder="Digite o complemento (opcional)"

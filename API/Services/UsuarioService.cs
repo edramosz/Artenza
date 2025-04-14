@@ -102,7 +102,6 @@ namespace API.Services
 
             // Agora que o Firebase gerou a chave, seta o Id no objeto
             usuario.Id = response.Key;
-            usuario.IdEndereco = "teste";
             // Atualiza o registro no Firebase já com o Id
             await _firebaseClient
                 .Child("usuarios")

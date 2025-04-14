@@ -52,20 +52,9 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEndereco([FromBody] CreateEndereco enderecoDto)
         {
-            var endereco = new Endereco
-            {
-                CEP = enderecoDto.CEP,
-                Estado = enderecoDto.Estado,
-                Cidade = enderecoDto.Cidade,
-                Bairro = enderecoDto.Bairro,
-                Rua = enderecoDto.Rua,
-                Numero = enderecoDto.Numero,
-                Complemento = enderecoDto.Complemento
-            };
+            var enderecoCriado = await _enderecoService.AddEnderecoAsync(enderecoDto);
 
-            await _enderecoService.AddEnderecoAsync(endereco);
-
-            return CreatedAtAction(nameof(GetEndereco), new { id = endereco.Id }, endereco);
+            return CreatedAtAction(nameof(GetEndereco), new { id = enderecoCriado.Id }, enderecoCriado);
         }
 
 
