@@ -37,8 +37,6 @@ const Cadastro = () => {
     console.log("Enviando dados do endereço:", formDataEndereco);
 
     try {
-      
-
       const responseEndereco = await fetch("https://localhost:7294/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

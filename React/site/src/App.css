@@ -13,3 +13,7 @@
     --vermelho-queimado-claro: #CC3F20;
     --azul-royal-profundo: #162A61;
   }
+
+  body{
+    background-color: var(--cinza-grafite-claro);
+  }
