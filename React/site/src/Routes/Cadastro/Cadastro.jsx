@@ -49,6 +49,17 @@ const Cadastro = () => {
         throw new Error("Erro ao cadastrar endereço");
       }
 
+  
+      const endereco = await responseEndereco.json();
+      console.log("Endereço cadastrado:", endereco);
+  
+      // Salva o nome e recarrega a página
+      alert("Usuário e endereço cadastrados com sucesso!");
+      localStorage.setItem("nomeUsuario", formData.NomeCompleto);
+      window.location.href = "/";
+  
+
+
       const enderecoData = await responseEndereco.json();
       console.log("Endereço criado:", enderecoData);
 
@@ -81,12 +92,12 @@ const Cadastro = () => {
       console.log("Usuário cadastrado:", usuario);
 
       alert("Usuário e endereço cadastrados com sucesso!");
+
     } catch (error) {
       console.error("Erro geral:", error);
       alert("Erro ao realizar cadastro completo.");
     }
   };
-
   return (
     <div className="form-container">
       <h2 className="title">Cadastre-se</h2>
@@ -229,7 +240,7 @@ const Cadastro = () => {
         </div>
 
         <div className="form-group">
-          <input type="submit" value="Cadastrar Tudo" className="form-button" />
+          <input type="submit" value="Cadastrar-se" className="form-button" />
         </div>
       </form>
     </div>
