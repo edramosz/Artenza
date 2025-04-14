@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router'; 
 import Navbar from './Components/NavBar/Navbar';
-import Home from './Routes/Home';
+import Home from './Routes/Home/Home';
 import Cadastro from './Routes/Cadastro/Cadastro';
 import Login from './Routes/Login/Login';
 

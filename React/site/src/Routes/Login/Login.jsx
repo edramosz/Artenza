@@ -13,31 +13,28 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErro("");
-
+  
     try {
-      // Tentando fazer login
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
       console.log('Usuário autenticado no Firebase:', userCredential.user);
-      
-      // Consultando a API para obter dados do usuário
+  
       const response = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
-      
+  
       if (!response.ok) {
         throw new Error("Usuário não encontrado na API");
       }
-      
+  
       const usuario = await response.json();
       console.log('Dados do usuário na API:', usuario);
-      
-      // Pega apenas o primeiro nome
+  
       const primeiroNome = usuario.nomeCompleto.split(" ")[0];
       localStorage.setItem("nomeUsuario", primeiroNome);
-    
+  
       alert("Login feito com sucesso!");
-      navigate("/"); // Redireciona para a home ou dashboard
-    
+      window.location.href = "/";
+  
     } catch (error) {
-      console.error("Erro no login:", error);  // Mostra o erro completo no console
+      console.error("Erro no login:", error);
       if (error.code === "auth/invalid-credential") {
         setErro("Email ou senha inválidos.");
       } else {
@@ -45,6 +42,7 @@ export default function Login() {
       }
     }
   };
+  
 
   return (
     <div className="login-container">
