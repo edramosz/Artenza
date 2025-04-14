@@ -7,7 +7,7 @@ const firebaseConfig = {
   authDomain: "trabalhofinalloja.firebaseapp.com",
   databaseURL: "https://trabalhofinalloja-default-rtdb.firebaseio.com",
   projectId: "trabalhofinalloja",
-  storageBucket: "trabalhofinalloja.appspot.com",
+  storageBucket: "trabalhofinalloja.firebasestorage.app",
   messagingSenderId: "926154359130",
   appId: "1:926154359130:web:90ba82aa123a0f4a9b3363"
 };
