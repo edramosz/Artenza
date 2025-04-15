@@ -93,7 +93,7 @@ namespace API.Services
             var usuario = _mapper.Map<Usuario>(usuarioDto);
 
             // (Opcional) Gera DataCadastro
-            usuario.DataCadastro = DateOnly.FromDateTime(DateTime.UtcNow);
+            usuario.DataCadastro = (DateTime.UtcNow);
 
             // Primeiro cria o documento no Firebase
             var response = await _firebaseClient

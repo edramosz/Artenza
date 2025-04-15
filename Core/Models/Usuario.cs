@@ -9,6 +9,6 @@
         public string Telefone { get; set; }
         public string DataNascimento { get; set; }
         public string SenhaHash { get; set; }
-        public DateOnly DataCadastro { get; set; }
+        public DateTime DataCadastro { get; set; }
     }
 }
