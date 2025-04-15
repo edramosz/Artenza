@@ -8,9 +8,9 @@ const Banner = () => {
             <div className="content">
                 <h1 className='title'>lorem ipsulum</h1>
                 <h3 className='sub-title'>opsum dolor</h3>
-                <Link to=''>
+                <Link to='/Colecao'>
                     <input type="button" value="Compra Já" className='btn-default'/>
-                </Link>
+                </Link> 
             </div>
         </div>
     )
