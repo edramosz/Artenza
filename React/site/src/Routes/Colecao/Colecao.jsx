@@ -10,7 +10,7 @@ const Colecao = () => {
         const buscarProdutos = async () => {
             try {
                 // Requisição GET para buscar os produtos da API
-                const resposta = await fetch('http://localhost:3000/api/produtos');
+                const resposta = await fetch('https://localhost:7294/Produto');
                 const dados = await resposta.json();
                 setProdutos(dados); // Atualiza o estado com os dados recebidos
             } catch (erro) {
@@ -47,7 +47,7 @@ const Colecao = () => {
                 {produtos.map(prod => (
                     <Link to={`/produto/${prod.id}`} key={prod.id}>
                         <div className="card-produto">
-                            <img src={prod.imagem} alt={prod.nome} />
+                            <img src={prod.urlImagem} alt={prod.nome} />
                             <h4>{prod.nome}</h4>
                             <p>{prod.categoria}</p>
                             {/* Formata o preço para padrão brasileiro (R$ 0.000,00) */}

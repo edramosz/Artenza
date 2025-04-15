@@ -88,9 +88,13 @@ namespace API.Services
 
 
         // Adicionar um novo usuario
+      
         public async Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto)
         {
             var usuario = _mapper.Map<Usuario>(usuarioDto);
+
+            // Define isAdmin como false
+            usuario.isAdmin = false;
 
             // (Opcional) Gera DataCadastro
             usuario.DataCadastro = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -102,14 +106,14 @@ namespace API.Services
 
             // Agora que o Firebase gerou a chave, seta o Id no objeto
             usuario.Id = response.Key;
+
             // Atualiza o registro no Firebase já com o Id
             await _firebaseClient
                 .Child("usuarios")
                 .Child(usuario.Id)
                 .PutAsync(usuario);
 
-            // Adicionar o ID do endereco ao usuario atraves de algum modo (ou add os dois juntos em um unico metodo,
-            // ou usuario já ter id de endereco salvo, faltando apenas adicionar este valor no objeto endereco)
+            // Adicionar o ID do endereco ao usuario através de algum modo
             return usuario;
         }
 
