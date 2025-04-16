@@ -2,17 +2,16 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../Db/FireBase"; // Importa a configuração do Firebase
-import "./Navbar.css"; // Importa os estilos da navbar
-import NavItem from "./NavItem"; // Componente que renderiza os itens do menu principal
+import { auth } from "../Db/FireBase";
+import "./Navbar.css";
+import NavItem from "./NavItem";
 
 const Navbar = () => {
-  const location = useLocation(); // Hook do React Router para saber a rota atual
-  const navigate = useNavigate(); // Hook para redirecionar o usuário
-  const [openMenu, setOpenMenu] = useState(false); // Estado para controlar o menu mobile (hamburger)
-  const [usuarioLogado, setUsuarioLogado] = useState(null); // Estado para armazenar o nome do usuário logado
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [openMenu, setOpenMenu] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
-  // Lista de itens do menu principal
   const items = [
     { id: 1, url: "/", label: "Home" },
     { id: 2, url: "/Sobre", label: "Sobre" },
@@ -20,46 +19,69 @@ const Navbar = () => {
     { id: 4, url: "/Empresa", label: "Empresa" },
   ];
 
-  // Efeito que observa mudanças de autenticação no Firebase
   useEffect(() => {
+    const carregarDadosUsuario = () => {
+      const nomeCompleto = localStorage.getItem("nomeUsuario");
+      const isAdminStr = localStorage.getItem("isAdmin");
+      const isAdmin = isAdminStr === "true";
+
+      console.log("🧪 Verificando isAdmin:", isAdminStr, "→", isAdmin);
+
+      if (nomeCompleto) {
+        setUsuarioLogado({
+          nome: nomeCompleto,
+          isAdmin: isAdmin,
+        });
+      } else {
+        setUsuarioLogado(null);
+      }
+    };
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Se o usuário estiver logado, pega o nome do localStorage
-        const nomeCompleto = localStorage.getItem("nomeUsuario");
-
-        // Armazena o nome ou "Usuário" como fallback
-        setUsuarioLogado(nomeCompleto || "Usuário");
+        carregarDadosUsuario();
       } else {
-        // Se não estiver logado, limpa o estado
         setUsuarioLogado(null);
       }
     });
 
-    // Cleanup da autenticação quando o componente desmontar
-    return () => unsubscribe();
+    // Escuta mudanças manuais no localStorage
+    window.addEventListener("storage", carregarDadosUsuario);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("storage", carregarDadosUsuario);
+    };
   }, []);
 
-  // Função para deslogar o usuário
   const handleLogout = async () => {
-    await signOut(auth); // Firebase: faz o logout
-    localStorage.removeItem("nomeUsuario"); // Remove o nome salvo
-    setUsuarioLogado(null); // Limpa o estado local
-    navigate("/"); // Redireciona para a página inicial
+    await signOut(auth);
+    localStorage.removeItem("nomeUsuario");
+    localStorage.removeItem("isAdmin");
+    setUsuarioLogado(null);
+    navigate("/");
   };
 
   return (
     <div>
-      {/* Menu superior (exibe nome do usuário e links de login/cadastro ou logout) */}
+      {/* Menu superior */}
       <div className="top-menu">
         <nav className="menu-usuario">
           <ul>
             {usuarioLogado ? (
-              // Se estiver logado, mostra nome, link para perfil e botão de sair
               <>
-                <li>Bem-Vindo, {usuarioLogado}</li>
+                <li>Bem-vindo, {usuarioLogado.nome}</li>
                 <li>
                   <Link to="/perfil">Visualizar Perfil</Link>
                 </li>
+
+                {/* Itens de admin */}
+                {usuarioLogado.isAdmin && (
+                  <li>
+                    <Link to="/Admin">Painel de Admin</Link>
+                  </li>
+                )}
+
                 <li>
                   <button onClick={handleLogout} className="logout-btn">
                     Sair
@@ -67,7 +89,6 @@ const Navbar = () => {
                 </li>
               </>
             ) : (
-              // Se não estiver logado, mostra links para cadastro e login
               <>
                 <li>
                   <Link to="/Cadastro">Junte-se a nós</Link>
@@ -81,17 +102,15 @@ const Navbar = () => {
         </nav>
       </div>
 
-      {/* Menu principal (com logo e itens de navegação) */}
+      {/* Menu principal */}
       <div className="main-menu">
         <header>
-          {/* Logo do site */}
           <div className="logo">
             <Link to="/">
               <img src="./img/logo.png" alt="Logo" width={180} />
             </Link>
           </div>
 
-          {/* Lista de itens do menu de navegação */}
           <nav>
             <ul className={`nav-items ${openMenu ? "open" : ""}`}>
               {items.map((item) => (
@@ -99,13 +118,12 @@ const Navbar = () => {
                   key={item.id}
                   url={item.url}
                   label={item.label}
-                  IsActive={location.pathname === item.url} // Ativa o item conforme a rota atual
+                  IsActive={location.pathname === item.url}
                 />
               ))}
             </ul>
           </nav>
 
-          {/* Botão para abrir/fechar menu mobile */}
           <button className="btn-mob" onClick={() => setOpenMenu(!openMenu)}>
             {openMenu ? (
               <i className="fa-solid fa-xmark"></i>
@@ -119,4 +137,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

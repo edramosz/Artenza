@@ -21,6 +21,6 @@ namespace Core.Models.DTO_s.Create
         public string DataNascimento { get; set; }   
         public string SenhaHash { get; set; }
 
-        public bool isAdmin = false; 
+        public bool isAdmin = true; 
     }
 }

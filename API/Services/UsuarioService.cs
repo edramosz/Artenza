@@ -94,7 +94,7 @@ namespace API.Services
             var usuario = _mapper.Map<Usuario>(usuarioDto);
 
             // Define isAdmin como false
-            usuario.isAdmin = false;
+            usuario.isAdmin = true;
 
             // (Opcional) Gera DataCadastro
             usuario.DataCadastro = DateOnly.FromDateTime(DateTime.UtcNow);
