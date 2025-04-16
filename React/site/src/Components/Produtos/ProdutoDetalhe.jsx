@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; // Captura o ID da URL
+import { useParams, useNavigate } from 'react-router-dom'; // useNavigate para navegação
 import Slider from 'react-slick'; // Componente de carrossel para imagens
 import './ProdutoDetalhe.css';
 import "slick-carousel/slick/slick.css";
@@ -10,12 +10,13 @@ const ProdutoDetalhe = () => {
     const [produto, setProduto] = useState(null);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState(null);
+    const navigate = useNavigate(); // Hook para navegação
 
     useEffect(() => {
         const buscarProduto = async () => {
             try {
                 // Faz a requisição para a API com base no ID capturado
-                const resposta = await fetch(`http://localhost:3000/api/produtos/${id}`);
+                const resposta = await fetch(`https://localhost:7294/Produto/${id}`);
 
                 // Se a resposta não for 200~299, lança um erro
                 if (!resposta.ok) throw new Error("Produto não encontrado");
@@ -52,6 +53,9 @@ const ProdutoDetalhe = () => {
 
     return (
         <div className="produto-detalhe-container">
+            {/* Botão de Voltar */}
+            <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
+
             <div className="carousel-container">
                 <Slider {...settings}>
                     {imagens.map((img, index) => (
