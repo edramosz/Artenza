@@ -56,7 +56,7 @@ const Navbar = () => {
             {usuarioLogado ? (
               // Se estiver logado, mostra nome, link para perfil e botão de sair
               <>
-                <li>Olá, {usuarioLogado}</li>
+                <li>Bem-Vindo, {usuarioLogado}</li>
                 <li>
                   <Link to="/perfil">Visualizar Perfil</Link>
                 </li>

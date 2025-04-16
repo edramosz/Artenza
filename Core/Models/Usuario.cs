@@ -10,5 +10,6 @@
         public string DataNascimento { get; set; }
         public string SenhaHash { get; set; }
         public DateOnly DataCadastro { get; set; }
+        public bool isAdmin { get; set; }
     }
 }
