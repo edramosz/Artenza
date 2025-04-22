@@ -97,7 +97,7 @@ namespace API.Services
             usuario.isAdmin = true;
 
             // (Opcional) Gera DataCadastro
-            usuario.DataCadastro = (DateTime.UtcNow);
+            usuario.DataCadastro = DateTime.UtcNow;
 
             // Primeiro cria o documento no Firebase
             var response = await _firebaseClient
