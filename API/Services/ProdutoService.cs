@@ -57,15 +57,13 @@ namespace API.Services
         // Atualizar um produto pelo ID
         public async Task UpdateProdutoAsync(string id, Produto produto)
         {
-            var produtoExistente = await GetProdutoAsync(id);
-            if (produtoExistente != null)
-            {
-                await _firebaseClient
-                    .Child("produtos")
-                    .Child(id)
-                    .PutAsync(produto);
-            }
+            // Atualiza o produto no Firebase
+            await _firebaseClient
+                .Child("produtos")
+                .Child(id)
+                .PutAsync(produto); // Atualiza o produto no Firebase
         }
+
 
         // Deletar um produto pelo ID
         public async Task DeleteProdutoAsync(string id)

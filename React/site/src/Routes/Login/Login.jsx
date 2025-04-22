@@ -13,26 +13,30 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErro("");
-  
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-      console.log('Usuário autenticado no Firebase:', userCredential.user);
-  
+      console.log("Usuário autenticado no Firebase:", userCredential.user);
+
+      // Consulta na sua API
       const response = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
-  
+
       if (!response.ok) {
         throw new Error("Usuário não encontrado na API");
       }
-  
+
       const usuario = await response.json();
-      console.log('Dados do usuário na API:', usuario);
-  
+      console.log("Dados do usuário na API:", usuario);
+
+      // Salva os dados no localStorage
       const primeiroNome = usuario.nomeCompleto.split(" ")[0];
       localStorage.setItem("nomeUsuario", primeiroNome);
-  
+      localStorage.setItem("isAdmin", usuario.isAdmin); // <-- salva aqui como string
+      window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar
+
       alert("Login feito com sucesso!");
-      window.location.href = "/";
-  
+      navigate("/"); // redireciona usando o React Router
+
     } catch (error) {
       console.error("Erro no login:", error);
       if (error.code === "auth/invalid-credential") {
@@ -42,12 +46,12 @@ export default function Login() {
       }
     }
   };
-  
 
   return (
     <div className="login-container">
       <form onSubmit={handleLogin}>
-        <h2 className="title">Login</h2>        
+        <h2 className="title">Login</h2>
+
         <label htmlFor="Email">Email:</label>
         <input
           type="email"
@@ -55,7 +59,8 @@ export default function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-        />        
+        />
+
         <label htmlFor="Senha">Senha:</label>
         <input
           type="password"
@@ -64,6 +69,7 @@ export default function Login() {
           onChange={(e) => setSenha(e.target.value)}
           required
         />
+
         {erro && <p style={{ color: "red" }}>{erro}</p>}
         <button type="submit">Entrar</button>
       </form>

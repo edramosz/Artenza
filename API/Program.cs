@@ -4,19 +4,13 @@ using Core.Models.DTO_s;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adiciona controllers
 builder.Services.AddControllers();
+
+// Configura o AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// Registro dos serviços
-builder.Services.AddSingleton<ProdutoService>();
-builder.Services.AddSingleton<UsuarioService>();
-builder.Services.AddSingleton<FuncionarioService>();
-builder.Services.AddSingleton<EnderecoService>();
-builder.Services.AddSingleton<CarrinhoService>();
-builder.Services.AddSingleton<VendaService>();
-builder.Services.AddSingleton<TransacaoService>();
-
+// Registro dos serviços (Singleton e Scoped ao mesmo tempo não é necessário)
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
@@ -37,29 +31,34 @@ builder.Services.AddSwaggerGen(options =>
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PermitirTudo",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173")//porta do front - end
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
+    options.AddPolicy("PermitirTudo", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // Porta do seu frontend Vite/React
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
 
-// Configure o pipeline HTTP
+// Redirecionamento para HTTPS
+app.UseHttpsRedirection();
+
+// Aplicar o CORS sempre, independente do ambiente
+app.UseCors("PermitirTudo");
+
+// Swagger apenas no modo de desenvolvimento
 if (app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();
-
-    app.UseCors("PermitirTudo"); // Colocado no local correto
-
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// Autorização (caso você venha a usar [Authorize])
 app.UseAuthorization();
+
+// Mapear os endpoints dos controllers
 app.MapControllers();
 
+// Inicia o app
 app.Run();

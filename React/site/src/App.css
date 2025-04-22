@@ -1,3 +1,7 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+
 :root {
 
     /* Paleta Artenza Street */
@@ -17,8 +21,8 @@
     --vermelho-queimado-claro: #CC3F20;
     --azul-royal-profundo: #162A61;
 
+}
 
-  body{
-    background-color: var(--cinza-grafite-claro);
-
-  }
+body{
+    background-color: #d1cbcb;
+}
