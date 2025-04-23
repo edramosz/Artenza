@@ -6,6 +6,7 @@ using Firebase.Database;
 using Firebase.Database.Query;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Core.Models.DTO_s.Update;
 
 namespace API.Services
 {
@@ -93,9 +94,6 @@ namespace API.Services
         {
             var usuario = _mapper.Map<Usuario>(usuarioDto);
 
-            // Define isAdmin como false
-            usuario.isAdmin = true;
-
             // (Opcional) Gera DataCadastro
             usuario.DataCadastro = DateTime.UtcNow;
 
@@ -118,15 +116,17 @@ namespace API.Services
         }
 
         // Atualizar um usuario pelo ID
-        public async Task UpdateUsuarioAsync(string id, Usuario usuario)
+        public async Task UpdateUsuarioAsync(string id, UpdateUsuario usuarioDto)
         {
+
             var usuarioExistente = await GetUsuarioAsync(id);
             if (usuarioExistente != null)
             {
+                _mapper.Map(usuarioDto, usuarioExistente);
                 await _firebaseClient
                     .Child("usuarios")
                     .Child(id)
-                    .PutAsync(usuario);
+                    .PutAsync(usuarioExistente);
             }
         }
 
