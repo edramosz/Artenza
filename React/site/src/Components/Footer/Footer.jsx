@@ -1,5 +1,6 @@
 import React from 'react';
-import './Footer.css'; // Importa o CSS separado
+import { Link } from 'react-router-dom';
+import './Footer.css';
 
 const Footer = () => {
     return (
@@ -9,11 +10,11 @@ const Footer = () => {
                 <div className="footer-column">
                     <h4>Ajuda</h4>
                     <ul>
-                        <li>Pedidos</li>
-                        <li>Entregas</li>
-                        <li>Devoluções</li>
-                        <li>Opções de pagamento</li>
-                        <li>Contato</li>
+                        <li><Link to="#">Pedidos</Link></li>
+                        <li><Link to="#">Entregas</Link></li>
+                        <li><Link to="#">Devoluções</Link></li>
+                        <li><Link to="#">Opções de pagamento</Link></li>
+                        <li><Link to="#">Contato</Link></li>
                     </ul>
                 </div>
 
@@ -22,19 +23,19 @@ const Footer = () => {
                     <details className='detalhes'>
                         <summary>Sobre</summary>
                         <ul>
-                            <li>Quem somos</li>
-                            <li>Carreiras</li>
-                            <li>Termos de uso</li>
-                            <li>Privacidade</li>
+                            <li><Link to="#">Quem somos</Link></li>
+                            <li><Link to="#">Carreiras</Link></li>
+                            <li><Link to="#">Termos de uso</Link></li>
+                            <li><Link to="#">Privacidade</Link></li>
                         </ul>
                     </details>
 
                     <ul className='footer-item'>
                         <h4>Sobre</h4>
-                        <li>Quem somos</li>
-                        <li>Carreiras</li>
-                        <li>Termos de uso</li>
-                        <li>Privacidade</li>
+                        <li><Link to="#">Quem somos</Link></li>
+                        <li><Link to="#">Carreiras</Link></li>
+                        <li><Link to="#">Termos de uso</Link></li>
+                        <li><Link to="#">Privacidade</Link></li>
                     </ul>
                 </div>
 
@@ -43,18 +44,21 @@ const Footer = () => {
                     <details className='detalhes'>
                         <summary>Redes Sociais</summary>
                         <ul>
-                            <li><a href="#">Instagram</a></li>
-                            <li><a href="#">Facebook</a></li>
-                            <li><a href="#">Twitter</a></li>
-                            <li><a href="#">YouTube</a></li>
+                            <li><Link to="#">Instagram</Link></li>
+                            <li><Link to="#">Facebook</Link></li>
+                            <li><Link to="#">Twitter</Link></li>
+                            <li><Link to="#">YouTube</Link></li>
                         </ul>
                     </details>
-                    <ul  className='footer-item'>
+
+                    <ul className='footer-item'>
                         <h4>Redes Sociais</h4>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">YouTube</a></li>
+                        <div id='social-media'>
+                            <li><Link to="#"><i class="fa-brands fa-instagram"></i></Link></li>
+                            <li><Link to="#"><i class="fa-brands fa-facebook"></i></Link></li>
+                            <li><Link to="#"><i class="fa-brands fa-twitter"></i></Link></li>
+                            <li><Link to="#"><i class="fa-brands fa-youtube"></i></Link></li>
+                        </div>
                     </ul>
                 </div>
             </div>
