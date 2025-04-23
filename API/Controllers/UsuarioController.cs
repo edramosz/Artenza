@@ -3,6 +3,7 @@ using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 
 namespace API.Controllers
 {
@@ -90,7 +91,7 @@ namespace API.Controllers
         /// <param name="usuario"></param>
         /// 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateUsuario(string id, Usuario usuario)
+        public async Task<ActionResult> UpdateUsuario(string id, UpdateUsuario usuario)
         {
             var existingUsuario = await _usuarioService.GetUsuarioAsync(id);
             if (existingUsuario == null)
