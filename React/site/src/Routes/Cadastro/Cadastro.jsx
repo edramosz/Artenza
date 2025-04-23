@@ -8,7 +8,6 @@ import {
 
 import { auth } from "../../Components/Db/FireBase";
 
-
 const Cadastro = () => {
   const [formData, setFormData] = useState({
     NomeCompleto: "",
@@ -48,7 +47,9 @@ const Cadastro = () => {
     console.log("Enviando dados do endereço:", formDataEndereco);
   
     try {
+
       // 1. Cadastro do endereço
+
       const responseEndereco = await fetch("https://localhost:7294/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

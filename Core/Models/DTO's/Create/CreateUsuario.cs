@@ -18,9 +18,10 @@ namespace Core.Models.DTO_s.Create
         [Required]
         public string Telefone { get; set; }
         [Required]
-        public string DataNascimento { get; set; }   
+        public string DataNascimento { get; set; }
+        [Required]
         public string SenhaHash { get; set; }
-
-        public bool isAdmin = true; 
+        [Required]
+        public bool isAdmin = false; 
     }
 }

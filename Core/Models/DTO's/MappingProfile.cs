@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 
 namespace Core.Models.DTO_s
 {
@@ -14,6 +15,9 @@ namespace Core.Models.DTO_s
         {
             CreateMap<Usuario, CreateUsuario>();
             CreateMap<CreateUsuario, Usuario>();
+
+            CreateMap<Usuario, UpdateUsuario>();
+            CreateMap<UpdateUsuario, Usuario>();
 
             CreateMap<Endereco, CreateEndereco>();
             CreateMap<CreateEndereco, Endereco>();
