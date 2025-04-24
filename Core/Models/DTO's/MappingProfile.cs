@@ -24,6 +24,18 @@ namespace Core.Models.DTO_s
             CreateMap<Produto, CreateProduto>();
             CreateMap<CreateProduto, Produto>();
 
+            CreateMap<Venda, CreateVenda>();
+            CreateMap<CreateVenda, Venda>();
+
+            CreateMap<Transacao, CreateTransacao>();
+            CreateMap<CreateTransacao, Transacao>();
+
+            CreateMap<Carrinho, CreateCarrinho>();
+            CreateMap<CreateCarrinho, Carrinho>();
+
+            CreateMap<ItemVenda, CreateItemVenda>();
+            CreateMap<CreateItemVenda, ItemVenda>();
+
             // UPDATE
 
             CreateMap<Usuario, UpdateUsuario>();
@@ -31,6 +43,12 @@ namespace Core.Models.DTO_s
 
             CreateMap<Produto, UpdateProduto>();
             CreateMap<UpdateProduto, Produto>();
+
+            CreateMap<Endereco, UpdateEndereco>();
+            CreateMap<UpdateEndereco, Endereco>();
+
+            CreateMap<Carrinho, UpdateCarrinho>();
+            CreateMap<UpdateCarrinho, Carrinho>();
         }
     }
 }
