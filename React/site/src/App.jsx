@@ -8,6 +8,7 @@ import ProdutoDetalhe from './Components/Produtos/ProdutoDetalhe';
 import AdminPanel from './Components/Produtos/AdminPainel';
 import AdicionarProduto from './Components/Produtos/AdicionarProduto';
 import EditarProduto from './Components/Produtos/EditarProduto';
+import Footer from './Components/Footer/Footer';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/Admin/editar-produto/:id" element={<EditarProduto />} />
 
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   )
