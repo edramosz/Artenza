@@ -1,5 +1,8 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Microsoft.AspNetCore.Identity;
@@ -9,11 +12,13 @@ namespace API.Services
     public class ProdutoService : IProdutoService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly IMapper _mapper;
 
-        public ProdutoService(IConfiguration configuration)
+        public ProdutoService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+            _mapper = mapper;
         }
 
         // Obter todos os produtos
@@ -38,8 +43,10 @@ namespace API.Services
         }
 
         // Adicionar um novo produto
-        public async Task AddProdutoAsync(Produto produto)
+        public async Task<Produto> AddProdutoAsync(CreateProduto produtoDto)
         {
+            var produto = _mapper.Map<Produto>(produtoDto);
+
             var result = await _firebaseClient
             .Child("produtos")
             .PostAsync(produto);
@@ -52,16 +59,22 @@ namespace API.Services
                 .Child("produtos")
                 .Child(produto.Id)
                 .PutAsync(produto);
+
+            return produto;
         }
 
         // Atualizar um produto pelo ID
-        public async Task UpdateProdutoAsync(string id, Produto produto)
+        public async Task UpdateProdutoAsync(string id, UpdateProduto produtoDto)
         {
-            // Atualiza o produto no Firebase
-            await _firebaseClient
-                .Child("produtos")
-                .Child(id)
-                .PutAsync(produto); // Atualiza o produto no Firebase
+            var produtoExistente = await GetProdutoAsync(id);
+            if (produtoExistente != null)
+            {
+                _mapper.Map(produtoDto, produtoExistente);
+                await _firebaseClient
+                    .Child("produtos")
+                    .Child(id)
+                    .PutAsync(produtoExistente);
+            }
         }
 
 

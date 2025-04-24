@@ -93,8 +93,8 @@ namespace API.Services
         public async Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto)
         {
             var usuario = _mapper.Map<Usuario>(usuarioDto);
-
-            // (Opcional) Gera DataCadastro
+            
+            // Gera DataCadastro
             usuario.DataCadastro = DateTime.UtcNow;
 
             // Primeiro cria o documento no Firebase

@@ -3,6 +3,7 @@ using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 
 namespace API.Controllers
 {
@@ -47,31 +48,18 @@ namespace API.Controllers
         /// <summary>
         /// Endpoint para adicionar produtos.
         /// </summary>
-        /// <param name="produto"></param>
+        /// <param name="produtoDto"></param>
         /// 
         
         [HttpPost]
-        public async Task<ActionResult> CreateProduto([FromBody] CreateProduto dto)
+        public async Task<ActionResult> CreateProduto([FromBody] CreateProduto produtoDto)
         {
-            var produto = new Produto
-            {
-                Nome = dto.Nome,
-                Preco = dto.Preco,
-                Descricao = dto.Descricao,
-                UrlImagem = dto.UrlImagem,
-                Categoria = dto.Categoria,
-                Estoque = dto.Estoque,
-                Tamanho = dto.Tamanho,
-                Material = dto.Material,
-                Cor = dto.Cor,
-                Genero = dto.Genero,
-                Tipo = dto.Tipo,
-                Marca = dto.Marca,
-            };
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            await _produtoService.AddProdutoAsync(produto);
+            var produtoCriado = await _produtoService.AddProdutoAsync(produtoDto);
+            return CreatedAtAction(nameof(GetProduto), new { id = produtoCriado.Id }, produtoCriado);
 
-            return CreatedAtAction(nameof(GetProduto), new { id = produto.Id }, produto);
         }
 
 
@@ -82,7 +70,7 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <param name="produto"></param>
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProduto(string id, [FromBody] Produto produto)
+        public async Task<ActionResult> UpdateProduto(string id, [FromBody] UpdateProduto produto)
         {
             var existingProduto = await _produtoService.GetProdutoAsync(id);
             if (existingProduto == null)
