@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTO_s.Update
 {
-    class UpdateCarrinho
+    public class UpdateCarrinho
     {
+        public int Quantidade { get; set; }
     }
 }

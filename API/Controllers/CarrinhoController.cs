@@ -1,5 +1,7 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -45,13 +47,16 @@ namespace API.Controllers
         /// <summary>
         /// Endpoint para adicionar um carrinho.
         /// </summary>
-        /// <param name="carrinho"></param>
+        /// <param name="carrinhoDto"></param>
 
         ///
         [HttpPost]
-        public async Task<ActionResult> CreateCarrinho(Carrinho carrinho)
+        public async Task<ActionResult> CreateCarrinho(CreateCarrinho carrinhoDto)
         {
-            await _carrinhoService.AddCarrinhoAsync(carrinho);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var carrinho = await _carrinhoService.AddCarrinhoAsync(carrinhoDto);
             return CreatedAtAction(nameof(GetCarrinho), new { id = carrinho.Id }, carrinho);
         }
 
@@ -62,7 +67,7 @@ namespace API.Controllers
         /// <param name="carrinho"></param>
         ///
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCarrinho(string id, Carrinho carrinho)
+        public async Task<ActionResult> UpdateCarrinho(string id, UpdateCarrinho carrinho)
         {
             var existingCarrinho = await _carrinhoService.GetCarrinhoAsync(id);
             if (existingCarrinho == null)
