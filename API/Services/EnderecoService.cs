@@ -66,15 +66,16 @@ namespace API.Services
         }
 
         // Atualizar um Endereco pelo ID
-        public async Task UpdateEnderecoAsync(string id, UpdateEndereco endereco)
+        public async Task UpdateEnderecoAsync(string id, UpdateEndereco enderecoDto)
         {
             var enderecoExistente = await GetEnderecoAsync(id);
             if (enderecoExistente != null)
             {
+                _mapper.Map(enderecoDto, enderecoExistente);
                 await _firebaseClient
                     .Child("enderecos")
                     .Child(id)
-                    .PutAsync(endereco);
+                    .PutAsync(enderecoExistente);
             }
         }
 
