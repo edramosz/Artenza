@@ -33,7 +33,7 @@ namespace API.Services
 
         // Obter um Endereco pelo ID
         public async Task<Endereco> GetEnderecoAsync(string id)
-        {
+        {   
             var endereco = (await _firebaseClient
                 .Child("enderecos")
                 .OnceAsync<Endereco>())
