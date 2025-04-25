@@ -1,102 +1,61 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../Db/FireBase";
+import React, { useState } from "react";
 import './AdminPainel.css';
+import AdminProduto from "./AdminProduto";
 
 const AdminPainel = () => {
-  const navigate = useNavigate();
-  const [produtos, setProdutos] = useState([]);
-  const [erro, setErro] = useState("");
 
-  useEffect(() => {
-    const fetchProdutos = async () => {
-      try {
-        const response = await fetch("https://localhost:7294/Produto");
-        if (!response.ok) {
-          throw new Error("Erro ao carregar produtos.");
-        }
-        const data = await response.json();
-        setProdutos(data);
-      } catch (error) {
-        setErro("Não foi possível carregar os produtos.");
-        console.error(error);
-      }
-    };
+  const [selecao, setSelecao] = useState('painel');
 
-    fetchProdutos();
-  }, []);
+  function renderConteudo() {
+    if (selecao === 'usuarios') {
+      return (
+        <div>
+          <h3>Usuários</h3>
+          
+        </div>
+      );
+    } else if (selecao === 'enderecos') {
+      return (
+        <div>
+          <h3>Endereços</h3>
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem("nomeUsuario");
-      localStorage.removeItem("isAdmin");
-      navigate("/");
-    } catch (error) {
-      console.error("Erro ao deslogar:", error);
+        </div>
+      );
+    } else if (selecao === 'produtos') {
+
+      return <AdminProduto />
+
     }
-  };
 
-  const handleDeleteProduct = async (id) => {
-    console.log("Excluindo produto com ID:", id); // Adicione este log
-    try {
-      const response = await fetch(`https://localhost:7294/Produto/${id}`, {
-        method: "DELETE",
-      });
-  
-      if (!response.ok) {
-        throw new Error("Erro ao excluir produto.");
-      }
-  
-      setProdutos(produtos.filter((produto) => produto.id !== id));
-    } catch (error) {
-      setErro("Erro ao excluir o produto.");
-      console.error(error);
-    }
-  };
-  
+
+    // conteúdo padrão (Painel de Admin)
+    return (
+      <div className="content">
+        <h2 className="title">Visão geral do site</h2>
+        <div className="cards">
+          <div className="info-card"><span className="icon"><i class="fa-solid fa-users"></i></span><div><div className="value">203</div><div className="label">Usuários</div></div></div>
+          <div className="info-card"><span className="icon"><i class="fa-solid fa-map-location-dot"></i></span><div><div className="value">12</div><div className="label">Endereços</div></div></div>
+          <div className="info-card"><span className="icon"><i class="fa-solid fa-cart-shopping"></i></span><div><div className="value">33</div><div className="label">Produtos</div></div></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="admin-panel">
-      <h2>Painel de Administração</h2>
-      <button onClick={handleLogout} className="logout-btn">Sair</button>
-      
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
-      
-      <h3>Lista de Produtos</h3>
-      <button onClick={() => navigate("/admin/adicionar-produto")}>Adicionar Produto</button>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Descrição</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {produtos.length === 0 ? (
-            <tr>
-              <td colSpan="5">Nenhum produto encontrado.</td>
-            </tr>
-          ) : (
-            produtos.map((produto) => (
-              <tr key={produto.id}>
-                <td>{produto.id}</td>
-                <td>{produto.nome}</td>
-                <td>{produto.preco}</td>
-                <td>{produto.descricao}</td>
-                <td>
-                  <button onClick={() => navigate(`/Admin/editar-produto/${produto.id}`)}>Editar</button>
-                  <button onClick={() => handleDeleteProduct(produto.id)}>Excluir</button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+    <div className="container-dashboard">
+      <div className="sidebar">
+        <h2 className="title">Painel Admin</h2>
+        <ul className="Pages">
+          <li><button onClick={() => setSelecao('painel')}>Painel de Admin</button></li>
+          <li><button onClick={() => setSelecao('usuarios')}>Usuários</button></li>
+          <li><button onClick={() => setSelecao('enderecos')}>Endereços</button></li>
+          <li><button onClick={() => setSelecao('produtos')}>Produtos</button></li>
+        </ul>
+      </div>
+
+      <div className="render">
+        {renderConteudo()}
+      </div>
     </div>
   );
 };
