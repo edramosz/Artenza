@@ -4,7 +4,9 @@ import AdminProduto from "./AdminProduto";
 
 const AdminPainel = () => {
 
-  const [selecao, setSelecao] = useState('painel');
+  const [selecao, setSelecao] = useState('painel'); //criando a seleçao para alterar os estados
+  const [sidebarAberta, setSidebarAberta] = useState(false);
+
 
   function renderConteudo() {
     if (selecao === 'usuarios') {
@@ -28,7 +30,7 @@ const AdminPainel = () => {
     }
 
 
-    // conteúdo padrão (Painel de Admin)
+    // conteúdo Painel de Admin
     return (
       <div className="content">
         <h2 className="title">Visão geral do site</h2>
@@ -43,7 +45,7 @@ const AdminPainel = () => {
 
   return (
     <div className="container-dashboard">
-      <div className="sidebar">
+      <aside className="sidebar">
         <h2 className="title">Painel Admin</h2>
         <ul className="Pages">
           <li><button onClick={() => setSelecao('painel')}>Painel de Admin</button></li>
@@ -51,11 +53,12 @@ const AdminPainel = () => {
           <li><button onClick={() => setSelecao('enderecos')}>Endereços</button></li>
           <li><button onClick={() => setSelecao('produtos')}>Produtos</button></li>
         </ul>
-      </div>
+      </aside>
 
-      <div className="render">
+
+      <main className="render">
         {renderConteudo()}
-      </div>
+      </main>
     </div>
   );
 };
