@@ -15,7 +15,7 @@
   background-color: var(--bege-urbano);
   padding: 6px 30px;
   margin-left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%);  
 }
 
 .top-menu {

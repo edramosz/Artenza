@@ -58,13 +58,13 @@
 
 .render {
   flex: 1;
-  padding: 25px 100px;
+  padding: 30px 80px;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 30px;  
 }
 
 .content .title {
@@ -77,29 +77,28 @@
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  gap: 38px;
+  gap: 50px;
   flex-wrap: wrap;
 }
 .content .cards .info-card {
   position: relative;
   flex: 1;
-  min-width: 200px;
-  max-width: 350px;
+  min-width: 180px;
+  max-width: 280px;
   height: 120px;
   border-radius: 16px;
-  background: linear-gradient(145deg, #fdfdfd, #b0aeb1); /* cor interna inicial */
+  background: linear-gradient(145deg, #fdfdfd, #b0aeb1); 
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 20px;
-  gap: 20px;
-  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.418);
-  overflow: hidden; /* pra esconder o ::after pra dentro do card */
+  gap: 36px;
+  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.100);  
   z-index: 0;
 }
 
 .content .cards .info-card:hover {    
-  background: linear-gradient(145deg, #fc7b7b, #610d8b); /* fundo igual à borda */
+  background: linear-gradient(145deg, #fc7b7b, #610d8b); 
   color: #fff;
   transition: all 0.5s;
   transform: translateY(-6px);
@@ -117,4 +116,134 @@
 .content .info-card .label{
     font-size: 14px;
 }
+
+
+
+/* Produtos */
+
+.admin-painel .title {
+  font-size: 1.9rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+  background-color: #fff;
+  padding: 5px 25px;
+  border-radius: 10px;  
+  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.100);  
+}
+
+.admin-painel .erro {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.admin-painel .btn-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-painel .btn-actions button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-painel .btn-actions button:hover {
+  background-color: #e60000;
+}
+
+.admin-painel .logout-btn {
+  background-color: #4CAF50;
+}
+
+.admin-painel .logout-btn:hover {
+  background-color: #45a049;
+}
+
+.admin-painel .top-table {
+  padding: 1rem 2rem;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #333;
+  background-color: #2196F3;
+  color: #fff;
+}
+
+.admin-painel .top-table h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.admin-painel .top-table .search {
+  padding: 0.4rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  width: 250px;
+  outline: none;
+  background-color: #fff;
+  color: #222;  
+  display: flex;
+}
+
+.admin-painel .top-table .search i{
+  margin-top: 2px;
+
+}
+.admin-painel .top-table .search input{
+  outline: none;
+  background-color: transparent;
+  border: none;
+  margin-left: 15px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.admin-painel .table {
+  width: 100%;
+  border-collapse:collapse;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;  
+  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.100);  
+}
+
+
+.admin-painel .table thead th {
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.admin-painel .table tbody td {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  color: #555;
+  text-align: center;
+}
+
+.admin-painel .table tbody tr:nth-child(even){
+  background-color: #eeecec;
+}
+
+
+.admin-painel .table button {
+  margin-right: 0.5rem;
+  background-color: #d021f3;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
 

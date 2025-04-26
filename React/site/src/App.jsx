@@ -9,6 +9,7 @@ import AdminPainel from './Components/PaineisAdmin/AdminPainel';
 import AdicionarProduto from './Components/Produtos/AdicionarProduto';
 import EditarProduto from './Components/Produtos/EditarProduto';
 import Footer from './Components/Footer/Footer';
+import AdminProduto from './Components/PaineisAdmin/AdminProduto';
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
           <Route path="/Cadastro" element={<Navbar />} Component={Cadastro} />
           <Route path="/Login" element={<Navbar />} Component={Login} />
 
-          <Route path="/Admin" element={<AdminPainel />} />
+          <Route path="/Admin" element={<AdminPainel />} />          
+          <Route path="/AdminProduto" element={<AdminProduto />} />
           <Route path="/Admin/adicionar-produto" element={<AdicionarProduto />} />
           <Route path="/Admin/editar-produto/:id" element={<EditarProduto />} />
 
