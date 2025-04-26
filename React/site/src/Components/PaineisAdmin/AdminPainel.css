@@ -1,3 +1,120 @@
-.dashboard-page{
-    display: flex;
+.container-dashboard {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  width: 100%;
+  max-width: 2500px;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
+
+.container-dashboard .sidebar {
+  width: 220px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background-color: #ca3737;
+  padding: 30px 0px 0px 14px ;
+  border-right: 6px solid #1ca032;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container-dashboard .sidebar .title {
+  font-size: 1.6rem;
+}
+
+.container-dashboard .sidebar .pages {
+  list-style: none;
+  padding: 0;
+}
+
+.pages li {
+  margin-bottom: 25px;
+}
+
+.pages button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16.5px;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+}
+
+.pages button> i{
+    margin-right: 10px;
+}
+
+.pages button:hover, .pages li.active button {
+  background-color: #9ec417;
+  border-radius: 15px 0px 0px 15px;
+}
+
+
+.render {
+  flex: 1;
+  padding: 25px 100px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.content .title {
+  font-size: 28px;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.content .cards {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 38px;
+  flex-wrap: wrap;
+}
+.content .cards .info-card {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 350px;
+  height: 120px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fdfdfd, #b0aeb1); /* cor interna inicial */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  gap: 20px;
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.418);
+  overflow: hidden; /* pra esconder o ::after pra dentro do card */
+  z-index: 0;
+}
+
+.content .cards .info-card:hover {    
+  background: linear-gradient(145deg, #fc7b7b, #610d8b); /* fundo igual à borda */
+  color: #fff;
+  transition: all 0.5s;
+  transform: translateY(-6px);
+}
+
+.content .info-card .icon{
+    font-size: 25px;
+}
+
+.content .info-card .value{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.content .info-card .label{
+    font-size: 14px;
+}
+
