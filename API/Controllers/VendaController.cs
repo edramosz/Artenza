@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -48,29 +49,32 @@ namespace API.Controllers
         /// <param name="venda"></param>
         /// 
         [HttpPost]
-        public async Task<ActionResult> CreateVenda(Venda venda)
+        public async Task<ActionResult> CreateVenda(CreateVenda vendaDto)
         {
-            await _vendaService.AddVendaAsync(venda);
-            return CreatedAtAction(nameof(GetVenda), new { id = venda.Id }, venda);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var vendaCriada = await _vendaService.AddVendaAsync(vendaDto);
+            return CreatedAtAction(nameof(GetVenda), new { id = vendaCriada.Id }, vendaCriada);
         }
 
-        /// <summary>
-        /// Endpoint para editar alguma venda pelo id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="venda"></param>
-        /// <returns></returns>
-        /// 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateVenda(string id, Venda venda)
-        {
-            var existingVenda = await _vendaService.GetVendaAsync(id);
-            if (existingVenda == null)
-                return NotFound();
+        ///// <summary>
+        ///// Endpoint para editar alguma venda pelo id.
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <param name="venda"></param>
+        ///// <returns></returns>
+        ///// 
+        //[HttpPut("{id}")]
+        //public async Task<ActionResult> UpdateVenda(string id, Venda venda)
+        //{
+        //    var existingVenda = await _vendaService.GetVendaAsync(id);
+        //    if (existingVenda == null)
+        //        return NotFound();
 
-            await _vendaService.UpdateVendaAsync(id, venda);
-            return NoContent();
-        }
+        //    await _vendaService.UpdateVendaAsync(id, venda);
+        //    return NoContent();
+        //}
 
         /// <summary>
         /// Endpoint para deletar alguma venda pelo id.
