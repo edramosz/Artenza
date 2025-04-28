@@ -25,7 +25,6 @@ const Navbar = () => {
       const isAdminStr = localStorage.getItem("isAdmin");
       const isAdmin = isAdminStr === "true";
 
-      console.log("🧪 Verificando isAdmin:", isAdminStr, "→", isAdmin);
 
       if (nomeCompleto) {
         setUsuarioLogado({
@@ -70,7 +69,7 @@ const Navbar = () => {
           <ul>
             {usuarioLogado ? (
               <>
-                <li>Bem-vindo, {usuarioLogado.nome}</li>
+                <li className="welcome">Bem-vindo (a), {usuarioLogado.nome}</li>
                 <li>
                   <Link to="/perfil">Visualizar Perfil</Link>
                 </li>
