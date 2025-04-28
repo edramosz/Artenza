@@ -101,6 +101,8 @@ const EditarProduto = () => {
 
   return (
     <div className="editar-produto">
+      
+      <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
       <h2>Editar Produto</h2>
       {erro && <p style={{ color: "red" }}>{erro}</p>}
       <form onSubmit={handleSubmit}>

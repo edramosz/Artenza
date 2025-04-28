@@ -7,6 +7,7 @@ using Firebase.Database.Query;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Core.Models.DTO_s.Update;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Services
 {
@@ -89,31 +90,29 @@ namespace API.Services
 
 
         // Adicionar um novo usuario
-      
-        public async Task<Usuario> AddUsuarioAsync(CreateUsuario usuarioDto)
+
+        public async Task<Usuario> AddUsuarioAsync([FromBody] CreateUsuario usuarioDto)
         {
             var usuario = _mapper.Map<Usuario>(usuarioDto);
 
-            // (Opcional) Gera DataCadastro
+            // Gera a data de cadastro atual
             usuario.DataCadastro = DateTime.UtcNow;
 
-            // Primeiro cria o documento no Firebase
+            // Cria o usuário no Firebase
             var response = await _firebaseClient
                 .Child("usuarios")
                 .PostAsync(usuario);
 
-            // Agora que o Firebase gerou a chave, seta o Id no objeto
             usuario.Id = response.Key;
 
-            // Atualiza o registro no Firebase já com o Id
             await _firebaseClient
                 .Child("usuarios")
                 .Child(usuario.Id)
                 .PutAsync(usuario);
 
-            // Adicionar o ID do endereco ao usuario através de algum modo
             return usuario;
         }
+
 
         // Atualizar um usuario pelo ID
         public async Task UpdateUsuarioAsync(string id, UpdateUsuario usuarioDto)
