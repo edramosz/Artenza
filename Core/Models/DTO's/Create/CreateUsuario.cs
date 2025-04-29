@@ -30,7 +30,7 @@ namespace Core.Models.DTO_s.Create
         [Required]
         public int AnoNascimento { get; set; }
 
-        [Required]
+        [Required, MinLength(6)]
         public string SenhaHash { get; set; }
 
         [Required]

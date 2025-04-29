@@ -98,7 +98,7 @@ namespace API.Services
             // Gera DataCadastro
 
             usuario.DataCadastro = DateTime.UtcNow;
-
+            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.SenhaHash);
             // Cria o usuário no Firebase
             var response = await _firebaseClient
                 .Child("usuarios")
