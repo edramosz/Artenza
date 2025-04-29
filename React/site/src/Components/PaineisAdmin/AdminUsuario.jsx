@@ -18,6 +18,10 @@ const AdminUsuario = () => {
           throw new Error("Erro ao carregar usuários.");
         }
         const data = await response.json();
+
+        // Ordenar os usuários para que os administradores venham primeiro
+        data.sort((a, b) => (b.isAdmin ? 1 : 0) - (a.isAdmin ? 1 : 0));
+
         setUsuarios(data);
       } catch (error) {
         setErro("Não foi possível carregar os usuários.");
@@ -100,7 +104,9 @@ const AdminUsuario = () => {
                   <td>{usuario.email}</td>
                   <td>{usuario.telefone}</td>
                   <td>
-                    <button className="editar" onClick={() => navigate(`/admin/editar-usuario/${usuario.id}`)}>Editar</button>
+                    {usuario.isAdmin && (
+                      <button className="editar" onClick={() => navigate(`/admin/editar-usuario/${usuario.id}`)}>Editar</button>
+                    )}
                     <button className="excluir" onClick={() => handleDeleteUsuario(usuario.id)}>Excluir</button>
                   </td>
                 </tr>

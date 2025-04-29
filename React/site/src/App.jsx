@@ -12,6 +12,7 @@ import Footer from './Components/Footer/Footer';
 import AdminProduto from './Components/PaineisAdmin/AdminProduto';
 import AdminUsuario from './Components/PaineisAdmin/AdminUsuario';
 import AdicionarUsuario from './Components/Usuarios/AdicionarUsuario';
+import EditarUsuario from './Components/Usuarios/EditarUsuario';
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
 
           <Route path="/AdminUsuario" element={<AdminUsuario />}></Route>
           <Route path="/Admin/adicionar-usuario" element={<AdicionarUsuario/>} />
-         {/* < <Route path="/Admin/editar-usuario/:id" element={</>} /> */}
+          <Route path="/Admin/editar-usuario/:id" element={<EditarUsuario/>} />
 
 
         </Routes>
