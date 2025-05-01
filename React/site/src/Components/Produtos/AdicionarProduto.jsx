@@ -59,7 +59,7 @@ const AdicionarProduto = () => {
       }
   
       alert("Produto adicionado com sucesso!");
-      navigate("/Admin");
+      navigate(-1);
     } catch (error) {
       setErro("Erro ao adicionar o produto. Tente novamente.");
       console.error("Erro detalhado:", error.message);
