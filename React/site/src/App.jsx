@@ -10,6 +10,9 @@ import AdicionarProduto from './Components/Produtos/AdicionarProduto';
 import EditarProduto from './Components/Produtos/EditarProduto';
 import Footer from './Components/Footer/Footer';
 import AdminProduto from './Components/PaineisAdmin/AdminProduto';
+import AdminUsuario from './Components/PaineisAdmin/AdminUsuario';
+import AdicionarUsuario from './Components/Usuarios/AdicionarUsuario';
+import EditarUsuario from './Components/Usuarios/EditarUsuario';
 
 function App() {
   return (
@@ -26,9 +29,14 @@ function App() {
           <Route path="/Login" element={<Navbar />} Component={Login} />
 
           <Route path="/Admin" element={<AdminPainel />} />          
-          <Route path="/AdminProduto" element={<AdminProduto />} />
+          <Route path="/AdminProduto" element={<AdminProduto />} />          
           <Route path="/Admin/adicionar-produto" element={<AdicionarProduto />} />
           <Route path="/Admin/editar-produto/:id" element={<EditarProduto />} />
+
+          <Route path="/AdminUsuario" element={<AdminUsuario />}></Route>
+          <Route path="/Admin/adicionar-usuario" element={<AdicionarUsuario/>} />
+          <Route path="/Admin/editar-usuario/:id" element={<EditarUsuario/>} />
+
 
         </Routes>
         <Footer />

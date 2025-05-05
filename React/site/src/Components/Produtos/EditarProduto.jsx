@@ -91,7 +91,7 @@ const EditarProduto = () => {
       }
   
       alert("Produto atualizado com sucesso!");
-      navigate("/Admin"); // Redireciona para o painel de administração
+      navigate("/AdminProduto"); // Redireciona para o painel de administração
     } catch (error) {
       setErro("Erro ao atualizar o produto. Tente novamente.");
       console.error("Erro detalhado:", error.message);
