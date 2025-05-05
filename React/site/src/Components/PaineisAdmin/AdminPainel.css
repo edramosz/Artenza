@@ -50,10 +50,12 @@
     margin-right: 10px;
 }
 
-.pages button:hover, .pages li.active button {
+.pages button:hover,
+.pages button.active {
   background-color: #9ec417;
   border-radius: 15px 0px 0px 15px;
 }
+
 
 
 .render {

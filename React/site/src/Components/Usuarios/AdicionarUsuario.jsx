@@ -10,7 +10,7 @@ const AdicionarUsuario = () => {
     email: "",
     telefone: "",
     senhaHash: "",
-    isAdmin: false,
+    isAdmin: "",
     dataNascimento: "",
     diaNascimento: "",
     mesNascimento: "",
