@@ -54,7 +54,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProduto([FromBody] CreateProduto produtoDto)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(produtoDto.ImagemBase64))
                 return BadRequest(ModelState);
 
             var produtoCriado = await _produtoService.AddProdutoAsync(produtoDto);
