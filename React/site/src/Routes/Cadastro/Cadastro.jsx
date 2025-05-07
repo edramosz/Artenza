@@ -141,10 +141,19 @@ const Cadastro = () => {
       await signInWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
       console.log("Login automático realizado com sucesso.");
 
-      // 5. Redireciona após o login
+     
       alert("Cadastro completo realizado com sucesso!");
+
+      // 5. Salva dados no localStorage ANTES de redirecionar
       localStorage.setItem("nomeUsuario", formData.NomeCompleto.split(" ")[0]);
-      window.location.href = "/";
+      localStorage.setItem("email", formData.Email);
+      localStorage.setItem("isAdmin", formData.isAdmin.toString());
+
+      // Força o update da Navbar (caso esteja montada ainda)
+      window.dispatchEvent(new Event("storage"));
+
+      alert("Cadastro completo realizado com sucesso!");
+
 
     } catch (error) {
       console.error("Erro geral:", error?.message || error);
