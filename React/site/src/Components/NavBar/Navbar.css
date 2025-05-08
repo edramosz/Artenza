@@ -1,13 +1,74 @@
 .top-menu{
   width: 100%;
   height: auto;
-  padding: 10px 20px;
+  padding: 10px 40px;
   background-color: rgb(247, 241, 233);
+}
+
+.top-menu i{
+  color: #000;
 }
 
 .top-menu nav{  
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  gap: 30px;
+  align-items: center;
+}
+
+.top-menu .main-user{
+  display: flex;
+  gap: 20px;
+}
+
+.top-menu nav ul{
+  list-style: none;
+}
+
+.top-menu .search{
+  width: 35%;  
+}
+
+.top-menu .search form{
+  gap: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.top-menu form{
+  background-color: yellow;
+  padding: 10px ;
+}
+
+.menu-user .icon-perfil {  
+  padding: 15px 0px; 
+}
+
+.menu-user .icon-perfil a{
+  background-color: blue;
+  padding: 10px 12px;
+  border-radius: 50%;
+}
+
+.menu-user .icon-perfil i{
+  font-size: 20px;  
+}
+
+.menu-user .main-user a{
+  text-decoration: none;
+  color: #111;
+}
+
+.top-menu .icons ul{
+  display: flex;
+  flex-direction: row;
+  gap: 22px;
+}
+
+.top-menu .icons ul i{
+  font-size: 23px;
 }
 
 .btn-mob {

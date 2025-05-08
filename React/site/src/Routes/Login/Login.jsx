@@ -29,7 +29,12 @@ export default function Login() {
       console.log("Dados do usuário na API:", usuario);
 
       // Salva os dados no localStorage
-      const primeiroNome = usuario.nomeCompleto.split(" ")[0];
+
+      //const primeiroNome = usuario.nomeCompleto.split(" ")[0];
+
+      const nomes = usuario.nomeCompleto.trim().split(" ");
+      const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
+
       localStorage.setItem("nomeUsuario", primeiroNome);
       localStorage.setItem("isAdmin", usuario.isAdmin); // <-- salva aqui como string
       window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar

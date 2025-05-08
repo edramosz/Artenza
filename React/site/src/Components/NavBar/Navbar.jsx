@@ -1,4 +1,3 @@
-// Importa os hooks e componentes do React e Firebase
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -19,36 +18,37 @@ const Navbar = () => {
     { id: 4, url: "/Empresa", label: "Empresa" },
   ];
 
+  // Função que carrega os dados do usuário do localStorage
+  const carregarDadosUsuario = () => {
+    const nomeCompleto = localStorage.getItem("nomeUsuario");
+    const emailStr = localStorage.getItem("email");
+    const isAdminStr = localStorage.getItem("isAdmin");
+
+    console.log("carregarDadosUsuario chamado");
+    console.log("nomeCompleto:", nomeCompleto);
+    console.log("emailStr:", emailStr);
+    console.log("isAdminStr:", isAdminStr);
+
+    const isAdmin = isAdminStr === "true";
+
+    if (nomeCompleto && emailStr) {
+      setUsuarioLogado({
+        nome: nomeCompleto,
+        email: emailStr,
+        isAdmin: isAdmin,        
+      });
+    } else {
+      setUsuarioLogado(null);
+    }
+  };
+  // useEffect para monitorar alterações na autenticação e localStorage
   useEffect(() => {
-    const carregarDadosUsuario = () => {
-      const nomeCompleto = localStorage.getItem("nomeUsuario");
-      const emailStr = localStorage.getItem("email");
-      const isAdminStr = localStorage.getItem("isAdmin");
+    // Carrega os dados do usuário ao montar o componente
+    carregarDadosUsuario();
 
-      const isAdmin = isAdminStr === "true";
-
-      useEffect(() => {
-        console.log("LocalStorage atual:", {
-          nome: localStorage.getItem("nomeUsuario"),
-          email: localStorage.getItem("email"),
-          isAdmin: localStorage.getItem("isAdmin"),
-        });
-      }, [usuarioLogado]);
-
-
-      if (nomeCompleto) {
-        setUsuarioLogado({
-          nome: nomeCompleto,
-          email: emailStr,
-          isAdmin: isAdmin,
-        });
-      } else {
-        setUsuarioLogado(null);
-      }
-    };
-
-
+    // Escuta mudanças na autenticação
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("onAuthStateChanged chamado, user:", user);
       if (user) {
         carregarDadosUsuario();
       } else {
@@ -63,7 +63,7 @@ const Navbar = () => {
       unsubscribe();
       window.removeEventListener("storage", carregarDadosUsuario);
     };
-  }, []);
+  }, []); // Este useEffect agora é executado uma vez ao montar o componente
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -72,6 +72,8 @@ const Navbar = () => {
     setUsuarioLogado(null);
     navigate("/");
   };
+
+  console.log("usuarioLogado no render:", usuarioLogado);
 
   return (
     <div>
@@ -94,10 +96,12 @@ const Navbar = () => {
                   name="searchInput"
                   placeholder="Buscar produtos..."
                 />
+              </div>
+              <div className="search-item">
                 <button type="submit" className="search-btn">
                   <i className="fa fa-search" />
-                </button>
-              </div>
+                </button>              
+              </div>                
             </form>
           </div>
           <div className="menu-user">
@@ -105,22 +109,20 @@ const Navbar = () => {
               {usuarioLogado ? (
                 <>
                   <div className="main-user">
-                    <div>
+                    <div className="icon-perfil">
                       <Link to="/perfil">
-                        <i class="fa-solid fa-user"></i>
+                        <i className="fa-solid fa-user"></i>
                       </Link>
                     </div>
                     <div>
                       <Link to="/perfil">
-                        <li className="user-item">Bem-vindo (a), {usuarioLogado.nome}</li>
+                        <li className="user-item">Bem-vindo, {usuarioLogado.nome}</li>
                         <li className="user-item">{usuarioLogado.email}</li>
                       </Link>
                     </div>
-
                   </div>
-                  
 
-                  {usuarioLogado.isAdmin && (
+                  {/* {usuarioLogado.isAdmin && (
                     <li>
                       <Link to="/Admin">Painel de Admin</Link>
                     </li>
@@ -130,9 +132,7 @@ const Navbar = () => {
                     <button onClick={handleLogout} className="logout-btn">
                       Sair
                     </button>
-                  </li>
-
-
+                  </li> */}
                 </>
               ) : (
                 <>
@@ -145,26 +145,25 @@ const Navbar = () => {
                 </>
               )}
             </ul>
+          </div>
 
-          </div>
-          <div className="icons">
-            <ul>
-              <Link>
-                <li><i class="fa-solid fa-cart-shopping"></i></li>
-              </Link>
-              <Link>
-                <li><i class="fa-solid fa-heart"></i></li>
-              </Link>
-            </ul>
-          </div>
+          {usuarioLogado && (
+            <div className="icons">
+              <ul>
+                <Link to="/carrinho">
+                  <li><i className="fa-solid fa-cart-shopping"></i></li>
+                </Link>
+                <Link to="/favoritos">
+                  <li><i className="fa-solid fa-heart"></i></li>
+                </Link>
+              </ul>
+            </div>
+          )}
         </nav>
       </div>
 
-      {/* Menu principal */}
       <div className="main-menu">
         <header>
-
-
           <nav>
             <ul className={`nav-items ${openMenu ? "open" : ""}`}>
               {items.map((item) => (
