@@ -35,8 +35,11 @@ export default function Login() {
       const nomes = usuario.nomeCompleto.trim().split(" ");
       const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
 
+
+      const firebaseEmail = userCredential.user.email;
       localStorage.setItem("nomeUsuario", primeiroNome);
       localStorage.setItem("isAdmin", usuario.isAdmin); // <-- salva aqui como string
+      localStorage.setItem("email", firebaseEmail); 
       window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar
 
       alert("Login feito com sucesso!");

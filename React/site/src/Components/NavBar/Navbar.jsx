@@ -16,7 +16,12 @@ const Navbar = () => {
     { id: 2, url: "/Sobre", label: "Sobre" },
     { id: 3, url: "/Contato", label: "Contato" },
     { id: 4, url: "/Empresa", label: "Empresa" },
+    { id: 5, url: "/Sosssbre", label: "Sobre" },
+    { id: 6, url: "/ssss", label: "Contato" },
+    { id: 7, url: "/Emssspresa", label: "Empresa" },
+    { id: 8, url: "/sss", label: "Empresa" },
   ];
+  
 
   // Função que carrega os dados do usuário do localStorage
   const carregarDadosUsuario = () => {
@@ -92,23 +97,21 @@ const Navbar = () => {
             }}>
               <div className="search-item">
                 <input
-                  type="text"
+                  type="search"
                   name="searchInput"
                   placeholder="Buscar produtos..."
                 />
-              </div>
-              <div className="search-item">
-                <button type="submit" className="search-btn">
+                 <button type="submit" className="search-btn">
                   <i className="fa fa-search" />
-                </button>              
-              </div>                
+                </button>   
+              </div>
             </form>
           </div>
           <div className="menu-user">
             <ul>
               {usuarioLogado ? (
                 <>
-                  <div className="main-user">
+                  <li className="main-user">
                     <div className="icon-perfil">
                       <Link to="/perfil">
                         <i className="fa-solid fa-user"></i>
@@ -120,7 +123,7 @@ const Navbar = () => {
                         <li className="user-item">{usuarioLogado.email}</li>
                       </Link>
                     </div>
-                  </div>
+                  </li>
 
                   {/* {usuarioLogado.isAdmin && (
                     <li>

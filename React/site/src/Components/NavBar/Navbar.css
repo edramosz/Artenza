@@ -2,7 +2,7 @@
   width: 100%;
   height: auto;
   padding: 10px 40px;
-  background-color: rgb(247, 241, 233);
+  background-color: #fff;
 }
 
 .top-menu i{
@@ -30,17 +30,43 @@
   width: 35%;  
 }
 
-.top-menu .search form{
-  gap: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.top-menu .search form {
+  align-items: center;
+  width: 100%;
+  background-color: rgba(161, 161, 157, 0.815);
+  padding: 10px 19px 10px 10px;
+  border-radius: 7px;
+  justify-content: space-between;    
 }
 
-.top-menu form{
-  background-color: yellow;
-  padding: 10px ;
+.top-menu .search-item{
+  display: flex;
+  gap: 10px;
 }
+
+.top-menu .search-btn{
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+}  
+
+.top-menu .search input[type="search"] {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0px;
+  font-size: 1rem;
+  background: transparent;
+}
+
+
+.top-menu .search input[type="search"]::placeholder {
+  color: #000000
+}
+
+
+
 
 .menu-user .icon-perfil {  
   padding: 15px 0px; 
@@ -70,6 +96,41 @@
 .top-menu .icons ul i{
   font-size: 23px;
 }
+
+
+.main-menu {
+  width: 100%;
+  height: auto;
+  padding: 10px 40px;
+  border-top: 1px solid #aca3a3;
+  background-color: #fff;
+}
+
+.main-menu ul{
+  display: flex;
+  list-style: none;
+  gap: 28px;
+  justify-content: center;
+}
+
+.main-menu .nav-item{
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  font-size: 1.08rem;
+  padding-bottom: 9px;
+}
+
+.main-menu .nav-item:hover{
+  color: #1d1c1ce3;
+  transition: color 0.3s;
+  border-bottom: 2px solid #000000;
+}
+
+.main-menu .nav-item.active{  
+  border-bottom: 2px solid #000000;
+}
+
 
 .btn-mob {
   display: none;
