@@ -10,6 +10,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
   const [usuarioLogado, setUsuarioLogado] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const items = [
     { id: 1, url: "/", label: "Home" },
@@ -21,7 +23,7 @@ const Navbar = () => {
     { id: 7, url: "/Emssspresa", label: "Empresa" },
     { id: 8, url: "/sss", label: "Empresa" },
   ];
-  
+
 
   // Função que carrega os dados do usuário do localStorage
   const carregarDadosUsuario = () => {
@@ -40,7 +42,7 @@ const Navbar = () => {
       setUsuarioLogado({
         nome: nomeCompleto,
         email: emailStr,
-        isAdmin: isAdmin,        
+        isAdmin: isAdmin,
       });
     } else {
       setUsuarioLogado(null);
@@ -90,22 +92,35 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="search">
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const termo = e.target.elements.searchInput.value;
-              console.log("Buscando por:", termo);
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log("Buscando por:", searchTerm);
+              }}
+            >
               <div className="search-item">
                 <input
                   type="search"
                   name="searchInput"
                   placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                 <button type="submit" className="search-btn">
+                {searchTerm && (
+                  <button
+                    type="button"
+                    className="clear-btn"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    <i className="fa fa-times" />
+                  </button>
+                )}
+                <button type="submit" className="search-btn">
                   <i className="fa fa-search" />
-                </button>   
+                </button>
               </div>
             </form>
+
           </div>
           <div className="menu-user">
             <ul>
