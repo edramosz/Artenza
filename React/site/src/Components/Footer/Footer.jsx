@@ -54,10 +54,10 @@ const Footer = () => {
                     <ul className='footer-item'>
                         <h4>Redes Sociais</h4>
                         <div id='social-media'>
-                            <li><Link to="#"><i class="fa-brands fa-instagram"></i></Link></li>
-                            <li><Link to="#"><i class="fa-brands fa-facebook"></i></Link></li>
-                            <li><Link to="#"><i class="fa-brands fa-twitter"></i></Link></li>
-                            <li><Link to="#"><i class="fa-brands fa-youtube"></i></Link></li>
+                            <li><Link to="#"><i className="fa-brands fa-instagram"></i></Link></li>
+                            <li><Link to="#"><i className="fa-brands fa-facebook"></i></Link></li>
+                            <li><Link to="#"><i className="fa-brands fa-twitter"></i></Link></li>
+                            <li><Link to="#"><i className="fa-brands fa-youtube"></i></Link></li>
                         </div>
                     </ul>
                 </div>
