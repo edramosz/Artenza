@@ -83,7 +83,7 @@ const Navbar = () => {
   console.log("usuarioLogado no render:", usuarioLogado);
 
   return (
-    <div>
+    <div className="all-menu">
       <div className="top-menu">
         <nav>
           <div className="logo">
