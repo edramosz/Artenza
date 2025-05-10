@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import './CadastroForm.css';
 
+import { useNavigate } from "react-router-dom";
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -9,6 +11,10 @@ import {
 import { auth } from "../../Components/Db/FireBase";
 
 const Cadastro = () => {
+
+  
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     NomeCompleto: "",
     Email: "",
@@ -141,15 +147,30 @@ const Cadastro = () => {
       await signInWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
       console.log("Login automático realizado com sucesso.");
 
-      // 5. Redireciona após o login
+     
       alert("Cadastro completo realizado com sucesso!");
+
+      // 5. Salva dados no localStorage ANTES de redirecionar
       localStorage.setItem("nomeUsuario", formData.NomeCompleto.split(" ")[0]);
-      window.location.href = "/";
+      localStorage.setItem("email", formData.Email);
+      localStorage.setItem("isAdmin", formData.isAdmin.toString());
+
+      // Força o update da Navbar (caso esteja montada ainda)
+      window.dispatchEvent(new Event("storage"));
+
+      alert("Cadastro completo realizado com sucesso!");
+      navigate('/')
 
     } catch (error) {
       console.error("Erro geral:", error?.message || error);
-      alert("Erro ao realizar cadastro completo.\n" + (error?.message || error));
+    
+      if (error.code === "auth/email-already-in-use") {
+        alert("Este email já está em uso. Tente outro ou recupere sua senha.");
+      } else {
+        alert("Erro ao realizar cadastro completo.\n" + (error?.message || error));
+      }
     }
+    
   };
 
   return (
