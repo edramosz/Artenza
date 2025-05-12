@@ -154,12 +154,16 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <li>
-                    <Link to="/Cadastro">Junte-se a nós</Link>
-                  </li>
-                  <li>
-                    <Link to="/Login">Entrar</Link>
-                  </li>
+                  <div className="acount">
+                    <ul>
+                      <li>
+                        <Link to="/Cadastro">Junte-se a nós</Link>
+                      </li>
+                      <li>
+                        <Link to="/Login">Entrar</Link>
+                      </li>
+                    </ul>
+                  </div>
                 </>
               )}
             </ul>
