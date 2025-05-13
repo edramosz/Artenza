@@ -134,8 +134,8 @@ const Navbar = () => {
                     </div>
                     <div>
                       <Link to="/perfil">
-                        <li className="user-item">Bem-vindo, {usuarioLogado.nome}</li>
-                        <li className="user-item">{usuarioLogado.email}</li>
+                        <p className="user-item">Bem-vindo, {usuarioLogado.nome}</p>
+                        <p className="user-item">{usuarioLogado.email}</p>
                       </Link>
                     </div>
                   </li>

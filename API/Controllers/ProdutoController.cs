@@ -54,8 +54,8 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateProduto([FromBody] CreateProduto produtoDto)
         {
-            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(produtoDto.UrlImagem))
-                return BadRequest(ModelState);
+            if (!ModelState.IsValid || produtoDto.UrlImagens == null || !produtoDto.UrlImagens.Any())
+                return BadRequest("Pelo menos uma imagem é obrigatória.");
 
             var produtoCriado = await _produtoService.AddProdutoAsync(produtoDto);
             return CreatedAtAction(nameof(GetProduto), new { id = produtoCriado.Id }, produtoCriado);
