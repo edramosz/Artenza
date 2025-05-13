@@ -1,18 +1,24 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Services
 {
     public class CarrinhoService : ICarrinhoService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly IMapper _mapper;
 
-        public CarrinhoService(IConfiguration configuration)
+        public CarrinhoService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+            _mapper = mapper;
         }
 
         // Obter todos os carrinhos
@@ -37,8 +43,10 @@ namespace API.Services
         }
 
         // Adicionar um novo carrinho
-        public async Task AddCarrinhoAsync(Carrinho carrinho)
+        public async Task<Carrinho> AddCarrinhoAsync(CreateCarrinho carrinhoDto)
         {
+            var carrinho = _mapper.Map<Carrinho>(carrinhoDto);
+
             var result = await _firebaseClient
             .Child("carrinhos")
             .PostAsync(carrinho);
@@ -51,18 +59,21 @@ namespace API.Services
                 .Child("carrinhos")
                 .Child(carrinho.Id)
                 .PutAsync(carrinho);
+
+            return carrinho;
         }
 
         // Atualizar um carrinho pelo ID
-        public async Task UpdateCarrinhoAsync(string id, Carrinho carrinho)
+        public async Task UpdateCarrinhoAsync(string id, UpdateCarrinho carrinhoDto)
         {
             var carrinhoExistente = await GetCarrinhoAsync(id);
             if (carrinhoExistente != null)
             {
+                _mapper.Map(carrinhoDto, carrinhoExistente);
                 await _firebaseClient
                     .Child("carrinhos")
                     .Child(id)
-                    .PutAsync(carrinho);
+                    .PutAsync(carrinhoExistente);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 
 namespace Core.Interfaces
 {
@@ -8,7 +9,7 @@ namespace Core.Interfaces
         Task<List<Endereco>> GetEnderecosAsync();
         Task<Endereco> GetEnderecoAsync(string id);
         Task<Endereco> AddEnderecoAsync(CreateEndereco enderecoDto);
-        Task UpdateEnderecoAsync(string id, Endereco endereco);
+        Task UpdateEnderecoAsync(string id, UpdateEndereco endereco);
         Task DeleteEnderecoAsync(string id);
     }
 }

@@ -3,6 +3,7 @@ using Core.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Update;
 
 namespace API.Controllers
 {
@@ -52,6 +53,9 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEndereco([FromBody] CreateEndereco enderecoDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var enderecoCriado = await _enderecoService.AddEnderecoAsync(enderecoDto);
 
             return CreatedAtAction(nameof(GetEndereco), new { id = enderecoCriado.Id }, enderecoCriado);
@@ -66,7 +70,7 @@ namespace API.Controllers
         /// <param name="endereco"></param>
         ///
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateEndereco(string id, Endereco endereco)
+        public async Task<ActionResult> UpdateEndereco(string id, UpdateEndereco endereco)
         {
             var existingEndereco = await _enderecoService.GetEnderecoAsync(id);
             if (existingEndereco == null)

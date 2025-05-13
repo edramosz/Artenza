@@ -1,5 +1,7 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 using Firebase.Database;
 using Firebase.Database.Query;
 
@@ -8,11 +10,13 @@ namespace API.Services
     public class VendaService : IVendaService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly IMapper _mapper;
 
-        public VendaService(IConfiguration configuration)
+        public VendaService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+            _mapper = mapper;
         }
 
         // Obter todos os vendas
@@ -37,8 +41,10 @@ namespace API.Services
         }
 
         // Adicionar um novo venda
-        public async Task AddVendaAsync(Venda venda)
+        public async Task<Venda> AddVendaAsync(CreateVenda vendaDto)
         {
+            var venda = _mapper.Map<Venda>(vendaDto);
+
             var result = await _firebaseClient
             .Child("vendas")
             .PostAsync(venda);
@@ -51,20 +57,22 @@ namespace API.Services
                 .Child("vendas")
                 .Child(venda.Id)
                 .PutAsync(venda);
+
+            return venda;
         }
 
         // Atualizar um venda pelo ID
-        public async Task UpdateVendaAsync(string id, Venda venda)
-        {
-            var vendaExistente = await GetVendaAsync(id);
-            if (vendaExistente != null)
-            {
-                await _firebaseClient
-                    .Child("vendas")
-                    .Child(id)
-                    .PutAsync(venda);
-            }
-        }
+        //public async Task UpdateVendaAsync(string id, Venda venda)
+        //{
+        //    var vendaExistente = await GetVendaAsync(id);
+        //    if (vendaExistente != null)
+        //    {
+        //        await _firebaseClient
+        //            .Child("vendas")
+        //            .Child(id)
+        //            .PutAsync(venda);
+        //    }
+        //}
 
         // Deletar um venda pelo ID
         public async Task DeleteVendaAsync(string id)

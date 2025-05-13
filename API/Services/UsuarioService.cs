@@ -94,10 +94,11 @@ namespace API.Services
         public async Task<Usuario> AddUsuarioAsync([FromBody] CreateUsuario usuarioDto)
         {
             var usuario = _mapper.Map<Usuario>(usuarioDto);
+            
+            // Gera DataCadastro
 
-            // Gera a data de cadastro atual
             usuario.DataCadastro = DateTime.UtcNow;
-
+            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.SenhaHash);
             // Cria o usuário no Firebase
             var response = await _firebaseClient
                 .Child("usuarios")

@@ -55,7 +55,7 @@ const PromotionalBanner = () => {
                     <div className="text-content">
                         <p>{currentSlide.subtitle}</p>
                         <h2>{currentSlide.title}</h2>
-                        <Link to='/' className="shop-btn">SHOP kkk</Link>
+                        <Link to='/Colecao' className="shop-btn">SHOP kkk</Link>
                     </div>
                 </div>
                 <button onClick={() => setCurrent((current + 1) % slides.length)}>

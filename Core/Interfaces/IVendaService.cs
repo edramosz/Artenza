@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 
 namespace Core.Interfaces
 {
@@ -11,8 +12,8 @@ namespace Core.Interfaces
     {
         Task<List<Venda>> GetVendasAsync();
         Task<Venda> GetVendaAsync(string id);
-        Task AddVendaAsync(Venda venda);
-        Task UpdateVendaAsync(string id, Venda venda);
+        Task<Venda> AddVendaAsync(CreateVenda venda);
+        // Analisar se deverá ter update ou não   Task UpdateVendaAsync(string id, Venda venda);
         Task DeleteVendaAsync(string id);
     }
 }
