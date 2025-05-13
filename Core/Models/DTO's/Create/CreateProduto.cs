@@ -21,6 +21,5 @@ namespace Core.Models.DTO_s.Create
         public string Genero { get; set; }
         public string Tipo { get; set; }      // Para acessórios (Exemplo: "Relógio", "Colar")
         public string Marca { get; set; }
-        public string ImagemBase64 { get; set; }
     }
 }
