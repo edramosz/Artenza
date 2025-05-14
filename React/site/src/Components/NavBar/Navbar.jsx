@@ -13,136 +13,16 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
 
- const items = [
-  { id: 1, url: "/", label: "Home" },
-  {
-    id: 2,
-    url: "/masculino",
-    label: "Masculino",
-    submenu: [
-      {
-        title: "ROUPAS",
-        items: [
-          { label: "Camisetas", url: "/masculino/camisetas" },
-          { label: "Camisas", url: "/masculino/camisas" },
-          { label: "Calças", url: "/masculino/calcas" },
-          { label: "Bermudas", url: "/masculino/bermudas" },
-          { label: "Jaquetas", url: "/masculino/jaquetas" },
-        ],
-      },
-      {
-        title: "CALÇADOS",
-        items: [
-          { label: "Calçados", url: "/masculino/calcados" },
-        ],
-      },
-      {
-        title: "ACESSÓRIOS",
-        items: [
-          { label: "Acessórios Masculinos", url: "/masculino/acessorios" },
-        ],
-      },
-    ],
-  },
-  {
-    id: 3,
-    url: "/feminino",
-    label: "Feminino",
-    submenu: [
-      {
-        title: "ROUPAS",
-        items: [
-          { label: "Blusas", url: "/feminino/blusas" },
-          { label: "Saias", url: "/feminino/saias" },
-          { label: "Vestidos", url: "/feminino/vestidos" },
-          { label: "Calças", url: "/feminino/calcas" },
-          { label: "Macacões", url: "/feminino/macacoes" },
-        ],
-      },
-      {
-        title: "CALÇADOS",
-        items: [
-          { label: "Calçados", url: "/feminino/calcados" },
-        ],
-      },
-      {
-        title: "ACESSÓRIOS",
-        items: [
-          { label: "Acessórios Femininos", url: "/feminino/acessorios" },
-        ],
-      },
-    ],
-  },
-  {
-    id: 4,
-    url: "/acessorios",
-    label: "Acessórios",
-    submenu: [
-      {
-        title: "BOLSAS E ÓCULOS",
-        items: [
-          { label: "Bolsas e Mochilas", url: "/acessorios/bolsas-mochilas" },
-          { label: "Óculos de Sol", url: "/acessorios/oculos" },
-        ],
-      },
-      {
-        title: "OUTROS",
-        items: [
-          { label: "Bonés e Chapéus", url: "/acessorios/bones-chapeus" },
-          { label: "Relógios", url: "/acessorios/relogios" },
-          { label: "Cintos", url: "/acessorios/cintos" },
-          { label: "Bijuterias", url: "/acessorios/bijuterias" },
-          { label: "Meias e Outros", url: "/acessorios/meias-outros" },
-        ],
-      },
-    ],
-  },
-  {
-    id: 5,
-    url: "/novidades",
-    label: "Novidades",
-    submenu: [
-      {
-        title: "LANÇAMENTOS",
-        items: [
-          { label: "Lançamentos Masculinos", url: "/novidades/masculino" },
-          { label: "Lançamentos Femininos", url: "/novidades/feminino" },
-          { label: "Novos Acessórios", url: "/novidades/acessorios" },
-        ],
-      },
-      {
-        title: "COLEÇÕES",
-        items: [
-          { label: "Coleções Recentes", url: "/novidades/colecoes" },
-        ],
-      },
-    ],
-  },
-  {
-    id: 6,
-    url: "/promocoes",
-    label: "Promoções",
-    submenu: [
-      {
-        title: "POR CATEGORIA",
-        items: [
-          { label: "Masculino em Promoção", url: "/promocoes/masculino" },
-          { label: "Feminino em Promoção", url: "/promocoes/feminino" },
-          { label: "Acessórios em Promoção", url: "/promocoes/acessorios" },
-        ],
-      },
-      {
-        title: "ESPECIAIS",
-        items: [
-          { label: "Queima de Estoque", url: "/promocoes/queima-de-estoque" },
-          { label: "Outlet", url: "/promocoes/outlet" },
-        ],
-      },
-    ],
-  },
-  { id: 7, url: "/contato", label: "Contato" },
-  { id: 8, url: "/sobre", label: "Sobre" },
-];
+  const items = [
+    { id: 1, url: "/", label: "Home" },
+    { id: 2, url: "/Sobre", label: "Sobre" },
+    { id: 3, url: "/Contato", label: "Contato" },
+    { id: 4, url: "/Empresa", label: "Empresa" },
+    { id: 5, url: "/Sosssbre", label: "Sobre" },
+    { id: 6, url: "/ssss", label: "Contato" },
+    { id: 7, url: "/Emssspresa", label: "Empresa" },
+    { id: 8, url: "/sss", label: "Empresa" },
+  ];
 
 
   // Função que carrega os dados do usuário do localStorage
@@ -313,12 +193,10 @@ const Navbar = () => {
                   key={item.id}
                   url={item.url}
                   label={item.label}
-                  submenu={item.submenu}
                   IsActive={location.pathname === item.url}
                 />
               ))}
             </ul>
-
           </nav>
 
           <button className="btn-mob" onClick={() => setOpenMenu(!openMenu)}>
