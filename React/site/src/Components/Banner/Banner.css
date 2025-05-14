@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(231, 230, 230, 0.863);
+  z-index: 1;
 }
 
 .carousel-container {
