@@ -1,0 +1,37 @@
+.container-service {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.container-service .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 50px;
+    justify-content: center;
+}
+
+.container-service .card{
+    
+  max-width: 260px;
+  height: 160px;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.container-service .icon{
+    font-size: 2.4rem;
+}
+
+.container-service .texts h2{
+    font-size: 1.1rem;
+}
+
+.container-service .texts p{
+    font-size: 0.9rem;
+    color: #222;
+}

@@ -35,17 +35,13 @@ const Selection = () => {
                             </li>
                             <li className={selecao === 'Shorts' ? 'active' : ''}>
                                 <button onClick={() => setSelecao('Shorts')}>Shorts</button>
-                            </li>                            
-                            <li className={selecao === 'Shorts' ? 'active' : ''}>
-                                <button onClick={() => setSelecao('Shorts')}>Shorts</button>
-                            </li>                            
-                            <li className={selecao === 'Shorts' ? 'active' : ''}>
-                                <button onClick={() => setSelecao('Shorts')}>Shorts</button>
                             </li>
-                            
-                            
-                            
-
+                            <li className={selecao === 'rr' ? 'active' : ''}>
+                                <button onClick={() => setSelecao('rr')}>Shorts</button>
+                            </li>
+                            <li className={selecao === 'rrxx' ? 'active' : ''}>
+                                <button onClick={() => setSelecao('rrxx')}>Shorts</button>
+                            </li>
                         </div>
                     </ul>
                 </nav>
