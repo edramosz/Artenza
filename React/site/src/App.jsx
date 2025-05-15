@@ -17,6 +17,7 @@ import AdminEndereco from './Components/PaineisAdmin/AdminEndereco';
 import EditarEndereco from './Components/Endereco/EditarEndereco';
 import EditarUsuario from './Components/Usuarios/EditarUsuario';
 import AdicionarEndereco from './Components/Endereco/AdicionarEndereco';
+import Perfil from './Routes/Perfil/Perfil';
 
 function App() {
   return (
@@ -31,6 +32,8 @@ function App() {
           <Route path="/Colecao" element={<Navbar />} Component={Colecao} />
           <Route path="/Cadastro" element={<Navbar />} Component={Cadastro} />
           <Route path="/Login" element={<Navbar />} Component={Login} />
+          
+          <Route path="/Perfil" element={<Navbar />} Component={Perfil} />
 
           <Route path="/Admin" element={<AdminPainel />} />
           <Route path="/AdminProduto" element={<AdminProduto />} />

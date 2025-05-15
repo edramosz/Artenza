@@ -1,0 +1,60 @@
+.container-perfil{
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
+    padding: 40px 0px;
+    display: flex;
+    gap: 200px;
+    justify-content: space-around;
+}
+
+
+.container-perfil img{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+/* Tabs (tabelas) */
+.tabs {
+  margin-top: 20px;
+}
+
+.tab-user,
+.tab-endereco {
+  margin-bottom: 30px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  color: #333;
+}
+
+.table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.table td:last-child,
+.table th:last-child {
+  text-align: center;
+}
+
+.table td:last-child {
+  color: #2a63f3;
+  cursor: pointer;
+}
