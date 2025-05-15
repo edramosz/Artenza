@@ -44,13 +44,20 @@ namespace API.Controllers
 
             return produto;
         }
+        [HttpGet("mais-vendidos")]
+        public async Task<ActionResult<List<Produto>>> GetMaisVendidos()
+        {
+            var produtos = await _produtoService.ObterProdutosMaisVendidos();
+            return Ok(produtos);
+        }
+
 
         /// <summary>
         /// Endpoint para adicionar produtos.
         /// </summary>
         /// <param name="produtoDto"></param>
         /// 
-        
+
         [HttpPost]
         public async Task<ActionResult> CreateProduto([FromBody] CreateProduto produtoDto)
         {

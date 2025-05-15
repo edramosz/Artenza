@@ -42,6 +42,57 @@ namespace API.Services
             return produto;
         }
 
+        public async Task<List<Produto>> ObterProdutosMaisVendidos()
+        {
+            // 1. Buscar todas as vendas
+            var vendas = (await _firebaseClient
+                .Child("vendas")
+                .OnceAsync<Venda>())
+                .Select(v => v.Object)
+                .ToList();
+
+            // 2. Dicionário para contar vendas por ProdutoId
+            var contagem = new Dictionary<string, int>();
+
+            foreach (var venda in vendas)
+            {
+                if (venda.Produtos == null) continue;
+
+                foreach (var item in venda.Produtos)
+                {
+                    if (string.IsNullOrEmpty(item.ProdutoId)) continue;
+
+                    if (contagem.ContainsKey(item.ProdutoId))
+                        contagem[item.ProdutoId] += item.Quantidade;
+                    else
+                        contagem[item.ProdutoId] = item.Quantidade;
+                }
+            }
+
+            // 3. Ordenar os ProdutoId por quantidade vendida (descendente)
+            var idsOrdenados = contagem
+                .OrderByDescending(p => p.Value)
+                .Select(p => p.Key)
+                .ToList();
+
+            // 4. Buscar todos os produtos de uma vez (melhor do que 1 a 1)
+            var todosProdutos = (await _firebaseClient
+                .Child("produtos")
+                .OnceAsync<Produto>())
+                .Select(p => p.Object)
+                .ToList();
+
+            // 5. Criar a lista final ordenada
+            var produtosOrdenados = idsOrdenados
+                .Select(id => todosProdutos.FirstOrDefault(p => p.Id == id))
+                .Where(p => p != null)
+                .ToList();
+
+            return produtosOrdenados;
+        }
+
+
+
         // Adicionar um novo produto
         public async Task<Produto> AddProdutoAsync(CreateProduto produtoDto)
         {
