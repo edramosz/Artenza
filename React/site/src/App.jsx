@@ -18,6 +18,12 @@ import EditarEndereco from './Components/Endereco/EditarEndereco';
 import EditarUsuario from './Components/Usuarios/EditarUsuario';
 import AdicionarEndereco from './Components/Endereco/AdicionarEndereco';
 import Perfil from './Routes/Perfil/Perfil';
+import Cupons from './Routes/Perfil/PerfilComponents/Cupons';
+import Enderecos from './Routes/Perfil/PerfilComponents/Enderecos';
+import Favoritos from './Routes/Perfil/PerfilComponents/Favoritos';
+import Pagamentos from './Routes/Perfil/PerfilComponents/Pagamentos';
+import Pedidos from './Routes/Perfil/PerfilComponents/Pedidos';
+import Config from './Routes/Perfil/PerfilComponents/Config';
 
 function App() {
   return (
@@ -33,7 +39,15 @@ function App() {
           <Route path="/Cadastro" element={<Navbar />} Component={Cadastro} />
           <Route path="/Login" element={<Navbar />} Component={Login} />
           
-          <Route path="/Perfil" element={<Navbar />} Component={Perfil} />
+          <Route path="/Perfil" element={<Navbar />} Component={Perfil} />          
+          <Route path="/Cupons" element={<Cupons />} />   
+          <Route path="/Enderecos" element={<Enderecos />} />             
+          <Route path="/Favoritos" element={<Favoritos />} />   
+          <Route path="/Pagamentos" element={<Pagamentos />} />   
+          <Route path="/Pedidos" element={<Pedidos />} />             
+          <Route path="/Config" element={<Config />} />
+
+
 
           <Route path="/Admin" element={<AdminPainel />} />
           <Route path="/AdminProduto" element={<AdminProduto />} />

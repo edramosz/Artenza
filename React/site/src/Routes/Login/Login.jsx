@@ -26,20 +26,32 @@ export default function Login() {
       }
 
       const usuario = await response.json();
-      console.log("Dados do usuário na API:", usuario);
+      console.log("Resposta da API:", usuario);
+
 
       // Salva os dados no localStorage
 
-      //const primeiroNome = usuario.nomeCompleto.split(" ")[0];
+      const { diaNascimento, mesNascimento, anoNascimento } = usuario;
+
+      // Cria uma string no formato ISO: "1988-03-02"
+      const dataNascimentoCompleta = `${anoNascimento}-${String(mesNascimento).padStart(2, '0')}-${String(diaNascimento).padStart(2, '0')}`;
+
+      localStorage.setItem("dataNascimento", dataNascimentoCompleta);
+      console.log("dataNascimento salva:", dataNascimentoCompleta); // deve ser "1990-05-12" por exemplo
+
 
       const nomes = usuario.nomeCompleto.trim().split(" ");
       const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
 
-
       const firebaseEmail = userCredential.user.email;
       localStorage.setItem("nomeUsuario", primeiroNome);
-      localStorage.setItem("isAdmin", usuario.isAdmin); // <-- salva aqui como string
-      localStorage.setItem("email", firebaseEmail); 
+      localStorage.setItem("nomeCompletoUser", usuario.nomeCompleto);
+      localStorage.setItem("isAdmin", usuario.isAdmin);
+      localStorage.setItem("email", firebaseEmail);
+      localStorage.setItem("dataCadastro", usuario.dataCadastro);
+
+
+
       window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar
 
       alert("Login feito com sucesso!");

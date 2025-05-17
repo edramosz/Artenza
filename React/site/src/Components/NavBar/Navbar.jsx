@@ -135,7 +135,7 @@ const items = [
                     </div>
                   </li>
 
-                  {/* {usuarioLogado.isAdmin && (
+                  {usuarioLogado.isAdmin && (
                     <li>
                       <Link to="/Admin">Painel de Admin</Link>
                     </li>
@@ -145,7 +145,7 @@ const items = [
                     <button onClick={handleLogout} className="logout-btn">
                       Sair
                     </button>
-                  </li> */}
+                  </li>
                 </>
               ) : (
                 <>

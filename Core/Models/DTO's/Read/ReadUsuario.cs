@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Core.Models.DTO_s.Read
 {
-    class ReadUsuario
+     public class ReadUsuario
     {
+        public string Id { get; set; }
+        public string NomeCompleto { get; set; }
+        public string Email { get; set; }
+        public string Telefone { get; set; }
+        public bool isAdmin { get; set; }
+        public DateTime DataCadastro { get; set; }
     }
 }
