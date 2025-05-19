@@ -15,6 +15,9 @@ const Perfil = () => {
   });
 
   useEffect(() => {
+    const editImage = () => {
+
+    }
     const atualizarUsuario = () => {
       const nome = localStorage.getItem("nomeCompletoUser") || '';
       const email = localStorage.getItem("email") || '';
@@ -61,7 +64,7 @@ const Perfil = () => {
           <div className="perfil-header">
             <div className="perfil-img-wrapper">
               <img src="./img/fundo.png" alt="Foto de Perfil" className="perfil-img" />
-              <button className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
+              <button onClick={editImage} className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
             </div>
             <div className="perfil-dados">
             </div>

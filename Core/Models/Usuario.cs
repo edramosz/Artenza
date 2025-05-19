@@ -13,6 +13,7 @@ namespace Core.Models
         public int MesNascimento { get; set; }
         public int AnoNascimento { get; set; }
         public string SenhaHash { get; set; }
+        public string PerfilUrl { get; set; }
         public bool isAdmin { get; set; }
         public DateTime DataCadastro { get; set; }
 
