@@ -1,0 +1,94 @@
+.container-perfil {
+  display: flex;
+}
+
+.container-perfil .sidebar {
+  width: 250px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 30px 10px;
+  border-right: 2px solid #e0e0e0;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+}
+
+.container-perfil .perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.container-perfil .profile{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.container-perfil .profile a{
+  text-decoration: none;
+}
+
+.container-perfil .perfil img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.container-perfil .perfil h2 {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.container-perfil .perfil-items {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.container-perfil .perfil-items li {
+  margin-bottom: 15px;
+}
+
+.container-perfil .perfil-items a {
+  text-decoration: none;
+  width: 100%;
+  display: block;
+}
+
+.container-perfil .perfil-items button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.container-perfil .perfil-items button:hover {
+  background-color: #e6e6e6;
+}
+
+.container-perfil .perfil-items button.active {
+  background-color: #49494983;
+  color: rgba(255, 255, 255, 0.904);
+  font-weight: bold; 
+}
+
+.container-perfil .perfil-items button svg {
+  width: 18px;
+  height: 18px;
+  color: #666;
+}
+
+.container-perfil .perfil-items button.active svg {
+  color: #fff; 
+}

@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Read;
 using Core.Models.DTO_s.Update;
 
 namespace Core.Interfaces
@@ -9,7 +10,7 @@ namespace Core.Interfaces
         Task<List<Usuario>> GetUsuariosAsync();
         Task<Usuario> GetUsuarioAsync(string id);
         Task<Usuario> GetUsuarioByEmailAsync(string email);
-        Task<Usuario> AddUsuarioAsync(CreateUsuario usuario);
+        Task<ReadUsuario> AddUsuarioAsync(CreateUsuario usuario); // Altere para ReadUsuario
         Task UpdateUsuarioAsync(string id, UpdateUsuario usuario);
         Task DeleteUsuarioAsync(string id);
     }

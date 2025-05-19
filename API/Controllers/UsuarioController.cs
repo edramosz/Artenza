@@ -77,12 +77,13 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateUsuario([FromBody] CreateUsuario usuarioDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var usuarioCriado = await _usuarioService.AddUsuarioAsync(usuarioDto);
             return CreatedAtAction(nameof(GetUsuario), new { id = usuarioCriado.Id }, usuarioCriado);
         }
+
 
         /// <summary>
         /// Endpoint para editar algum usuário pelo id.

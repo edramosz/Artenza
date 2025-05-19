@@ -12,9 +12,7 @@ namespace Core.Models.DTO_s.Create
         [Required] public string Nome { get; set; }
         [Required] public decimal Preco { get; set; }
         public string Descricao { get; set; }
-        [Required] public string UrlImagem { get; set; }
-        [Required] public string UrlImagem2 { get; set; }
-        [Required] public string UrlImagem3 { get; set; }
+        public List<string> UrlImagens { get; set; } = new List<string>();
         public string Categoria { get; set; } // Exemplo: "Roupas", "Acessórios"
         [Required] public int Estoque { get; set; }
         public string Tamanho { get; set; }

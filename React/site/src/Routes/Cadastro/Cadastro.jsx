@@ -12,7 +12,7 @@ import { auth } from "../../Components/Db/FireBase";
 
 const Cadastro = () => {
 
-  
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -147,11 +147,11 @@ const Cadastro = () => {
       await signInWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
       console.log("Login automático realizado com sucesso.");
 
-     
+
       alert("Cadastro completo realizado com sucesso!");
 
       // 5. Salva dados no localStorage ANTES de redirecionar
-      localStorage.setItem("nomeUsuario", formData.NomeCompleto.split(" ")[0]);
+      localStorage.setItem("nomeUsuario", formData.NomeCompleto);
       localStorage.setItem("email", formData.Email);
       localStorage.setItem("isAdmin", formData.isAdmin.toString());
 
@@ -161,16 +161,40 @@ const Cadastro = () => {
       alert("Cadastro completo realizado com sucesso!");
       navigate('/')
 
+      setFormData({
+        NomeCompleto: "",
+        Email: "",
+        Telefone: "",
+        SenhaHash: "",
+        IdEndereco: "",
+        isAdmin: false,
+        DiaNascimento: "",
+        MesNascimento: "",
+        AnoNascimento: "",
+        DataNascimento: "",
+      });
+
+      setFormDataEndereco({
+        CEP: "",
+        Estado: "",
+        Cidade: "",
+        Bairro: "",
+        Rua: "",
+        Numero: "",
+        Complemento: "",
+      });
+
+
     } catch (error) {
       console.error("Erro geral:", error?.message || error);
-    
+
       if (error.code === "auth/email-already-in-use") {
         alert("Este email já está em uso. Tente outro ou recupere sua senha.");
       } else {
         alert("Erro ao realizar cadastro completo.\n" + (error?.message || error));
       }
     }
-    
+
   };
 
   return (

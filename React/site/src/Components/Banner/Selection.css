@@ -1,0 +1,48 @@
+.container-selection {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.selection-nav{
+    margin-bottom: 60px;
+}
+
+.selection-nav nav{
+    display: flex;
+    justify-content: space-between;
+}
+
+.selection-nav .content{
+    line-height: 0;
+    padding-top:20px ;
+}
+
+.selection-nav .selection {
+    justify-content: end;
+    display: flex;
+    list-style: none;
+    margin-bottom: 30px;
+    padding: 0;
+}
+
+.items {
+    display: flex;    
+    gap: 35px;
+    padding: 0px 10px;
+}
+
+.selection-nav .selection button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.selection-nav .selection li:hover button,
+.selection-nav .selection li.active button {
+    border-bottom: 2px solid #181717;
+    font-weight: 600;
+}

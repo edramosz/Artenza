@@ -1,0 +1,118 @@
+.nav-s {
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 10px 40px;
+    justify-content: space-between;
+    border-bottom: 1px solid #aaa;
+}
+
+.nav-s ul li {
+    list-style: none;
+}
+
+.nav-s ul a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1.2rem;
+}
+
+.not-found {
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1px 40px;
+    flex-grow: 1;
+    min-height: 100vh;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.not-found-card {
+    width: 570px;
+    background-color: rgba(197, 196, 195, 0.74);
+    padding: 40px;
+    text-align: justify;    
+    box-shadow: 4px 2px 12px #00000044;
+    border-radius: 20px;
+}
+
+.not-found-card span {
+    position: absolute;
+    z-index: 2;
+    transform: translate(181px, -51px);
+    background-color: #313131;
+    border-radius: 10px;
+    padding: 5px 8px;
+    text-transform: uppercase;
+    color: #fffffff8;
+    font-size: 0.8rem;
+    box-shadow: 2px 2px 8px #00000067;
+}
+
+.not-found-card h1 {
+    text-align: center;
+    text-shadow: 3px 3px 12px #00000009;
+    margin-bottom: 30px;
+    padding: 20px 0px;
+    border-bottom: 1px solid #aaa;    
+    color: #000000cb;
+}
+
+.not-found-card h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000000cb;
+}
+
+.not-found-card p {
+    line-height: 1.8rem;
+}
+
+.not-found-card a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.not-found a:hover {
+    color: #1981c7;
+    transition: color 0.3s ease;
+}
+
+.nav-s a:hover,
+.footer-s a:hover {
+    opacity: 0.5;
+    transition: 0.4s;
+}
+
+.footer-s {    
+    width: 100%;
+    max-width: 2000px;
+    margin: 0 auto;
+    align-items: center;
+    padding: 20px 40px;
+    border-top: 1px solid #aaa;
+}
+
+.footer-s ul {
+    display: flex;
+    list-style: none;
+    gap: 38px;
+    color: #555;    
+    text-align: end;
+    justify-content: end;
+}
+
+.footer-s ul a {
+    text-decoration: none;
+    color: #111;
+    font-weight: 500;
+    font-size: 1.06rem;
+}
