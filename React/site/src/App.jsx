@@ -28,6 +28,7 @@ import Favoritos from './Routes/Perfil/PerfilComponents/Favoritos';
 import Pagamentos from './Routes/Perfil/PerfilComponents/Pagamentos';
 import Pedidos from './Routes/Perfil/PerfilComponents/Pedidos';
 import Config from './Routes/Perfil/PerfilComponents/Config';
+import Carrinho from './Routes/Carrinho/Carrinho';
 
 function AppContent() {
   return (
@@ -39,6 +40,8 @@ function AppContent() {
         <Route path="/Colecao" element={<Colecao />} />
         <Route path="/Cadastro" element={<Cadastro />} />
         <Route path="/Login" element={<Login />} />
+
+        <Route path="/Carrinho" element={<Carrinho />} />
 
         <Route path="/Perfil" element={<Perfil />} />
         <Route path="/Cupons" element={<Cupons />} />

@@ -12,6 +12,9 @@ const ProdutoDetalhe = () => {
     const [erro, setErro] = useState(null);
     const navigate = useNavigate(); // Hook para navegação
 
+    console.log("ID do usuário no ProdutoDetalhe:", localStorage.getItem("idUsuario"));
+
+
     useEffect(() => {
         const buscarProduto = async () => {
             try {
@@ -51,6 +54,67 @@ const ProdutoDetalhe = () => {
         slidesToScroll: 1
     };
 
+
+    const adicionarAoCarrinho = async () => {
+        const idUsuario = localStorage.getItem("idUsuario");
+        console.log("ID do usuário ao adicionar ao carrinho:", idUsuario); // <-- Aqui é o lugar certo para logar
+
+        if (!idUsuario) {
+            alert("Você precisa estar logado.");
+            return;
+        }
+
+        const idProduto = produto.id;
+
+        console.log("ID do usuário no ProdutoDetalhe:", idUsuario);
+
+        if (!idUsuario) {
+            alert("Você precisa estar logado.");
+            return;
+        }
+
+        try {
+            // Buscar todos os carrinhos
+            const resposta = await fetch("https://localhost:7294/Carrinho");
+            const todos = await resposta.json();
+
+            // Verificar se já tem esse produto para esse usuário
+            const existente = todos.find(c => c.idUsuario === idUsuario && c.idProduto === idProduto);
+
+            if (existente) {
+                // Atualizar a quantidade
+                const novaQuantidade = existente.quantidade + 1;
+                await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        idUsuario,
+                        idProduto,
+                        quantidade: novaQuantidade
+                    })
+                });
+            } else {
+                // Criar novo item no carrinho
+                await fetch("https://localhost:7294/Carrinho", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        idUsuario,
+                        idProduto,
+                        quantidade: 1
+                    })
+                });
+            }
+
+            alert("Produto adicionado ao carrinho!");
+        } catch (err) {
+            console.error("Erro ao adicionar:", err);
+            alert("Erro ao adicionar ao carrinho.");
+        }
+    };
+
+
+
     return (
         <div className="produto-detalhe-container">
             {/* Botão de Voltar */}
@@ -85,8 +149,12 @@ const ProdutoDetalhe = () => {
                 </div>
 
                 {/* Ações do usuário */}
+
                 <div className="acoes">
-                    <button className="btn adicionar-carrinho">Adicionar ao Carrinho</button>
+                    <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
+                        Adicionar ao Carrinho
+                    </button>
+
                     <button className="btn favoritar">Favoritar</button>
                 </div>
             </div>

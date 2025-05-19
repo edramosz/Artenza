@@ -42,6 +42,9 @@ export default function Login() {
       const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
 
       const firebaseEmail = userCredential.user.email;
+
+      localStorage.setItem("idUsuario", usuario.id);
+
       localStorage.setItem("nomeUsuario", primeiroNome);
       localStorage.setItem("nomeCompletoUser", usuario.nomeCompleto);
       localStorage.setItem("isAdmin", usuario.isAdmin);
@@ -52,9 +55,9 @@ export default function Login() {
 
 
       window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar
-
       alert("Login feito com sucesso!");
-      navigate("/"); // redireciona usando o React Router
+      window.location.href = "/"; // recarrega a página para garantir que localStorage esteja disponível
+
 
     } catch (error) {
       console.error("Erro no login:", error);
