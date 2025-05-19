@@ -44,4 +44,5 @@
 .selection-nav .selection li:hover button,
 .selection-nav .selection li.active button {
     border-bottom: 2px solid #181717;
+    font-weight: 600;
 }

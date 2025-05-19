@@ -33,6 +33,7 @@ namespace Core.Models.DTO_s.Create
         [Required, MinLength(6)]
         public string SenhaHash { get; set; }
 
+
         [Required]
         public bool isAdmin = false;
     }

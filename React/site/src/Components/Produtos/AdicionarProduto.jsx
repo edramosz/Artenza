@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './AdicionarProduto.css';
 
 const AdicionarProduto = () => {
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ const AdicionarProduto = () => {
   const [nome, setNome] = useState("");
   const [preco, setPreco] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [urlImagem, setUrlImagem] = useState("");
+  const [urlsImagem, setUrlsImagem] = useState([]);
   const [categoria, setCategoria] = useState("");
   const [estoque, setEstoque] = useState("");
   const [tamanho, setTamanho] = useState("");
@@ -18,30 +19,36 @@ const AdicionarProduto = () => {
   const [marca, setMarca] = useState("");
   const [erro, setErro] = useState("");
 
-  const handleImageUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "Artenza"); // Nome do seu upload preset
-    formData.append("cloud_name", "drit350g5");
-
+  const handleMultipleImageUpload = async (files) => {
     try {
-      const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
-        method: "POST",
-        body: formData
-      });
+      const uploadedUrls = [];
 
-      const data = await res.json();
-      setUrlImagem(data.secure_url); // Atualiza o estado com a URL segura da imagem
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "Artenza"); // seu upload preset
+        formData.append("cloud_name", "drit350g5");
+
+        const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        uploadedUrls.push(data.secure_url);
+      }
+
+      setUrlsImagem(uploadedUrls);
     } catch (err) {
-      console.error("Erro ao fazer upload da imagem:", err);
-      setErro("Erro ao fazer upload da imagem.");
+      console.error("Erro ao fazer upload das imagens:", err);
+      setErro("Erro ao fazer upload das imagens.");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nome || !preco || !descricao || !urlImagem) {
+    if (!nome || !preco || !descricao || urlsImagem.length === 0) {
       setErro("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
@@ -50,7 +57,7 @@ const AdicionarProduto = () => {
       nome,
       preco: isNaN(parseFloat(preco)) ? 0 : parseFloat(preco),
       descricao,
-      urlImagem,
+      urlImagens: urlsImagem, // nome atualizado para bater com backend
       categoria,
       estoque: isNaN(parseInt(estoque)) ? 0 : parseInt(estoque),
       tamanho,
@@ -60,6 +67,7 @@ const AdicionarProduto = () => {
       tipo,
       marca
     };
+
 
     try {
       const response = await fetch("https://localhost:7294/Produto", {
@@ -86,6 +94,7 @@ const AdicionarProduto = () => {
   return (
     <div className="adicionar-produto">
       <h2>Adicionar Produto</h2>
+      <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
       {erro && <p style={{ color: "red" }}>{erro}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="nome">Nome:</label>
@@ -97,20 +106,26 @@ const AdicionarProduto = () => {
         <label htmlFor="descricao">Descrição:</label>
         <textarea id="descricao" value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
 
-        <label htmlFor="imagem">Imagem:</label>
+        <label htmlFor="imagem">Imagens:</label>
         <input
           type="file"
           id="imagem"
           accept="image/*"
+          multiple
+          required
           onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
-              handleImageUpload(file);
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+              handleMultipleImageUpload(files);
             }
           }}
         />
-        {urlImagem && (
-          <img src={urlImagem} alt="Preview" style={{ width: "150px", marginTop: "10px" }} />
+        {urlsImagem.length > 0 && (
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "10px" }}>
+            {urlsImagem.map((url, index) => (
+              <img key={index} src={url} alt={`Preview ${index + 1}`} style={{ width: "100px", borderRadius: "4px", border: "1px solid #ccc" }} />
+            ))}
+          </div>
         )}
 
         <label htmlFor="categoria">Categoria:</label>

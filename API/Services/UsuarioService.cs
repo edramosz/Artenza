@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Core.Models.DTO_s.Update;
 using Microsoft.AspNetCore.Mvc;
+using Core.Models.DTO_s.Read;
 
 namespace API.Services
 {
@@ -91,14 +92,14 @@ namespace API.Services
 
         // Adicionar um novo usuario
 
-        public async Task<Usuario> AddUsuarioAsync([FromBody] CreateUsuario usuarioDto)
+        public async Task<ReadUsuario> AddUsuarioAsync([FromBody] CreateUsuario usuarioDto)
         {
             var usuario = _mapper.Map<Usuario>(usuarioDto);
-            
-            // Gera DataCadastro
 
+            // Gera DataCadastro
             usuario.DataCadastro = DateTime.UtcNow;
             usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.SenhaHash);
+
             // Cria o usuário no Firebase
             var response = await _firebaseClient
                 .Child("usuarios")
@@ -111,8 +112,12 @@ namespace API.Services
                 .Child(usuario.Id)
                 .PutAsync(usuario);
 
-            return usuario;
+            // Mapeando o usuário para o DTO de leitura (ReadUsuario)
+            var readUsuario = _mapper.Map<ReadUsuario>(usuario);
+
+            return readUsuario; // Agora retornamos um ReadUsuario
         }
+
 
 
         // Atualizar um usuario pelo ID

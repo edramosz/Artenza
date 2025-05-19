@@ -1,0 +1,101 @@
+.perfil-page-main {
+  width: 100%;
+  max-width: 2000px;
+  display: flex;
+  margin: 0 auto;
+  max-height: 100vh;
+}
+
+.perfil-container {
+  width: 100%;
+  max-height: 100vh;
+}
+
+.perfil-img-wrapper {
+  width: 100%;
+  height: 160px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(133, 130, 127);
+  margin-bottom: 100px;
+}
+
+.perfil-img-wrapper img {
+  width: 215px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: translateY(40px);
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #19191a;
+}
+
+.perfil-img-wrapper .btn-edit-img {
+  transform: translate(-20px, -20px);
+  background-color: #fff;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 1.2rem;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #19191a;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.perfil-img-wrapper .btn-edit-img:hover {
+  scale: 1.08;
+  transition: 0.4s;
+  color: #414144;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #414144;
+}
+
+.perfil-img-wrapper .btn-edit-img svg {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.perfil-detalhes {
+  width: 550px;
+  margin: 0 auto;
+  padding: 30px 40px;
+}
+
+.perfil-detalhes h2 {
+  color: rgba(31, 32, 32, 0.966);
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 1.7rem;
+}
+
+.perfil-detalhes p {
+  line-height: 2.1rem;
+}
+
+.perfil-detalhes p > strong {
+  font-weight: 600;
+  margin-right: 5px;
+  text-align: end;
+}
+
+.perfil-detalhes .perfil-actions .btn-editar {
+  background-color: rgb(54, 56, 56);
+  border: none;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  color: #fff;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(31, 32, 32, 0.459);
+}
+
+.perfil-detalhes .perfil-actions .btn-editar:hover{
+    scale: 1.01;
+    opacity: 0.9;
+    transition: 0.4s;
+}

@@ -13,16 +13,17 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
 
-  const items = [
-    { id: 1, url: "/", label: "Home" },
-    { id: 2, url: "/Sobre", label: "Sobre" },
-    { id: 3, url: "/Contato", label: "Contato" },
-    { id: 4, url: "/Empresa", label: "Empresa" },
-    { id: 5, url: "/Sosssbre", label: "Sobre" },
-    { id: 6, url: "/ssss", label: "Contato" },
-    { id: 7, url: "/Emssspresa", label: "Empresa" },
-    { id: 8, url: "/sss", label: "Empresa" },
-  ];
+const items = [
+  { id: 1, url: "/", label: "Home" },
+  { id: 2, url: "/masculino", label: "Masculino" },
+  { id: 3, url: "/feminino", label: "Feminino" },
+  { id: 4, url: "/acessorios", label: "Acessórios" },
+  { id: 5, url: "/novidades", label: "Novidades" },
+  { id: 6, url: "/promocoes", label: "Promoções" },
+  { id: 7, url: "/contato", label: "Contato" },
+  { id: 8, url: "/sobre", label: "Sobre" },
+];
+
 
 
   // Função que carrega os dados do usuário do localStorage
@@ -31,11 +32,7 @@ const Navbar = () => {
     const emailStr = localStorage.getItem("email");
     const isAdminStr = localStorage.getItem("isAdmin");
 
-    console.log("carregarDadosUsuario chamado");
-    console.log("nomeCompleto:", nomeCompleto);
-    console.log("emailStr:", emailStr);
-    console.log("isAdminStr:", isAdminStr);
-
+   
     const isAdmin = isAdminStr === "true";
 
     if (nomeCompleto && emailStr) {
@@ -55,7 +52,6 @@ const Navbar = () => {
 
     // Escuta mudanças na autenticação
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("onAuthStateChanged chamado, user:", user);
       if (user) {
         carregarDadosUsuario();
       } else {
@@ -80,7 +76,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  console.log("usuarioLogado no render:", usuarioLogado);
 
   return (
     <div className="all-menu">
@@ -134,13 +129,13 @@ const Navbar = () => {
                     </div>
                     <div>
                       <Link to="/perfil">
-                        <li className="user-item">Bem-vindo, {usuarioLogado.nome}</li>
-                        <li className="user-item">{usuarioLogado.email}</li>
+                        <p className="user-item">Olá, {usuarioLogado.nome}</p>
+                        <p className="user-item">{usuarioLogado.email}</p>
                       </Link>
                     </div>
                   </li>
 
-                  {/* {usuarioLogado.isAdmin && (
+                  {usuarioLogado.isAdmin && (
                     <li>
                       <Link to="/Admin">Painel de Admin</Link>
                     </li>
@@ -150,7 +145,7 @@ const Navbar = () => {
                     <button onClick={handleLogout} className="logout-btn">
                       Sair
                     </button>
-                  </li> */}
+                  </li>
                 </>
               ) : (
                 <>

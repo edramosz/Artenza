@@ -1,5 +1,15 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faGear,
+  faUsers,
+  faCartShopping,
+  faLocationDot,
+} from '@fortawesome/free-solid-svg-icons';
+
+
+
 import '../PaineisAdmin/AdminPainel.css';
 
 const SideBar = () => {
@@ -12,30 +22,30 @@ const SideBar = () => {
       <h2 className="title">Painel Admin</h2>
       <ul className="pages">
         <li>
-          <Link to='/Admin'>
+          <Link to="/Admin">
             <button className={isActive('/Admin') ? 'active' : ''}>
-              <i className="fa-solid fa-gear"></i> Administração
+              <FontAwesomeIcon icon={faGear} /> Administração
             </button>
           </Link>
         </li>
         <li>
-          <Link to='/AdminUsuario'>
+          <Link to="/AdminUsuario">
             <button className={isActive('/AdminUsuario') ? 'active' : ''}>
-              <i className="fa-solid fa-users"></i> Usuários
+              <FontAwesomeIcon icon={faUsers} /> Usuários
             </button>
           </Link>
         </li>
         <li>
-          <Link to='/AdminEndereco'>
+          <Link to="/AdminEndereco">
             <button className={isActive('/AdminEndereco') ? 'active' : ''}>
-              <i className="fa-solid fa-location-dot"></i> Endereços
+              <FontAwesomeIcon icon={faLocationDot} /> Endereços
             </button>
           </Link>
         </li>
         <li>
-          <Link to='/AdminProduto'>
+          <Link to="/AdminProduto">
             <button className={isActive('/AdminProduto') ? 'active' : ''}>
-              <i className="fa-solid fa-cart-shopping"></i> Produtos
+             <FontAwesomeIcon icon={faCartShopping} />Produtos
             </button>
           </Link>
         </li>

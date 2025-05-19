@@ -48,13 +48,11 @@ namespace API.Services
             var produto = _mapper.Map<Produto>(produtoDto);
 
             var result = await _firebaseClient
-            .Child("produtos")
-            .PostAsync(produto);
+                .Child("produtos")
+                .PostAsync(produto);
 
-            // Atualizar o ID do produto com a chave gerada
             produto.Id = result.Key;
 
-            // Se quiser, você pode atualizar no Firebase também:
             await _firebaseClient
                 .Child("produtos")
                 .Child(produto.Id)
@@ -62,6 +60,7 @@ namespace API.Services
 
             return produto;
         }
+
 
         // Atualizar um produto pelo ID
         public async Task UpdateProdutoAsync(string id, UpdateProduto produtoDto)
