@@ -129,7 +129,7 @@ const items = [
                     </div>
                     <div>
                       <Link to="/perfil">
-                        <p className="user-item">Bem-vindo, {usuarioLogado.nome}</p>
+                        <p className="user-item">Olá, {usuarioLogado.nome}</p>
                         <p className="user-item">{usuarioLogado.email}</p>
                       </Link>
                     </div>

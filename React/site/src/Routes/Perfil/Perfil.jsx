@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import NavProfile from './NavProfile';
 import './Perfil.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
+
 const Perfil = () => {
   const [usuario, setUsuario] = useState({
     nome: '',
     email: '',
     dataCadastro: '',
-    dataNascimento: ''
+    dataNascimento: '',
+    telefone: '',
   });
-
 
   useEffect(() => {
     const atualizarUsuario = () => {
@@ -17,58 +20,64 @@ const Perfil = () => {
       const email = localStorage.getItem("email") || '';
       const dataCadastro = localStorage.getItem("dataCadastro") || '';
       const dataNascimento = localStorage.getItem("dataNascimento") || '';
+      const telefone = localStorage.getItem("telefone") || '';
 
-
-      // Se a data de cadastro for válida, formatamos ela
       let dataCadastroFormatada = '';
       if (dataCadastro) {
         const data = new Date(dataCadastro);
         dataCadastroFormatada = data.toLocaleString("pt-BR", {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+          day: '2-digit', month: '2-digit', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
         });
       }
 
       let dataNascimentoFormatada = '';
       if (dataNascimento) {
-        const nascimento = new Date(dataNascimento); // "1988-03-02"
+        const nascimento = new Date(dataNascimento);
         if (!isNaN(nascimento.getTime())) {
           dataNascimentoFormatada = nascimento.toLocaleDateString("pt-BR", {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
+            day: '2-digit', month: '2-digit', year: 'numeric'
           });
-        } else {
-          console.warn("Data de nascimento inválida:", dataNascimento);
         }
       }
 
-      setUsuario({ nome, email, dataCadastro: dataCadastroFormatada, dataNascimento: dataNascimentoFormatada });
+      setUsuario({
+        nome, email, dataCadastro: dataCadastroFormatada,
+        dataNascimento: dataNascimentoFormatada,
+        telefone
+      });
     };
 
-    // Atualiza quando o componente montar
     atualizarUsuario();
-
-    // Atualiza quando o localStorage mudar (evento disparado no login)
     window.addEventListener("storage", atualizarUsuario);
-
-    return () => {
-      window.removeEventListener("storage", atualizarUsuario);
-    };
+    return () => window.removeEventListener("storage", atualizarUsuario);
   }, []);
 
   return (
-    <div className="perfil-page">
+    <div className="perfil-page-main">
       <NavProfile />
-      <div className="perfil-info">
-        <h2>Informações do Usuário</h2>
-        <p><strong>Nome:</strong> {usuario.nome}</p>
-        <p><strong>Email:</strong> {usuario.email}</p>
-        <p><strong>Data de Cadastro:</strong> {usuario.dataCadastro || 'Carregando...'}</p>
-        <p><strong>Data de Nascimento:</strong> {usuario.dataNascimento || 'Carregando...'}</p>
+      <div className="perfil-container">
+        <div className="perfil-info">
+          <div className="perfil-header">
+            <div className="perfil-img-wrapper">
+              <img src="./img/fundo.png" alt="Foto de Perfil" className="perfil-img" />
+              <button className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
+            </div>
+            <div className="perfil-dados">
+            </div>
+          </div>
+
+          <div className="perfil-detalhes">
+            <h2>Olá, {usuario.nome}</h2>
+            <p><strong>Email:</strong> {usuario.email}</p>
+            <p><strong>Telefone:</strong> {usuario.telefone}</p>
+            <p><strong>Data de Nascimento:</strong> {usuario.dataNascimento || '---'}</p>
+            <p><strong>Data de Cadastro:</strong> {usuario.dataCadastro || '---'}</p>
+            <div className="perfil-actions">
+              <button className="btn-editar">Editar Informações</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

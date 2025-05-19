@@ -112,6 +112,7 @@ const AdicionarProduto = () => {
           id="imagem"
           accept="image/*"
           multiple
+          required
           onChange={(e) => {
             const files = Array.from(e.target.files);
             if (files.length > 0) {

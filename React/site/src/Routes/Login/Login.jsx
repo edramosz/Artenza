@@ -16,7 +16,6 @@ export default function Login() {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-      console.log("Usuário autenticado no Firebase:", userCredential.user);
 
       // Consulta na sua API
       const response = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
@@ -26,7 +25,7 @@ export default function Login() {
       }
 
       const usuario = await response.json();
-      console.log("Resposta da API:", usuario);
+      console.log("Usuário retornado da API:", usuario); // Veja se "telefone" aparece aqui
 
 
       // Salva os dados no localStorage
@@ -37,7 +36,6 @@ export default function Login() {
       const dataNascimentoCompleta = `${anoNascimento}-${String(mesNascimento).padStart(2, '0')}-${String(diaNascimento).padStart(2, '0')}`;
 
       localStorage.setItem("dataNascimento", dataNascimentoCompleta);
-      console.log("dataNascimento salva:", dataNascimentoCompleta); // deve ser "1990-05-12" por exemplo
 
 
       const nomes = usuario.nomeCompleto.trim().split(" ");
@@ -48,6 +46,7 @@ export default function Login() {
       localStorage.setItem("nomeCompletoUser", usuario.nomeCompleto);
       localStorage.setItem("isAdmin", usuario.isAdmin);
       localStorage.setItem("email", firebaseEmail);
+      localStorage.setItem("telefone", usuario.telefone);
       localStorage.setItem("dataCadastro", usuario.dataCadastro);
 
 

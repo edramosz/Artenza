@@ -35,20 +35,20 @@ const InfoService = () => {
                 </div>
                 <div className="card">
                     <div className="icon">
-                        <i class="fa-solid fa-truck-fast"></i>
+                       <i class="fa-solid fa-headset"></i>
                     </div>
                     <div className="texts">
-                        <h2>Frete Grátis</h2>
-                        <p>Para todos produtos acima de R$ 100,00</p>
+                        <h2>Suporte ao Cliente</h2>
+                        <p>Atendimento via WhatsApp e Email</p>
                     </div>
                 </div>
                 <div className="card">
                     <div className="icon">
-                        <i class="fa-solid fa-truck-fast"></i>
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <div className="texts">
-                        <h2>Frete Grátis</h2>
-                        <p>Para todos produtos acima de R$ 100,00</p>
+                        <h2>Compra Garantida</h2>
+                        <p>Segurança e reembolso</p>
                     </div>
                 </div>
             </div>
