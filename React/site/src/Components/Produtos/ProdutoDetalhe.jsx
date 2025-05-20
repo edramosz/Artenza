@@ -9,6 +9,7 @@ const ProdutoDetalhe = () => {
     const { id } = useParams(); // Recupera o ID do produto da rota
     const [produto, setProduto] = useState(null);
     const [carregando, setCarregando] = useState(true);
+    const [idUsuario, setIdUsuario] = useState(null);
     const [erro, setErro] = useState(null);
     const navigate = useNavigate(); // Hook para navegação
 
@@ -36,6 +37,13 @@ const ProdutoDetalhe = () => {
         buscarProduto(); // Executa a função ao montar ou trocar o ID
     }, [id]);
 
+    useEffect(() => {
+        const id = localStorage.getItem("idUsuario");
+        setIdUsuario(id);
+        console.log("ID do usuário no useEffect:", id);
+    }, []);
+
+
     // Controle de estados: carregando, erro ou produto não retornado
     if (carregando) return <p>Carregando produto...</p>;
     if (erro) return <p>{erro}</p>;
@@ -55,63 +63,41 @@ const ProdutoDetalhe = () => {
     };
 
 
-    const adicionarAoCarrinho = async () => {
-        const idUsuario = localStorage.getItem("idUsuario");
-        console.log("ID do usuário ao adicionar ao carrinho:", idUsuario); // <-- Aqui é o lugar certo para logar
+   const adicionarAoCarrinho = async () => {
+    if (!idUsuario) {
+        alert("Você precisa estar logado.");
+        return;
+    }
 
-        if (!idUsuario) {
-            alert("Você precisa estar logado.");
-            return;
+    const idProduto = produto.id;
+
+    try {
+        const resposta = await fetch("https://localhost:7294/Carrinho");
+        const todos = await resposta.json();
+
+        const existente = todos.find(c => c.idUsuario === idUsuario && c.idProduto === idProduto);
+
+        if (existente) {
+            const novaQuantidade = existente.quantidade + 1;
+            await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idUsuario, idProduto, quantidade: novaQuantidade })
+            });
+        } else {
+            await fetch("https://localhost:7294/Carrinho", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idUsuario, idProduto, quantidade: 1 })
+            });
         }
 
-        const idProduto = produto.id;
-
-        console.log("ID do usuário no ProdutoDetalhe:", idUsuario);
-
-        if (!idUsuario) {
-            alert("Você precisa estar logado.");
-            return;
-        }
-
-        try {
-            // Buscar todos os carrinhos
-            const resposta = await fetch("https://localhost:7294/Carrinho");
-            const todos = await resposta.json();
-
-            // Verificar se já tem esse produto para esse usuário
-            const existente = todos.find(c => c.idUsuario === idUsuario && c.idProduto === idProduto);
-
-            if (existente) {
-                // Atualizar a quantidade
-                const novaQuantidade = existente.quantidade + 1;
-                await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        idUsuario,
-                        idProduto,
-                        quantidade: novaQuantidade
-                    })
-                });
-            } else {
-                // Criar novo item no carrinho
-                await fetch("https://localhost:7294/Carrinho", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        idUsuario,
-                        idProduto,
-                        quantidade: 1
-                    })
-                });
-            }
-
-            alert("Produto adicionado ao carrinho!");
-        } catch (err) {
-            console.error("Erro ao adicionar:", err);
-            alert("Erro ao adicionar ao carrinho.");
-        }
-    };
+        alert("Produto adicionado ao carrinho!");
+    } catch (err) {
+        console.error("Erro ao adicionar:", err);
+        alert("Erro ao adicionar ao carrinho.");
+    }
+};
 
 
 
