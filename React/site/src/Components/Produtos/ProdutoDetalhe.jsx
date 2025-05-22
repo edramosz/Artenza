@@ -141,26 +141,26 @@ const ProdutoDetalhe = () => {
         </div>
 
         <div className="info-produto">
-          <h2>{produto.nome}</h2>
-          <p className="preco">
-            {produto.preco.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })}
-          </p>
+          <h2 className='name-prod'>{produto.nome}</h2>
+          <p className='tipo-prod'>{produto.tipo}</p>
           <p className="descricao">{produto.descricao}</p>
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
-          <FontAwesomeIcon icon={faStar} />
+          <p className='avaliacao'><FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} /></p>
 
           <div className="detalhes-produto">
+            <p className="preco">
+              {produto.preco.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
+            </p>
             <p><strong>Marca:</strong> {produto.marca}</p>
             <p><strong>Cor:</strong> {produto.cor}</p>
             <p><strong>Material:</strong> {produto.material}</p>
             <p><strong>Gênero:</strong> {produto.genero}</p>
-            <p><strong>Tipo:</strong> {produto.tipo}</p>
             <div className="filtro-tamanhos">
               {['26', '28', '30', '32', '34', '36', '38', '40'].map(tam => (
                 <button key={tam}>{tam}</button>
@@ -172,11 +172,11 @@ const ProdutoDetalhe = () => {
             <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
               Adicionar ao Carrinho
             </button>
-            <button className="btn favoritar">Favoritar</button>
+            <button className="btn comprar">Comprar agora</button>
           </div>
-              <div className="links">
-                <p>Compartilhar: <i class="fa-brands fa-whatsapp"></i>WhatsApp</p>
-              </div>
+          <div className="links">
+            <p>Compartilhar: <i class="fa-brands fa-whatsapp"></i>WhatsApp</p>
+          </div>
 
         </div>
       </div>

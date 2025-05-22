@@ -69,7 +69,34 @@
 
 .info-produto {
   flex: 1;
-  background-color: aquamarine;
+  background-color: rgba(255, 255, 255, 0.685);
+  color: #000000ce;
   padding: 20px;
   border-radius: 15px;
+}
+
+.name-prod{
+  font-size: 1.9rem;
+  text-shadow: 3px 3px 4px #00000021;
+  line-height: 1.6rem;
+  font-weight: 700;
+}
+
+.tipo-prod{
+  font-size: 1.3rem;  
+  text-shadow: 3px 3px 4px #00000021;
+  text-transform: lowercase;
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+
+.descricao{
+  font-size: 1.1rem;
+  color: #000000cb;
+  margin-bottom: 7px;
+}
+
+.avaliacao{
+  font-size: 1.2rem;
+  margin-bottom: 7px;
 }
