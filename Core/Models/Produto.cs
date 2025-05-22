@@ -10,7 +10,6 @@ namespace Core.Models
         public decimal Preco { get; set; }
         public string Descricao { get; set; }
         public List<string> UrlImagens { get; set; } = new List<string>();
-
         public string Categoria { get; set; } // Exemplo: "Roupas", "Acessórios"
         public int Estoque { get; set; }
         public string Tamanho { get; set; }

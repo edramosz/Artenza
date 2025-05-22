@@ -12,6 +12,7 @@ namespace Core.Models
         public string UsuarioId { get; set; }
         public DateTime DataVenda { get; set; }
         public decimal ValorTotal { get; set; }
+        public List<ItemVenda> Produtos { get; set; } = new List<ItemVenda>();
     }
 
 }
