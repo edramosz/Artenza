@@ -108,53 +108,56 @@ const ProdutoDetalhe = () => {
   if (!produto) return <p>Produto não encontrado</p>;
 
   return (
-    <div className="produto-detalhe-container">
-      <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
-
-      <div className="carousel-wrapperr">
-        <button className="carousel-button left" onClick={scrollLeft}>
-          <i className="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <div className="carousel-container" ref={carouselRef}>
-          {imagens.map((img, index) => (
-            <div key={index} className="carousel-slide">
-              <img src={img} alt={`Imagem ${index}`} />
-            </div>
-          ))}
-        </div>
-
-        <button className="carousel-button right" onClick={scrollRight}>
-          <i className="fa-solid fa-chevron-right"></i>
-        </button>
+    <>
+      <div className="btn">
+        <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
       </div>
-
-      <div className="info-produto">
-        <h2>{produto.nome}</h2>
-        <p className="preco">
-          {produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-        </p>
-        <p className="descricao">{produto.descricao}</p>
-
-        <div className="detalhes">
-          <p><strong>Marca:</strong> {produto.marca}</p>
-          <p><strong>Cor:</strong> {produto.cor}</p>
-          <p><strong>Tamanho:</strong> {produto.tamanho}</p>
-          <p><strong>Material:</strong> {produto.material}</p>
-          <p><strong>Gênero:</strong> {produto.genero}</p>
-          <p><strong>Tipo:</strong> {produto.tipo}</p>
-          <p><strong>Estoque:</strong> {produto.estoque}</p>
-        </div>
-
-        <div className="acoes">
-          <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
-            Adicionar ao Carrinho
+      <div className="produto-detalhe-container">
+        <div className="carousel-wrapperr">
+          <button className="carousel-button left" onClick={scrollLeft}>
+            <i className="fa-solid fa-chevron-left"></i>
           </button>
 
-          <button className="btn favoritar">Favoritar</button>
+          <div className="carousel-container" ref={carouselRef}>
+            {imagens.map((img, index) => (
+              <div key={index} className="carousel-slide">
+                <img src={img} alt={`Imagem ${index}`} />
+              </div>
+            ))}
+          </div>
+
+          <button className="carousel-button right" onClick={scrollRight}>
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div className="info-produto">
+          <h2>{produto.nome}</h2>
+          <p className="preco">
+            {produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+          </p>
+          <p className="descricao">{produto.descricao}</p>
+
+          <div className="detalhes">
+            <p><strong>Marca:</strong> {produto.marca}</p>
+            <p><strong>Cor:</strong> {produto.cor}</p>
+            <p><strong>Tamanho:</strong> {produto.tamanho}</p>
+            <p><strong>Material:</strong> {produto.material}</p>
+            <p><strong>Gênero:</strong> {produto.genero}</p>
+            <p><strong>Tipo:</strong> {produto.tipo}</p>
+            <p><strong>Estoque:</strong> {produto.estoque}</p>
+          </div>
+
+          <div className="acoes">
+            <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
+              Adicionar ao Carrinho
+            </button>
+
+            <button className="btn favoritar">Favoritar</button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

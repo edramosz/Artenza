@@ -1,0 +1,66 @@
+.produto-detalhe-container {
+  width: 100%;
+  max-width: 2000px;
+  display: flex;
+  margin: 0 auto;
+  position: relative;  
+  overflow: hidden;  
+  padding: 30px 40px;
+}
+
+.produto-detalhe-container .carousel-container {
+  display: flex;
+  gap: 50px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  width: 620px;
+}
+
+.produto-detalhe-container .carousel-container .carousel-slide {
+  flex: 0 0 100%;
+  height: 570px;
+  scroll-snap-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.produto-detalhe-container .carousel-wrapperr {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.produto-detalhe-container .carousel-container .carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.produto-detalhe-container .carousel-wrapperr .carousel-button {
+    position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  background: rgb(245, 243, 243);
+  color: rgba(0, 0, 0, 0.733);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 10;
+  padding: 7px 17px;
+}
+
+.produto-detalhe-container .carousel-button.left {
+  left: 10px;
+}
+
+.produto-detalhe-container .carousel-button.right {
+  right: 10px;
+}
