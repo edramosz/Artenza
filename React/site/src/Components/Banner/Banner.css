@@ -1,4 +1,4 @@
-.carousel-wrapper {
+ .carousel-wrapper {
   position: relative;
   width: 100%;
   max-width: 1700px;
@@ -11,7 +11,7 @@
   background-color: rgba(231, 230, 230, 0.863);
 }
 
-.carousel-container {
+.carousel-wrapper .carousel-container {
   display: flex;
   gap: 50px;
   overflow-x: auto;
@@ -21,11 +21,11 @@
   scroll-snap-type: x mandatory;
 }
 
-.carousel-container::-webkit-scrollbar {
+.carousel-wrapper .carousel-container::-webkit-scrollbar {
   display: none;
 }
 
-.carousel-slide {
+.carousel-wrapper .carousel-slide {
   flex: 0 0 90%;
   height: 410px;
   scroll-snap-align: center;
@@ -37,14 +37,14 @@
   background-color: #000;
 }
 
-.carousel-slide img {
+.carousel-wrapper .carousel-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-.carousel-text {
+.carousel-wrapper .carousel-text {
   position: absolute;
   top: 20px;
   left: 30px;
@@ -52,17 +52,17 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
-.carousel-text h2 {
+.carousel-wrapper .carousel-text h2 {
   font-size: 2rem;
   margin: 0;
 }
 
-.carousel-text p {
+.carousel-wrapper .carousel-text p {
   font-size: 1.2rem;
   margin-top: 8px;
 }
 
-.carousel-button {
+.carousel-wrapper .carousel-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -76,26 +76,26 @@
   padding: 7px 17px;
 }
 
-.carousel-button.left {
+.carousel-wrapper .carousel-button.left {
   left: 20px;
 }
 
-.carousel-button.right {
+.carousel-wrapper .carousel-button.right {
   right: 20px;
 }
 
 
 
 @media (max-width: 768px) {
-  .carousel-slide {
+  .carousel-wrapper .carousel-slide {
     flex: 0 0 75%;
   }
 
-  .carousel-text h2 {
+  .carousel-wrapper .carousel-text h2 {
     font-size: 1.5rem;
   }
 
-  .carousel-text p {
+  .carousel-wrapper .carousel-text p {
     font-size: 1rem;
   }
 }

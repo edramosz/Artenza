@@ -1,97 +1,188 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // useNavigate para navegação
-import Slider from 'react-slick'; // Componente de carrossel para imagens
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import './ProdutoDetalhe.css';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, } from '@fortawesome/free-regular-svg-icons';
 
 const ProdutoDetalhe = () => {
-    const { id } = useParams(); // Recupera o ID do produto da rota
-    const [produto, setProduto] = useState(null);
-    const [carregando, setCarregando] = useState(true);
-    const [erro, setErro] = useState(null);
-    const navigate = useNavigate(); // Hook para navegação
+  const { id } = useParams();
+  const [produto, setProduto] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [idUsuario, setIdUsuario] = useState(null);
+  const [erro, setErro] = useState(null);
+  const navigate = useNavigate();
+  const carouselRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-    useEffect(() => {
-        const buscarProduto = async () => {
-            try {
-                // Faz a requisição para a API com base no ID capturado
-                const resposta = await fetch(`https://localhost:7294/Produto/${id}`);
+  useEffect(() => {
+    const buscarProduto = async () => {
+      try {
+        const resposta = await fetch(`https://localhost:7294/Produto/${id}`);
+        if (!resposta.ok) throw new Error("Produto não encontrado");
 
-                // Se a resposta não for 200~299, lança um erro
-                if (!resposta.ok) throw new Error("Produto não encontrado");
-
-                const dados = await resposta.json();
-                setProduto(dados); // Armazena o produto retornado no estado
-            } catch (err) {
-                setErro(err.message); // Armazena a mensagem de erro
-            } finally {
-                setCarregando(false); // Marca que o carregamento terminou
-            }
-        };
-
-        buscarProduto(); // Executa a função ao montar ou trocar o ID
-    }, [id]);
-
-    // Controle de estados: carregando, erro ou produto não retornado
-    if (carregando) return <p>Carregando produto...</p>;
-    if (erro) return <p>{erro}</p>;
-    if (!produto) return <p>Produto não encontrado</p>;
-
-    // Garante que sempre haja pelo menos uma imagem para exibir
-    const imagens = produto.imagens && produto.imagens.length > 0
-        ? produto.imagens
-        : [produto.imagem];
-
-    const settings = {
-        dots: true,       // Habilita os indicadores
-        infinite: true,   // Loop infinito
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
+        const dados = await resposta.json();
+        setProduto(dados);
+      } catch (err) {
+        setErro(err.message);
+      } finally {
+        setCarregando(false);
+      }
     };
 
-    return (
-        <div className="produto-detalhe-container">
-            {/* Botão de Voltar */}
-            <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
+    buscarProduto();
+  }, [id]);
 
-            <div className="carousel-container">
-                <Slider {...settings}>
-                    {imagens.map((img, index) => (
-                        <div key={index}>
-                            <img src={img} alt={`Slide ${index}`} />
-                        </div>
-                    ))}
-                </Slider>
-            </div>
+  useEffect(() => {
+    const id = localStorage.getItem("idUsuario");
+    setIdUsuario(id);
+  }, []);
 
-            <div className="info-produto">
-                <h2>{produto.nome}</h2>
-                <p className="preco">
-                    {produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                </p>
-                <p className="descricao">{produto.descricao}</p>
+  const scrollToIndex = (index) => {
+    const container = carouselRef.current;
+    const slideWidth = container.offsetWidth;
+    container.scrollTo({
+      left: index * slideWidth,
+      behavior: 'smooth',
+    });
+  };
 
-                {/* Informações técnicas e detalhes do produto */}
-                <div className="detalhes">
-                    <p><strong>Marca:</strong> {produto.marca}</p>
-                    <p><strong>Cor:</strong> {produto.cor}</p>
-                    <p><strong>Tamanho:</strong> {produto.tamanho}</p>
-                    <p><strong>Material:</strong> {produto.material}</p>
-                    <p><strong>Gênero:</strong> {produto.genero}</p>
-                    <p><strong>Tipo:</strong> {produto.tipo}</p>
-                    <p><strong>Estoque:</strong> {produto.estoque}</p>
+  const scrollLeft = () => {
+    const newIndex = currentIndex === 0 ? (produto?.urlImagens?.length || 1) - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+    scrollToIndex(newIndex);
+  };
+
+  const scrollRight = () => {
+    const imagensLength = produto?.urlImagens?.length || 1;
+    const newIndex = (currentIndex + 1) % imagensLength;
+    setCurrentIndex(newIndex);
+    scrollToIndex(newIndex);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      scrollRight();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+
+  const adicionarAoCarrinho = async () => {
+    if (!idUsuario) {
+      alert("Você precisa estar logado.");
+      return;
+    }
+
+    const idProduto = produto.id;
+
+    try {
+      const resposta = await fetch("https://localhost:7294/Carrinho");
+      const todos = await resposta.json();
+
+      const existente = todos.find(c => c.idUsuario === idUsuario && c.idProduto === idProduto);
+
+      if (existente) {
+        const novaQuantidade = existente.quantidade + 1;
+        await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idUsuario, idProduto, quantidade: novaQuantidade })
+        });
+      } else {
+        await fetch("https://localhost:7294/Carrinho", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idUsuario, idProduto, quantidade: 1 })
+        });
+      }
+
+      alert("Produto adicionado ao carrinho!");
+    } catch (err) {
+      console.error("Erro ao adicionar:", err);
+      alert("Erro ao adicionar ao carrinho.");
+    }
+  };
+
+  if (carregando) return <p>Carregando produto...</p>;
+  if (erro) return <p>{erro}</p>;
+  if (!produto) return <p>Produto não encontrado</p>;
+
+  return (
+    <>
+      <div className="btn">
+        <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
+      </div>
+      <div className="produto-detalhe-container">
+        <div className="carousel-wrapperr">
+          <button className="carousel-button left" onClick={scrollLeft}>
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <div className="carousel-container" ref={carouselRef}>
+            {produto?.urlImagens?.length > 0 ? (
+              produto.urlImagens.map((img, index) => (
+                <div key={index} className="carousel-slide">
+                  <img src={img} alt={`Imagem ${index}`} />
                 </div>
+              ))
+            ) : (
+              <div className="carousel-slide">
+                <img
+                  src="http://via.placeholder.com/600x400.png?text=Produto+sem+imagem"
+                  alt="Sem imagem"
+                />
+              </div>
+            )}
+          </div>
 
-                {/* Ações do usuário */}
-                <div className="acoes">
-                    <button className="btn adicionar-carrinho">Adicionar ao Carrinho</button>
-                    <button className="btn favoritar">Favoritar</button>
-                </div>
-            </div>
+          <button className="carousel-button right" onClick={scrollRight}>
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
-    );
+
+        <div className="info-produto">
+          <h2 className='name-prod'>{produto.nome}</h2>
+          <p className='tipo-prod'>{produto.tipo}</p>
+          <p className="descricao">{produto.descricao}</p>
+          <p className='avaliacao'><FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} />
+            <FontAwesomeIcon icon={faStar} /></p>
+
+          <div className="detalhes-produto">
+            <p className="preco">
+              {produto.preco.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
+            </p>
+            <p><strong>Marca:</strong> {produto.marca}</p>
+            <p><strong>Cor:</strong> {produto.cor}</p>
+            <p><strong>Material:</strong> {produto.material}</p>
+            <p><strong>Gênero:</strong> {produto.genero}</p>
+            <div className="filtro-tamanhos">
+              {['26', '28', '30', '32', '34', '36', '38', '40'].map(tam => (
+                <button key={tam}>{tam}</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="acoes">
+            <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
+              Adicionar ao Carrinho
+            </button>
+            <button className="btn comprar">Comprar agora</button>
+          </div>
+          <div className="links">
+            <p>Compartilhar: <i class="fa-brands fa-whatsapp"></i>WhatsApp</p>
+          </div>
+
+        </div>
+      </div>
+
+    </>
+  );
 };
 
 export default ProdutoDetalhe;

@@ -167,10 +167,10 @@ const items = [
           {usuarioLogado && (
             <div className="icons">
               <ul>
-                <Link to="/carrinho">
+                <Link to="/Carrinho">
                   <li><i className="fa-solid fa-cart-shopping"></i></li>
                 </Link>
-                <Link to="/favoritos">
+                <Link to="/Favoritos">
                   <li><i className="fa-solid fa-heart"></i></li>
                 </Link>
               </ul>
