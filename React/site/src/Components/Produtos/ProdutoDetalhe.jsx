@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ProdutoDetalhe.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar, } from '@fortawesome/free-regular-svg-icons';
+
 const ProdutoDetalhe = () => {
   const { id } = useParams();
   const [produto, setProduto] = useState(null);
@@ -35,10 +38,6 @@ const ProdutoDetalhe = () => {
     setIdUsuario(id);
   }, []);
 
-  const imagens = Array.isArray(produto?.urlImagens) && produto.urlImagens.length > 0
-    ? produto.urlImagens
-    : ["http://via.placeholder.com/600x400.png?text=Produto+sem+imagem"];
-
   const scrollToIndex = (index) => {
     const container = carouselRef.current;
     const slideWidth = container.offsetWidth;
@@ -49,13 +48,14 @@ const ProdutoDetalhe = () => {
   };
 
   const scrollLeft = () => {
-    const newIndex = currentIndex === 0 ? imagens.length - 1 : currentIndex - 1;
+    const newIndex = currentIndex === 0 ? (produto?.urlImagens?.length || 1) - 1 : currentIndex - 1;
     setCurrentIndex(newIndex);
     scrollToIndex(newIndex);
   };
 
   const scrollRight = () => {
-    const newIndex = (currentIndex + 1) % imagens.length;
+    const imagensLength = produto?.urlImagens?.length || 1;
+    const newIndex = (currentIndex + 1) % imagensLength;
     setCurrentIndex(newIndex);
     scrollToIndex(newIndex);
   };
@@ -119,11 +119,20 @@ const ProdutoDetalhe = () => {
           </button>
 
           <div className="carousel-container" ref={carouselRef}>
-            {imagens.map((img, index) => (
-              <div key={index} className="carousel-slide">
-                <img src={img} alt={`Imagem ${index}`} />
+            {produto?.urlImagens?.length > 0 ? (
+              produto.urlImagens.map((img, index) => (
+                <div key={index} className="carousel-slide">
+                  <img src={img} alt={`Imagem ${index}`} />
+                </div>
+              ))
+            ) : (
+              <div className="carousel-slide">
+                <img
+                  src="http://via.placeholder.com/600x400.png?text=Produto+sem+imagem"
+                  alt="Sem imagem"
+                />
               </div>
-            ))}
+            )}
           </div>
 
           <button className="carousel-button right" onClick={scrollRight}>
@@ -134,29 +143,44 @@ const ProdutoDetalhe = () => {
         <div className="info-produto">
           <h2>{produto.nome}</h2>
           <p className="preco">
-            {produto.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            {produto.preco.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
           </p>
           <p className="descricao">{produto.descricao}</p>
+          <FontAwesomeIcon icon={faStar} />
+          <FontAwesomeIcon icon={faStar} />
+          <FontAwesomeIcon icon={faStar} />
+          <FontAwesomeIcon icon={faStar} />
+          <FontAwesomeIcon icon={faStar} />
 
-          <div className="detalhes">
+          <div className="detalhes-produto">
             <p><strong>Marca:</strong> {produto.marca}</p>
             <p><strong>Cor:</strong> {produto.cor}</p>
-            <p><strong>Tamanho:</strong> {produto.tamanho}</p>
             <p><strong>Material:</strong> {produto.material}</p>
             <p><strong>Gênero:</strong> {produto.genero}</p>
             <p><strong>Tipo:</strong> {produto.tipo}</p>
-            <p><strong>Estoque:</strong> {produto.estoque}</p>
+            <div className="filtro-tamanhos">
+              {['26', '28', '30', '32', '34', '36', '38', '40'].map(tam => (
+                <button key={tam}>{tam}</button>
+              ))}
+            </div>
           </div>
 
           <div className="acoes">
             <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
               Adicionar ao Carrinho
             </button>
-
             <button className="btn favoritar">Favoritar</button>
           </div>
+              <div className="links">
+                <p>Compartilhar: <i class="fa-brands fa-whatsapp"></i>WhatsApp</p>
+              </div>
+
         </div>
       </div>
+
     </>
   );
 };
