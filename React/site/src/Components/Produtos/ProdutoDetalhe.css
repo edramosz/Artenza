@@ -8,14 +8,16 @@
   overflow: hidden;
   padding: 30px 40px;
   gap: 50px;
+  height: 200vh;
 }
 
 .carousel-wrapperr {
-  flex: 2;
-  max-width: 60%;
+  flex: 3;
+  max-width: 67%;
   position: relative;
   display: flex;
   align-items: center;
+  height: 590px;
 }
 
 .carousel-container {
@@ -96,7 +98,38 @@
   margin-bottom: 7px;
 }
 
+.detalhes-produto{
+  font-size: 1.1rem;
+}
+
+
 .avaliacao{
   font-size: 1.2rem;
   margin-bottom: 7px;
+  color: #f5d20b;
+}
+
+.preco{
+  font-size: 1.2rem;
+  color: #0c880c;
+  margin-bottom: 7px;
+}
+
+.filtro-tamanhos{
+  margin: 20px 0px;
+}
+
+.acoes .btn{
+  width: 100%;
+  border: none;
+  color: #fff ;
+  background-color: #000000;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer;  
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-weight: 500;
+  box-shadow: 6px 6px 14px #00000021;
 }
