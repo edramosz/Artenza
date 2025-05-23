@@ -45,7 +45,7 @@ const ListaProdutos = () => {
         </ul>
 
         <h3>Tamanho</h3>
-        <div className="filtro-tamanhos">
+        <div className="filtro-tamanho">
           {['26', '28', '30', '32', '34', '36'].map(tam => (
             <button key={tam}>{tam}</button>
           ))}

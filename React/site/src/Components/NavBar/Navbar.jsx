@@ -25,8 +25,6 @@ const items = [
 ];
 
 
-
-  // Função que carrega os dados do usuário do localStorage
   const carregarDadosUsuario = () => {
     const nomeCompleto = localStorage.getItem("nomeUsuario");
     const emailStr = localStorage.getItem("email");

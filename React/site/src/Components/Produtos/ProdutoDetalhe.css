@@ -7,17 +7,17 @@
   position: relative;
   overflow: hidden;
   padding: 30px 40px;
-  gap: 50px;
-  height: 200vh;
+  gap: 20px;
+  height: 0 auto;
 }
 
 .carousel-wrapperr {
   flex: 3;
-  max-width: 67%;
+  max-width: 69%;
   position: relative;
   display: flex;
   align-items: center;
-  height: 590px;
+  height: 570px;
 }
 
 .carousel-container {
@@ -71,10 +71,9 @@
 
 .info-produto {
   flex: 1;
-  background-color: rgba(255, 255, 255, 0.685);
   color: #000000ce;
   padding: 20px;
-  border-radius: 15px;
+  height: 0 auto;
 }
 
 .name-prod{
@@ -119,6 +118,14 @@
   margin: 20px 0px;
 }
 
+
+.filtro-tamanhos button{
+  font-size: 1.06rem;
+  border: 2px solid #222;
+  color: #000000;
+  font-weight: 500;
+  border-radius: 10px;
+}
 .acoes .btn{
   width: 100%;
   border: none;

@@ -64,7 +64,7 @@ const Perfil = () => {
           <div className="perfil-header">
             <div className="perfil-img-wrapper">
               <img src="./img/fundo.png" alt="Foto de Perfil" className="perfil-img" />
-              <button onClick={editImage} className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
+              <button  className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
             </div>
             <div className="perfil-dados">
             </div>
