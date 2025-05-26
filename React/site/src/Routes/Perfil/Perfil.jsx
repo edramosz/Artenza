@@ -12,18 +12,67 @@ const Perfil = () => {
     dataCadastro: '',
     dataNascimento: '',
     telefone: '',
+    perfilUrl: ''
   });
 
-  useEffect(() => {
-    const editImage = () => {
-
+  // Atualiza backend
+  const puted = async (novoUsuario) => {
+    try {
+      await fetch("https://localhost:7294/Produto", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(novoUsuario)
+      });
+    } catch (err) {
+      console.error("Erro no put do user", err);
     }
+  };
+
+  // Upload e atualiza imagem
+  const editImage = async (files) => {
+    if (!files || files.length === 0) return;
+
+    try {
+      const file = files[0];
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "Artenza");
+      formData.append("cloud_name", "drit350g5");
+
+      const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      const novaUrl = data.secure_url;
+
+      // Atualiza estado e localStorage
+      const novoUsuario = { ...usuario, perfilUrl: novaUrl };
+      setUsuario(novoUsuario);
+      localStorage.setItem("perfilUrl", novaUrl);
+
+      // Atualiza backend
+      await puted(novoUsuario);
+
+    } catch (err) {
+      console.error("Erro ao fazer upload da imagem:", err);
+    }
+  };
+
+  // Pega info do localStorage e seta no estado
+  useEffect(() => {
     const atualizarUsuario = () => {
       const nome = localStorage.getItem("nomeCompletoUser") || '';
       const email = localStorage.getItem("email") || '';
       const dataCadastro = localStorage.getItem("dataCadastro") || '';
       const dataNascimento = localStorage.getItem("dataNascimento") || '';
       const telefone = localStorage.getItem("telefone") || '';
+      const perfilUrl = localStorage.getItem("perfilUrl") || '';
 
       let dataCadastroFormatada = '';
       if (dataCadastro) {
@@ -45,9 +94,12 @@ const Perfil = () => {
       }
 
       setUsuario({
-        nome, email, dataCadastro: dataCadastroFormatada,
+        nome,
+        email,
+        dataCadastro: dataCadastroFormatada,
         dataNascimento: dataNascimentoFormatada,
-        telefone
+        telefone,
+        perfilUrl
       });
     };
 
@@ -63,11 +115,26 @@ const Perfil = () => {
         <div className="perfil-info">
           <div className="perfil-header">
             <div className="perfil-img-wrapper">
-              <img src="./img/fundo.png" alt="Foto de Perfil" className="perfil-img" />
-              <button onClick={editImage} className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
+              <img
+                src={usuario.perfilUrl || "./img/fundo.png"}
+                alt="Foto de Perfil"
+                className="perfil-img"
+              />
+              <button
+                onClick={() => document.getElementById('inputFile').click()}
+                className="btn-edit-img"
+              >
+                <FontAwesomeIcon icon={faCamera} />
+              </button>
+              <input
+                id="inputFile"
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={e => editImage(e.target.files)}
+              />
             </div>
-            <div className="perfil-dados">
-            </div>
+            <div className="perfil-dados"></div>
           </div>
 
           <div className="perfil-detalhes">

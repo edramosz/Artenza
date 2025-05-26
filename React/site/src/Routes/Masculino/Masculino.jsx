@@ -9,7 +9,7 @@ const Masculino = () => {
     useEffect(() => {
         const buscarProdMasc = async () => {
             try {
-                const response = await fetch("colocar o endpoint");
+                const response = await fetch("colocar endpoint");
 
                 if (!response.ok) {
                     throw new Error(" colocar o erro" + response.status);
