@@ -102,12 +102,12 @@ function Carrinho() {
                 src={
                   Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
                     ? produto.urlImagens[0]
-                    : "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"
+                    : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"     // conferir com thulio o que significa
                 }
                 alt={produto.nome}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
+                  e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
                 }}
               />
 

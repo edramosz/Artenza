@@ -10,7 +10,7 @@ const slides = [
     subtitle: 'Poppies on the sea',
   },
   {
-    image: 'https://media.istockphoto.com/id/1682399954/pt/vetorial/dark-abstract-urban-style-hiphop-graffiti-street-art.jpg?s=612x612',
+    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',
     title: "FW'24",
     subtitle: 'Autumn Breeze',
   },
