@@ -49,7 +49,7 @@ const PromotionalBanner = () => {
                 }}
             >
                 <button className="btn-caroussel" onClick={() => setCurrent((current - 1 + slides.length) % slides.length)}>
-                    <i class="fa-solid fa-chevron-left"></i>
+                    <i className="fa-solid fa-chevron-left"></i>
                 </button>
                 <div className="carousel-slide">
                     <div className="text-content">
@@ -59,7 +59,7 @@ const PromotionalBanner = () => {
                     </div>
                 </div>
                 <button onClick={() => setCurrent((current + 1) % slides.length)}>
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i className="fa-solid fa-chevron-right"></i>
                 </button>
                 <div className="dots">
                     {slides.map((_, idx) => (

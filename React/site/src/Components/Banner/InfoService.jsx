@@ -8,7 +8,7 @@ const InfoService = () => {
 
                 <div className="card">
                     <div className="icon">
-                        <i class="fa-solid fa-truck-fast"></i>
+                        <i className="fa-solid fa-truck-fast"></i>
                     </div>
                     <div className="texts">
                         <h2>Frete Grátis</h2>
@@ -17,7 +17,7 @@ const InfoService = () => {
                 </div>
                 <div className="card">
                     <div className="icon">
-                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <i className="fa-solid fa-arrow-rotate-left"></i>
                     </div>
                     <div className="texts">
                         <h2>Devoluções em 30 dias</h2>
@@ -26,7 +26,7 @@ const InfoService = () => {
                 </div>
                 <div className="card">
                     <div className="icon">
-                       <i class="fa-solid fa-wallet"></i>
+                       <i className="fa-solid fa-wallet"></i>
                     </div>
                     <div className="texts">
                         <h2>Pagamento Seguro</h2>
@@ -35,7 +35,7 @@ const InfoService = () => {
                 </div>
                 <div className="card">
                     <div className="icon">
-                       <i class="fa-solid fa-headset"></i>
+                       <i className="fa-solid fa-headset"></i>
                     </div>
                     <div className="texts">
                         <h2>Suporte ao Cliente</h2>
@@ -44,7 +44,7 @@ const InfoService = () => {
                 </div>
                 <div className="card">
                     <div className="icon">
-                        <i class="fa-solid fa-shield-halved"></i>
+                        <i className="fa-solid fa-shield-halved"></i>
                     </div>
                     <div className="texts">
                         <h2>Compra Garantida</h2>
