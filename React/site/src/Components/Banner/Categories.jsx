@@ -6,46 +6,46 @@ const Categories = () => {
 
     const cards = [
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/blusa.jpg',
+            alt: 'Blusas femininas e masculinas',
+            link: '/categoria/blusas',
+            title: 'Blusas'
         },
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/calcas.jpg',
+            alt: 'Calças jeans, sociais e esportivas',
+            link: '/categoria/calcas',
+            title: 'Calças'
         },
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/tenis.jpg',
+            alt: 'Tênis esportivos e casuais',
+            link: '/categoria/tenis',
+            title: 'Tênis'
         },
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/acessorios.jpg',
+            alt: 'Bolsas, cintos, óculos e mais',
+            link: '/categoria/acessorios',
+            title: 'Acessórios'
         },
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/vestidos.jpg',
+            alt: 'Vestidos casuais e sociais',
+            link: '/categoria/vestidos',
+            title: 'Vestidos'
         },
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/camisetas.jpg',
+            alt: 'Camisetas básicas e estampadas',
+            link: '/categoria/camisetas',
+            title: 'Camisetas'
         },
         {
-            img: '././img/fundo.png',
-            alt: 'bla bla',
-            link: '/',
-            title: 'blusas'
+            img: '././img/jaquetas.jpg',
+            alt: 'Jaquetas e casacos',
+            link: '/categoria/jaquetas',
+            title: 'Jaquetas'
         }
     ];
 
