@@ -36,6 +36,9 @@ namespace Core.Models.DTO_s
             CreateMap<ItemVenda, CreateItemVenda>();
             CreateMap<CreateItemVenda, ItemVenda>();
 
+            CreateMap<Feedback, CreateFeedback>();
+            CreateMap<CreateFeedback, Feedback>();
+
             // UPDATE
 
             CreateMap<Usuario, UpdateUsuario>();
@@ -49,6 +52,9 @@ namespace Core.Models.DTO_s
 
             CreateMap<Carrinho, UpdateCarrinho>();
             CreateMap<UpdateCarrinho, Carrinho>();
+
+            CreateMap<Feedback, UpdateFeedback>();
+            CreateMap<UpdateFeedback, Feedback>();
         }
     }
 }
