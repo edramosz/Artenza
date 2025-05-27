@@ -17,52 +17,64 @@ const Perfil = () => {
 
   // Atualiza backend
   const puted = async (novoUsuario) => {
-    try {
-      await fetch("https://localhost:7294/Produto", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(novoUsuario)
-      });
-    } catch (err) {
-      console.error("Erro no put do user", err);
-    }
-  };
+  const id = localStorage.getItem("idUsuario");
+
+  try {
+    await fetch(`https://localhost:7294/Usuario/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({  
+        nomeCompleto: novoUsuario.nome,
+        telefone: novoUsuario.telefone,
+        diaNascimento: parseInt(localStorage.getItem("diaNascimento")),
+        mesNascimento: parseInt(localStorage.getItem("mesNascimento")),
+        anoNascimento: parseInt(localStorage.getItem("anoNascimento")),
+        perfilUrl: novoUsuario.perfilUrl 
+      })
+    });
+  } catch (err) {
+    console.error("Erro no put do user", err);
+  }
+};
+
 
   // Upload e atualiza imagem
-  const editImage = async (files) => {
-    if (!files || files.length === 0) return;
+ const editImage = async (files) => {
+  if (!files || files.length === 0) return;
 
-    try {
-      const file = files[0];
+  try {
+    const file = files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "Artenza");
+    formData.append("cloud_name", "drit350g5");
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "Artenza");
-      formData.append("cloud_name", "drit350g5");
+    const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
+      method: "POST",
+      body: formData
+    });
 
-      const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
-        method: "POST",
-        body: formData
-      });
+    const data = await res.json();
+    const novaUrl = data.secure_url;
 
-      const data = await res.json();
+    const novoUsuario = {
+      nome: usuario.nome,
+      telefone: usuario.telefone,
+      perfilUrl: novaUrl
+    };
 
-      const novaUrl = data.secure_url;
+    await puted(novoUsuario);
 
-      // Atualiza estado e localStorage
-      const novoUsuario = { ...usuario, perfilUrl: novaUrl };
-      setUsuario(novoUsuario);
-      localStorage.setItem("perfilUrl", novaUrl);
+    setUsuario(prev => ({ ...prev, perfilUrl: novaUrl }));
+    localStorage.setItem("perfilUrl", novaUrl);
 
-      // Atualiza backend
-      await puted(novoUsuario);
+  } catch (err) {
+    console.error("Erro ao fazer upload da imagem:", err);
+  }
+};
 
-    } catch (err) {
-      console.error("Erro ao fazer upload da imagem:", err);
-    }
-  };
 
   // Pega info do localStorage e seta no estado
   useEffect(() => {
@@ -115,12 +127,7 @@ const Perfil = () => {
         <div className="perfil-info">
           <div className="perfil-header">
             <div className="perfil-img-wrapper">
-<<<<<<< HEAD
-              <img src="./img/fundo.png" alt="Foto de Perfil" className="perfil-img" />
-              <button  className="btn-edit-img">  <FontAwesomeIcon icon={faCamera} /> </button>
-            </div>
-            <div className="perfil-dados">
-=======
+
               <img
                 src={usuario.perfilUrl || "./img/fundo.png"}
                 alt="Foto de Perfil"
@@ -139,7 +146,6 @@ const Perfil = () => {
                 style={{ display: 'none' }}
                 onChange={e => editImage(e.target.files)}
               />
->>>>>>> 8bc804b0883650dc6d9c895e692c38726c38a9c9
             </div>
             <div className="perfil-dados"></div>
           </div>
