@@ -23,7 +23,7 @@ export default function Login() {
       if (!response.ok) {
         throw new Error("Usuário não encontrado na API");
       }
-
+      
       const usuario = await response.json();
       console.log("Usuário retornado da API:", usuario); // Veja se "telefone" aparece aqui
 
@@ -41,23 +41,23 @@ export default function Login() {
       const nomes = usuario.nomeCompleto.trim().split(" ");
       const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
 
-      const firebaseEmail = userCredential.user.email;
+      const emailMaiusculo = email;
+
+      // const firebaseEmail = userCredential.user.email;  --- CÓDIGO ANTIGO COM ERRO NAS MAIÚSCULAS
 
       localStorage.setItem("idUsuario", usuario.id);
 
       localStorage.setItem("nomeUsuario", primeiroNome);
       localStorage.setItem("nomeCompletoUser", usuario.nomeCompleto);
       localStorage.setItem("isAdmin", usuario.isAdmin);
-      localStorage.setItem("email", firebaseEmail);
+      localStorage.setItem("email", emailMaiusculo);
       localStorage.setItem("telefone", usuario.telefone);
       localStorage.setItem("dataCadastro", usuario.dataCadastro);
 
-
-
+      console.log(emailMaiusculo);
       window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar
       alert("Login feito com sucesso!");
       window.location.href = "/"; // recarrega a página para garantir que localStorage esteja disponível
-
 
     } catch (error) {
       console.error("Erro no login:", error);

@@ -175,7 +175,7 @@ const ProdutoDetalhe = () => {
             <button className="btn comprar">Comprar agora</button>
           </div>
           <div className="links">
-            <p>Compartilhar: <i class="fa-brands fa-whatsapp"></i>WhatsApp</p>
+            <p>Compartilhar: <i className="fa-brands fa-whatsapp"></i>WhatsApp</p>
           </div>
 
         </div>

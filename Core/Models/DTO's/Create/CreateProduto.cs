@@ -15,7 +15,7 @@ namespace Core.Models.DTO_s.Create
         public List<string> UrlImagens { get; set; } = new List<string>();
         public string Categoria { get; set; } // Exemplo: "Roupas", "Acessórios"
         [Required] public int Estoque { get; set; }
-        public string Tamanho { get; set; }
+        public List<string> Tamanhos { get; set; }
         public string Material { get; set; }
         public string Cor { get; set; }
         public string Genero { get; set; }
