@@ -6,34 +6,36 @@ const Masculino = () => {
     const [produtos, setProdutos] = useState([]);
     const [erro, setErro] = useState(null);
 
-    useEffect(() => {
-        const buscarProdMasc = async () => {
-            try {
-                const response = await fetch("colocar endpoint");
+   useEffect(() => {
+    const buscarProdMasc = async () => {
+        try {
+            const response = await fetch("https://localhost:7294/Produto");
 
-                if (!response.ok) {
-                    throw new Error(" colocar o erro" + response.status);
-                }
-
-                const data = await response.json();
-
-                const dataComImagem = data.map(produto => ({
-                    ...produto,
-                    urlImagens: Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
-                        ? produto.urlImagens
-                        : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
-                }));
-
-                setProdutos(dataComImagem);
+            if (!response.ok) {
+                throw new Error("Erro ao buscar produtos: " + response.status);
             }
 
-            catch (err) {
-                console.error("Erro ao buscar produtos:", err);
-                setErro("Não foi possível carregar os produtos.");
-            }
-        };
-        buscarProdMasc();
-    }, []);
+            const data = await response.json();
+
+            // Filtra apenas produtos do gênero masculino
+            const masculinos = data.filter(produto => produto.genero === "Masculino");
+
+            const dataComImagem = masculinos.map(produto => ({
+                ...produto,
+                urlImagens: Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
+                    ? produto.urlImagens
+                    : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
+            }));
+
+            setProdutos(dataComImagem);
+        } catch (err) {
+            console.error("Erro ao buscar produtos:", err);
+            setErro("Não foi possível carregar os produtos.");
+        }
+    };
+    buscarProdMasc();
+}, []);
+
 
     return (
         <div className="masc-container">
@@ -48,8 +50,8 @@ const Masculino = () => {
                 </div>
             </div>
             <div className="masc-produtos">
-                {produtos.map(prods, index => (
-                    <div className="card-prods" key={index}>
+                {produtos.map((prod) => (
+                    <div className="card-prods" key={prod.id}>
                         <div>
                             <img
                                 src={prod.urlImagens[0]}
@@ -57,12 +59,18 @@ const Masculino = () => {
                                 onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
-                                }} />
+                                }}
+                            />
                         </div>
                         <div>
                             <h4>{prod.nome}</h4>
                             <p>{prod.categoria}</p>
-                            <p>{prod.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+                            <p>
+                                {prod.preco.toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                })}
+                            </p>
                         </div>
                         <div className="btns-actions">
                             <button>Adicione ao Carrinho</button>
@@ -70,6 +78,7 @@ const Masculino = () => {
                     </div>
                 ))}
             </div>
+
         </div>
     );
 };

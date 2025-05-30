@@ -11,7 +11,7 @@ const AdicionarProduto = () => {
   const [urlsImagem, setUrlsImagem] = useState([]);
   const [categoria, setCategoria] = useState("");
   const [estoque, setEstoque] = useState("");
-  const [tamanho, setTamanho] = useState("");
+  const [tamanhos, setTamanhos] = useState([]);
   const [material, setMaterial] = useState("");
   const [cor, setCor] = useState("");
   const [genero, setGenero] = useState("");
@@ -60,7 +60,7 @@ const AdicionarProduto = () => {
       urlImagens: urlsImagem, // nome atualizado para bater com backend
       categoria,
       estoque: isNaN(parseInt(estoque)) ? 0 : parseInt(estoque),
-      tamanho,
+      tamanhos: tamanhos,
       material,
       cor,
       genero,
@@ -134,8 +134,8 @@ const AdicionarProduto = () => {
         <label htmlFor="estoque">Estoque:</label>
         <input type="number" id="estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} />
 
-        <label htmlFor="tamanho">Tamanho:</label>
-        <input type="text" id="tamanho" value={tamanho} onChange={(e) => setTamanho(e.target.value)} />
+        <label htmlFor="tamanhos">Tamanhos:</label>
+        <input type="text" id="tamanhos" value={tamanhos} onChange={(e) => setTamanhos(e.target.value)} />
 
         <label htmlFor="material">Material:</label>
         <input type="text" id="material" value={material} onChange={(e) => setMaterial(e.target.value)} />
