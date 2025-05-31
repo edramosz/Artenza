@@ -1,12 +1,15 @@
-.produto-detalhe-container {
+.prod-detalhe-container{  
   width: 100%;
-  max-width: 2000px;
+  max-width: 2000px;  
+  margin: 0 auto;  
+  padding: 30px 40px;
+}
+
+.produto-detalhe-container {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto;
   position: relative;
   overflow: hidden;
-  padding: 30px 40px;
   gap: 20px;
   height: 0 auto;
 }
@@ -20,7 +23,7 @@
   height: 570px;
 }
 
-.carousel-container {
+.prod-detalhe-container .carousel-container {
   display: flex;
   gap: 50px;
   overflow-x: auto;
@@ -120,11 +123,13 @@
 
 
 .filtro-tamanhos button{
+  margin-top: 10px;
   font-size: 1.06rem;
   border: 2px solid #222;
   color: #000000;
   font-weight: 500;
   border-radius: 10px;
+  width: 60px;
 }
 .acoes .btn{
   width: 100%;

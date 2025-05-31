@@ -7,15 +7,14 @@
   margin-left: 50%;
   transform: translateX(-50%);
 }
+
 .container-dashboard .sidebar {
-  width: 220px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  background-color: #ca3737;
-  padding: 30px 0px 0px 14px;
-  border-right: 6px solid #1ca032;
-  color: #fff;
+  width: 250px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 30px 10px;
+  border-right: 2px solid #e0e0e0;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -23,45 +22,64 @@
 
 .container-dashboard .sidebar .title {
   font-size: 1.6rem;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-.container-dashboard .sidebar .pages {
+.container-dashboard .pages {
   list-style: none;
   padding: 0;
+  width: 100%;
 }
-
-.container-dashboard  .pages a {
-  text-decoration: none;
-}
-
 
 .container-dashboard .pages li {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
+  width: 100%;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
-.container-dashboard  .pages button {
+.container-dashboard .pages a {
+  text-decoration: none;
+  width: 100%;
+}
+
+.container-dashboard .pages button {
+  width: 100%;
   background: none;
   border: none;
-  color: #fff;
-  cursor: pointer;
-  font-size: 16.5px;
-  width: 100%;
-  text-align: left;
-  padding: 10px;
+  color: #333;
+  font-size: 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.container-dashboard .pages button:hover {
+  background-color: #e6e6e6;
 }
 
 .container-dashboard .pages button svg {
   width: 18px;
   height: 18px;
+  color: #666;
 }
 
-.container-dashboard .pages button:hover,
 .container-dashboard .pages button.active {
-  background-color: #9ec417;
-  border-radius: 15px 0px 0px 15px;
+  background-color: #49494983;
+  color: rgba(255, 255, 255, 0.904);
+  font-weight: bold;
+}
+
+.container-dashboard .pages button.active svg {
+  color: #fff;
 }
 
 

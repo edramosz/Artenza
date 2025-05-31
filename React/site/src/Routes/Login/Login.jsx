@@ -53,7 +53,9 @@ export default function Login() {
       localStorage.setItem("email", emailMaiusculo);
       localStorage.setItem("telefone", usuario.telefone);
       localStorage.setItem("dataCadastro", usuario.dataCadastro);
-      localStorage.setItem("perfilUrl", usuarioLogado.PerfilUrl || "");
+      localStorage.setItem("perfilUrl", usuario.perfilUrl || "");
+
+
 
 
       console.log(emailMaiusculo);

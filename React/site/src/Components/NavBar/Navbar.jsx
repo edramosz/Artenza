@@ -11,18 +11,19 @@ const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [perfilUrl, setPerfilUrl] = useState("");
 
 
-const items = [
-  { id: 1, url: "/", label: "Home" },
-  { id: 2, url: "/masculino", label: "Masculino" },
-  { id: 3, url: "/feminino", label: "Feminino" },
-  { id: 4, url: "/acessorios", label: "Acessórios" },
-  { id: 5, url: "/novidades", label: "Novidades" },
-  { id: 6, url: "/promocoes", label: "Promoções" },
-  { id: 7, url: "/contato", label: "Contato" },
-  { id: 8, url: "/sobre", label: "Sobre" },
-];
+  const items = [
+    { id: 1, url: "/", label: "Home" },
+    { id: 2, url: "/masculino", label: "Masculino" },
+    { id: 3, url: "/feminino", label: "Feminino" },
+    { id: 4, url: "/acessorios", label: "Acessórios" },
+    { id: 5, url: "/novidades", label: "Novidades" },
+    { id: 6, url: "/promocoes", label: "Promoções" },
+    { id: 7, url: "/contato", label: "Contato" },
+    { id: 8, url: "/sobre", label: "Sobre" },
+  ];
 
 
   const carregarDadosUsuario = () => {
@@ -30,7 +31,7 @@ const items = [
     const emailStr = localStorage.getItem("email");
     const isAdminStr = localStorage.getItem("isAdmin");
 
-   
+
     const isAdmin = isAdminStr === "true";
 
     if (nomeCompleto && emailStr) {
@@ -66,13 +67,22 @@ const items = [
     };
   }, []); // Este useEffect agora é executado uma vez ao montar o componente
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    localStorage.removeItem("nomeUsuario");
-    localStorage.removeItem("isAdmin");
-    setUsuarioLogado(null);
-    navigate("/");
-  };
+
+  useEffect(() => {
+    const updatePerfilUrl = () => {
+      const url = localStorage.getItem("perfilUrl");
+      setPerfilUrl(url);
+    };
+
+    // Escuta o evento customizado
+    window.addEventListener("perfilAtualizado", updatePerfilUrl);
+    updatePerfilUrl(); // Carrega inicialmente
+
+    return () => {
+      window.removeEventListener("perfilAtualizado", updatePerfilUrl);
+    };
+  }, []);
+
 
 
   return (
@@ -122,7 +132,7 @@ const items = [
                   <li className="main-user">
                     <div className="icon-perfil">
                       <Link to="/perfil">
-                        <i className="fa-solid fa-user"></i>
+                        <img src={perfilUrl || "/img/userDefault.png"} alt="" className="perfil-foto" />
                       </Link>
                     </div>
                     <div>
@@ -131,18 +141,6 @@ const items = [
                         <p className="user-item">{usuarioLogado.email}</p>
                       </Link>
                     </div>
-                  </li>
-
-                  {usuarioLogado.isAdmin && (
-                    <li>
-                      <Link to="/Admin">Painel de Admin</Link>
-                    </li>
-                  )}
-
-                  <li>
-                    <button onClick={handleLogout} className="logout-btn">
-                      Sair
-                    </button>
                   </li>
                 </>
               ) : (

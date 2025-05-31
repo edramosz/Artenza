@@ -37,7 +37,8 @@ function AppContent() {
       {/* Rotas com Layout Normal */}
       <Route element={<LayoutNormal />}>
         <Route path="/" element={<Home />} />
-        <Route path="/Produto/:id" element={<ProdutoDetalhe />} />
+        <Route path="/Produto/:id" element={<ProdutoDetalhe /> } />        
+        <Route path="/Produto/:id" element={<Masculino/>} />
         <Route path="/Colecao" element={<Colecao />} />
         <Route path="/Cadastro" element={<Cadastro />} />
         <Route path="/Login" element={<Login />} />

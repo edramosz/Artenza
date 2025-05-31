@@ -13,5 +13,6 @@ namespace Core.Interfaces
         Task<ReadUsuario> AddUsuarioAsync(CreateUsuario usuario); // Altere para ReadUsuario
         Task UpdateUsuarioAsync(string id, UpdateUsuario usuario);
         Task DeleteUsuarioAsync(string id);
+        Task UpdateUsuarioFotoAsync(string id, Usuario usuario);
     }
 }

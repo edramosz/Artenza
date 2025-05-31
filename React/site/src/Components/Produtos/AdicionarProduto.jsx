@@ -54,29 +54,38 @@ const AdicionarProduto = () => {
     }
 
     const novoProduto = {
-      nome,
-      preco: isNaN(parseFloat(preco)) ? 0 : parseFloat(preco),
-      descricao,
-      urlImagens: urlsImagem, // nome atualizado para bater com backend
-      categoria,
-      estoque: isNaN(parseInt(estoque)) ? 0 : parseInt(estoque),
-      tamanhos: tamanhos,
-      material,
-      cor,
-      genero,
-      tipo,
-      marca
+      Nome: nome,
+      Preco: isNaN(parseFloat(preco)) ? 0 : parseFloat(preco),
+      Descricao: descricao,
+      UrlImagens: urlsImagem,
+      Categoria: categoria,
+      Estoque: isNaN(parseInt(estoque)) ? 0 : parseInt(estoque),
+      Tamanhos: tamanhos,
+      Material: material,
+      Cor: cor,
+      Genero: genero,
+      Tipo: tipo,
+      Marca: marca
     };
 
 
+
     try {
+
+      if (!nome || !descricao || !cor || !tipo || !marca || !genero || !material || !categoria || tamanhos.length === 0) {
+        setErro("Por favor, preencha todos os campos obrigatórios.");
+        return;
+      }
+
       const response = await fetch("https://localhost:7294/Produto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(novoProduto)
+
       });
+
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -98,13 +107,13 @@ const AdicionarProduto = () => {
       {erro && <p style={{ color: "red" }}>{erro}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="nome">Nome:</label>
-        <input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
+        <input type="text" id="nome" required value={nome} onChange={(e) => setNome(e.target.value)} />
 
         <label htmlFor="preco">Preço:</label>
-        <input type="number" id="preco" value={preco} onChange={(e) => setPreco(e.target.value)} required />
+        <input type="number" id="preco" required value={preco} onChange={(e) => setPreco(e.target.value)} />
 
         <label htmlFor="descricao">Descrição:</label>
-        <textarea id="descricao" value={descricao} onChange={(e) => setDescricao(e.target.value)} required />
+        <textarea id="descricao" required value={descricao} onChange={(e) => setDescricao(e.target.value)} />
 
         <label htmlFor="imagem">Imagens:</label>
         <input
@@ -129,28 +138,32 @@ const AdicionarProduto = () => {
         )}
 
         <label htmlFor="categoria">Categoria:</label>
-        <input type="text" id="categoria" value={categoria} onChange={(e) => setCategoria(e.target.value)} />
+        <input type="text" required id="categoria" value={categoria} onChange={(e) => setCategoria(e.target.value)} />
 
         <label htmlFor="estoque">Estoque:</label>
-        <input type="number" id="estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} />
+        <input type="number" required id="estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} />
 
         <label htmlFor="tamanhos">Tamanhos:</label>
-        <input type="text" id="tamanhos" value={tamanhos} onChange={(e) => setTamanhos(e.target.value)} />
+        <input type="text" required id="tamanhos"
+          value={tamanhos.join(", ")}
+          onChange={(e) => setTamanhos(e.target.value.split(",").map(t => t.trim()))}
+        />
+
 
         <label htmlFor="material">Material:</label>
-        <input type="text" id="material" value={material} onChange={(e) => setMaterial(e.target.value)} />
+        <input type="text" required id="material" value={material} onChange={(e) => setMaterial(e.target.value)} />
 
         <label htmlFor="cor">Cor:</label>
-        <input type="text" id="cor" value={cor} onChange={(e) => setCor(e.target.value)} />
+        <input type="text" required id="cor" value={cor} onChange={(e) => setCor(e.target.value)} />
 
         <label htmlFor="genero">Gênero:</label>
-        <input type="text" id="genero" value={genero} onChange={(e) => setGenero(e.target.value)} />
+        <input type="text" required id="genero" value={genero} onChange={(e) => setGenero(e.target.value)} />
 
         <label htmlFor="tipo">Tipo:</label>
-        <input type="text" id="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} />
+        <input type="text" required id="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} />
 
         <label htmlFor="marca">Marca:</label>
-        <input type="text" id="marca" value={marca} onChange={(e) => setMarca(e.target.value)} />
+        <input type="text" required id="marca" value={marca} onChange={(e) => setMarca(e.target.value)} />
 
         <button type="submit">Adicionar Produto</button>
       </form>

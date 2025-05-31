@@ -117,5 +117,29 @@ namespace API.Controllers
             await _usuarioService.DeleteUsuarioAsync(id);
             return NoContent();
         }
+
+        /// <summary>
+        /// Endpoint para atualizar a foto de perfil do usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPatch("{id}/perfil")]
+        public async Task<IActionResult> AtualizarPerfil(string id, [FromBody] UpdatePerfilDto dto)
+        {
+            var usuarioExistente = await _usuarioService.GetUsuarioAsync(id);
+            if (usuarioExistente == null)
+                return NotFound();
+
+            usuarioExistente.PerfilUrl = dto.PerfilUrl ?? "";
+
+            // Atualize diretamente a entidade sem passar pelo UpdateUsuario que valida demais
+            await _usuarioService.UpdateUsuarioFotoAsync(id, usuarioExistente);
+
+            return NoContent();
+        }
+
+
+
     }
 }

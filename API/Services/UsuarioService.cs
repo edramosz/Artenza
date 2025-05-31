@@ -148,6 +148,13 @@ namespace API.Services
             }
         }
 
+        public async Task UpdateUsuarioFotoAsync(string id, Usuario usuario)
+        {
+            await _firebaseClient
+                .Child("usuarios")
+                .Child(id)
+                .PutAsync(usuario);
+        }
 
 
         // Deletar um produto pelo ID

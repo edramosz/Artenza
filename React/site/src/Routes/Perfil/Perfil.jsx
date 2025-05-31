@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useNavigate } from 'react';
 import NavProfile from './NavProfile';
 import './Perfil.css';
 
@@ -20,60 +20,69 @@ const Perfil = () => {
   const id = localStorage.getItem("idUsuario");
 
   try {
-    await fetch(`https://localhost:7294/Usuario/${id}`, {
-      method: "PUT",
+    const response = await fetch(`https://localhost:7294/Usuario/${id}/perfil`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({  
-        nomeCompleto: novoUsuario.nome,
-        telefone: novoUsuario.telefone,
-        diaNascimento: parseInt(localStorage.getItem("diaNascimento")),
-        mesNascimento: parseInt(localStorage.getItem("mesNascimento")),
-        anoNascimento: parseInt(localStorage.getItem("anoNascimento")),
-        perfilUrl: novoUsuario.perfilUrl 
-      })
+      body: JSON.stringify({
+        perfilUrl: novoUsuario.perfilUrl
+      }),
     });
-  } catch (err) {
-    console.error("Erro no put do user", err);
+
+    if (!response.ok) {
+      const erro = await response.text();
+      console.error("Erro ao atualizar imagem de perfil:", erro);
+      alert("Erro ao atualizar imagem de perfil: " + erro);
+      return false;
+    }
+
+    console.log("Imagem de perfil atualizada com sucesso!");
+    return true;
+  } catch (error) {
+    console.error("Erro ao fazer PATCH do perfil:", error);
+    alert("Erro ao atualizar imagem de perfil, veja o console.");
+    return false;
   }
 };
 
 
   // Upload e atualiza imagem
- const editImage = async (files) => {
-  if (!files || files.length === 0) return;
+  const editImage = async (files) => {
+    if (!files || files.length === 0) return;
 
-  try {
-    const file = files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "Artenza");
-    formData.append("cloud_name", "drit350g5");
+    try {
+      const file = files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "Artenza");
+      formData.append("cloud_name", "drit350g5");
 
-    const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
-      method: "POST",
-      body: formData
-    });
+      const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
+        method: "POST",
+        body: formData
+      });
 
-    const data = await res.json();
-    const novaUrl = data.secure_url;
+      const data = await res.json();
+      const novaUrl = data.secure_url;
 
-    const novoUsuario = {
-      nome: usuario.nome,
-      telefone: usuario.telefone,
-      perfilUrl: novaUrl
-    };
+      const novoUsuario = {
+        nome: usuario.nome,
+        telefone: usuario.telefone,
+        perfilUrl: novaUrl
+      };
 
-    await puted(novoUsuario);
+      await puted(novoUsuario);
 
-    setUsuario(prev => ({ ...prev, perfilUrl: novaUrl }));
-    localStorage.setItem("perfilUrl", novaUrl);
+      setUsuario(prev => ({ ...prev, perfilUrl: novaUrl }));
+      localStorage.setItem("perfilUrl", novaUrl);
+      window.dispatchEvent(new Event("perfilAtualizado"));
 
-  } catch (err) {
-    console.error("Erro ao fazer upload da imagem:", err);
-  }
-};
+
+    } catch (err) {
+      console.error("Erro ao fazer upload da imagem:", err);
+    }
+  };
 
 
   // Pega info do localStorage e seta no estado
@@ -129,7 +138,7 @@ const Perfil = () => {
             <div className="perfil-img-wrapper">
 
               <img
-                src={usuario.perfilUrl || "./img/fundo.png"}
+                src={usuario.perfilUrl || "./img/userDefault.png"}
                 alt="Foto de Perfil"
                 className="perfil-img"
               />

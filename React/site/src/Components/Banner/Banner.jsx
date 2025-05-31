@@ -6,18 +6,18 @@ import React, { useRef, useEffect, useState } from 'react';
 const slides = [
   {
     image: '././img/fundo.png',
-    title: "SS'24",
-    subtitle: 'Poppies on the sea',
+    title: "Blusa da Bielv",
+    subtitle: 'Novos lançamentos da marca',
   },
   {
-    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',
-    title: "FW'24",
-    subtitle: 'Autumn Breeze',
+    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',   
+    title: "Blusa da Bielv",
+    subtitle: 'Novos lançamentos da marca',
   },
   {
-    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',
-    title: "SS'25",
-    subtitle: 'Sunset Glow',
+    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',    
+    title: "Blusa da Bielv",
+    subtitle: 'Novos lançamentos da marca',
   },
 ];
 
@@ -50,7 +50,7 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       scrollRight();
-    }, 5000); // 5 segundos
+    }, 55000); // 5 segundos
 
     return () => clearInterval(interval);
   }, [currentIndex]); // Dependente do índice
@@ -66,8 +66,9 @@ const Banner = () => {
           <div key={index} className="carousel-slide">
             <img src={slide.image} alt={slide.title} />
             <div className="carousel-text">
-              <h2>{slide.title}</h2>
-              <p>{slide.subtitle}</p>
+              <h2 className='element-title'>{slide.title}</h2>
+              <p className='element-text'>{slide.subtitle}</p>
+              <button className='element-btn'>Saiba Mais</button>
             </div>
           </div>
         ))}
