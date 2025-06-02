@@ -26,6 +26,7 @@ const Cadastro = () => {
     MesNascimento: "",
     AnoNascimento: "",
     DataNascimento: "", // Ainda usado no input, mas não será enviado
+    PerfilUrl: "",
   });
 
   const [formDataEndereco, setFormDataEndereco] = useState({
@@ -127,6 +128,7 @@ const Cadastro = () => {
           DiaNascimento: formData.DiaNascimento,
           MesNascimento: formData.MesNascimento,
           AnoNascimento: formData.AnoNascimento,
+          PerfilUrl: formData.PerfilUrl || "https://exemplo.com/default-profile.png",
         }),
       });
 
@@ -154,6 +156,8 @@ const Cadastro = () => {
       localStorage.setItem("nomeUsuario", formData.NomeCompleto);
       localStorage.setItem("email", formData.Email);
       localStorage.setItem("isAdmin", formData.isAdmin.toString());
+      localStorage.setItem("perfilUrl", formData.PerfilUrl || "");
+
 
       // Força o update da Navbar (caso esteja montada ainda)
       window.dispatchEvent(new Event("storage"));

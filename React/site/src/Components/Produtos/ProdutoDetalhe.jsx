@@ -109,78 +109,90 @@ const ProdutoDetalhe = () => {
 
   return (
     <>
-      <div className="btn">
-        <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
-      </div>
-      <div className="produto-detalhe-container">
-        <div className="carousel-wrapperr">
-          <button className="carousel-button left" onClick={scrollLeft}>
-            <i className="fa-solid fa-chevron-left"></i>
-          </button>
-
-          <div className="carousel-container" ref={carouselRef}>
-            {produto?.urlImagens?.length > 0 ? (
-              produto.urlImagens.map((img, index) => (
-                <div key={index} className="carousel-slide">
-                  <img src={img} alt={`Imagem ${index}`} />
-                </div>
-              ))
-            ) : (
-              <div className="carousel-slide">
-                <img
-                  src="http://via.placeholder.com/600x400.png?text=Produto+sem+imagem"
-                  alt="Sem imagem"
-                />
-              </div>
-            )}
-          </div>
-
-          <button className="carousel-button right" onClick={scrollRight}>
-            <i className="fa-solid fa-chevron-right"></i>
-          </button>
+      <div className="prod-detalhe-container">
+        <div className="btn">
+          <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
         </div>
-
-        <div className="info-produto">
-          <h2 className='name-prod'>{produto.nome}</h2>
-          <p className='tipo-prod'>{produto.tipo}</p>
-          <p className="descricao">{produto.descricao}</p>
-          <p className='avaliacao'><FontAwesomeIcon icon={faStar} />
-            <FontAwesomeIcon icon={faStar} />
-            <FontAwesomeIcon icon={faStar} />
-            <FontAwesomeIcon icon={faStar} />
-            <FontAwesomeIcon icon={faStar} /></p>
-
-          <div className="detalhes-produto">
-            <p className="preco">
-              {produto.preco.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
-            <p><strong>Marca:</strong> {produto.marca}</p>
-            <p><strong>Cor:</strong> {produto.cor}</p>
-            <p><strong>Material:</strong> {produto.material}</p>
-            <p><strong>Gênero:</strong> {produto.genero}</p>
-            <div className="filtro-tamanhos">
-              {['26', '28', '30', '32', '34', '36', '38', '40'].map(tam => (
-                <button key={tam}>{tam}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className="acoes">
-            <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
-              Adicionar ao Carrinho
+        <div className="produto-detalhe-container">
+          <div className="carousel-wrapperr">
+            <button className="carousel-button left" onClick={scrollLeft}>
+              <i className="fa-solid fa-chevron-left"></i>
             </button>
-            <button className="btn comprar">Comprar agora</button>
-          </div>
-          <div className="links">
-            <p>Compartilhar: <i className="fa-brands fa-whatsapp"></i>WhatsApp</p>
+
+            <div className="carousel-container" ref={carouselRef}>
+              {produto?.urlImagens?.length > 0 ? (
+                produto.urlImagens.map((img, index) => (
+                  <div key={index} className="carousel-slide">
+                    <img src={img} alt={`Imagem ${index}`} />
+                  </div>
+                ))
+              ) : (
+                <div className="carousel-slide">
+                  <img
+                    src="http://via.placeholder.com/600x400.png?text=Produto+sem+imagem"
+                    alt="Sem imagem"
+                  />
+                </div>
+              )}
+            </div>
+
+            <button className="carousel-button right" onClick={scrollRight}>
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
           </div>
 
+          <div className="info-produto">
+            <h2 className='name-prod'>{produto.nome}</h2>
+            <p className='tipo-prod'>{produto.tipo}</p>
+            <p className="descricao">{produto.descricao}</p>
+            <div className="avaliacoes">
+              <p className='avaliacao'><FontAwesomeIcon icon={faStar} />
+                <FontAwesomeIcon icon={faStar} />
+                <FontAwesomeIcon icon={faStar} />
+                <FontAwesomeIcon icon={faStar} />
+                <FontAwesomeIcon icon={faStar} />
+
+                <span>4.7</span>
+              </p>
+              <a href="#sobre">ver avaliações</a>
+            </div>
+
+            <div className="detalhes-produto">
+              <p className="preco">
+                {produto.preco.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+              <p><strong>Marca:</strong> {produto.marca}</p>
+              <p><strong>Cor:</strong> {produto.cor}</p>
+              <p><strong>Material:</strong> {produto.material}</p>
+              <p><strong>Gênero:</strong> {produto.genero}</p>
+              <div className="filtro-tamanhos">
+                <h4 className='title-tamanho'>Tamanhos disponiveis:</h4>
+                {produto.tamanhos?.map(tam => ( //trocar depois o ?................................              
+                  <button key={tam}>{tam}</button>
+                ))}
+
+              </div>
+            </div>
+
+            <div className="acoes">
+              <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
+                Adicionar ao Carrinho
+              </button>
+              <button className="btn comprar">Comprar agora</button>
+            </div>
+            <div className="links">
+              <p>Compartilhar: <i className="fa-brands fa-whatsapp"></i>WhatsApp</p>
+            </div>
+
+          </div>
         </div>
+        <section  id="sobre" style={{ height: '500px' }}>
+              <p>jskjskj</p>
+        </section>
       </div>
-
     </>
   );
 };

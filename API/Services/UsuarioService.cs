@@ -94,7 +94,14 @@ namespace API.Services
 
         public async Task<ReadUsuario> AddUsuarioAsync([FromBody] CreateUsuario usuarioDto)
         {
+
             var usuario = _mapper.Map<Usuario>(usuarioDto);
+
+            if (string.IsNullOrEmpty(usuario.PerfilUrl))
+            {
+                usuario.PerfilUrl = "https://exemplo.com/default-profile.png"; // Ou apenas ""
+            }
+
 
             // Gera DataCadastro
             usuario.DataCadastro = DateTime.UtcNow;
@@ -123,17 +130,32 @@ namespace API.Services
         // Atualizar um usuario pelo ID
         public async Task UpdateUsuarioAsync(string id, UpdateUsuario usuarioDto)
         {
-
             var usuarioExistente = await GetUsuarioAsync(id);
             if (usuarioExistente != null)
             {
                 _mapper.Map(usuarioDto, usuarioExistente);
+
+               
+                if (string.IsNullOrEmpty(usuarioDto.PerfilUrl))
+                {
+                    usuarioDto.PerfilUrl = ""; // ou um avatar padrão
+                }
+
                 await _firebaseClient
                     .Child("usuarios")
                     .Child(id)
                     .PutAsync(usuarioExistente);
             }
         }
+
+        public async Task UpdateUsuarioFotoAsync(string id, Usuario usuario)
+        {
+            await _firebaseClient
+                .Child("usuarios")
+                .Child(id)
+                .PutAsync(usuario);
+        }
+
 
         // Deletar um produto pelo ID
         public async Task DeleteUsuarioAsync(string id)

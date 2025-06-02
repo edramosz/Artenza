@@ -53,6 +53,10 @@ export default function Login() {
       localStorage.setItem("email", emailMaiusculo);
       localStorage.setItem("telefone", usuario.telefone);
       localStorage.setItem("dataCadastro", usuario.dataCadastro);
+      localStorage.setItem("perfilUrl", usuario.perfilUrl || "");
+
+
+
 
       console.log(emailMaiusculo);
       window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar

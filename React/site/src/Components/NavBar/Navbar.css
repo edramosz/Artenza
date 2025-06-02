@@ -118,13 +118,10 @@ input[type="search"]::-webkit-search-cancel-button {
   transition: color 0.3s;
 }
 
-.menu-user .icon-perfil {  
-  padding: 15px 0px; 
-}
-
-.menu-user .icon-perfil a{
-  background-color: rgba(129, 129, 134, 0.651);   
-  padding: 10px 12px;
+.top-menu .perfil-foto{
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
   border-radius: 50%;
 }
 

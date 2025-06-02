@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 // Configura o AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-// Registro dos serviços (Singleton e Scoped ao mesmo tempo não é necessário)
+// Registro dos serviços
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTudo", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Porta do seu frontend Vite/React
+        policy.WithOrigins("http://localhost:5174") // Porta correta do seu frontend Vite/React
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -45,7 +45,7 @@ var app = builder.Build();
 // Redirecionamento para HTTPS
 app.UseHttpsRedirection();
 
-// Aplicar o CORS sempre, independente do ambiente
+// Aplicar CORS (antes de Authorization)
 app.UseCors("PermitirTudo");
 
 // Swagger apenas no modo de desenvolvimento
