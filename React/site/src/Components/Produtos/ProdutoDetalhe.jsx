@@ -189,8 +189,8 @@ const ProdutoDetalhe = () => {
 
           </div>
         </div>
-        <section  id="sobre" style={{ height: '500px' }}>
-              <p>jskjskj</p>
+        <section id="sobre" style={{ height: '500px' }}>
+          <p>jskjskj</p>
         </section>
       </div>
     </>

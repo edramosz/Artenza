@@ -10,7 +10,7 @@
   width: 100%;
   height: auto;
   padding: 10px 40px;
-  background-color: #010326;
+  background-color: #ffffff;
 }
 
 .top-menu i{
@@ -41,7 +41,7 @@
 .top-menu .search form {
   align-items: center;
   width: 100%;
-  background-color: #B4B7BF;
+  background-color: #b6b6b8;
   padding: 5px 5px 5px 10px;
   border-radius: 7px;
   justify-content: space-between;    
@@ -104,7 +104,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .top-menu .acount ul a{
   text-decoration: none;
-  color: #B4B7BF;
+  color: #000000;
   font-size: 1.1rem;
   padding-right: 10px;
 }
