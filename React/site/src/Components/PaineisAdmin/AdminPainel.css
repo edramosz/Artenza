@@ -1,11 +1,10 @@
 .container-dashboard {
   display: flex;
   min-height: 100vh;
-  margin: 0;
+  margin: 0 auto;
   width: 100%;
-  max-width: 2500px;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  max-width: 2000px;
+
 }
 
 .container-dashboard .sidebar {
@@ -19,6 +18,7 @@
   flex-direction: column;
   gap: 20px;
 }
+
 
 .container-dashboard .sidebar .title {
   font-size: 1.6rem;

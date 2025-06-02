@@ -41,7 +41,7 @@ const Perfil = () => {
     return true;
   } catch (error) {
     console.error("Erro ao fazer PATCH do perfil:", error);
-    alert("Erro ao atualizar imagem de perfil, veja o console.");
+    alert("Erro.");
     return false;
   }
 };
