@@ -42,6 +42,11 @@ namespace API.Services
             return produto;
         }
 
+        //public async Task<Produto> Filtro(string filtro, string[] vetor)
+        //{
+            
+        //}
+
         public async Task<List<Produto>> ObterProdutosMaisVendidos()
         {
             // 1. Buscar todas as vendas
