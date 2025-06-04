@@ -91,45 +91,84 @@ const Masculino = () => {
         </div>
       </div>
 
-      <div className="masc-produtos">
-        {erro && <p style={{ color: "red" }}>{erro}</p>}
+      <div className="conteiner-masc-prod">
+        <h2>Nossos Produtos</h2>
+        <div className="masc-produtos">
+          {erro && <p style={{ color: "red" }}>{erro}</p>}
 
-        {produtos.map((prod) => (
-          <Link to={`/produto/${prod.id}`} key={prod.id}>
-            <div className="card-prods">
-              <div>
-                <img
-                  src={prod.urlImagens[0]}
-                  alt={prod.nome}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
-                  }}
-                />
+          {produtos.map((prod) => (
+            <Link to={`/produto/${prod.id}`} key={prod.id}>
+              <div className="card-prods">
+                <div>
+                  <img
+                    src={prod.urlImagens[0]}
+                    alt={prod.nome}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
+                    }}
+                  />
+                </div>
+                <div>
+                  <h4>{prod.nome}</h4>
+                  <p>{prod.categoria}</p>
+                  <p>
+                    {prod.preco.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </p>
+                </div>
+                <div className="btns-actions">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      adicionarAoCarrinho(prod);
+                    }}           >
+                    Adicione ao Carrinho
+                  </button>
+                </div>
               </div>
-              <div>
-                <h4>{prod.nome}</h4>
-                <p>{prod.categoria}</p>
-                <p>
-                  {prod.preco.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
-              <div className="btns-actions">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault(); // Evita redirecionamento do <Link>
-                    adicionarAoCarrinho(prod);
-                  }}
-                >
-                  Adicione ao Carrinho
-                </button>
-              </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="masc-catalog">
+        <div className="links-masc">
+          <h2>Outros</h2>
+          <nav>
+            <ul className="items-masc">
+              <Link to=''>
+                <li className="item-ul-masc">Tennis</li>
+              </Link>
+
+              <Link to=''>
+                <li className="item-ul-masc">Calças</li>
+              </Link>
+
+              <Link to=''>
+                <li className="item-ul-masc">Blusas</li>
+              </Link>
+            </ul>
+            
+            <ul className="items-masc">
+              <Link to=''>
+                <li className="item-ul-masc">Corrente</li>
+              </Link>
+
+              <Link to=''>
+                <li className="item-ul-masc">Shorts</li>
+              </Link>
+
+              <Link to=''>
+                <li className="item-ul-masc">Jaquetas</li>
+              </Link>
+            </ul>
+          </nav>
+        </div>
+
+        
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ const Navbar = () => {
     { id: 7, url: "/contato", label: "Contato" },
     { id: 8, url: "/sobre", label: "Sobre" },
   ];
-
+6
 
   const carregarDadosUsuario = () => {
     const nomeCompleto = localStorage.getItem("nomeUsuario");
