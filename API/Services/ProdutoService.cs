@@ -2,9 +2,12 @@
 using Core.Interfaces;
 using Core.Models;
 using Core.Models.DTO_s.Create;
+using Core.Models.DTO_s.Read;
 using Core.Models.DTO_s.Update;
 using Firebase.Database;
 using Firebase.Database.Query;
+using LiteDB;
+using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Services
@@ -12,12 +15,19 @@ namespace API.Services
     public class ProdutoService : IProdutoService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly FirestoreDb _firestoreDb;
         private readonly IMapper _mapper;
 
         public ProdutoService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+
+            var projectId = configuration["Firebase:ProjectId"]; // ID do projeto Firebase
+            var credentialPath = configuration["Firebase:CredentialPath"];
+
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialPath);
+            _firestoreDb = FirestoreDb.Create(projectId);
             _mapper = mapper;
         }
 
@@ -42,10 +52,48 @@ namespace API.Services
             return produto;
         }
 
-        //public async Task<Produto> Filtro(string filtro, string[] vetor)
-        //{
-            
-        //}
+        public async Task<List<Produto>> FiltrarProdutos(FiltroProduto filtros)
+        {
+            var collection = _firestoreDb.Collection("produtos");
+            Google.Cloud.Firestore.Query query = collection;
+
+            if (filtros.Tamanhos != null && filtros.Tamanhos.Any())
+            {
+                // Firestore não aceita IN com array maior que 10
+                query = query.WhereIn("Tamanho", filtros.Tamanhos.Take(10).ToList());
+            }
+
+            if (filtros.Cores != null && filtros.Cores.Any())
+            {
+                query = query.WhereIn("Cor", filtros.Cores.Take(10).ToList());
+            }
+
+            if (filtros.Categorias != null && filtros.Categorias.Any())
+            {
+                query = query.WhereIn("Categoria", filtros.Categorias.Take(10).ToList());
+            }
+
+            if (filtros.PrecoMin.HasValue)
+            {
+                query = query.WhereGreaterThanOrEqualTo("Preco", filtros.PrecoMin.Value);
+            }
+
+            if (filtros.PrecoMax.HasValue)
+            {
+                query = query.WhereLessThanOrEqualTo("Preco", filtros.PrecoMax.Value);
+            }
+
+            var snapshot = await query.GetSnapshotAsync();
+            var produtos = new List<Produto>();
+
+            foreach (var doc in snapshot.Documents)
+            {
+                produtos.Add(doc.ConvertTo<Produto>());
+            }
+
+            return produtos;
+        }
+
 
         public async Task<List<Produto>> ObterProdutosMaisVendidos()
         {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces;
 using Core.Models.DTO_s.Create;
 using Core.Models.DTO_s.Update;
+using Core.Models.DTO_s.Read;
 
 namespace API.Controllers
 {
@@ -44,6 +45,12 @@ namespace API.Controllers
 
             return produto;
         }
+
+        /// <summary>
+        /// Endpoint para listar os produtos mais vendidos.
+        /// </summary>
+        /// <returns></returns>
+        /// 
         [HttpGet("mais-vendidos")]
         public async Task<ActionResult<List<Produto>>> GetMaisVendidos()
         {
@@ -51,6 +58,18 @@ namespace API.Controllers
             return Ok(produtos);
         }
 
+        /// <summary>
+        /// Endpoint para filtrar produtos.
+        /// </summary>
+        /// <param name="filtros"></param>
+        /// <returns></returns>
+        /// 
+        [HttpPost("filtrar")]
+        public async Task<IActionResult> FiltrarProdutos([FromBody] FiltroProduto filtros)
+        {
+            var produtosFiltrados = await _produtoService.FiltrarProdutos(filtros);
+            return Ok(produtosFiltrados);
+        }
 
         /// <summary>
         /// Endpoint para adicionar produtos.
