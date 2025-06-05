@@ -167,8 +167,9 @@ const Masculino = () => {
             </ul>
           </nav>
         </div>
-
-        
+        <div className="cards-prods">
+            <img src="../img/fundo.png" alt="" />
+        </div>        
       </div>
     </div>
   );
