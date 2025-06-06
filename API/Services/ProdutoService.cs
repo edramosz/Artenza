@@ -75,12 +75,12 @@ namespace API.Services
 
             if (filtros.PrecoMin.HasValue)
             {
-                query = query.WhereGreaterThanOrEqualTo("Preco", filtros.PrecoMin.Value);
+                query = query.WhereGreaterThanOrEqualTo("Preco", (double)filtros.PrecoMin.Value);
             }
 
             if (filtros.PrecoMax.HasValue)
             {
-                query = query.WhereLessThanOrEqualTo("Preco", filtros.PrecoMax.Value);
+                query = query.WhereLessThanOrEqualTo("Preco", (double)filtros.PrecoMax.Value);
             }
 
             var snapshot = await query.GetSnapshotAsync();
