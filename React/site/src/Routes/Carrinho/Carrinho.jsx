@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
 import "./Carrinho.css";
 
 function Carrinho() {
@@ -80,7 +81,15 @@ function Carrinho() {
     return total + (produto.preco || 0) * item.quantidade;
   }, 0);
 
-  if (itensCarrinho.length === 0) return <p>Seu carrinho está vazio.</p>;
+  if (itensCarrinho.length === 0) return <div class="carrinho-null">
+    <h2 className="title-null">Carrinho</h2>
+    <p className="text-null">Seu carrinho está vazio <i class="fa-solid fa-circle-exclamation"></i></p>
+    <span><i class="fa-solid fa-cart-shopping"></i></span>
+    <div className="btns-null">
+      <Link>
+        <button>Ver Produtos</button>
+      </Link>
+    </div>  </div>;
 
   return (
     <div className="carrinho-container">

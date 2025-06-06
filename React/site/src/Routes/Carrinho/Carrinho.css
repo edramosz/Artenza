@@ -50,3 +50,41 @@
     flex: 1;    
     padding: 20px;
 }
+
+.carrinho-null{
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 40px;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.carrinho-null .title-null{
+    font-size: 3rem;
+    text-transform: uppercase;
+    color: #222;
+}
+
+.carrinho-null .text-null{
+    font-size: 1.5rem;
+    color: #222;
+}
+
+.carrinho-null span > i{
+    font-size: 10rem;
+    margin: 30px;
+    color: #222;
+}
+
+.carrinho-null button{
+    padding: 6px 12px;
+    border: 2px solid #333;
+    background: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+}
