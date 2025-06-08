@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Masculino.css";
 
@@ -6,6 +6,45 @@ const Masculino = () => {
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
+
+  const cards = [
+    {
+      img: '././img/blusa.jpg',
+      alt: 'Blusas masculinas',
+      link: '/categoria/blusas',
+      title: 'Blusas'
+    },
+    {
+      img: '././img/calcas.jpg',
+      alt: 'Calças',
+      link: '/categoria/calcas',
+      title: 'Calças'
+    },
+    {
+      img: '././img/tenis.jpg',
+      alt: 'Tênis esportivos e casuais',
+      link: '/categoria/tenis',
+      title: 'Tênis'
+    },
+    {
+      img: '././img/acessorios.jpg',
+      alt: 'Bolsas, cintos, óculos e mais',
+      link: '/categoria/acessorios',
+      title: 'Acessórios'
+    },
+    {
+      img: '././img/camisetas.jpg',
+      alt: 'Camisetas básicas e estampadas',
+      link: '/categoria/camisetas',
+      title: 'Camisetas'
+    },
+    {
+      img: '././img/jaquetas.jpg',
+      alt: 'Jaquetas e casacos',
+      link: '/categoria/jaquetas',
+      title: 'Jaquetas'
+    }
+  ];
 
   useEffect(() => {
     const buscarProdMasc = async () => {
@@ -77,6 +116,21 @@ const Masculino = () => {
     }
   };
 
+  // Cria uma referência para acessar a div com rolagem horizontal
+  const scrollRef = useRef(null);
+
+  // Rola a div 800px para a esquerda com animação suave
+  const scrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -1100, behavior: 'smooth' });
+  };
+
+  // Rola a div 800px para a direita com animação suave
+  const scrollRight = () => {
+    scrollRef.current.scrollBy({ left: 1100, behavior: 'smooth' });
+  };
+
+
+
   return (
     <div className="masc-container">
       <div className="masc-content">
@@ -87,12 +141,43 @@ const Masculino = () => {
       <div className="masc-img">
         <div className="content-img">
           <h3>Nossa coleção</h3>
-          <button>Saiba mais</button>
+          <button className="masc-btn">Saiba mais</button>
         </div>
       </div>
 
+      <div className="container-masc-categories">
+        <div>
+          <h2>Compre por categoria</h2>
+        </div>
+        <button className="carousel-button left" onClick={scrollLeft}>
+          <i className="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div className="masc-categories" ref={scrollRef}>
+          {cards.map((card, index) => (
+            <div className="masc-categ" key={index}>
+              <div>
+                <img src={card.img} alt={card.alt} />
+                <p className="legenda">{card.title}</p>
+              </div>
+              <div className="btn-actions">
+                <Link to={card.link}>
+                  <button className="masc-btn">Ver Tudo</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button className="carousel-button right" onClick={scrollRight}>
+          <i className="fa-solid fa-chevron-right"></i>
+        </button>
+
+      </div>
+
+     
       <div className="conteiner-masc-prod">
-        <h2>Nossos Produtos</h2>
+        <h2>Nossos Produtos:</h2>
         <div className="masc-produtos">
           {erro && <p style={{ color: "red" }}>{erro}</p>}
 
@@ -109,10 +194,10 @@ const Masculino = () => {
                     }}
                   />
                 </div>
-                <div>
-                  <h4>{prod.nome}</h4>
-                  <p>{prod.categoria}</p>
-                  <p>
+                <div className="text-card">
+                  <h4 className="nome">{prod.nome}</h4>
+                  <p className="categoria">{prod.categoria}</p>
+                  <p className="preco">
                     {prod.preco.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
@@ -120,7 +205,7 @@ const Masculino = () => {
                   </p>
                 </div>
                 <div className="btns-actions">
-                  <button
+                  <button 
                     onClick={(e) => {
                       e.preventDefault();
                       adicionarAoCarrinho(prod);
@@ -132,45 +217,7 @@ const Masculino = () => {
             </Link>
           ))}
         </div>
-      </div>
-
-      <div className="masc-catalog">
-        <div className="links-masc">
-          <h2>Outros</h2>
-          <nav>
-            <ul className="items-masc">
-              <Link to=''>
-                <li className="item-ul-masc">Tennis</li>
-              </Link>
-
-              <Link to=''>
-                <li className="item-ul-masc">Calças</li>
-              </Link>
-
-              <Link to=''>
-                <li className="item-ul-masc">Blusas</li>
-              </Link>
-            </ul>
-            
-            <ul className="items-masc">
-              <Link to=''>
-                <li className="item-ul-masc">Corrente</li>
-              </Link>
-
-              <Link to=''>
-                <li className="item-ul-masc">Shorts</li>
-              </Link>
-
-              <Link to=''>
-                <li className="item-ul-masc">Jaquetas</li>
-              </Link>
-            </ul>
-          </nav>
-        </div>
-        <div className="cards-prods">
-            <img src="../img/fundo.png" alt="" />
-        </div>        
-      </div>
+      </div>        
     </div>
   );
 };
