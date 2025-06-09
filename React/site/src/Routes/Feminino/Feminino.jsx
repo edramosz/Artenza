@@ -1,48 +1,47 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import "./Masculino.css";
 
-const Masculino = () => {
+const Feminino = () => {
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
 
-  const cards = [
+ const cards = [
     {
-      img: '././img/blusa.jpg',
-      alt: 'Blusas masculinas',
-      link: '/categoria/blusas',
-      title: 'Blusas'
+      img: '././img/vestidos.jpg',
+      alt: 'Vestidos femininos',
+      link: '/categoria/vestidos',
+      title: 'Vestidos'
     },
     {
-      img: '././img/calcas.jpg',
-      alt: 'Calças',
-      link: '/categoria/calcas',
-      title: 'Calças'
+      img: '././img/saias.jpg',
+      alt: 'Saias',
+      link: '/categoria/saias',
+      title: 'Saias'
     },
     {
-      img: '././img/tenis.jpg',
-      alt: 'Tênis esportivos e casuais',
-      link: '/categoria/tenis',
-      title: 'Tênis'
+      img: '././img/sapatos.jpg',
+      alt: 'Sapatos femininos',
+      link: '/categoria/sapatos',
+      title: 'Sapatos'
     },
     {
-      img: '././img/acessorios.jpg',
-      alt: 'Bolsas, cintos, óculos e mais',
+      img: '././img/bijuterias.jpg',
+      alt: 'Bijuterias e acessórios',
       link: '/categoria/acessorios',
       title: 'Acessórios'
     },
     {
-      img: '././img/camisetas.jpg',
-      alt: 'Camisetas básicas e estampadas',
-      link: '/categoria/camisetas',
-      title: 'Camisetas'
+      img: '././img/blusasf.jpg',
+      alt: 'Blusas femininas básicas e estampadas',
+      link: '/categoria/blusas',
+      title: 'Blusas'
     },
     {
-      img: '././img/jaquetas.jpg',
-      alt: 'Jaquetas e casacos',
-      link: '/categoria/jaquetas',
-      title: 'Jaquetas'
+      img: '././img/casacosf.jpg',
+      alt: 'Casacos e jaquetas femininas',
+      link: '/categoria/casacos',
+      title: 'Casacos'
     }
   ];
 
@@ -57,9 +56,9 @@ const Masculino = () => {
 
         const data = await response.json();
 
-        const masculinos = data.filter(produto => produto.genero === "Masculino");
+        const femininos = data.filter(produto => produto.genero === "Feminino");
 
-        const dataComImagem = masculinos.map(produto => ({
+        const dataComImagem = femininos.map(produto => ({
           ...produto,
           urlImagens: Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
             ? produto.urlImagens
@@ -134,8 +133,8 @@ const Masculino = () => {
   return (
     <div className="masc-container">
       <div className="masc-content">
-        <h1>Roupas Masculinas</h1>
-        <h3>Encontre as melhores vestimentas para o dia a dia. </h3>
+        <h1>Modelos Femininas</h1>
+        <h3>Procure as melhores roupas para você aqui. </h3>
       </div>
 
       <div className="masc-img">
@@ -229,4 +228,4 @@ const Masculino = () => {
   );
 };
 
-export default Masculino;
+export default Feminino;

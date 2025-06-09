@@ -1,16 +1,21 @@
 .container-dashboard {
   display: flex;
-  min-height: 100vh;
-  margin: 0 auto;
   width: 100%;
   max-width: 2000px;
-
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #f4f6f8;
+  box-sizing: border-box;
 }
 
+
 .container-dashboard .sidebar {
+  position: sticky;
+  top: 0;                 
+  align-self: flex-start;  
   width: 250px;
+  height: 100vh;          
   background-color: #f5f5f5;
-  min-height: 100vh;
   padding: 30px 10px;
   border-right: 2px solid #e0e0e0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
@@ -18,7 +23,6 @@
   flex-direction: column;
   gap: 20px;
 }
-
 
 .container-dashboard .sidebar .title {
   font-size: 1.6rem;
@@ -31,14 +35,12 @@
 .container-dashboard .pages {
   list-style: none;
   padding: 0;
-  width: 100%;
+  margin: 0;
+  flex: 1;
 }
 
 .container-dashboard .pages li {
   margin-bottom: 15px;
-  width: 100%;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
 }
 
 .container-dashboard .pages a {
@@ -51,7 +53,7 @@
   background: none;
   border: none;
   color: #333;
-  font-size: 16px;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -73,8 +75,8 @@
 }
 
 .container-dashboard .pages button.active {
-  background-color: #49494983;
-  color: rgba(255, 255, 255, 0.904);
+  background-color: #494949;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -82,7 +84,99 @@
   color: #fff;
 }
 
+.admin-painel {
+  flex: 1;
+  padding: 30px 60px;
+  box-sizing: border-box;
+  min-width: 0;
+}
 
+.admin-painel .title {
+  font-size: 1.9rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+  background-color: #fff;
+  padding: 5px 25px;
+  border-radius: 10px;
+  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.1);
+}
+
+.admin-painel .erro {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.admin-painel .btn-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-painel .btn-actions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-painel .btn-actions button:first-child {
+  background-color: #0077cc;
+  color: white;
+}
+
+.admin-painel .btn-actions .logout-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.admin-painel .btn-actions button:hover {
+  opacity: 0.9;
+}
+
+/* Cabeçalho da tabela */
+.admin-painel .top-table {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #2196f3;
+  color: #fff;
+  border-radius: 12px 12px 0 0;
+  box-sizing: border-box;
+}
+
+.admin-painel .top-table h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.admin-painel .top-table .search {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+}
+
+.admin-painel .top-table .search i {
+  color: #777;
+}
+
+.admin-painel .top-table .search input {
+  border: none;
+  background: transparent;
+  margin-left: 15px;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* os card os componente */
 
 .render {
   flex: 1;
@@ -147,136 +241,85 @@
 
 
 
-/* Produtos */
 
-.admin-painel {
-  flex: 1;
-  padding: 20px 60px;
-  min-width: 0;
-}
-
-.admin-painel .title {
-  font-size: 1.9rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-  color: #333;
-  background-color: #fff;
-  padding: 5px 25px;
-  border-radius: 10px;  
-  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.100);  
-}
-
-.admin-painel .erro {
-  color: red;
-  margin-bottom: 1rem;
-}
-
-.admin-painel .btn-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.admin-painel .btn-actions button {
-  background-color: #ff4d4d;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.admin-painel .btn-actions button:hover {
-  background-color: #e60000;
-}
-
-.admin-painel .logout-btn {
-  background-color: #4CAF50;
-}
-
-.admin-painel .logout-btn:hover {
-  background-color: #45a049;
-}
-
-.admin-painel .top-table {
-  padding: 1rem 2rem;
-  border-radius: 12px 12px 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 2px solid #333;
-  background-color: #2196F3;
-  color: #fff;
-}
-
-.admin-painel .top-table h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.admin-painel .top-table .search {
-  padding: 0.4rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  width: 250px;
-  outline: none;
-  background-color: #fff;
-  color: #222;  
-  display: flex;
-}
-
-.admin-painel .top-table .search i{
-  margin-top: 2px;
-
-}
-.admin-painel .top-table .search input{
-  outline: none;
-  background-color: transparent;
-  border: none;
-  margin-left: 15px;
-  justify-content: space-between;
-  width: 100%;
-}
-
+/*tabela */
 .admin-painel .table {
   width: 100%;
-  border-collapse:collapse;
-  background-color: white;
+  border-collapse: collapse;
+  background: #fff;
   border-radius: 0 0 10px 10px;
-  overflow: hidden;  
-  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.100); 
+  overflow: hidden;
+  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.1);
 }
-
 
 .admin-painel .table thead th {
   padding: 1rem;
   text-align: center;
   font-size: 1rem;
+  background-color: #0077cc;
+  color: #fff;
 }
 
 .admin-painel .table tbody td {
   padding: 1rem;
-  color: #555;
   text-align: center;
+  color: #555;
 }
 
-.admin-painel .table tbody tr:nth-child(even){
-  background-color: #eeecec;
+.admin-painel .table tbody tr:nth-child(even) {
+  background: #f0f0f0;
 }
 
-
+/* Botões na tabela */
 .admin-painel .table button {
   margin-right: 0.5rem;
-  background-color: #d021f3;
-  color: white;
-  border: none;
   padding: 0.4rem 0.8rem;
+  border: none;
   border-radius: 6px;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
+.admin-painel .table .editar {
+  background-color: #2ecc71;
+  color: white;
+}
 
+.admin-painel .table .excluir {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.admin-painel .table button:hover {
+  opacity: 0.9;
+}
+
+
+@media (max-width: 768px) {
+  .container-dashboard {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .container-dashboard .sidebar {
+    position: relative;
+    height: auto;
+    width: 100%;
+  }
+
+  .admin-painel {
+    padding: 20px;
+  }
+
+  .admin-painel .top-table {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .admin-painel .table thead th,
+  .admin-painel .table tbody td {
+    padding: 0.8rem;
+    font-size: 0.85rem;
+  }
+}
