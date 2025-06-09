@@ -1,50 +1,14 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import "./Masculino.css";
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import './Masculino.css';
 
 const Masculino = () => {
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
+  const location = useLocation();
 
-  const cards = [
-    {
-      img: '././img/blusa.jpg',
-      alt: 'Blusas masculinas',
-      link: '/categoria/blusas',
-      title: 'Blusas'
-    },
-    {
-      img: '././img/calcas.jpg',
-      alt: 'Calças',
-      link: '/categoria/calcas',
-      title: 'Calças'
-    },
-    {
-      img: '././img/tenis.jpg',
-      alt: 'Tênis esportivos e casuais',
-      link: '/categoria/tenis',
-      title: 'Tênis'
-    },
-    {
-      img: '././img/acessorios.jpg',
-      alt: 'Bolsas, cintos, óculos e mais',
-      link: '/categoria/acessorios',
-      title: 'Acessórios'
-    },
-    {
-      img: '././img/camisetas.jpg',
-      alt: 'Camisetas básicas e estampadas',
-      link: '/categoria/camisetas',
-      title: 'Camisetas'
-    },
-    {
-      img: '././img/jaquetas.jpg',
-      alt: 'Jaquetas e casacos',
-      link: '/categoria/jaquetas',
-      title: 'Jaquetas'
-    }
-  ];
+  const isActive = (path) => location.pathname === path;
 
   useEffect(() => {
     const buscarProdMasc = async () => {
@@ -56,7 +20,6 @@ const Masculino = () => {
         }
 
         const data = await response.json();
-
         const masculinos = data.filter(produto => produto.genero === "Masculino");
 
         const dataComImagem = masculinos.map(produto => ({
@@ -75,12 +38,13 @@ const Masculino = () => {
 
     buscarProdMasc();
 
-    // Pega o id do usuário logado
     const id = localStorage.getItem("idUsuario");
     setIdUsuario(id);
   }, []);
+ 
 
-  const adicionarAoCarrinho = async (produto) => {
+  
+    const adicionarAoCarrinho = async (produto) => {
     if (!idUsuario) {
       alert("Você precisa estar logado.");
       return;
@@ -114,118 +78,69 @@ const Masculino = () => {
       console.error("Erro ao adicionar:", err);
       alert("Erro ao adicionar ao carrinho.");
     }
-  };
-
-  // Cria uma referência para acessar a div com rolagem horizontal
-  const scrollRef = useRef(null);
-
-  // Rola a div 800px para a esquerda com animação suave
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -1100, behavior: 'smooth' });
-  };
-
-  // Rola a div 800px para a direita com animação suave
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 1100, behavior: 'smooth' });
-  };
-
+  };  
 
 
   return (
-    <div className="masc-container">
-      <div className="masc-content">
-        <h1>Roupas Masculinas</h1>
-        <h3>Encontre as melhores vestimentas para o dia a dia. </h3>
-      </div>
-
-      <div className="masc-img">
-        <div className="content-img">
-          <h3>Nossa coleção</h3>
-          <button className="masc-btn">Saiba mais</button>
-        </div>
-      </div>
-
-      <div className="container-masc-categories">
+    <>
+      <div className="conteiner-masc">
         <div>
-          <h2>Compre por categoria</h2>
+          <h2 className="title-masc">Masculino</h2>
         </div>
-        <button className="carousel-button left" onClick={scrollLeft}>
-          <i className="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <div className="masc-categories" ref={scrollRef}>
-          {cards.slice(0, 5).map((card, index) => (
-            <div className="masc-categ" key={index}>
-              <div>
-                <img src={card.img} alt={card.alt} />
-                <p className="legenda">{card.title}</p>
-              </div>
-              <div className="btn-actions">
-                <Link to={card.link}>
-                  <button className="masc-btn">Ver Tudo</button>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-
-
-        <button className="carousel-button right" onClick={scrollRight}>
-          <i className="fa-solid fa-chevron-right"></i>
-        </button>
-
-      </div>
-
-
-      <div className="conteiner-masc-prod">
-        <h2>Nossos Produtos:</h2>
-        <div className="masc-produtos">
-          {erro && <p style={{ color: "red" }}>{erro}</p>}
-
-          {produtos.map((prod) => (
-            <Link to={`/produto/${prod.id}`} key={prod.id}>
-              <div className="card-prods">
-                <div>
-                  <img
-                    src={prod.urlImagens[0]}
-                    alt={prod.nome}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
-                    }}
-                  />
-                </div>
-                <div className="text-card">
-                  <h4 className="nome">{prod.nome}</h4>
-                  <p className="categoria">{prod.categoria}</p>
-                  <p className="preco">
-                    {prod.preco.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </p>
-                </div>
-                <div className="btns-actions">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      adicionarAoCarrinho(prod);
-                    }}           >
-                    Adicione ao Carrinho
-                  </button>
-                </div>
-              </div>
-            </Link>
-          ))}
+        <div>
+          <p>8 Resultado</p>
         </div>
       </div>
+      <div className="flex-conteiner">
 
-      <div className="ver-mais">
-        <Link>
-          <p>Ver Mais</p>
-        </Link>
+        <aside className="sidebar">
+          <h2 className="title">Painel Admin</h2>
+          <ul>
+            <li>Menu</li>
+          </ul>
+        </aside>
+
+        <main className="content">
+          <div className="masc-produtos">
+            {produtos.map((prod) => (
+              <Link to={`/produto/${prod.id}`} key={prod.id}>
+                <div className="card-prods">
+                  <div>
+                    <img
+                      src={prod.urlImagens[0]}
+                      alt={prod.nome}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
+                      }}
+                    />
+                  </div>
+                  <div className="text-card">
+                    <h4 className="nome">{prod.nome}</h4>
+                    <p className="categoria">{prod.categoria}</p>
+                    <p className="preco">
+                      {prod.preco.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </p>
+                  </div>
+                  <div className="btns-actions">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        adicionarAoCarrinho(prod);
+                      }}           >
+                      Adicione ao Carrinho
+                    </button>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </main>
       </div>
-    </div>
+    </>
   );
 };
 
