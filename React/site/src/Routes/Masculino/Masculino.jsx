@@ -6,9 +6,42 @@ const Masculino = () => {
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
-  const location = useLocation();
+  // const location = useLocation();
+  // const isActive = (path) => location.pathname === path;
 
-  const isActive = (path) => location.pathname === path;
+  const ChecksList = [
+    {
+      title: 'Categorias',
+      checksLists: [
+        "Blusas", "Calças", "Tênnis", "Camisas", "Vestidos", "Meias"
+      ]
+    },
+    {
+      title: 'Sub-Categorias',
+      checksLists: [
+        "Casual", "Sportivo", "Social"
+      ]
+    },
+    {
+      title: 'Tamanhos',
+      categoriaTamanho: [
+        {
+          tipo: 'Roupas',
+          checksLists: [
+            "PP", "P", "M", "G", "GG"
+          ]
+        },
+         {
+          tipo: 'Calçados',
+          checksLists: [
+            "34", "35", "36", "38", "40", "42", "44", "46", "47", "48"
+          ]
+        }
+      ]
+    },
+  ]
+
+
 
   useEffect(() => {
     const buscarProdMasc = async () => {
@@ -41,10 +74,10 @@ const Masculino = () => {
     const id = localStorage.getItem("idUsuario");
     setIdUsuario(id);
   }, []);
- 
 
-  
-    const adicionarAoCarrinho = async (produto) => {
+
+
+  const adicionarAoCarrinho = async (produto) => {
     if (!idUsuario) {
       alert("Você precisa estar logado.");
       return;
@@ -78,27 +111,65 @@ const Masculino = () => {
       console.error("Erro ao adicionar:", err);
       alert("Erro ao adicionar ao carrinho.");
     }
-  };  
+  };
 
 
   return (
     <>
       <div className="conteiner-masc">
-        <div>
-          <h2 className="title-masc">Masculino</h2>
-        </div>
-        <div>
-          <p>8 Resultado</p>
+        <div className="masc-content">
+          <div>
+            <h2 className="title-masc">Masculino</h2>
+          </div>
+          <div>
+            <p>8 Resultado</p>
+          </div>
         </div>
       </div>
       <div className="flex-conteiner">
 
-        <aside className="sidebar">
-          <h2 className="title">Painel Admin</h2>
-          <ul>
-            <li>Menu</li>
-          </ul>
-        </aside>
+         <aside className="sidebar">
+      <h2>Filtros</h2>
+
+      {ChecksList.map((item, index) => (
+        <details key={index} open>
+          <summary>{item.title}</summary>
+
+          {/* Renderiza tamanhos com subgrupos */}
+          {item.categoriaTamanho ? (
+            item.categoriaTamanho.map((subItem, subIndex) => (
+              <details key={subIndex} style={{ marginLeft: '1rem' }} open>
+                <summary>{subItem.tipo}</summary>
+                <ul>
+                  {subItem.checksLists.map((check, i) => (
+                    <li key={i}>
+                      <label>
+                        <input type="checkbox" value={check} />
+                        {check}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))
+          ) : (
+            // Renderiza listas simples
+            <ul>
+              {item.checksLists.map((check, i) => (
+                <li key={i}>
+                  <label>
+                    <input type="checkbox" value={check} />
+                    {check}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
+        </details>
+      ))}
+    </aside>
+
+
 
         <main className="content">
           <div className="masc-produtos">
