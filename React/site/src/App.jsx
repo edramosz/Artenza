@@ -30,6 +30,7 @@ import Pedidos from './Routes/Perfil/PerfilComponents/Pedidos';
 import Config from './Routes/Perfil/PerfilComponents/Config';
 import Carrinho from './Routes/Carrinho/Carrinho';
 import Masculino from './Routes/Masculino/Masculino';
+import Feminino from './Routes/Feminino/Feminino';
 
 function AppContent() {
   return (
@@ -42,7 +43,8 @@ function AppContent() {
         <Route path="/Colecao" element={<Colecao />} />
         <Route path="/Cadastro" element={<Cadastro />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="Masculino" element={<Masculino />} />
+        <Route path="/masculino" element={<Masculino />} />        
+        <Route path="/feminino" element={<Feminino />} />
 
         <Route path="/Carrinho" element={<Carrinho />} />
 

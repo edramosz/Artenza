@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTudo", policy =>
     {
-        policy.WithOrigins("http://localhost:5174") // Porta correta do seu frontend Vite/React
+        policy.WithOrigins("http://localhost:5173") // Porta correta do seu frontend Vite/React
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
