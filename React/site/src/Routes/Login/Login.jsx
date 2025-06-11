@@ -23,7 +23,7 @@ export default function Login() {
       if (!response.ok) {
         throw new Error("Usuário não encontrado na API");
       }
-      
+
       const usuario = await response.json();
       console.log("Usuário retornado da API:", usuario); // Veja se "telefone" aparece aqui
 
@@ -46,7 +46,7 @@ export default function Login() {
       // const firebaseEmail = userCredential.user.email;  --- CÓDIGO ANTIGO COM ERRO NAS MAIÚSCULAS
 
       localStorage.setItem("idUsuario", usuario.id);
-
+      localStorage.setItem("idEndereco", usuario.idEndereco);
       localStorage.setItem("nomeUsuario", primeiroNome);
       localStorage.setItem("nomeCompletoUser", usuario.nomeCompleto);
       localStorage.setItem("isAdmin", usuario.isAdmin);

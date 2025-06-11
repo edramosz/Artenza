@@ -40,6 +40,8 @@ function Carrinho() {
 
   const getProduto = (idProduto) => produtos.find(p => p.id === idProduto) || {};
 
+  
+
   const alterarQuantidade = async (item, novaQtd) => {
     if (novaQtd <= 0) return;
 
@@ -68,12 +70,22 @@ function Carrinho() {
     });
   };
 
-  const toggleSelecionado = (id) => {
-    setSelecionados(prev => ({
+ const toggleSelecionado = (id) => {
+  setSelecionados(prev => {
+    const novoSelecionados = {
       ...prev,
-      [id]: !prev[id]
-    }));
-  };
+      [id]: !prev[id],
+    };
+
+    const selecionadosIds = Object.entries(novoSelecionados)
+      .filter(([_, valor]) => valor)
+      .map(([id]) => Number(id));
+
+    localStorage.setItem("itensSelecionados", JSON.stringify(selecionadosIds));
+    return novoSelecionados;
+  });
+};
+
 
   const totalSelecionado = itensCarrinho.reduce((total, item) => {
     if (!selecionados[item.id]) return total;
@@ -167,6 +179,11 @@ function Carrinho() {
         </div>
         <div className="total">
           <h3>Total da Compra: R$ {totalSelecionado.toFixed(2)}</h3>
+        </div>
+        <div className="btn-compra">
+          <Link to='/FinalizarPedido'>
+            Comprar
+          </Link>
         </div>
       </div>
     </div>
