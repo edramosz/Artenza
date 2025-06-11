@@ -189,7 +189,8 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #1d1c1ce3;
 }
 
-.main-menu .nav-item:hover::after {
+.main-menu .nav-item:hover::after,
+.main-menu .nav-item.active::after{
   transform: scaleX(1); /*aparece*/
 }
 
