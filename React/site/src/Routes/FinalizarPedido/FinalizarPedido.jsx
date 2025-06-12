@@ -8,29 +8,49 @@ function FinalizarPedido() {
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const email = localStorage.getItem("email");
 
-  useEffect(() => {
-    const carregarDados = async () => {
-      try {
-        const resUsuario = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
-        const usuarioData = await resUsuario.json();
-        setUsuario(usuarioData);
-        setEndereco(usuarioData.endereco); // ou `usuarioData.enderecos[0]` se for array
+ useEffect(() => {
+  const carregarDados = async () => {
+    try {
+      // Buscar usuário
+      const resUsuario = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
+      const usuarioData = await resUsuario.json();
+      setUsuario(usuarioData);
+      console.log(usuarioData, usuarioData.idEndereco)
 
-        const resProdutos = await fetch("https://localhost:7294/Produto");
-        const listaProdutos = await resProdutos.json();
-        setProdutos(listaProdutos);
+      // Buscar endereço usando idEndereco
+        const resEndereco = await fetch(`https://localhost:7294/Endereco/${usuarioData.idEndereco}`);
+        const enderecoData = await resEndereco.json();
+        setEndereco(enderecoData);
 
-        const resCarrinho = await fetch("https://localhost:7294/Carrinho");
-        const listaCarrinho = await resCarrinho.json();
-        const itensDoUsuario = listaCarrinho.filter(item => item.idUsuario === usuarioData.id && item.selecionado); // "selecionado" precisa existir
-        setItensSelecionados(itensDoUsuario);
-      } catch (error) {
-        console.error("Erro ao carregar dados:", error);
-      }
-    };
+      // Buscar produtos
+      const resProdutos = await fetch("https://localhost:7294/Produto");
+      const listaProdutos = await resProdutos.json();
+      setProdutos(listaProdutos);
 
-    carregarDados();
-  }, [email]);
+      // Buscar carrinho
+      const resCarrinho = await fetch("https://localhost:7294/Carrinho");
+      const listaCarrinho = await resCarrinho.json();
+
+      // Itens selecionados (localStorage + carrinho)
+      const selecionadosIds = JSON.parse(localStorage.getItem("itensSelecionados") || "[]");
+      const itensDoUsuario = listaCarrinho.filter(
+        item => item.idUsuario === usuarioData.id && selecionadosIds.includes(item.id)
+      );
+      setItensSelecionados(itensDoUsuario);
+
+      // Logs para debug
+      console.log("Itens selecionados do localStorage:", selecionadosIds);
+      console.log("Itens do carrinho do usuário:", listaCarrinho.filter(item => item.idUsuario === usuarioData.id));
+      console.log("Itens realmente selecionados:", itensDoUsuario);
+
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+    }
+  };
+
+  carregarDados();
+}, [email]);
+
 
   const getProduto = (idProduto) => produtos.find(p => p.id === idProduto) || {};
 
@@ -58,7 +78,7 @@ function FinalizarPedido() {
 
       if (res.ok) {
         alert("Pedido realizado com sucesso!");
-        // Redirecionar para página de sucesso
+        localStorage.removeItem("itensSelecionados");
         window.location.href = "/pedido-sucesso";
       } else {
         alert("Erro ao finalizar pedido.");

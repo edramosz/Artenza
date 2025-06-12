@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import "./Carrinho.css";
 
 function Carrinho() {
   const [itensCarrinho, setItensCarrinho] = useState([]);
   const [produtos, setProdutos] = useState([]);
   const [selecionados, setSelecionados] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const email = localStorage.getItem("email");
 
   useEffect(() => {
@@ -20,7 +21,6 @@ function Carrinho() {
         const carrinhoUsuario = carrinho.filter(item => item.idUsuario === usuario.id);
         setItensCarrinho(carrinhoUsuario);
 
-        // Inicializa todos os itens como não selecionados
         const estadoInicialSelecionados = {};
         carrinhoUsuario.forEach(item => {
           estadoInicialSelecionados[item.id] = false;
@@ -32,15 +32,23 @@ function Carrinho() {
         setProdutos(listaProdutos);
       } catch (err) {
         console.error("Erro ao carregar dados:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     carregarDados();
   }, [email]);
 
-  const getProduto = (idProduto) => produtos.find(p => p.id === idProduto) || {};
+  useEffect(() => {
+    const selecionadosIds = Object.entries(selecionados)
+      .filter(([_, valor]) => valor)
+      .map(([id]) => id);
 
-  
+    localStorage.setItem("itensSelecionados", JSON.stringify(selecionadosIds));
+  }, [selecionados]);
+
+  const getProduto = (idProduto) => produtos.find(p => p.id === idProduto) || {};
 
   const alterarQuantidade = async (item, novaQtd) => {
     if (novaQtd <= 0) return;
@@ -70,22 +78,12 @@ function Carrinho() {
     });
   };
 
- const toggleSelecionado = (id) => {
-  setSelecionados(prev => {
-    const novoSelecionados = {
+  const toggleSelecionado = (id) => {
+    setSelecionados(prev => ({
       ...prev,
       [id]: !prev[id],
-    };
-
-    const selecionadosIds = Object.entries(novoSelecionados)
-      .filter(([_, valor]) => valor)
-      .map(([id]) => Number(id));
-
-    localStorage.setItem("itensSelecionados", JSON.stringify(selecionadosIds));
-    return novoSelecionados;
-  });
-};
-
+    }));
+  };
 
   const totalSelecionado = itensCarrinho.reduce((total, item) => {
     if (!selecionados[item.id]) return total;
@@ -93,15 +91,24 @@ function Carrinho() {
     return total + (produto.preco || 0) * item.quantidade;
   }, 0);
 
-  if (itensCarrinho.length === 0) return <div class="carrinho-null">
-    <h2 className="title-null">Carrinho</h2>
-    <p className="text-null">Seu carrinho está vazio <i class="fa-solid fa-circle-exclamation"></i></p>
-    <span><i class="fa-solid fa-cart-shopping"></i></span>
-    <div className="btns-null">
-      <Link>
-        <button>Ver Produtos</button>
-      </Link>
-    </div>  </div>;
+  if (isLoading) {
+    return <div className="loading">Carregando carrinho...</div>;
+  }
+
+  if (itensCarrinho.length === 0) {
+    return (
+      <div className="carrinho-null">
+        <h2 className="title-null">Carrinho</h2>
+        <p className="text-null">Seu carrinho está vazio <i className="fa-solid fa-circle-exclamation"></i></p>
+        <span><i className="fa-solid fa-cart-shopping"></i></span>
+        <div className="btns-null">
+          <Link to="/">
+            <button>Ver Produtos</button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="carrinho-container">
@@ -123,7 +130,7 @@ function Carrinho() {
                 src={
                   Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
                     ? produto.urlImagens[0]
-                    : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"     // conferir com thulio o que significa
+                    : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"
                 }
                 alt={produto.nome}
                 onError={(e) => {
@@ -181,7 +188,7 @@ function Carrinho() {
           <h3>Total da Compra: R$ {totalSelecionado.toFixed(2)}</h3>
         </div>
         <div className="btn-compra">
-          <Link to='/FinalizarPedido'>
+          <Link to="/FinalizarPedido">
             Comprar
           </Link>
         </div>
