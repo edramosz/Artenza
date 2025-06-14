@@ -33,14 +33,18 @@ namespace API.Services
 
         // Obter um Endereco pelo ID
         public async Task<Endereco> GetEnderecoAsync(string id)
-        {   
-            var endereco = (await _firebaseClient
+        {
+            var enderecos = await _firebaseClient
                 .Child("enderecos")
-                .OnceAsync<Endereco>())
-                .FirstOrDefault(p => p.Object.Id.ToString() == id)?.Object;//metodo LINQ
+                .OnceAsync<Endereco>();
+
+            var endereco = enderecos
+                .FirstOrDefault(p => p.Object != null && p.Object.Id == id)
+                ?.Object;
 
             return endereco;
         }
+
 
         // Adicionar um novo Endereco
         public async Task<Endereco> AddEnderecoAsync(CreateEndereco enderecoDto)
