@@ -5,8 +5,58 @@
     padding: 30px;
 }
 
+.finalizar-container .endereco{
+    margin-bottom: 30px;
+}
+
+.finalizar-container .title-endereco{
+    font-size: 1.6rem;
+    border-left:4px solid var(--color-accent) ;
+    padding-left: 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.finalizar-container .edereco-content{
+    display: flex;
+    gap: 30px;    
+    margin-top: 20px;
+}
+
+.finalizar-container .dados-endereco .nome{
+    font-size: 1.2rem;
+    color:  var(--color-accent);
+    font-weight: 600;
+}
+
+.finalizar-container .dados-endereco span{
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-right: 2px;
+    color: #000;
+}
+
+.finalizar-container .dados-endereco p{
+    color: rgba(0, 0, 0, 0.849);
+    font-weight: 500;
+}
+
+.dados-endereco {
+    display: flex;
+    gap: 30px;
+}
+
+
 .finalizar-container .itens-pedido .item img{
     width: 250px;
     height: 250px;
 
+}
+
+@media (max-width: 600px) {
+  .dados-endereco {
+    grid-template-columns: 1fr;
+  }
 }

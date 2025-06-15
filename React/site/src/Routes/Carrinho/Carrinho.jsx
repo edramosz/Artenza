@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Carrinho.css";
 
@@ -8,6 +9,8 @@ function Carrinho() {
   const [selecionados, setSelecionados] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const email = localStorage.getItem("email");
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -84,6 +87,17 @@ function Carrinho() {
       [id]: !prev[id],
     }));
   };
+
+  const handleFinalizarPedido = () => {
+    const selecionadosIds = Object.values(selecionados).filter(Boolean);
+    if (selecionadosIds.length === 0) {
+      alert("Você precisa selecionar pelo menos um item para continuar.");
+      return;
+    }
+
+    navigate("/FinalizarPedido");
+  };
+
 
   const totalSelecionado = itensCarrinho.reduce((total, item) => {
     if (!selecionados[item.id]) return total;
@@ -188,9 +202,9 @@ function Carrinho() {
           <h3>Total da Compra: R$ {totalSelecionado.toFixed(2)}</h3>
         </div>
         <div className="btn-compra">
-          <Link to="/FinalizarPedido">
+          <button onClick={handleFinalizarPedido} className="botao-comprar">
             Comprar
-          </Link>
+          </button>
         </div>
       </div>
     </div>

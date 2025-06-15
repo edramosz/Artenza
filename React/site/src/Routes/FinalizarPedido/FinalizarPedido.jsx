@@ -7,15 +7,15 @@ function FinalizarPedido() {
   const [endereco, setEndereco] = useState(null);
   const [produtos, setProdutos] = useState([]);
   const [itensSelecionados, setItensSelecionados] = useState([]);
-
-  const [metodoPagamento, setMetodoPagamento] = useState("credito");
+  const [metodoPagamento, setMetodoPagamento] = useState("pix");
   const [parcelamento, setParcelamento] = useState(1);
-
   const [cupom, setCupom] = useState("");
   const [desconto, setDesconto] = useState(0);
   const [enviando, setEnviando] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
   const email = localStorage.getItem("email");
+  const nomeCompleto = localStorage.getItem("nomeCompletoUser");
 
   // Lista de cupons válidos
   const cuponsValidos = [
@@ -23,6 +23,15 @@ function FinalizarPedido() {
     { codigo: "fretegratis", desconto: 0.15 },
     { codigo: "vip", desconto: 0.20 }
   ];
+
+  useEffect(() => {
+    if (nomeCompleto) {
+      setUsuarioLogado({ nome: nomeCompleto });
+    } else {
+      setUsuarioLogado(null);
+    }
+  }, [nomeCompleto]);
+
 
   // Carregamento dos dados ao abrir a página
   useEffect(() => {
@@ -168,16 +177,22 @@ function FinalizarPedido() {
   // Interface
   return (
     <div className="finalizar-container">
-      <h1>Finalizar Pedido</h1>
-
       {/* Endereço */}
       <div className="endereco">
-        <h2>Endereço de Entrega</h2>
-        <p><strong>Rua:</strong> {endereco.rua}</p>
-        <p><strong>Número:</strong> {endereco.numero}</p>
-        <p><strong>Bairro:</strong> {endereco.bairro}</p>
-        <p><strong>Cidade:</strong> {endereco.cidade}</p>
-        <p><strong>CEP:</strong> {endereco.cep}</p>
+        <h2 className="title-endereco"><i class="fa-solid fa-location-dot"></i> Endereço de Entrega</h2>
+        <div className="edereco-content">
+          <div className="dados-endereco">
+            <p className="nome">{usuarioLogado.nome}</p>
+            <p><span>Rua:</span> {endereco.rua}</p>
+            <p><span>Número:</span> {endereco.numero}</p>
+            <p><span>Bairro:</span> {endereco.bairro}</p>
+            <p><span>Cidade:</span> {endereco.cidade}</p>
+            <p><span>CEP:</span> {endereco.cep}</p>
+          </div>
+          <div className="btns-endereco">
+            <button>Alterar</button>
+          </div>
+        </div>
       </div>
 
       {/* Itens do pedido */}

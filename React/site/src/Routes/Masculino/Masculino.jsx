@@ -19,7 +19,7 @@ const Masculino = () => {
     {
       title: 'Sub-Categorias',
       checksLists: [
-        "Casual", "Sportivo", "Social"
+        "Casual", "Esportivo", "Social"
       ]
     },
     {
