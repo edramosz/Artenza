@@ -1,18 +1,13 @@
 import React, { useState } from "react";
 import './CadastroForm.css';
-
 import { useNavigate } from "react-router-dom";
-
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-
 import { auth } from "../../Components/Db/FireBase";
 
 const Cadastro = () => {
-
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -25,7 +20,7 @@ const Cadastro = () => {
     DiaNascimento: "",
     MesNascimento: "",
     AnoNascimento: "",
-    DataNascimento: "", // Ainda usado no input, mas não será enviado
+    DataNascimento: "",
     PerfilUrl: "",
   });
 
@@ -39,8 +34,6 @@ const Cadastro = () => {
     Complemento: "",
   });
 
-  const [ano, mes, dia] = formData.DataNascimento.split("-");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -52,20 +45,27 @@ const Cadastro = () => {
   };
 
   const handleChangeDate = (e) => {
-    const { name, value } = e.target;
+    const value = e.target.value;
 
-    if (name === "DataNascimento") {
-      const [ano, mes, dia] = value.split("-");
+    if (value === "") {
       setFormData((prev) => ({
         ...prev,
-        DataNascimento: value,
-        DiaNascimento: dia,
-        MesNascimento: mes,
-        AnoNascimento: ano,
+        DataNascimento: "",
+        DiaNascimento: "",
+        MesNascimento: "",
+        AnoNascimento: "",
       }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
     }
+
+    const [ano, mes, dia] = value.split("-");
+    setFormData((prev) => ({
+      ...prev,
+      DataNascimento: value,
+      DiaNascimento: parseInt(dia, 10),
+      MesNascimento: parseInt(mes, 10),
+      AnoNascimento: parseInt(ano, 10),
+    }));
   };
 
   const buscarEnderecoPorCEP = async (cep) => {
@@ -86,7 +86,6 @@ const Cadastro = () => {
         Rua: data.logradouro,
       }));
     } catch (error) {
-      console.error("Erro ao buscar endereço pelo CEP:", error);
       alert("Erro ao buscar endereço. Tente novamente.");
     }
   };
@@ -94,11 +93,12 @@ const Cadastro = () => {
   const handleSubmitCompleto = async (e) => {
     e.preventDefault();
 
-    console.log("Enviando dados do usuário:", formData);
-    console.log("Enviando dados do endereço:", formDataEndereco);
+    if (!formData.DiaNascimento || !formData.MesNascimento || !formData.AnoNascimento) {
+      alert("Por favor, selecione uma data de nascimento válida.");
+      return;
+    }
 
     try {
-      // 1. Cadastro do endereço
       const responseEndereco = await fetch("https://localhost:7294/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,14 +107,11 @@ const Cadastro = () => {
 
       if (!responseEndereco.ok) {
         const error = await responseEndereco.text();
-        console.error("Erro no cadastro de endereço:", error);
         throw new Error(`Erro ao cadastrar endereço: ${error}`);
       }
 
       const endereco = await responseEndereco.json();
-      console.log("Endereço cadastrado com sucesso:", endereco);
 
-      // 2. Cadastro do usuário na API
       const responseUsuario = await fetch("https://localhost:7294/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -134,36 +131,19 @@ const Cadastro = () => {
 
       if (!responseUsuario.ok) {
         const error = await responseUsuario.text();
-        console.error("Erro no cadastro de usuário:", error);
         throw new Error(`Erro ao cadastrar usuário: ${error}`);
       }
 
-      const usuario = await responseUsuario.json();
-      console.log("Usuário cadastrado com sucesso:", usuario);
-
-      // 3. Cadastro do usuário no Firebase
       await createUserWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
-      console.log("Usuário criado no Firebase.");
-
-      // 4. Login automático no Firebase
       await signInWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
-      console.log("Login automático realizado com sucesso.");
-
 
       alert("Cadastro completo realizado com sucesso!");
 
-      // 5. Salva dados no localStorage ANTES de redirecionar
       localStorage.setItem("nomeUsuario", formData.NomeCompleto);
       localStorage.setItem("email", formData.Email);
       localStorage.setItem("isAdmin", formData.isAdmin.toString());
       localStorage.setItem("perfilUrl", formData.PerfilUrl || "");
-
-
-      // Força o update da Navbar (caso esteja montada ainda)
       window.dispatchEvent(new Event("storage"));
-
-      alert("Cadastro completo realizado com sucesso!");
-      navigate('/')
 
       setFormData({
         NomeCompleto: "",
@@ -176,6 +156,7 @@ const Cadastro = () => {
         MesNascimento: "",
         AnoNascimento: "",
         DataNascimento: "",
+        PerfilUrl: "",
       });
 
       setFormDataEndereco({
@@ -188,17 +169,15 @@ const Cadastro = () => {
         Complemento: "",
       });
 
-
+      navigate('/');
     } catch (error) {
-      console.error("Erro geral:", error?.message || error);
-
+      console.error("Erro:", error.message || error);
       if (error.code === "auth/email-already-in-use") {
         alert("Este email já está em uso. Tente outro ou recupere sua senha.");
       } else {
         alert("Erro ao realizar cadastro completo.\n" + (error?.message || error));
       }
     }
-
   };
 
   return (
@@ -211,8 +190,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="NomeCompleto"
-              id="NomeCompleto"
-              placeholder="Digite seu nome completo"
               value={formData.NomeCompleto}
               onChange={handleChange}
             />
@@ -222,8 +199,6 @@ const Cadastro = () => {
             <input
               type="email"
               name="Email"
-              id="Email"
-              placeholder="Digite seu email"
               value={formData.Email}
               onChange={handleChange}
             />
@@ -233,8 +208,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="Telefone"
-              id="Telefone"
-              placeholder="Digite seu telefone"
               value={formData.Telefone}
               onChange={handleChange}
             />
@@ -244,7 +217,6 @@ const Cadastro = () => {
             <input
               type="date"
               name="DataNascimento"
-              id="DataNascimento"
               value={formData.DataNascimento}
               onChange={handleChangeDate}
             />
@@ -254,8 +226,6 @@ const Cadastro = () => {
             <input
               type="password"
               name="SenhaHash"
-              id="SenhaHash"
-              placeholder="Crie uma senha segura"
               value={formData.SenhaHash}
               onChange={handleChange}
             />
@@ -268,8 +238,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="CEP"
-              id="CEP"
-              placeholder="Digite o CEP"
               value={formDataEndereco.CEP}
               onChange={handleChangeEndereco}
               onBlur={() => buscarEnderecoPorCEP(formDataEndereco.CEP)}
@@ -280,8 +248,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="Estado"
-              id="Estado"
-              placeholder="Digite o estado"
               value={formDataEndereco.Estado}
               onChange={handleChangeEndereco}
             />
@@ -291,8 +257,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="Cidade"
-              id="Cidade"
-              placeholder="Digite a cidade"
               value={formDataEndereco.Cidade}
               onChange={handleChangeEndereco}
             />
@@ -302,8 +266,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="Bairro"
-              id="Bairro"
-              placeholder="Digite o bairro"
               value={formDataEndereco.Bairro}
               onChange={handleChangeEndereco}
             />
@@ -313,8 +275,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="Rua"
-              id="Rua"
-              placeholder="Digite a rua"
               value={formDataEndereco.Rua}
               onChange={handleChangeEndereco}
             />
@@ -324,8 +284,6 @@ const Cadastro = () => {
             <input
               type="text"
               name="Numero"
-              id="Numero"
-              placeholder="Digite o número"
               value={formDataEndereco.Numero}
               onChange={handleChangeEndereco}
             />
@@ -334,8 +292,6 @@ const Cadastro = () => {
             <label htmlFor="Complemento">Complemento:</label>
             <textarea
               name="Complemento"
-              id="Complemento"
-              placeholder="Digite o complemento (opcional)"
               value={formDataEndereco.Complemento}
               onChange={handleChangeEndereco}
             />
