@@ -170,7 +170,7 @@ const ProdutoDetalhe = () => {
               <p><strong>Gênero:</strong> {produto.genero}</p>
               <div className="filtro-tamanhos">
                 <h4 className='title-tamanho'>Tamanhos disponiveis:</h4>
-                {produto.tamanhos?.map(tam => ( //trocar depois o ?................................              
+                {produto.tamanhos?.map(tam => (              
                   <button key={tam}>{tam}</button>
                 ))}
 

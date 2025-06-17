@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Masculino.css';
 
 const Masculino = () => {
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
-  // const location = useLocation();
-  // const isActive = (path) => location.pathname === path;
 
   const ChecksList = [
     {
@@ -39,9 +37,7 @@ const Masculino = () => {
         }
       ]
     },
-  ]
-
-
+  ];
 
   useEffect(() => {
     const buscarProdMasc = async () => {
@@ -75,7 +71,32 @@ const Masculino = () => {
     setIdUsuario(id);
   }, []);
 
+  useEffect(() => {
+    const detailsElements = document.querySelectorAll(".sidebar details");
 
+    detailsElements.forEach((detail) => {
+      let closingTimeout;
+
+      const onToggle = () => {
+        if (!detail.open) {
+          detail.classList.add("closing");
+          closingTimeout = setTimeout(() => {
+            detail.classList.remove("closing");
+          }, 400); // Tempo igual a duração da animação fadeOut no CSS
+        } else {
+          detail.classList.remove("closing");
+          if (closingTimeout) clearTimeout(closingTimeout);
+        }
+      };
+
+      detail.addEventListener("toggle", onToggle);
+
+      return () => {
+        detail.removeEventListener("toggle", onToggle);
+        if (closingTimeout) clearTimeout(closingTimeout);
+      };
+    });
+  }, []);
 
   const adicionarAoCarrinho = async (produto) => {
     if (!idUsuario) {
@@ -113,7 +134,6 @@ const Masculino = () => {
     }
   };
 
-
   return (
     <>
       <div className="conteiner-masc">
@@ -122,7 +142,7 @@ const Masculino = () => {
             <h2 className="title-masc">Masculino</h2>
           </div>
           <div>
-            <p>8 Resultado</p>
+            <p>{produtos.length} Resultado{produtos.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
       </div>
@@ -130,15 +150,14 @@ const Masculino = () => {
 
         <aside className="sidebar">
           {ChecksList.map((item, index) => (
-            <details key={index} open>
+            <details key={index}>
               <summary>{item.title}</summary>
 
-              {/* Renderiza tamanhos com subgrupos */}
               {item.categoriaTamanho ? (
                 item.categoriaTamanho.map((subItem, subIndex) => (
-                  <details key={subIndex} className='tamanho-filtros' open>
+                  <details key={subIndex} className="tamanho-filtros" open>
                     <summary>{subItem.tipo}</summary>
-                    <ul className='lista-composta'>
+                    <ul className="lista-composta">
                       {subItem.checksLists.map((check, i) => (
                         <li key={i}>
                           <label>
@@ -151,8 +170,7 @@ const Masculino = () => {
                   </details>
                 ))
               ) : (
-                // Renderiza listas simples
-                <ul className='lista-simples'>
+                <ul className="lista-simples">
                   {item.checksLists.map((check, i) => (
                     <li key={i}>
                       <label>
@@ -166,8 +184,6 @@ const Masculino = () => {
             </details>
           ))}
         </aside>
-
-
 
         <main className="content">
           <div className="masc-produtos">
@@ -199,7 +215,8 @@ const Masculino = () => {
                       onClick={(e) => {
                         e.preventDefault();
                         adicionarAoCarrinho(prod);
-                      }}           >
+                      }}
+                    >
                       Adicione ao Carrinho
                     </button>
                   </div>
