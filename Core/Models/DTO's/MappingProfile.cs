@@ -39,6 +39,9 @@ namespace Core.Models.DTO_s
             CreateMap<Feedback, CreateFeedback>();
             CreateMap<CreateFeedback, Feedback>();
 
+            CreateMap<Cupom, CreateCupom>();
+            CreateMap<CreateCupom, Cupom>();
+
             // UPDATE
 
             CreateMap<Usuario, UpdateUsuario>();
@@ -55,6 +58,9 @@ namespace Core.Models.DTO_s
 
             CreateMap<Feedback, UpdateFeedback>();
             CreateMap<UpdateFeedback, Feedback>();
+
+            CreateMap<Cupom, CreateCupom>();
+            CreateMap<CreateCupom, Cupom>();
         }
     }
 }
