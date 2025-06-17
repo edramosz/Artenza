@@ -29,7 +29,93 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  overflow-y: auto;
 }
+
+.sidebar summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.6rem 0.3rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #000000;
+  transition: background-color 0.2s, color 0.2s;
+  border-bottom: 2px solid #00000023;
+}
+
+
+
+.sidebar summary:hover,
+.sidebar summary:focus {
+  outline: none;
+}
+
+.sidebar summary::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f078"; 
+  transition: transform 0.3s ease;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+.sidebar details[open] > summary::after {
+  transform: rotate(180deg);
+}
+
+.sidebar details > ul,
+.sidebar details > .lista-composta {
+  list-style: none;
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.sidebar details > .lista-composta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 0.5rem;
+}
+
+.sidebar .lista-simples {
+}
+
+.tamanho-filtros {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  padding-left: 0.75rem;
+}
+
+.sidebar li {
+  margin-bottom: 0;
+}
+
+.sidebar label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #000000;
+  transition: color 0.2s;
+}
+
+.sidebar label:hover {
+  color: #000000;
+  font-weight: 600;
+}
+
+.sidebar input[type="checkbox"] {
+  accent-color: #ffffff00;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+
 
 .content {
   width: 100%;
@@ -63,7 +149,6 @@
   border: 1px solid #aaaaaa48;
   border-radius: 5px 5px 0px 0px;
 }
-
 
 .card-prods .text-card {
   padding: 10px 15px;

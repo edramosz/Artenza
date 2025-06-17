@@ -22,12 +22,7 @@ namespace API.Services
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
-
-            var projectId = configuration["Firebase:ProjectId"]; // ID do projeto Firebase
-            var credentialPath = configuration["Firebase:CredentialPath"];
-
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credentialPath);
-            _firestoreDb = FirestoreDb.Create(projectId);
+            
             _mapper = mapper;
         }
 

@@ -1,14 +1,16 @@
+
 .perfil-page-main {
   width: 100%;
   max-width: 2000px;
   display: flex;
   margin: 0 auto;
-  max-height: 100vh;
+  min-height: 100vh;
 }
 
 .perfil-container {
   width: 100%;
-  max-height: 100vh;
+  min-height: 100vh;
+  height: auto; 
 }
 
 .perfil-img-wrapper {
@@ -63,7 +65,7 @@
 }
 
 .perfil-detalhes h2 {
-  color: rgba(31, 32, 32, 0.966);
+  color: rgb(0, 0, 0);
   margin-bottom: 10px;
   font-weight: 500;
   font-size: 1.7rem;
@@ -71,20 +73,22 @@
 
 .perfil-detalhes p {
   line-height: 2.1rem;
+  margin-bottom: 9px;
 }
 
 .perfil-detalhes p > strong {
   font-weight: 600;
   margin-right: 5px;
   text-align: end;
+  font-size: 1.1rem;
 }
 
 .perfil-detalhes .perfil-actions .btn-editar {
-  background-color: rgb(54, 56, 56);
+  background-color: #111  ;
   border: none;
   width: 100%;
   padding: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   color: #fff;
   font-size: 1rem;
   text-transform: uppercase;
@@ -100,3 +104,79 @@
     transition: 0.4s;
 }
 
+
+.form-perfil{
+  padding: 10px;
+}
+
+.form-perfil .perfil-edit{
+  display: flex;
+  flex-direction: column;
+}
+
+.form-perfil .perfil-edit label{
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.form-perfil .perfil-edit input{
+  padding: 12px 2px;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 2px solid #000000;
+  background: transparent;
+  transition: all 0.25s ease;
+  outline: none;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.form-perfil .perfil-edit input:focus, .form-perfil .perfil-edit input:hover{
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.perfil-actions{
+  justify-content: center ;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mensagem-sucesso{
+  color: #168d34;
+  font-weight: 500;
+}
+
+.erro-campo{  
+  color: #af1f0c;
+  font-weight: 500;
+}
+
+.perfil-actions .btns-edit{
+  display: flex;
+  gap: 20px;
+}
+
+.perfil-actions .btns-edit button{
+  padding: 12px 22px;
+  font-size: 1.05rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #fff;
+  background: #222;
+  box-shadow: 4px 4px 12px #1111112c;
+  transition: all 0.2s ease;
+  width: 50%;
+}
+
+.perfil-actions .btns-edit button:hover{
+  opacity: 0.9;  
+  box-shadow: 5px 5px 13px #11111179;
+}
+
+#btn-cancelar {
+  background-color: var(--color-accent);
+}

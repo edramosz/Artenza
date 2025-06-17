@@ -19,7 +19,7 @@ const Masculino = () => {
     {
       title: 'Sub-Categorias',
       checksLists: [
-        "Casual", "Sportivo", "Social"
+        "Casual", "Esportivo", "Social"
       ]
     },
     {
@@ -31,7 +31,7 @@ const Masculino = () => {
             "PP", "P", "M", "G", "GG"
           ]
         },
-         {
+        {
           tipo: 'Calçados',
           checksLists: [
             "34", "35", "36", "38", "40", "42", "44", "46", "47", "48"
@@ -128,20 +128,32 @@ const Masculino = () => {
       </div>
       <div className="flex-conteiner">
 
-         <aside className="sidebar">
-      <h2>Filtros</h2>
+        <aside className="sidebar">
+          {ChecksList.map((item, index) => (
+            <details key={index} open>
+              <summary>{item.title}</summary>
 
-      {ChecksList.map((item, index) => (
-        <details key={index} open>
-          <summary>{item.title}</summary>
-
-          {/* Renderiza tamanhos com subgrupos */}
-          {item.categoriaTamanho ? (
-            item.categoriaTamanho.map((subItem, subIndex) => (
-              <details key={subIndex} style={{ marginLeft: '1rem' }} open>
-                <summary>{subItem.tipo}</summary>
-                <ul>
-                  {subItem.checksLists.map((check, i) => (
+              {/* Renderiza tamanhos com subgrupos */}
+              {item.categoriaTamanho ? (
+                item.categoriaTamanho.map((subItem, subIndex) => (
+                  <details key={subIndex} className='tamanho-filtros' open>
+                    <summary>{subItem.tipo}</summary>
+                    <ul className='lista-composta'>
+                      {subItem.checksLists.map((check, i) => (
+                        <li key={i}>
+                          <label>
+                            <input type="checkbox" value={check} />
+                            {check}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ))
+              ) : (
+                // Renderiza listas simples
+                <ul className='lista-simples'>
+                  {item.checksLists.map((check, i) => (
                     <li key={i}>
                       <label>
                         <input type="checkbox" value={check} />
@@ -150,24 +162,10 @@ const Masculino = () => {
                     </li>
                   ))}
                 </ul>
-              </details>
-            ))
-          ) : (
-            // Renderiza listas simples
-            <ul>
-              {item.checksLists.map((check, i) => (
-                <li key={i}>
-                  <label>
-                    <input type="checkbox" value={check} />
-                    {check}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          )}
-        </details>
-      ))}
-    </aside>
+              )}
+            </details>
+          ))}
+        </aside>
 
 
 

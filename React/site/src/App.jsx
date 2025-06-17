@@ -31,6 +31,7 @@ import Config from './Routes/Perfil/PerfilComponents/Config';
 import Carrinho from './Routes/Carrinho/Carrinho';
 import Masculino from './Routes/Masculino/Masculino';
 import Feminino from './Routes/Feminino/Feminino';
+import FinalizarPedido from './Routes/FinalizarPedido/FinalizarPedido';
 
 function AppContent() {
   return (
@@ -46,7 +47,8 @@ function AppContent() {
         <Route path="/masculino" element={<Masculino />} />        
         <Route path="/feminino" element={<Feminino />} />
 
-        <Route path="/Carrinho" element={<Carrinho />} />
+        <Route path="/Carrinho" element={<Carrinho />} />        
+        <Route path="/FinalizarPedido" element={<FinalizarPedido />} />
 
         <Route path="/Perfil" element={<Perfil />} />
         <Route path="/Cupons" element={<Cupons />} />

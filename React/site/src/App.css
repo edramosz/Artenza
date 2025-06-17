@@ -3,21 +3,18 @@
 
 
 :root {
+  --color-primary: #101572;
+  --color-secondary: #2C3359;
+  --color-accent: #1538a3;
+  --color-light: #B4B7BF;
+  --color-background: #010326;
+  --color-white: #FFFFFF;
+  --color-black: #000000;
 
-
- /* colors: {
-        primary: '#0A0D40',
-        secondary: '#2C3359',
-        accent: '#4F5873',
-        light: '#B4B7BF',
-        background: '#010326',
-        white: '#FFFFFF',
-        black: '#000000',
- } */
 }
 
 body{
-    background-color: #ffffff;
+    background-color: #f3f2f2;
 }
 
 * {

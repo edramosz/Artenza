@@ -28,13 +28,6 @@
   text-decoration: none;
 }
 
-.container-perfil .perfil .profile-title {
-  font-size: 1.6rem;
-  color: #181717;
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-left: 15px;
-}
 
 .container-perfil .perfil-items {
   list-style: none;
@@ -54,7 +47,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 15px;
-  color: #333;
+  color: #222;
   text-decoration: none;
   font-size: 16px;
   width: 100%;
@@ -70,13 +63,13 @@
 .container-perfil .perfil-items li.active a {
   background-color: #49494983;
   color: rgba(255, 255, 255, 0.904);
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .container-perfil .perfil-items li a svg {
-  width: 18px;
-  height: 18px;
-  color: #666;
+  width: 20px;
+  height: 20px;
+  color: #444;
 }
 
 .container-perfil .perfil-items li.active a svg {
@@ -105,7 +98,6 @@
   background-color: #f1c7c7;
 }
 
-/* Modal de confirmação */
 .modal-overlay {
   position: fixed;
   inset: 0;

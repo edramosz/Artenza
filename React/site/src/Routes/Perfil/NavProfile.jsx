@@ -11,11 +11,14 @@ import {
   faBagShopping,
   faGear,
   faArrowRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
-import {
+  faTicket,
   faUser,
   faHeart,
   faCreditCard,
+  
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  
 } from '@fortawesome/free-regular-svg-icons';
 
 const NavProfile = () => {
@@ -64,15 +67,15 @@ const NavProfile = () => {
     <div className="container-perfil">
       <aside className="sidebar">
         <div className="perfil">
-          <div className="profile">            
-            <Link to="/Perfil">
-              <h2 className='profile-title'>Meu Perfil</h2>
-            </Link>
-          </div>
           <ul className="perfil-items">
+            <li className={isActive('/Perfil') ? 'active' : ''}>
+              <Link to="/Perfil">
+                <FontAwesomeIcon icon={faUser} />Meu Perfil
+              </Link>
+            </li>
             <li className={isActive('/Pedidos') ? 'active' : ''}>
               <Link to="/Pedidos">
-                <FontAwesomeIcon icon={faUser} /> Meus Pedidos
+                <FontAwesomeIcon icon={faBagShopping} /> Meus Pedidos
               </Link>
             </li>
             <li className={isActive('/Favoritos') ? 'active' : ''}>
@@ -87,7 +90,7 @@ const NavProfile = () => {
             </li>
             <li className={isActive('/Cupons') ? 'active' : ''}>
               <Link to="/Cupons">
-                <FontAwesomeIcon icon={faBagShopping} /> Cupons
+                <FontAwesomeIcon icon={faTicket} /> Cupons
               </Link>
             </li>
             <li className={isActive('/Pagamentos') ? 'active' : ''}>
