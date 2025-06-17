@@ -42,33 +42,30 @@
   font-weight: 600;
   font-size: 1rem;
   color: #000000;
-  border: 1px solid transparent;
   transition: background-color 0.2s, color 0.2s;
   border-bottom: 2px solid #00000023;
 }
 
-/* Hover e foco do summary */
+
+
 .sidebar summary:hover,
 .sidebar summary:focus {
   outline: none;
 }
 
-/* Ícone de seta (FontAwesome) */
 .sidebar summary::after {
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
-  content: "\f078"; /* chevron-down */
+  content: "\f078"; 
   transition: transform 0.3s ease;
   margin-left: 0.5rem;
   display: inline-block;
 }
 
-/* Ícone rotacionado quando aberto */
 .sidebar details[open] > summary::after {
   transform: rotate(180deg);
 }
 
-/* Espaço interno das listas */
 .sidebar details > ul,
 .sidebar details > .lista-composta {
   list-style: none;
@@ -76,21 +73,15 @@
   padding-left: 0.5rem;
 }
 
-/* Estilo das listas com subgrupos (tamanhos) */
 .sidebar details > .lista-composta {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem 0.5rem;
 }
 
-/* Estilo das listas simples (sem subgrupos) */
 .sidebar .lista-simples {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem 1rem;
 }
 
-/* Estilo de sub-filtros */
 .tamanho-filtros {
   display: flex;
   flex-direction: column;
