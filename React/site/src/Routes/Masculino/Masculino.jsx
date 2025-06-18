@@ -17,7 +17,7 @@ const Masculino = () => {
     subcategorias: [],
     tamanhos: [],
     cores: [],
-    preco: [0, 10000],
+    preco: [0, 2600],
   });
 
 
@@ -97,7 +97,7 @@ const Masculino = () => {
       subcategorias: searchParams.get('subcategoria')?.split(',') || [],
       tamanhos: searchParams.get('tamanho')?.split(',') || [],
       cores: searchParams.get('cor')?.split(',') || [],
-      preco: precoURL && precoURL.length === 2 ? precoURL : [0, 10000],
+      preco: precoURL && precoURL.length === 2 ? precoURL : [0, 2600],
     };
     setFiltros(filtrosIniciais);
 
@@ -229,6 +229,7 @@ const Masculino = () => {
       </div>
       <div className="flex-conteiner">
         <aside className="sidebar">
+
           {temFiltrosAtivos && (
             <div className="filtros-aplicados-container">
               <div className="filtros-aplicados-top">
