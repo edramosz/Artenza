@@ -1,98 +1,202 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+
 
 const Feminino = () => {
+
+  const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
   const [idUsuario, setIdUsuario] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filtros, setFiltros] = useState({
+    categorias: [],
+    subcategorias: [],
+    tamanhos: [],
+    cores: [],
+    preco: [0, 10000],
+  });
 
- const cards = [
+
+
+  const mapaCores = {
+    Amarelo: "#FFD700",
+    Azul: "#0000FF",
+    Branco: "#FFFFFF",
+    Cinza: "#808080",
+    Laranja: "#FFA500",
+    Marrom: "#A52A2A",
+    Preto: "#000000",
+    Rosa: "#FFC0CB",
+    Roxo: "#800080",
+    Verde: "#008000",
+    Vermelho: "#FF0000"
+  };
+
+
+
+  const CoresDisponiveis = ["Amarelo", "Azul", "Branco", "Cinza", "Laranja", "Marrom", "Preto", "Rosa", "Roxo", "Verde", "Vermelho"];
+
+  const ChecksList = [
     {
-      img: '././img/vestidos.jpg',
-      alt: 'Vestidos femininos',
-      link: '/categoria/vestidos',
-      title: 'Vestidos'
+      title: 'Categorias',
+      tipo: 'categorias',
+      checksLists: ["Blusas", "Calças", "Tênnis", "Camisas", "Meias"]
     },
     {
-      img: '././img/saias.jpg',
-      alt: 'Saias',
-      link: '/categoria/saias',
-      title: 'Saias'
+      title: 'Sub-Categorias',
+      tipo: 'subcategorias',
+      checksLists: ["Casual", "Esportivo", "Social"]
     },
     {
-      img: '././img/sapatos.jpg',
-      alt: 'Sapatos femininos',
-      link: '/categoria/sapatos',
-      title: 'Sapatos'
+      title: 'Tamanhos',
+      tipo: 'tamanhos',
+      categoriaTamanho: [
+        {
+          tipo: 'Roupas',
+          checksLists: ["PP", "P", "M", "G", "GG"]
+        },
+        {
+          tipo: 'Calçados',
+          checksLists: ["34", "35", "36", "38", "40", "42", "44", "46", "47", "48"]
+        }
+      ]
     },
-    {
-      img: '././img/bijuterias.jpg',
-      alt: 'Bijuterias e acessórios',
-      link: '/categoria/acessorios',
-      title: 'Acessórios'
-    },
-    {
-      img: '././img/blusasf.jpg',
-      alt: 'Blusas femininas básicas e estampadas',
-      link: '/categoria/blusas',
-      title: 'Blusas'
-    },
-    {
-      img: '././img/casacosf.jpg',
-      alt: 'Casacos e jaquetas femininas',
-      link: '/categoria/casacos',
-      title: 'Casacos'
-    }
   ];
 
   useEffect(() => {
     const buscarProdMasc = async () => {
       try {
         const response = await fetch("https://localhost:7294/Produto");
-
-        if (!response.ok) {
-          throw new Error("Erro ao buscar produtos: " + response.status);
-        }
-
+        if (!response.ok) throw new Error("Erro ao buscar produtos");
         const data = await response.json();
-
-        const femininos = data.filter(produto => produto.genero === "Feminino");
-
-        const dataComImagem = femininos.map(produto => ({
-          ...produto,
-          urlImagens: Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
-            ? produto.urlImagens
+        const femininos = data.filter(prod => prod.genero === "Feminino");
+        const produtosComImagem = femininos.map(prod => ({
+          ...prod,
+          urlImagens: Array.isArray(prod.urlImagens) && prod.urlImagens.length > 0 && typeof prod.urlImagens[0] === "string"
+            ? prod.urlImagens
             : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
-        }));
 
-        setProdutos(dataComImagem);
+        }));
+        setProdutos(produtosComImagem);
       } catch (err) {
         console.error("Erro ao buscar produtos:", err);
         setErro("Não foi possível carregar os produtos.");
       }
     };
-
     buscarProdMasc();
-
-    // Pega o id do usuário logado
     const id = localStorage.getItem("idUsuario");
     setIdUsuario(id);
+
+    const precoURL = searchParams.get('preco')?.split('-').map(Number);
+    const filtrosIniciais = {
+      categorias: searchParams.get('categoria')?.split(',') || [],
+      subcategorias: searchParams.get('subcategoria')?.split(',') || [],
+      tamanhos: searchParams.get('tamanho')?.split(',') || [],
+      cores: searchParams.get('cor')?.split(',') || [],
+      preco: precoURL && precoURL.length === 2 ? precoURL : [0, 10000],
+    };
+    setFiltros(filtrosIniciais);
+
+
   }, []);
+
+  const handleCheckboxChange = (tipo, valor) => {
+    setFiltros(prev => {
+      const atual = prev[tipo];
+      const atualizado = atual.includes(valor) ? atual.filter(i => i !== valor) : [...atual, valor];
+      return { ...prev, [tipo]: atualizado };
+    });
+  };
+
+
+  const handlePrecoChange = (event, index) => {
+    const novoValor = parseFloat(event.target.value);
+
+    setFiltros(prev => {
+      const novoPreco = [...prev.preco];
+
+      if (index === 0) {
+        // Preço mínimo não pode ultrapassar o preço máximo
+        novoPreco[0] = Math.min(novoValor, novoPreco[1]);
+      } else {
+        // Preço máximo não pode ser menor que o preço mínimo
+        novoPreco[1] = Math.max(novoValor, novoPreco[0]);
+      }
+
+      return { ...prev, preco: novoPreco };
+    });
+  };
+
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (filtros.categorias.length > 0) params.set('categoria', filtros.categorias.join(','));
+    if (filtros.subcategorias.length > 0) params.set('subcategoria', filtros.subcategorias.join(','));
+    if (filtros.tamanhos.length > 0) params.set('tamanho', filtros.tamanhos.join(','));
+    if (filtros.cores.length > 0) params.set('cor', filtros.cores.join(','));
+    if (filtros.preco) params.set('preco', `${filtros.preco[0]}-${filtros.preco[1]}`);
+
+    setSearchParams(params);
+  }, [filtros]);
+
+
+
+  // Função para limpar todos os filtros
+  const limparFiltros = () => {
+    setFiltros({
+      categorias: [],
+      subcategorias: [],
+      tamanhos: [],
+      cores: [],
+      preco: [0, 2600],
+    });
+  };
+
+  // Função para remover filtro específico
+  const removerFiltro = (tipo, valor) => {
+    setFiltros(prev => {
+      if (tipo === 'preco') {
+        // Reseta faixa de preço para padrão
+        return { ...prev, preco: [0, 2600] };
+      }
+      const novoFiltro = prev[tipo].filter(item => item !== valor);
+      return { ...prev, [tipo]: novoFiltro };
+    });
+  };
+
+  const temFiltrosAtivos =
+    filtros.categorias.length > 0 ||
+    filtros.subcategorias.length > 0 ||
+    filtros.tamanhos.length > 0 ||
+    filtros.cores.length > 0 ||
+    filtros.preco[0] !== 0 ||
+    filtros.preco[1] !== 2600;
+
+
+
+  const produtosFiltrados = produtos.filter(prod => {
+    const categoriaOk = filtros.categorias.length === 0 || filtros.categorias.includes(prod.categoria);
+    const subcategoriaOk = filtros.subcategorias.length === 0 || filtros.subcategorias.includes(prod.subcategoria);
+    const tamanhoOk = filtros.tamanhos.length === 0 || prod.tamanhos?.some(t => filtros.tamanhos.includes(t));
+    const corOk = filtros.cores.length === 0 || filtros.cores.includes(capitalizeFirst(prod.cor));
+    const precoOk = prod.preco >= filtros.preco[0] && prod.preco <= filtros.preco[1];
+    return categoriaOk && subcategoriaOk && tamanhoOk && corOk && precoOk;
+  });
 
   const adicionarAoCarrinho = async (produto) => {
     if (!idUsuario) {
       alert("Você precisa estar logado.");
       return;
     }
-
     const idProduto = produto.id;
-
     try {
       const resposta = await fetch("https://localhost:7294/Carrinho");
       const todos = await resposta.json();
-
       const existente = todos.find(c => c.idUsuario === idUsuario && c.idProduto === idProduto);
-
       if (existente) {
         const novaQuantidade = existente.quantidade + 1;
         await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
@@ -107,7 +211,6 @@ const Feminino = () => {
           body: JSON.stringify({ idUsuario, idProduto, quantidade: 1 })
         });
       }
-
       alert("Produto adicionado ao carrinho!");
     } catch (err) {
       console.error("Erro ao adicionar:", err);
@@ -115,116 +218,189 @@ const Feminino = () => {
     }
   };
 
-  // Cria uma referência para acessar a div com rolagem horizontal
-  const scrollRef = useRef(null);
-
-  // Rola a div 800px para a esquerda com animação suave
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -1100, behavior: 'smooth' });
-  };
-
-  // Rola a div 800px para a direita com animação suave
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 1100, behavior: 'smooth' });
-  };
-
-
-
   return (
-    <div className="masc-container">
-      <div className="masc-content">
-        <h1>Modelos Femininas</h1>
-        <h3>Procure as melhores roupas para você aqui. </h3>
-      </div>
-
-      <div className="masc-img">
-        <div className="content-img">
-          <h3>Nossa coleção</h3>
-          <button className="masc-btn">Saiba mais</button>
+    <>
+      <div className="conteiner-masc">
+        <div className="masc-content">
+          <h2 className="title-masc">Feminino</h2>
+          <p>({produtosFiltrados.length}) Resultado{produtosFiltrados.length !== 1 ? 's' : ''}</p>
         </div>
       </div>
-
-      <div className="container-masc-categories">
-        <div>
-          <h2>Compre por categoria</h2>
-        </div>
-        <button className="carousel-button left" onClick={scrollLeft}>
-          <i className="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <div className="masc-categories" ref={scrollRef}>
-          {cards.slice(0, 5).map((card, index) => (
-            <div className="masc-categ" key={index}>
-              <div>
-                <img src={card.img} alt={card.alt} />
-                <p className="legenda">{card.title}</p>
+      <div className="flex-conteiner">
+        <aside className="sidebar">
+          {temFiltrosAtivos && (
+            <div className="filtros-aplicados-container">
+              <div className="filtros-aplicados-top">
+                <span>FILTROS APLICADOS:</span>
+                <button className="limpar-tudo-btn" onClick={limparFiltros}>Limpar tudo</button>
               </div>
-              <div className="btn-actions">
-                <Link to={card.link}>
-                  <button className="masc-btn">Ver Tudo</button>
-                </Link>
+              <div className="filtros-lista">
+                {filtros.categorias.map(cat => (
+                  <button
+                    key={`cat-${cat}`}
+                    className="filtro-btn"
+                    onClick={() => removerFiltro('categorias', cat)}
+                  >× {cat}</button>
+                ))}
+                {filtros.subcategorias.map(sub => (
+                  <button
+                    key={`sub-${sub}`}
+                    className="filtro-btn"
+                    onClick={() => removerFiltro('subcategorias', sub)}
+                  >× {sub}</button>
+                ))}
+                {filtros.tamanhos.map(tam => (
+                  <button
+                    key={`tam-${tam}`}
+                    className="filtro-btn"
+                    onClick={() => removerFiltro('tamanhos', tam)}
+                  >× {tam}</button>
+                ))}
+                {filtros.cores.map(cor => (
+                  <button
+                    key={`cor-${cor}`}
+                    className="filtro-btn"
+                    onClick={() => removerFiltro('cores', cor)}
+                  >× {cor}</button>
+                ))}
+                {(filtros.preco[0] !== 0 || filtros.preco[1] !== 2600) && (
+                  <button
+                    className="filtro-btn"
+                    onClick={() => removerFiltro('preco')}
+                  >
+                    × R$ {filtros.preco[0]} - R$ {filtros.preco[1]}
+                  </button>
+                )}
               </div>
             </div>
+          )}
+
+
+          {/* Filtros por Categoria/Subcategoria/Tamanho */}
+          {ChecksList.map((item, index) => (
+            <details key={index}>
+              <summary>{item.title}</summary>
+              {item.categoriaTamanho ? (
+                item.categoriaTamanho.map((subItem, subIndex) => (
+                  <details key={subIndex} className="tamanho-filtros" open>
+                    <summary>{subItem.tipo}</summary>
+                    <ul className="lista-composta">
+                      {subItem.checksLists.map((check, i) => (
+                        <li key={i}>
+                          <label>
+                            <input type="checkbox" checked={filtros.tamanhos.includes(check)} onChange={() => handleCheckboxChange("tamanhos", check)} /> {check}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ))
+              ) : (
+                <ul className="lista-simples">
+                  {item.checksLists.map((check, i) => (
+                    <li key={i}>
+                      <label>
+                        <input type="checkbox" checked={filtros[item.tipo]?.includes(check)} onChange={() => handleCheckboxChange(item.tipo, check)} /> {check}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </details>
           ))}
-        </div>
+
+          {/* Filtro por Cor */}
+          <details className='details-cor'>
+            <summary>Cor</summary>
+            <div className="filtros-cor">
+              {CoresDisponiveis.map((cor, index) => {
+                const isChecked = filtros.cores.includes(cor);
+                return (
+                  <label key={index} className="cor-label">
+                    <input
+                      type="checkbox"
+                      value={cor}
+                      checked={isChecked}
+                      onChange={() => handleCheckboxChange("cores", cor)}
+                    />
+                    <span
+                      className="cor-circulo"
+                      style={{
+                        backgroundColor: mapaCores[cor] || "transparent",
+                        border: cor === "Branco" ? "1px solid #888" : "none",
+                      }}
+                    >
+                    </span>
+                    {cor}
+                  </label>
+                );
+              })}
+            </div>
+          </details>
 
 
-        <button className="carousel-button right" onClick={scrollRight}>
-          <i className="fa-solid fa-chevron-right"></i>
-        </button>
+          {/* Filtro por Preço */}
+          <div className='faixa-preco'>
+            <h2 className='preco-filtro'>Faixas de preço</h2>
 
-      </div>
+            <div className="range-wrapper">
+              <div className="range-background"></div>
+              <div
+                className="range-highlight"
+                style={{
+                  left: `${(filtros.preco[0] / 2600) * 100}%`,
+                  width: `${((filtros.preco[1] - filtros.preco[0]) / 2600) * 100}%`,
+                }}
+              />
+              <input
+                type="range"
+                min="0"
+                max="2600"
+                step="10"
+                value={filtros.preco[0]}
+                onChange={(e) => handlePrecoChange(e, 0)}
+              />
+              <input
+                type="range"
+                min="0"
+                max="2600"
+                step="10"
+                value={filtros.preco[1]}
+                onChange={(e) => handlePrecoChange(e, 1)}
+              />
+            </div>
+
+            <div className="range-valores">
+              <span>R$ {filtros.preco[0]}</span>
+              <span>R$ {filtros.preco[1]}</span>
+            </div>
+          </div>
 
 
-      <div className="conteiner-masc-prod">
-        <h2>Nossos Produtos:</h2>
-        <div className="masc-produtos">
-          {erro && <p style={{ color: "red" }}>{erro}</p>}
 
-          {produtos.map((prod) => (
-            <Link to={`/produto/${prod.id}`} key={prod.id}>
-              <div className="card-prods">
-                <div>
-                  <img
-                    src={prod.urlImagens[0]}
-                    alt={prod.nome}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
-                    }}
-                  />
+        </aside>
+
+        <main className="content">
+          <div className="masc-produtos">
+            {produtosFiltrados.map((prod) => (
+              <Link to={`/produto/${prod.id}`} key={prod.id}>
+                <div className="card-prods">
+                  <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
+                  <div className="text-card">
+                    <h4 className="nome">{prod.nome}</h4>
+                    <p className="categoria">{prod.categoria}</p>
+                    <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+                  </div>
+                  <div className="btns-actions">
+                    <button onClick={(e) => { e.preventDefault(); adicionarAoCarrinho(prod); }}>Adicionar ao Carrinho</button>
+                  </div>
                 </div>
-                <div className="text-card">
-                  <h4 className="nome">{prod.nome}</h4>
-                  <p className="categoria">{prod.categoria}</p>
-                  <p className="preco">
-                    {prod.preco.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </p>
-                </div>
-                <div className="btns-actions">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      adicionarAoCarrinho(prod);
-                    }}           >
-                    Adicione ao Carrinho
-                  </button>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="ver-mais">
-        <Link>
-          <p>Ver Mais</p>
-        </Link>
-      </div>
-    </div>
+              </Link>
+            ))}
+          </div>
+        </main>
+      </div >
+    </>
   );
 };
 
