@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import './Masculino.css';
-
+import SidebarFiltros from '../../Components/SidebarFiltros';
+import ConteudoMasculino from '../../Components/ConteudoMasculino';
 const Masculino = () => {
   const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [produtosVisiveis, setProdutosVisiveis] = useState(12);
   const [idUsuario, setIdUsuario] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,6 +67,7 @@ const Masculino = () => {
 
   useEffect(() => {
     const buscarProdMasc = async () => {
+      setLoading(true);
       try {
         const response = await fetch("https://localhost:7294/Produto");
         if (!response.ok) throw new Error("Erro ao buscar produtos");
@@ -75,15 +78,19 @@ const Masculino = () => {
           urlImagens: Array.isArray(prod.urlImagens) && prod.urlImagens.length > 0 && typeof prod.urlImagens[0] === "string"
             ? prod.urlImagens
             : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
-
         }));
         setProdutos(produtosComImagem);
+        setErro(null);
       } catch (err) {
         console.error("Erro ao buscar produtos:", err);
         setErro("Não foi possível carregar os produtos.");
+        setProdutos([]);
+      } finally {
+        setLoading(false);
       }
     };
     buscarProdMasc();
+
     const id = localStorage.getItem("idUsuario");
     setIdUsuario(id);
 
@@ -97,7 +104,6 @@ const Masculino = () => {
     };
     setFiltros(filtrosIniciais);
 
-
   }, []);
 
   useEffect(() => {
@@ -105,7 +111,6 @@ const Masculino = () => {
     params.set("page", pagina.toString());
     setSearchParams(params);
   }, [pagina]);
-
 
   const handleCheckboxChange = (tipo, valor) => {
     setFiltros(prev => {
@@ -115,25 +120,18 @@ const Masculino = () => {
     });
   };
 
-
   const handlePrecoChange = (event, index) => {
     const novoValor = parseFloat(event.target.value);
-
     setFiltros(prev => {
       const novoPreco = [...prev.preco];
-
       if (index === 0) {
-        // Preço mínimo não pode ultrapassar o preço máximo
         novoPreco[0] = Math.min(novoValor, novoPreco[1]);
       } else {
-        // Preço máximo não pode ser menor que o preço mínimo
         novoPreco[1] = Math.max(novoValor, novoPreco[0]);
       }
-
       return { ...prev, preco: novoPreco };
     });
   };
-
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -147,9 +145,6 @@ const Masculino = () => {
     setSearchParams(params);
   }, [filtros]);
 
-
-
-  // Função para limpar todos os filtros
   const limparFiltros = () => {
     setFiltros({
       categorias: [],
@@ -160,26 +155,15 @@ const Masculino = () => {
     });
   };
 
-  // Função para remover filtro específico
   const removerFiltro = (tipo, valor) => {
     setFiltros(prev => {
       if (tipo === 'preco') {
-        // Reseta faixa de preço para padrão
         return { ...prev, preco: [0, 2600] };
       }
       const novoFiltro = prev[tipo].filter(item => item !== valor);
       return { ...prev, [tipo]: novoFiltro };
     });
   };
-
-  const temFiltrosAtivos =
-    filtros.categorias.length > 0 ||
-    filtros.subcategorias.length > 0 ||
-    filtros.tamanhos.length > 0 ||
-    filtros.cores.length > 0 ||
-    filtros.preco[0] !== 0 ||
-    filtros.preco[1] !== 2600;
-
 
 
   const produtosFiltrados = produtos.filter(prod => {
@@ -231,157 +215,31 @@ const Masculino = () => {
         </div>
       </div>
       <div className="flex-conteiner">
-        <aside className="sidebar">
-          {temFiltrosAtivos && (
-            <div className="filtros-aplicados-container">
-              <div className="filtros-aplicados-top">
-                <span>FILTROS APLICADOS:</span>
-                <button className="limpar-tudo-btn" onClick={limparFiltros}>Limpar tudo</button>
-              </div>
-              <div className="filtros-lista">
-                {filtros.categorias.map(cat => (
-                  <button
-                    key={`cat-${cat}`}
-                    className="filtro-btn"
-                    onClick={() => removerFiltro('categorias', cat)}
-                  >× {cat}</button>
-                ))}
-                {filtros.subcategorias.map(sub => (
-                  <button
-                    key={`sub-${sub}`}
-                    className="filtro-btn"
-                    onClick={() => removerFiltro('subcategorias', sub)}
-                  >× {sub}</button>
-                ))}
-                {filtros.tamanhos.map(tam => (
-                  <button
-                    key={`tam-${tam}`}
-                    className="filtro-btn"
-                    onClick={() => removerFiltro('tamanhos', tam)}
-                  >× {tam}</button>
-                ))}
-                {filtros.cores.map(cor => (
-                  <button
-                    key={`cor-${cor}`}
-                    className="filtro-btn"
-                    onClick={() => removerFiltro('cores', cor)}
-                  >× {cor}</button>
-                ))}
-                {(filtros.preco[0] !== 0 || filtros.preco[1] !== 2600) && (
-                  <button
-                    className="filtro-btn"
-                    onClick={() => removerFiltro('preco')}
-                  >
-                    × R$ {filtros.preco[0]} - R$ {filtros.preco[1]}
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
+        <SidebarFiltros
+          filtros={filtros}
+          setFiltros={setFiltros}
+          ChecksList={ChecksList}
+          CoresDisponiveis={CoresDisponiveis}
+          mapaCores={mapaCores}
+          handleCheckboxChange={handleCheckboxChange}
+          handlePrecoChange={handlePrecoChange}
+          limparFiltros={limparFiltros}
+          removerFiltro={removerFiltro}
+        />
 
-          {/* Filtros por Categoria/Subcategoria/Tamanho */}
-          {ChecksList.map((item, index) => (
-            <details key={index}>
-              <summary>{item.title}</summary>
-              {item.categoriaTamanho ? (
-                item.categoriaTamanho.map((subItem, subIndex) => (
-                  <details key={subIndex} className="tamanho-filtros" open>
-                    <summary>{subItem.tipo}</summary>
-                    <ul className="lista-composta">
-                      {subItem.checksLists.map((check, i) => (
-                        <li key={i}>
-                          <label>
-                            <input type="checkbox" checked={filtros.tamanhos.includes(check)} onChange={() => handleCheckboxChange("tamanhos", check)} /> {check}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                ))
-              ) : (
-                <ul className="lista-simples">
-                  {item.checksLists.map((check, i) => (
-                    <li key={i}>
-                      <label>
-                        <input type="checkbox" checked={filtros[item.tipo]?.includes(check)} onChange={() => handleCheckboxChange(item.tipo, check)} /> {check}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </details>
-          ))}
-
-          {/* Filtro por Cor */}
-          <details className='details-cor'>
-            <summary>Cor</summary>
-            <div className="filtros-cor">
-              {CoresDisponiveis.map((cor, index) => {
-                const isChecked = filtros.cores.includes(cor);
-                return (
-                  <label key={index} className="cor-label">
-                    <input
-                      type="checkbox"
-                      value={cor}
-                      checked={isChecked}
-                      onChange={() => handleCheckboxChange("cores", cor)}
-                    />
-                    <span
-                      className="cor-circulo"
-                      style={{
-                        backgroundColor: mapaCores[cor] || "transparent",
-                        border: cor === "Branco" ? "1px solid #888" : "none",
-                      }}
-                    >
-                    </span>
-                    {cor}
-                  </label>
-                );
-              })}
-            </div>
-          </details>
-
-          {/* Filtro por Preço */}
-          <div className='faixa-preco'>
-            <h2 className='preco-filtro'>Faixas de preço</h2>
-
-            <div className="range-wrapper">
-              <div className="range-background"></div>
-              <div
-                className="range-highlight"
-                style={{
-                  left: `${(filtros.preco[0] / 2600) * 100}%`,
-                  width: `${((filtros.preco[1] - filtros.preco[0]) / 2600) * 100}%`,
-                }}
-              />
-              <input
-                type="range"
-                min="0"
-                max="2600"
-                step="10"
-                value={filtros.preco[0]}
-                onChange={(e) => handlePrecoChange(e, 0)}
-              />
-              <input
-                type="range"
-                min="0"
-                max="2600"
-                step="10"
-                value={filtros.preco[1]}
-                onChange={(e) => handlePrecoChange(e, 1)}
-              />
-            </div>
-
-            <div className="range-valores">
-              <span>R$ {filtros.preco[0]}</span>
-              <span>R$ {filtros.preco[1]}</span>
-            </div>
-          </div>
-        </aside>
 
         <main className="content">
           <div className="masc-produtos">
-            {produtosFiltrados.length === 0 ? (
+            {loading ? (
+              <div className="carregando">
+                <h3>Carregando...</h3>
+                {/* Aqui você pode colocar um spinner futuramente */}
+              </div>
+            ) : erro ? (
+              <div className="erro">
+                <h3>{erro}</h3>
+              </div>
+            ) : produtosFiltrados.length === 0 ? (
               <div className="nenhum-produto-encontrado">
                 <h3>Nenhum produto encontrado</h3>
                 <p>Tente ajustar os filtros ou limpe todos os filtros.</p>
@@ -406,7 +264,7 @@ const Masculino = () => {
             )}
           </div>
 
-          {produtosFiltrados.length > produtosVisiveis && (
+          {produtosFiltrados.length > produtosVisiveis && !loading && (
             <div className='carregar-mais'>
               <button
                 onClick={() => {
@@ -419,51 +277,9 @@ const Masculino = () => {
               </button>
             </div>
           )}
-
         </main>
       </div >
-      <div className="conteiner-masc-content">
-        <section className='secao-conteudo'>
-          <h2 className='titulo-secao'>Guarda-roupa masculino: por onde começar?</h2>
-          <p className='texto-secao'>
-            O guarda-roupa masculino moderno valoriza a praticidade e qualidade. Na Artenza, você encontra roupas e acessórios que combinam com um estilo de vida ativo e versátil.
-            De looks para o dia a dia até peças ideais para momentos de lazer, temos tudo o que você precisa para se expressar com autenticidade.
-            Um bom começo é investir em peças-chave, como camisetas básicas, calças de corte reto, jaquetas estilosas e acessórios funcionais.
-            Priorize cores neutras que combinam com tudo e tecidos respiráveis para o clima do dia a dia.
-            Montar seu guarda-roupa com foco em qualidade e propósito evita compras por impulso e garante durabilidade.
-          </p>
-        </section>
-
-        <section className='secao-conteudo'>
-          <h2 className='titulo-secao'>Como escolher roupas masculinas?</h2>
-          <p className='texto-secao'>
-            A dica é apostar em peças versáteis! Nossas camisetas, calças, jaquetas, regatas, bermudas e moletons são pensadas para facilitar suas combinações, sem abrir mão do conforto e da estética.
-            Tudo com caimento impecável, tecidos leves e duráveis para acompanhar sua rotina.
-            Leve em consideração o seu estilo pessoal e o tipo de ocasião — casual, esportiva ou urbana — para fazer escolhas assertivas.
-            Apostar em peças que transitam entre diferentes momentos do dia é uma forma inteligente de valorizar o seu investimento em moda masculina.
-          </p>
-        </section>
-
-        <section className='secao-conteudo'>
-          <h2 className='titulo-secao'>Acessórios que fazem a diferença</h2>
-          <p className='texto-secao'>
-            Os acessórios masculinos da Artenza são aliados do seu estilo. Bolsas, mochilas, bonés, viseiras e meias não são apenas funcionais — eles elevam sua produção com personalidade.
-            Para quem valoriza detalhes, investir nesses itens é essencial.
-            Um bom acessório pode transformar um look básico em algo estiloso e autêntico.
-            Além disso, eles oferecem praticidade para o dia a dia, seja para carregar itens, proteger-se do sol ou completar uma composição de forma inteligente.
-          </p>
-        </section>
-
-        <section className='secao-conteudo'>
-          <h2 className='titulo-secao'>Artenza: Moda que acompanha seu ritmo</h2>
-          <p className='texto-secao'>
-            Na Artenza, você encontra uma curadoria de roupas e acessórios pensados para o homem contemporâneo. Complete seu guarda-roupa com estilo e funcionalidade, tudo em um só lugar.
-            Independentemente do seu estilo — esportivo, básico ou urbano —, temos opções que acompanham o seu ritmo com autenticidade.
-            Nossos produtos são desenvolvidos com atenção aos detalhes, priorizando qualidade, conforto e design para atender às exigências do dia a dia.
-            Viver bem é também vestir-se bem. E a Artenza está aqui para ajudar você nessa jornada.
-          </p>
-        </section>
-      </div>
+      <ConteudoMasculino />
     </>
   );
 };
