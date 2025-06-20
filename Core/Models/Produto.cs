@@ -18,5 +18,8 @@ namespace Core.Models
         public string Genero { get; set; }
         public string Tipo { get; set; }      // Para acessórios (Exemplo: "Relógio", "Colar")
         public string Marca { get; set; }
+        public DateTime DataCriacao { get; set; } = DateTime.UtcNow; // para lançamentos
+        public int QuantidadeVendida { get; set; }  // para mais vendidos
+
     }
 }

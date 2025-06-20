@@ -4,10 +4,13 @@ import { useSearchParams } from 'react-router-dom';
 import './Masculino.css';
 import SidebarFiltros from '../../Components/SidebarFiltros';
 import ConteudoMasculino from '../../Components/ConteudoMasculino';
+import SecaoProdutos from '../../Components/SecaoProdutos';
 const Masculino = () => {
   const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   const [produtos, setProdutos] = useState([]);
+  const [produtosMaisVendidos, setProdutosMaisVendidos] = useState([]);
+  const [produtosLancamentos, setProdutosLancamentos] = useState([]);
   const [erro, setErro] = useState(null);
   const [loading, setLoading] = useState(true);
   const [produtosVisiveis, setProdutosVisiveis] = useState(12);
@@ -66,30 +69,44 @@ const Masculino = () => {
   ];
 
   useEffect(() => {
-    const buscarProdMasc = async () => {
+    const buscarDados = async () => {
       setLoading(true);
       try {
-        const response = await fetch("https://localhost:7294/Produto");
-        if (!response.ok) throw new Error("Erro ao buscar produtos");
-        const data = await response.json();
-        const masculinos = data.filter(prod => prod.genero === "Masculino");
-        const produtosComImagem = masculinos.map(prod => ({
+        // TODOS OS PRODUTOS
+        const resTodos = await fetch("https://localhost:7294/Produto");
+        const todosData = await resTodos.json();
+        const masculinos = todosData.filter(prod => prod.genero === "Masculino");
+
+        const formatar = (lista) => lista.map(prod => ({
           ...prod,
           urlImagens: Array.isArray(prod.urlImagens) && prod.urlImagens.length > 0 && typeof prod.urlImagens[0] === "string"
             ? prod.urlImagens
             : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
         }));
-        setProdutos(produtosComImagem);
+
+        setProdutos(formatar(masculinos));
+
+        // MAIS VENDIDOS
+        const resMaisVendidos = await fetch("https://localhost:7294/Produto/mais-vendidos");
+        const dataMaisVendidos = await resMaisVendidos.json();
+        setProdutosMaisVendidos(formatar(dataMaisVendidos.filter(p => p.genero === "Masculino")));
+
+        // LANÇAMENTOS
+        const resLancamentos = await fetch("https://localhost:7294/Produto/lancamentos");
+        const dataLancamentos = await resLancamentos.json();
+        setProdutosLancamentos(formatar(dataLancamentos.filter(p => p.genero === "Masculino")));
+
         setErro(null);
       } catch (err) {
         console.error("Erro ao buscar produtos:", err);
-        setErro("Não foi possível carregar os produtos.");
+        setErro("Erro ao carregar produtos.");
         setProdutos([]);
       } finally {
         setLoading(false);
       }
     };
-    buscarProdMasc();
+
+    buscarDados();
 
     const id = localStorage.getItem("idUsuario");
     setIdUsuario(id);
@@ -103,8 +120,8 @@ const Masculino = () => {
       preco: precoURL && precoURL.length === 2 ? precoURL : [0, 2600],
     };
     setFiltros(filtrosIniciais);
-
   }, []);
+
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -207,7 +224,7 @@ const Masculino = () => {
   };
 
   return (
-    <>
+    <div className='masc-tudo'>
       <div className="conteiner-masc">
         <div className="masc-content">
           <h2 className="title-masc">Masculino</h2>
@@ -227,60 +244,62 @@ const Masculino = () => {
           removerFiltro={removerFiltro}
         />
 
-
         <main className="content">
-          <div className="masc-produtos">
-            {loading ? (
-              <div className="carregando">
-                <h3>Carregando...</h3>
-                {/* Aqui você pode colocar um spinner futuramente */}
-              </div>
-            ) : erro ? (
-              <div className="erro">
-                <h3>{erro}</h3>
-              </div>
-            ) : produtosFiltrados.length === 0 ? (
-              <div className="nenhum-produto-encontrado">
-                <h3>Nenhum produto encontrado</h3>
-                <p>Tente ajustar os filtros ou limpe todos os filtros.</p>
-                <button onClick={limparFiltros} className="btn-limpar-filtros">Limpar</button>
-              </div>
-            ) : (
-              produtosFiltrados.slice(0, produtosVisiveis).map((prod) => (
-                <Link to={`/produto/${prod.id}`} key={prod.id}>
-                  <div className="card-prods">
-                    <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
-                    <div className="text-card">
-                      <h4 className="nome">{prod.nome}</h4>
-                      <p className="categoria">{prod.categoria}</p>
-                      <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+          {loading ? (
+            <div className="carregando"><h3>Carregando...</h3></div>
+          ) : erro ? (
+            <div className="erro"><h3>{erro}</h3></div>
+          ) : (
+            <>
+              <div className="masc-produtos">
+                {produtosFiltrados.map((prod) => (
+                  <Link to={`/produto/${prod.id}`} key={prod.id}>
+                    <div className="card-prods">
+                      <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
+                      <div className="text-card">
+                        <h4 className="nome">{prod.nome}</h4>
+                        <p className="categoria">{prod.categoria}</p>
+                        <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+                      </div>
+                      {/* <div className="btns-actions">
+                        <button onClick={(e) => { e.preventDefault(); adicionarAoCarrinho(prod); }}>Adicionar ao Carrinho</button>
+                      </div> */}
                     </div>
-                    <div className="btns-actions">
-                      <button onClick={(e) => { e.preventDefault(); adicionarAoCarrinho(prod); }}>Adicionar ao Carrinho</button>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            )}
-          </div>
+                  </Link>
+                ))}
+              </div>
 
-          {produtosFiltrados.length > produtosVisiveis && !loading && (
-            <div className='carregar-mais'>
-              <button
-                onClick={() => {
-                  setPagina(prev => prev + 1);
-                  setProdutosVisiveis(prev => prev + 12);
-                }}
-                className="carregar-mais-btn"
-              >
-                Carregar mais
-              </button>
-            </div>
+
+              {produtosFiltrados.length > produtosVisiveis && (
+                <div className='carregar-mais'>
+                  <button onClick={() => {
+                    setPagina(prev => prev + 1);
+                    setProdutosVisiveis(prev => prev + 12);
+                  }} className="carregar-mais-btn">
+                    Carregar mais
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </main>
-      </div >
+      </div>
+      <div>
+        <SecaoProdutos
+          titulo="Mais Vendidos"
+          produtos={produtosMaisVendidos}
+          adicionarAoCarrinho={adicionarAoCarrinho}
+        />
+
+        <SecaoProdutos
+          titulo="Novidades"
+          produtos={produtosLancamentos}
+          adicionarAoCarrinho={adicionarAoCarrinho}
+        />
+      </div>
+
       <ConteudoMasculino />
-    </>
+    </div>
   );
 };
 

@@ -1,11 +1,10 @@
-.conteiner-masc,
-.flex-conteiner,
-.conteiner-masc-content {
+.masc-tudo{
   width: 100%;
-  max-width: 2000px;
+  max-width: 1380px;
   margin: 0 auto;
   padding: 20px 30px;
 }
+
 
 .masc-content {
   display: flex;
@@ -25,15 +24,14 @@
 }
 
 .flex-conteiner {
-  padding: 0;
   display: flex;
+  padding: 20px 0px;
 }
 
 .flex-conteiner .sidebar {
   top: 0;
   align-self: flex-start;
   width: 390px;
-  padding: 30px 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -332,7 +330,6 @@
   z-index: 2;
 }
 
-/* Sliders */
 .range-wrapper input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
@@ -387,13 +384,13 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  padding: 25px;
+  padding: 10px 25px;
   gap: 50px;
-  justify-content: start;
+  justify-content: center;
 }
 
-.card-prods {
-  width: 290px;
+.content .card-prods {
+  width: 270px;
 }
 
 .masc-produtos a {
@@ -416,7 +413,7 @@
 }
 
 .card-prods .nome {
-  font-size: 1.2rem;
+  font-size: 1.08rem;
   margin: 5px 0;
   font-weight: 600;
 }
@@ -508,7 +505,9 @@
 }
 
 /* Parte da descrição da pagina*/
-
+.conteiner-masc-content{
+  margin-top: 100px;
+}
 .conteiner-masc-content .secao-conteudo {
   margin: 20px 0px;
 }
@@ -518,7 +517,7 @@
   line-height: 2.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #2b2a2a;
+  color: #0f0f0f;
 }
 
 .secao-conteudo .texto-secao {
@@ -529,5 +528,72 @@
   color: #333;
   margin-bottom: 0;
 }
+/* 
+@media (max-width: 1024px) {
+  .flex-conteiner {
+    flex-direction: column;
+  }
 
+  .flex-conteiner .sidebar {
+    width: 100%;
+    padding: 10px 15px;
+  }
 
+  .content .masc-produtos {
+    justify-content: center;
+    gap: 30px;
+    padding: 10px;
+  }
+
+  .masc-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .masc-content p {
+    font-size: 1rem;
+  }
+
+  .card-prods {
+    width: 100%;
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 600px) {
+  .conteiner-masc {
+    padding: 10px;
+  }
+
+  .sidebar details > .lista-composta {
+    grid-template-columns: 1fr;
+  }
+
+  .filtros-cor {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .card-prods img {
+    height: 220px;
+  }
+
+  .masc-content h2 {
+    font-size: 1.4rem;
+  }
+
+  .card-prods .nome,
+  .card-prods .preco {
+    font-size: 1rem;
+  }
+
+  .btn-limpar-filtros {
+    font-size: 0.9rem;
+  }
+
+  .carregar-mais .carregar-mais-btn {
+    width: 100%;
+  }
+}
+
+ */
