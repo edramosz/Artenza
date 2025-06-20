@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
-
 import './Masculino.css';
 
 const Masculino = () => {
-
   const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState(null);
+  const [produtosVisiveis, setProdutosVisiveis] = useState(12);
   const [idUsuario, setIdUsuario] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [pagina, setPagina] = useState(Number(searchParams.get("page")) || 1);
   const [filtros, setFiltros] = useState({
     categorias: [],
     subcategorias: [],
@@ -19,8 +19,6 @@ const Masculino = () => {
     cores: [],
     preco: [0, 2600],
   });
-
-
 
   const mapaCores = {
     Amarelo: "#FFD700",
@@ -35,8 +33,6 @@ const Masculino = () => {
     Verde: "#008000",
     Vermelho: "#FF0000"
   };
-
-
 
   const CoresDisponiveis = ["Amarelo", "Azul", "Branco", "Cinza", "Laranja", "Marrom", "Preto", "Rosa", "Roxo", "Verde", "Vermelho"];
 
@@ -103,6 +99,13 @@ const Masculino = () => {
 
 
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pagina.toString());
+    setSearchParams(params);
+  }, [pagina]);
+
 
   const handleCheckboxChange = (tipo, valor) => {
     setFiltros(prev => {
@@ -224,12 +227,11 @@ const Masculino = () => {
       <div className="conteiner-masc">
         <div className="masc-content">
           <h2 className="title-masc">Masculino</h2>
-          <p>({produtosFiltrados.length}) Resultado{produtosFiltrados.length !== 1 ? 's' : ''}</p>
+          <p>{produtosFiltrados.length} Resultado{produtosFiltrados.length !== 1 ? 's' : ''}</p>
         </div>
       </div>
       <div className="flex-conteiner">
         <aside className="sidebar">
-
           {temFiltrosAtivos && (
             <div className="filtros-aplicados-container">
               <div className="filtros-aplicados-top">
@@ -276,7 +278,6 @@ const Masculino = () => {
               </div>
             </div>
           )}
-
 
           {/* Filtros por Categoria/Subcategoria/Tamanho */}
           {ChecksList.map((item, index) => (
@@ -340,7 +341,6 @@ const Masculino = () => {
             </div>
           </details>
 
-
           {/* Filtro por Preço */}
           <div className='faixa-preco'>
             <h2 className='preco-filtro'>Faixas de preço</h2>
@@ -377,31 +377,93 @@ const Masculino = () => {
               <span>R$ {filtros.preco[1]}</span>
             </div>
           </div>
-
-
-
         </aside>
 
         <main className="content">
           <div className="masc-produtos">
-            {produtosFiltrados.map((prod) => (
-              <Link to={`/produto/${prod.id}`} key={prod.id}>
-                <div className="card-prods">
-                  <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
-                  <div className="text-card">
-                    <h4 className="nome">{prod.nome}</h4>
-                    <p className="categoria">{prod.categoria}</p>
-                    <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+            {produtosFiltrados.length === 0 ? (
+              <div className="nenhum-produto-encontrado">
+                <h3>Nenhum produto encontrado</h3>
+                <p>Tente ajustar os filtros ou limpe todos os filtros.</p>
+                <button onClick={limparFiltros} className="btn-limpar-filtros">Limpar</button>
+              </div>
+            ) : (
+              produtosFiltrados.slice(0, produtosVisiveis).map((prod) => (
+                <Link to={`/produto/${prod.id}`} key={prod.id}>
+                  <div className="card-prods">
+                    <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
+                    <div className="text-card">
+                      <h4 className="nome">{prod.nome}</h4>
+                      <p className="categoria">{prod.categoria}</p>
+                      <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+                    </div>
+                    <div className="btns-actions">
+                      <button onClick={(e) => { e.preventDefault(); adicionarAoCarrinho(prod); }}>Adicionar ao Carrinho</button>
+                    </div>
                   </div>
-                  <div className="btns-actions">
-                    <button onClick={(e) => { e.preventDefault(); adicionarAoCarrinho(prod); }}>Adicionar ao Carrinho</button>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))
+            )}
           </div>
+
+          {produtosFiltrados.length > produtosVisiveis && (
+            <div className='carregar-mais'>
+              <button
+                onClick={() => {
+                  setPagina(prev => prev + 1);
+                  setProdutosVisiveis(prev => prev + 12);
+                }}
+                className="carregar-mais-btn"
+              >
+                Carregar mais
+              </button>
+            </div>
+          )}
+
         </main>
       </div >
+      <div className="conteiner-masc-content">
+        <section className='secao-conteudo'>
+          <h2 className='titulo-secao'>Guarda-roupa masculino: por onde começar?</h2>
+          <p className='texto-secao'>
+            O guarda-roupa masculino moderno valoriza a praticidade e qualidade. Na Artenza, você encontra roupas e acessórios que combinam com um estilo de vida ativo e versátil.
+            De looks para o dia a dia até peças ideais para momentos de lazer, temos tudo o que você precisa para se expressar com autenticidade.
+            Um bom começo é investir em peças-chave, como camisetas básicas, calças de corte reto, jaquetas estilosas e acessórios funcionais.
+            Priorize cores neutras que combinam com tudo e tecidos respiráveis para o clima do dia a dia.
+            Montar seu guarda-roupa com foco em qualidade e propósito evita compras por impulso e garante durabilidade.
+          </p>
+        </section>
+
+        <section className='secao-conteudo'>
+          <h2 className='titulo-secao'>Como escolher roupas masculinas?</h2>
+          <p className='texto-secao'>
+            A dica é apostar em peças versáteis! Nossas camisetas, calças, jaquetas, regatas, bermudas e moletons são pensadas para facilitar suas combinações, sem abrir mão do conforto e da estética.
+            Tudo com caimento impecável, tecidos leves e duráveis para acompanhar sua rotina.
+            Leve em consideração o seu estilo pessoal e o tipo de ocasião — casual, esportiva ou urbana — para fazer escolhas assertivas.
+            Apostar em peças que transitam entre diferentes momentos do dia é uma forma inteligente de valorizar o seu investimento em moda masculina.
+          </p>
+        </section>
+
+        <section className='secao-conteudo'>
+          <h2 className='titulo-secao'>Acessórios que fazem a diferença</h2>
+          <p className='texto-secao'>
+            Os acessórios masculinos da Artenza são aliados do seu estilo. Bolsas, mochilas, bonés, viseiras e meias não são apenas funcionais — eles elevam sua produção com personalidade.
+            Para quem valoriza detalhes, investir nesses itens é essencial.
+            Um bom acessório pode transformar um look básico em algo estiloso e autêntico.
+            Além disso, eles oferecem praticidade para o dia a dia, seja para carregar itens, proteger-se do sol ou completar uma composição de forma inteligente.
+          </p>
+        </section>
+
+        <section className='secao-conteudo'>
+          <h2 className='titulo-secao'>Artenza: Moda que acompanha seu ritmo</h2>
+          <p className='texto-secao'>
+            Na Artenza, você encontra uma curadoria de roupas e acessórios pensados para o homem contemporâneo. Complete seu guarda-roupa com estilo e funcionalidade, tudo em um só lugar.
+            Independentemente do seu estilo — esportivo, básico ou urbano —, temos opções que acompanham o seu ritmo com autenticidade.
+            Nossos produtos são desenvolvidos com atenção aos detalhes, priorizando qualidade, conforto e design para atender às exigências do dia a dia.
+            Viver bem é também vestir-se bem. E a Artenza está aqui para ajudar você nessa jornada.
+          </p>
+        </section>
+      </div>
     </>
   );
 };

@@ -1,8 +1,10 @@
-.conteiner-masc {
+.conteiner-masc,
+.flex-conteiner,
+.conteiner-masc-content {
   width: 100%;
   max-width: 2000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 30px;
 }
 
 .masc-content {
@@ -13,19 +15,17 @@
   border-bottom: 1px solid #acacaf;
 }
 
-.masc-content h2{
+.masc-content h2 {
   text-transform: uppercase;
   color: #222;
 }
 
-.masc-content p{
+.masc-content p {
   font-size: 1.1rem;
 }
 
 .flex-conteiner {
-  width: 100%;
-  max-width: 2000px;
-  margin: 0 auto;
+  padding: 0;
   display: flex;
 }
 
@@ -33,7 +33,6 @@
   top: 0;
   align-self: flex-start;
   width: 390px;
-  min-height: 100vh;
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
@@ -51,7 +50,7 @@
   font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
-  color: #000000;
+  color: var(--color-black);
   transition: background-color 0.2s, color 0.2s, border ease;
   border-bottom: 2px solid #88888870;
 }
@@ -107,7 +106,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 7px solid #000;
+  border: 7px solid var(--color-black);
 }
 
 .cor-circulo {
@@ -120,7 +119,7 @@
 
 .cor-ativa,
 .cor-ativa:hover {
-  border: 2px solid black !important;
+  border: 2px solid var(--color-black) !important;
 }
 
 @keyframes fadeIn {
@@ -196,13 +195,13 @@
   gap: 1rem;
   font-size: 0.95rem;
   cursor: pointer;
-  color: #000000;
+  color: var(--color-black);
   transition: color 0.2s;
   margin-bottom: 10px;
 }
 
 .sidebar details label:hover {
-  color: #000000;
+  color: var(--color-black);
   font-weight: 600;
 }
 
@@ -210,9 +209,9 @@
   appearance: none;
   width: 18px;
   height: 18px;
-  border: 2px solid #030303e7;
+  border: 2px solid var(--color-black);
   border-radius: 6px;
-  background-color: white;
+  background-color: var(--color-white);
   cursor: pointer;
   position: relative;
 }
@@ -228,7 +227,7 @@
   left: 4px;
   width: 5px;
   height: 8px;
-  border: solid #000000;
+  border: solid var(--color-black);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   display: none;
@@ -238,11 +237,10 @@
   display: block;
 }
 
-
 .sidebar .filtros-aplicados-top {
-  color: #000;
+  color: var(--color-black);
   font-weight: 600;
-  font-size: 1.0rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -255,14 +253,18 @@
   white-space: nowrap;
 }
 
-.sidebar .limpar-tudo-btn {  
+.sidebar .limpar-tudo-btn {
   color: var(--color-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
-  text-decoration: underline;
   font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.sidebar .limpar-tudo-btn:hover {
+  color: var(--color-black);
 }
 
 .sidebar .filtros-lista {
@@ -281,7 +283,7 @@
   font-size: 14px;
   font-weight: 500;
   color: #2c2c2c;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
 }
 
 .sidebar .filtro-btn:hover {
@@ -438,9 +440,94 @@
   height: 38px;
   border: none;
   background-color: #111;
-  color: #fff;
+  color: var(--color-white);
   cursor: pointer;
   border-radius: 5px;
   width: 100%;
   padding: 4px 10px;
 }
+
+
+.nenhum-produto-encontrado {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  width: 100%;
+  height: 400px;
+}
+
+.nenhum-produto-encontrado h3 {
+  font-size: 1.9rem;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  color: var(--color-black);
+}
+
+.btn-limpar-filtros {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  padding: 5px 14px;
+  font-size: 1.0rem;
+  cursor: pointer;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.btn-limpar-filtros:hover {
+  background-color: #242323;
+}
+
+
+.carregar-mais {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center; 
+  padding: 10px;
+  margin: 20px 0px;
+}
+
+.carregar-mais .carregar-mais-btn {
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-transform: none;
+  height: 38px;
+  border: none;
+  background-color: #111;
+  color: var(--color-white);
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px 14px;
+  text-transform: uppercase;
+}
+
+/* Parte da descrição da pagina*/
+
+.conteiner-masc-content .secao-conteudo {
+  margin: 20px 0px;
+}
+
+.secao-conteudo .titulo-secao {
+  font-size: 1.55rem;
+  line-height: 2.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #2b2a2a;
+}
+
+.secao-conteudo .texto-secao {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333;
+  margin-bottom: 0;
+}
+
+
