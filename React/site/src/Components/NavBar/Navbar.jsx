@@ -95,36 +95,54 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="search">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                console.log("Buscando por:", searchTerm);
-              }}
-            >
-              <div className="search-item">
-                <input
-                  type="search"
-                  name="searchInput"
-                  placeholder="Buscar produtos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                {searchTerm && (
-                  <button
-                    type="button"
-                    className="clear-btn"
-                    onClick={() => setSearchTerm("")}
-                  >
-                    <i className="fa fa-times" />
-                  </button>
-                )}
-                <button type="submit" className="search-btn">
-                  <i className="fa fa-search" />
-                </button>
-              </div>
-            </form>
+  <form
+    onSubmit={async (e) => {
+      e.preventDefault();
 
-          </div>
+      try {
+        const response = await fetch("http://localhost:5000/buscar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ termo: searchTerm }),
+        });
+
+        if (!response.ok) throw new Error("Erro na busca");
+
+        const resultados = await response.json();
+        console.log("Resultados:", resultados);
+
+        // Aqui você pode usar setResultados(resultados);
+      } catch (err) {
+        console.error("Erro:", err);
+      }
+    }}
+  >
+    <div className="search-item">
+      <input
+        type="search"
+        name="searchInput"
+        placeholder="Buscar produtos..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {searchTerm && (
+        <button
+          type="button"
+          className="clear-btn"
+          onClick={() => setSearchTerm("")}
+        >
+          <i className="fa fa-times" />
+        </button>
+      )}
+      <button type="submit" className="search-btn">
+        <i className="fa fa-search" />
+      </button>
+    </div>
+  </form>
+</div>
+
           <div className="menu-user">
             <ul>
               {usuarioLogado ? (

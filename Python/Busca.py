@@ -1,43 +1,59 @@
+# app.py
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from firebase_admin import credentials, db
 import firebase_admin
-import numpy as np
+from firebase_admin import credentials, db
 
-# Carrega modelo de embeddings
-model = SentenceTransformer("all-MiniLM-L6-v2")
+# Inicializa o Flask e permite CORS
+app = Flask(__name__)
+CORS(app)
 
-# Inicializa o Firebase com Realtime Database
+# Inicializa o Firebase
 cred = credentials.Certificate("seu-arquivo-firebase.json")
 firebase_admin.initialize_app(cred, {
     "databaseURL": "https://trabalhofinalloja-default-rtdb.firebaseio.com/"
 })
 
-def buscar_produtos_semelhantes(texto):
-    # Vetor da consulta
-    vetor_consulta = model.encode([texto])
+# Carrega o modelo de embeddings
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    # Referência ao caminho 'produtos' no Realtime Database
-    ref = db.reference("produtos")
-    produtos_dict = ref.get()
+# Rota para receber a string de busca
+@app.route("/buscar", methods=["POST"])
+def buscar():
+    data = request.get_json()
+    termo = data.get("termo")
 
-    produtos = []
-    vetores = []
+    if not termo:
+        return jsonify({"erro": "Termo de busca não fornecido"}), 400
 
-    for produto_id, data in produtos_dict.items():
-        if "vetor" in data:
-            produtos.append({**data, "id": produto_id})  # adiciona o ID ao dict
-            vetores.append(data["vetor"])
+    # Exemplo: busca no Firebase
+    ref = db.reference("produtos")  # substitua pelo seu caminho no Firebase
+    dados = ref.get()
 
-    if not vetores:
-        return []
+    if not dados:
+        return jsonify([])
 
-    # Converte vetores para array numpy
-    vetores = np.array(vetores)
-    similares = cosine_similarity(vetor_consulta, vetores)[0]
+    resultados = []
 
-    # Ordena os índices pela similaridade (maior primeiro)
-    indices = np.argsort(similares)[::-1][:5]
+    emb_busca = model.encode([termo])[0]
 
-    # Retorna os 5 produtos mais semelhantes
-    return [produtos[i] for i in indices]
+    for chave, item in dados.items():
+        nome = item.get("nome", "")
+        emb_nome = model.encode([nome])[0]
+        similaridade = cosine_similarity([emb_busca], [emb_nome])[0][0]
+
+        resultados.append({
+            "id": chave,
+            "nome": nome,
+            "similaridade": round(float(similaridade), 4)
+        })
+
+    # Ordena por maior similaridade
+    resultados.sort(key=lambda x: x["similaridade"], reverse=True)
+
+    return jsonify(resultados)
+
+if __name__ == "__main__":
+    app.run(debug=True)
