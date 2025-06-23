@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './SecaoProdutos.css';
 
-const SecaoProdutos = ({ titulo, produtos, adicionarAoCarrinho }) => {
+const SecaoProdutos = ({ titulo, produtos }) => {
     const carrosselRef = useRef(null);
     const [showLeft, setShowLeft] = useState(false);
     const [showRight, setShowRight] = useState(false);
@@ -75,7 +75,7 @@ const SecaoProdutos = ({ titulo, produtos, adicionarAoCarrinho }) => {
                                     />
                                     <div className="text-card">
                                         <h4 className="nome">{prod.nome}</h4>
-                                        <p className="categoria">{prod.categoria}</p>
+                                        <p className="categoria">{prod.categoria}</p>      
                                         <p className="preco">
                                             {prod.preco.toLocaleString("pt-BR", {
                                                 style: "currency",

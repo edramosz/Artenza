@@ -11,5 +11,6 @@ namespace Core.Models.DTO_s.Create
         public string IdUsuario { get; set; }
         public string IdProduto { get; set; }
         public int Quantidade { get; set; }
+        public string Tamanho { get; set; }
     }
 }

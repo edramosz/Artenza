@@ -1,3 +1,7 @@
+.secoes-prods{
+  margin-top: 100px;
+}
+
 .secao-prod{
   width: 100%;
   max-width: 1240px;
@@ -41,7 +45,7 @@
   top: 40%;
   transform: translateY(-40%);
   font-size: 1.5rem;
-  background: var(--color-black);
+  background: #363636;
   color: var(--color-white);
   border: none;
   border-radius: 50px;
