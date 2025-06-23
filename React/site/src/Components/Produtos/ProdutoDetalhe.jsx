@@ -97,7 +97,10 @@ const ProdutoDetalhe = () => {
         <div className="info-produto">
           <h2 className="name-prod">{produto.nome}</h2>
           <p className="tipo-prod">{produto.tipo}</p>
-          <p className="descricao">{produto.descricao}</p>
+          <div className="descricao-div">
+            <p className="descricao">{produto.descricao}</p>
+            <a href="#descrição">ver-mais</a>
+          </div>
 
           <div className="avaliacoes">
             <p className="avaliacao">
@@ -108,7 +111,7 @@ const ProdutoDetalhe = () => {
               <FontAwesomeIcon icon={faStar} />
               <span>4.7</span>
             </p>
-            <a href="#sobre">ver avaliações</a>
+
           </div>
 
           <div className="detalhes-produto">
@@ -126,7 +129,7 @@ const ProdutoDetalhe = () => {
                   <button
                     key={tam}
                     className={tamanhoSelecionado === tam ? 'selecionado' : ''}
-                    onClick={() => setTamanhoSelecionado(tam)}                   
+                    onClick={() => setTamanhoSelecionado(tam)}
                   >
                     {tam}
                   </button>
@@ -149,8 +152,58 @@ const ProdutoDetalhe = () => {
         </div>
       </div>
 
-      <section id="sobre" style={{ height: '500px' }}>
-        <p>jskjskj</p>
+      <section id="descrição">
+        <div className="info-prods">
+          <h2 className="title-info">Detalhes do Produtos</h2>
+          <p className="descr">{produto.descricao}</p>
+        </div>
+        <div className="ficha-container">
+          <h2 className="title-info">Informações Técnicas</h2>
+          <table className="tabela-info">
+            <tbody>
+              <tr>
+                <td><strong>Categoria:</strong></td>
+                <td>{produto.categoria}</td>
+              </tr>
+              <tr>
+                <td><strong>Estoque Disponível:</strong></td>
+                <td>{produto.estoque}</td>
+              </tr>
+              <tr>
+                <td><strong>Tamanhos Disponíveis:</strong></td>
+                <td>{obterTamanhos().join(', ')}</td>
+              </tr>
+              <tr>
+                <td><strong>Material:</strong></td>
+                <td>{produto.material}</td>
+              </tr>
+              <tr>
+                <td><strong>Cor:</strong></td>
+                <td>{produto.cor}</td>
+              </tr>
+              <tr>
+                <td><strong>Gênero:</strong></td>
+                <td>{produto.genero}</td>
+              </tr>
+              <tr>
+                <td><strong>Tipo:</strong></td>
+                <td>{produto.tipo}</td>
+              </tr>
+              <tr>
+                <td><strong>Marca:</strong></td>
+                <td>{produto.marca}</td>
+              </tr>
+              <tr>
+                <td><strong>Quantidade Vendida:</strong></td>
+                <td>{produto.quantidadeVendida}</td>
+              </tr>
+              <tr>
+                <td><strong>Data de Cadastro:</strong></td>
+                <td>{new Date(produto.dataCriacao).toLocaleDateString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
