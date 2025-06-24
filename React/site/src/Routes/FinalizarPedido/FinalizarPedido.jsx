@@ -213,6 +213,7 @@ function FinalizarPedido() {
               <div>
                 <p><strong>{produto.nome}</strong></p>
                 <p>Quantidade: {item.quantidade}</p>
+                <p>Tamanho: {item.tamanho}</p>
                 <p>Preço unitário: R$ {produto.preco?.toFixed(2)}</p>
                 <p>Subtotal: R$ {(produto.preco * item.quantidade).toFixed(2)}</p>
               </div>

@@ -156,6 +156,8 @@ function Carrinho() {
               <div className="atributos-carrinho">
                 <div className="items-imp">
                   <p>{produto.nome}</p>
+                  <p><strong>Tamanho:</strong> {item.tamanho}</p>
+
                 </div>
                 <div className="items-atributos">
                   <p>R$ {produto.preco?.toFixed(2)}</p>

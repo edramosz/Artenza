@@ -124,5 +124,17 @@ namespace API.Controllers
             await _produtoService.DeleteProdutoAsync(id);
             return NoContent();
         }
+
+
+        /// <summary>
+        /// Endpoint para listar os produtos mais recentes (lançamentos).
+        /// </summary>
+        [HttpGet("lancamentos")]
+        public async Task<ActionResult<List<Produto>>> GetLancamentos()
+        {
+            var produtos = await _produtoService.ObterLancamentosAsync();
+            return Ok(produtos);
+        }
+
     }
 }
