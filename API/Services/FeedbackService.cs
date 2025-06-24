@@ -37,7 +37,7 @@ namespace API.Services
             var feedback = (await _firebaseClient
                 .Child("feedbacks")
                 .OnceAsync<Feedback>())
-                .FirstOrDefault(p => p.Object.Id.ToString() == id)?.Object;//metodo LINQ
+                .FirstOrDefault(p => p.Object.Id == id)?.Object; // comparar direto id, pois Id já é string
 
             return feedback;
         }
@@ -46,6 +46,10 @@ namespace API.Services
         public async Task<Feedback> AddFeedbackAsync(CreateFeedback feedbackDto)
         {
             var feedback = _mapper.Map<Feedback>(feedbackDto);
+
+            // Setar DataCriacao na hora da criação se não veio no DTO
+            if (feedback.DataCriacao == default)
+                feedback.DataCriacao = DateTime.UtcNow;
 
             // Primeiro cria o documento no Firebase
             var response = await _firebaseClient
@@ -61,7 +65,6 @@ namespace API.Services
                 .Child(feedback.Id)
                 .PutAsync(feedback);
 
-            // Adicionar o ID do feedback ao usuario através de algum modo
             return feedback;
         }
 
