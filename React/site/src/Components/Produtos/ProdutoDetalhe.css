@@ -31,15 +31,15 @@
   box-shadow: 5px 5px 15px 4px #aaaaaa2c;
 }
 
-.imagem-produto:hover {
-}
+.imagem-produto:hover {}
+
 .info-produto {
   flex: 1;
   color: #000000ef;
   padding: 10px;
   height: auto;
   position: sticky;
-  top: 20px; 
+  top: 20px;
 }
 
 .btn-voltar {
@@ -97,7 +97,8 @@
   font-size: 1.1rem;
   color: #000000f5;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* número de linhas visíveis */
+  -webkit-line-clamp: 2;
+  /* número de linhas visíveis */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -224,5 +225,8 @@
   font-weight: 600;
 }
 
+.feedback-container {
+  padding: 10px;
+  align-items: center;
 
-
+}

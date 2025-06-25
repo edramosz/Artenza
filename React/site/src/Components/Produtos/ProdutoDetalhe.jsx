@@ -391,28 +391,33 @@ const ProdutoDetalhe = () => {
       </div>
 
       <div className="feedback-container">
-        <h3 className='title-feedback'>Avaliações do Produto</h3>
-
         <div className="filtro-estrelas">
-          <span className="media-nota">{mediaNotas.toFixed(1)} de 5.0 </span>
-          <button
-            onClick={() => setFiltroEstrela(null)}
-            className={filtroEstrela === null ? 'ativo' : ''}
-          >
-            Tudo
-          </button>
-          {[5, 4, 3, 2, 1].map(nota => {
-            const count = feedbacks.filter(f => f.nota === nota).length;
-            return (
+          <div className="header-feedback">
+            <div className="filtros-titles">
+              <h3 className='title-feedback'>Avaliações do Produto</h3>
+              <span className="media-nota">{mediaNotas.toFixed(1)} de 5.0 </span>
+            </div>
+            <div className="btns-filtros">
               <button
-                key={nota}
-                onClick={() => setFiltroEstrela(nota)}
-                className={filtroEstrela === nota ? 'ativo' : ''}
+                onClick={() => setFiltroEstrela(null)}
+                className={filtroEstrela === null ? 'ativo' : ''}
               >
-                {nota} Estrela{nota > 1 ? 's' : ''} ({count})
+                Tudo
               </button>
-            );
-          })}
+              {[5, 4, 3, 2, 1].map(nota => {
+                const count = feedbacks.filter(f => f.nota === nota).length;
+                return (
+                  <button
+                    key={nota}
+                    onClick={() => setFiltroEstrela(nota)}
+                    className={filtroEstrela === nota ? 'ativo' : ''}
+                  >
+                    {nota} Estrela{nota > 1 ? 's' : ''} ({count})
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
 
@@ -432,15 +437,16 @@ const ProdutoDetalhe = () => {
                   alt="Foto do usuário"
                   className="foto-perfil-feedback"
                 />
-                <div>
-                  <p><strong>{fb.nomeUsuario}</strong> em {new Date(fb.dataCriacao).toLocaleDateString()}</p>
-                  <p>
-                    <Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}
-                  </p>
-                </div>
+                <p><span>{fb.nomeUsuario}</span></p>
+                <p> {new Date(fb.dataCriacao).toLocaleDateString()}</p>
               </div>
-              <p><strong>{fb.titulo}</strong></p>
-              <p>{fb.comentario}</p>
+              <div>
+                <p><Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}</p>
+              </div>
+              <div>
+                <p><strong>{fb.titulo}</strong></p>
+                <p>{fb.comentario}</p>
+              </div>
             </li>
           ))}
         </ul>
