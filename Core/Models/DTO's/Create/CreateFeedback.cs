@@ -13,5 +13,7 @@ namespace Core.Models.DTO_s.Create
         public int Nota { get; set; }
         public string NomeUsuario { get; set; }
         public DateTime DataCriacao { get; set; }
+        public string PerfilUrl { get; set; }
+
     }
 }

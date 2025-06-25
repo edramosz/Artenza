@@ -15,7 +15,9 @@ namespace Core.Models
         public int Nota { get; set; }
         public string Titulo { get; set; }
         public string NomeUsuario { get; set; }
-        public DateTime DataCriacao { get; set; } 
+        public DateTime DataCriacao { get; set; }
+        public string PerfilUrl { get; set; }
+
     }
 
 }

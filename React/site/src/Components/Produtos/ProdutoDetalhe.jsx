@@ -28,9 +28,12 @@ const ProdutoDetalhe = () => {
   const [carregando, setCarregando] = useState(true);
   const [idUsuario, setIdUsuario] = useState(null);
   const [nomeUsuario, setNomeUsuario] = useState("");
+  const [urlUsuario, setUrlUsuario] = useState("");
   const [erro, setErro] = useState(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState(null);
   const [produtosRelacionados, setProdutosRelacionados] = useState([]);
+  const [filtroEstrela, setFiltroEstrela] = useState(null);
+
 
   // Feedbacks e avaliação
   const [feedbacks, setFeedbacks] = useState([]);
@@ -92,11 +95,17 @@ const ProdutoDetalhe = () => {
 
     const nomeSalvo = localStorage.getItem("nomeUsuario") || "";
     setNomeUsuario(nomeSalvo);
+
+    const urlSalva = localStorage.getItem("perfilUrl") || "";
+    setUrlUsuario(urlSalva);
+
+    console.log(localStorage.getItem("perfilUrl"));
+
   }, []);
 
   const carregarFeedbacks = async (idProduto) => {
     try {
-      // Aqui supondo que sua API aceite query param idProduto
+
       const response = await fetch(`https://localhost:7294/api/Feedback?idProduto=${idProduto}`);
       if (!response.ok) throw new Error("Erro ao carregar feedbacks");
       const dados = await response.json();
@@ -122,6 +131,10 @@ const ProdutoDetalhe = () => {
     return [];
   };
 
+  const feedbacksFiltrados = filtroEstrela
+    ? feedbacks.filter(f => f.nota === filtroEstrela)
+    : feedbacks;
+
   const adicionarAoCarrinho = async () => {
     if (!idUsuario) {
       alert("Você precisa estar logado.");
@@ -133,8 +146,50 @@ const ProdutoDetalhe = () => {
       return;
     }
 
-    alert(`Produto ${produto.nome} no tamanho ${tamanhoSelecionado} adicionado ao carrinho!`);
+    const idProduto = produto.id;
+
+    try {
+      const resposta = await fetch("https://localhost:7294/Carrinho");
+      const todos = await resposta.json();
+
+      const existente = todos.find(c =>
+        c.idUsuario === idUsuario &&
+        c.idProduto === idProduto &&
+        c.tamanho === tamanhoSelecionado // compara também o tamanho!
+      );
+
+      if (existente) {
+        const novaQuantidade = existente.quantidade + 1;
+        await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUsuario,
+            idProduto,
+            quantidade: novaQuantidade,
+            tamanho: tamanhoSelecionado // envia tamanho no PUT também
+          })
+        });
+      } else {
+        await fetch("https://localhost:7294/Carrinho", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUsuario,
+            idProduto,
+            quantidade: 1,
+            tamanho: tamanhoSelecionado // envia tamanho no POST
+          })
+        });
+      }
+
+      alert(`Produto ${produto.nome} no tamanho ${tamanhoSelecionado} adicionado ao carrinho!`);
+    } catch (err) {
+      console.error("Erro ao adicionar:", err);
+      alert("Erro ao adicionar ao carrinho.");
+    }
   };
+
 
   const enviarFeedback = async () => {
     if (!nomeUsuario) {
@@ -162,7 +217,9 @@ const ProdutoDetalhe = () => {
       nota: novaNota,
       nomeUsuario: nomeUsuario,
       dataCriacao: new Date().toISOString(),
+      perfilUrl: urlUsuario
     };
+
 
     try {
       const response = await fetch("https://localhost:7294/api/Feedback", {
@@ -334,23 +391,60 @@ const ProdutoDetalhe = () => {
       </div>
 
       <div className="feedback-container">
-        <h3>Avaliações do Produto</h3>
+        <h3 className='title-feedback'>Avaliações do Produto</h3>
+
+        <div className="filtro-estrelas">
+          <span className="media-nota">{mediaNotas.toFixed(1)} de 5.0 </span>
+          <button
+            onClick={() => setFiltroEstrela(null)}
+            className={filtroEstrela === null ? 'ativo' : ''}
+          >
+            Tudo
+          </button>
+          {[5, 4, 3, 2, 1].map(nota => {
+            const count = feedbacks.filter(f => f.nota === nota).length;
+            return (
+              <button
+                key={nota}
+                onClick={() => setFiltroEstrela(nota)}
+                className={filtroEstrela === nota ? 'ativo' : ''}
+              >
+                {nota} Estrela{nota > 1 ? 's' : ''} ({count})
+              </button>
+            );
+          })}
+        </div>
+
+
 
         {feedbacks.length === 0 && <p>Este produto ainda não possui avaliações.</p>}
+        {feedbacksFiltrados.length === 0 && (
+          <p>Nenhum feedback encontrado com {filtroEstrela} estrela(s).</p>
+        )}
+
 
         <ul className="lista-feedbacks">
-          {feedbacks.map(fb => (
+          {feedbacksFiltrados.map(fb => (
             <li key={fb.id} className="feedback-item">
-
-              <p><em>{fb.nomeUsuario}</em> em {new Date(fb.dataCriacao).toLocaleDateString()}</p>
-              <p>
-                <Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}
-              </p>
+              <div className="feedback-header">
+                <img
+                  src={fb.perfilUrl || "https://via.placeholder.com/40?text=U"}
+                  alt="Foto do usuário"
+                  className="foto-perfil-feedback"
+                />
+                <div>
+                  <p><strong>{fb.nomeUsuario}</strong> em {new Date(fb.dataCriacao).toLocaleDateString()}</p>
+                  <p>
+                    <Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}
+                  </p>
+                </div>
+              </div>
               <p><strong>{fb.titulo}</strong></p>
               <p>{fb.comentario}</p>
             </li>
           ))}
         </ul>
+
 
         <h4>Deixe sua avaliação</h4>
         <input
