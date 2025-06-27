@@ -230,3 +230,134 @@
   align-items: center;
 
 }
+
+
+.feedback-container {
+  margin-top: 40px;
+  padding: 20px;
+}
+
+.filtro-estrelas {
+  margin-bottom: 20px;
+}
+
+.header-feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filtros-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-feedback {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.media-nota {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.btns-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btns-filtros button.ativo,
+.btns-filtros button:hover {
+  background-color: #111;
+  color: #fff;
+}
+
+.lista-feedbacks {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.feedback-item {
+  border-bottom: 1px solid #ccc;
+  padding: 15px 0;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.foto-perfil-feedback {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.feedback-item span {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #000;
+}
+
+.feedback-item p {
+  margin: 2px 0;
+  font-size: 0.95rem;
+}
+
+.feedback-item strong {
+  font-size: 1.05rem;
+  color: #111;
+}
+
+.feedback-container input[type="text"],
+.feedback-container textarea,
+.feedback-container select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  border: 1.8px solid #aaa;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s;
+}
+
+.feedback-container input[type="text"]:focus,
+.feedback-container textarea:focus,
+.feedback-container select:focus {
+  border-color: #111;
+  outline: none;
+}
+
+.feedback-container textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.feedback-container button {
+  background-color: #111;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.feedback-container button:hover {
+  background-color: #222;
+}
