@@ -15,7 +15,7 @@ const Estrelas = ({ nota, max = 5 }) => {
       <FontAwesomeIcon
         key={i}
         icon={faStarFull}
-        style={{ color: i <= nota ? "#FFD700" : "#ccc", marginRight: 2 }}
+        style={{ color: i <= nota ? "#111" : "#ccc", marginRight: 2 }}
       />
     );
   }
@@ -32,6 +32,8 @@ const ProdutoDetalhe = () => {
   const [erro, setErro] = useState(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState(null);
   const [produtosRelacionados, setProdutosRelacionados] = useState([]);
+  const [quantidadeExibida, setQuantidadeExibida] = useState(3);
+
   const [filtroEstrela, setFiltroEstrela] = useState(null);
 
 
@@ -279,28 +281,32 @@ const ProdutoDetalhe = () => {
             <h2 className="name-prod">{produto.nome}</h2>
             <span className='heart'><FontAwesomeIcon icon={faHeart} /></span>
           </div>
+
           <p className="tipo-prod">{produto.tipo}</p>
+
+          <div className="media-avaliacoes">
+            <Estrelas nota={Math.round(mediaNotas)} />
+            <span className='media-num'> {mediaNotas.toFixed(1)}</span>
+          </div>
+
+          <p className="preco">
+            {produto.preco.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </p>
+
           <div className="descricao-div">
             <p className="descricao">{produto.descricao}</p>
             <a href="#descrição">ver-mais</a>
           </div>
 
-          {/* Aqui exibimos a média das avaliações com estrelas */}
-          <div className="media-avaliacoes">
-            <Estrelas nota={Math.round(mediaNotas)} />
-            <span> {mediaNotas.toFixed(1)}</span>
-          </div>
+
 
           <div className="detalhes-produto">
-            <p className="preco">
-              {produto.preco.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
 
+            <h4 className="title-tamanho">Tamanhos disponíveis:</h4>
             <div className="filtro-tamanhos">
-              <h4 className="title-tamanho">Tamanhos disponíveis:</h4>
               {tamanhos.length > 0 ? (
                 tamanhos.map((tam) => (
                   <button
@@ -429,27 +435,36 @@ const ProdutoDetalhe = () => {
 
 
         <ul className="lista-feedbacks">
-          {feedbacksFiltrados.map(fb => (
+          {feedbacksFiltrados.slice(0, quantidadeExibida).map(fb => (
             <li key={fb.id} className="feedback-item">
+              <div>
+                <p><Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}</p>
+              </div>
               <div className="feedback-header">
                 <img
                   src={fb.perfilUrl || "https://via.placeholder.com/40?text=U"}
                   alt="Foto do usuário"
                   className="foto-perfil-feedback"
                 />
-                <p><span>{fb.nomeUsuario}</span></p>
-                <p> {new Date(fb.dataCriacao).toLocaleDateString()}</p>
+                <p className='nome-feedback'>{fb.nomeUsuario}</p>
+                <p className='data-feedback'>{new Date(fb.dataCriacao).toLocaleDateString()}</p>
               </div>
               <div>
-                <p><Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}</p>
-              </div>
-              <div>
-                <p><strong>{fb.titulo}</strong></p>
-                <p>{fb.comentario}</p>
+                <p className='tile-feedback'>{fb.titulo}</p>
+                <p className='comentario-feedback'>"{fb.comentario}"</p>
               </div>
             </li>
           ))}
         </ul>
+        {quantidadeExibida < feedbacksFiltrados.length && (
+          <button
+            className="btn-carregar-mais"
+            onClick={() => setQuantidadeExibida(quantidadeExibida + 3)}
+          >
+            Carregar-mais
+          </button>
+        )}
+
 
 
         <h4>Deixe sua avaliação</h4>
