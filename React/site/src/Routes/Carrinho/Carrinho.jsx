@@ -139,6 +139,17 @@ function Carrinho() {
       <div className="lista-carrinho">
         <h1>Meu Carrinho</h1>
 
+        <div className="cabecalho-carrinho">
+          <span className="col-checkbox"></span>
+          <span className="col-produto">Produto</span>
+          <span className="col-tamanho">Tamanho</span>
+          <span className="col-preco">Preço</span>
+          <span className="col-quantidade">Quantidade</span>
+          <span className="col-subtotal">Subtotal</span>
+          <span className="col-acoes">Ações</span>
+        </div>
+
+
         {itensCarrinho.map(item => {
           const produto = getProduto(item.idProduto);
           return (
@@ -176,8 +187,7 @@ function Carrinho() {
                 </div>
 
                 <div className="items-atributos">
-                  <div className="quantidade-controls">
-                    <span>Quantidade:</span>
+                  <div className="quantidade-controls">                    
                     <div className="botoes-qtd">
                       <button
                         onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)}
