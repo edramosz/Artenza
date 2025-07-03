@@ -38,6 +38,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Endereco>> GetEndereco(string id)
         {
+            
             var endereco = await _enderecoService.GetEnderecoAsync(id);
             if (endereco == null)
                 return NotFound();

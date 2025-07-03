@@ -140,73 +140,80 @@ function Carrinho() {
         <h1>Meu Carrinho</h1>
 
         <div className="cabecalho-carrinho">
-          <span className="col-checkbox"></span>
-          <span className="col-produto">Produto</span>
-          <span className="col-tamanho">Tamanho</span>
-          <span className="col-preco">Preço</span>
-          <span className="col-quantidade">Quantidade</span>
-          <span className="col-subtotal">Subtotal</span>
-          <span className="col-acoes">Ações</span>
+          <div className="col-checkbox"></div>
+          <div className="col-img"></div>
+          <div className="col-produto">Produto</div>
+          <div className="col-tamanho">Tamanho</div>
+          <div className="col-preco">Preço</div>
+          <div className="col-quantidade">Qtd.</div>
+          <div className="col-subtotal">Subtotal</div>
+          <div className="col-remover"></div>
         </div>
-
 
         {itensCarrinho.map(item => {
           const produto = getProduto(item.idProduto);
           return (
             <div key={item.id} className="item-carrinho">
-              <input
-                type="checkbox"
-                checked={selecionados[item.id] || false}
-                onChange={() => toggleSelecionado(item.id)}
-              />
+              <div className="col-checkbox">
+                <input
+                  type="checkbox"
+                  checked={selecionados[item.id] || false}
+                  onChange={() => toggleSelecionado(item.id)}
+                />
+              </div>
 
-              <img
-                className="img-item"
-                src={
-                  Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
-                    ? produto.urlImagens[0]
-                    : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"
-                }
-                alt={produto.nome}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
-                }}
-              />
+              <div className="col-img">
+                <img
+                  className="img-item"
+                  src={
+                    Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
+                      ? produto.urlImagens[0]
+                      : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"
+                  }
+                  alt={produto.nome}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
+                  }}
+                />
+              </div>
 
-              <div className="atributos-carrinho">
-                <div className="items-imp">
-                  <p>{produto.nome}</p>
-                  <p>{produto.tipo}</p>
-                  <p>{produto.categoria}</p>
-                  <p>{item.tamanho}</p>
-                </div>
+              <div className="col-produto">
+                <p>{produto.nome}</p>
+                <p>{produto.tipo}</p>
+                <p>{produto.categoria}</p>
+              </div>
 
-                <div className="items-atributos">
-                  <p>R$ {produto.preco?.toFixed(2)}</p>
-                </div>
+              <div className="col-tamanho">
+                <p>{item.tamanho}</p>
+              </div>
 
-                <div className="items-atributos">
-                  <div className="quantidade-controls">                    
-                    <div className="botoes-qtd">
-                      <button
-                        onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)}
-                        disabled={!item.quantidade || item.quantidade <= 1}
-                      >
-                        -
-                      </button>
-                      <span>{item.quantidade ?? 1}</span>
-                      <button
-                        onClick={() => alterarQuantidade(item, (item.quantidade || 1) + 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+              <div className="col-preco">
+                <p>R$ {produto.preco?.toFixed(2)}</p>
+              </div>
+
+              <div className="col-quantidade">
+                <div className="botoes-qtd">
+                  <button
+                    onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)}
+                    disabled={!item.quantidade || item.quantidade <= 1}
+                  >
+                    -
+                  </button>
+                  <span>{item.quantidade ?? 1}</span>
+                  <button
+                    onClick={() => alterarQuantidade(item, (item.quantidade || 1) + 1)}
+                  >
+                    +
+                  </button>
                 </div>
-                <div className="items-atributos">
-                  <p>Subtotal: R$ {(produto.preco * item.quantidade).toFixed(2)}</p>
-                </div>
+              </div>
+
+              <div className="col-subtotal">
+                <p>R$ {(produto.preco * item.quantidade).toFixed(2)}</p>
+              </div>
+
+              <div className="col-remover">
                 <button onClick={() => removerItem(item.id)}>Remover</button>
               </div>
             </div>
@@ -242,6 +249,7 @@ function Carrinho() {
       </div>
     </div>
   );
+
 }
 
 export default Carrinho;
