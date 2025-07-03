@@ -1,0 +1,72 @@
+.secoes-prods{
+  margin-top: 100px;
+}
+
+.secao-prod{
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.secao-prod .secao-titulo {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.secao-prod .secao-produtos {
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  justify-content: start;
+  scrollbar-width: none;
+}
+
+.secao-prod .secao-produtos::-webkit-scrollbar {
+  display: none; /* Chrome */
+}
+
+.secao-prod .card-prods {
+  flex: 0 0 auto;
+  width: 270px;
+}
+
+.secao-prod .carrossel-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.secao-prod .btn-carrossel {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-40%);
+  font-size: 1.5rem;
+  background: #363636;
+  color: var(--color-white);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 10;
+  padding: 7px 17px;
+  opacity: 1;
+  visibility: visible;
+}
+
+.secao-prod .btn-carrossel.esquerda {
+  left: 20px;
+}
+
+.secao-prod .btn-carrossel.direita {
+  right: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+

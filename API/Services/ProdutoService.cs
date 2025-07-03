@@ -145,6 +145,7 @@ namespace API.Services
         public async Task<Produto> AddProdutoAsync(CreateProduto produtoDto)
         {
             var produto = _mapper.Map<Produto>(produtoDto);
+            produto.DataCriacao = DateTime.UtcNow;
 
             var result = await _firebaseClient
                 .Child("produtos")
@@ -159,6 +160,7 @@ namespace API.Services
 
             return produto;
         }
+
 
 
         // Atualizar um produto pelo ID
@@ -183,6 +185,21 @@ namespace API.Services
                 .Child("produtos")
                 .Child(id)
                 .DeleteAsync();
+        }
+
+        //Obter Lançamento do Produto
+
+        public async Task<List<Produto>> ObterLancamentosAsync()
+        {
+            var produtos = await _firebaseClient
+                .Child("produtos")
+                .OnceAsync<Produto>();
+
+            return produtos
+                .Select(p => p.Object)
+                .OrderByDescending(p => p.DataCriacao)
+                .Take(10) // por exemplo, os 10 lançamentos mais recentes
+                .ToList();
         }
     }
 }

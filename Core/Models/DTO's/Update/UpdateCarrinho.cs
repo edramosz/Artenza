@@ -9,5 +9,6 @@ namespace Core.Models.DTO_s.Update
     public class UpdateCarrinho
     {
         public int Quantidade { get; set; }
+        public string Tamanho { get; set; }
     }
 }

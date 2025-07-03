@@ -1,26 +1,35 @@
 .container-service {
     width: 100%;
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 40px;
-}
-
-.container-service .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 50px;
+    max-width: 1180px;
+    margin: 0 auto;    
+    display: flex;
     justify-content: center;
 }
 
-.container-service .card{
-    
+.container-service .cards {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 30px;
+    background-color: #bebaba;
+   /*  margin-top: -30px;
+    position: absolute; */
+    border-radius: 25px;
+}
+
+.container-service .card{    
   max-width: 260px;
-  height: 160px;
+  height: auto;
   align-items: center;
   text-align: center;
   flex-direction: column;
   justify-content: center;
-  border-radius: 10px;
+  border-left: 2px solid #666;
+  padding: 10px 20px 10px 30px;
+}
+
+.container-service .card:first-child{    
+  border-left:none;
 }
 
 .container-service .icon{

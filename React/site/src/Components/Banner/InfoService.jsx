@@ -41,16 +41,7 @@ const InfoService = () => {
                         <h2>Suporte ao Cliente</h2>
                         <p>Atendimento via WhatsApp e Email</p>
                     </div>
-                </div>
-                <div className="card">
-                    <div className="icon">
-                        <i className="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <div className="texts">
-                        <h2>Compra Garantida</h2>
-                        <p>Segurança e reembolso</p>
-                    </div>
-                </div>
+                </div>               
             </div>
         </div>
     );

@@ -54,7 +54,7 @@ namespace API.Services
             // Atualizar o ID do carrinho com a chave gerada
             carrinho.Id = result.Key;
 
-            // Se quiser, você pode atualizar no Firebase também:
+            // Se quiser, você pode atualizar no Fireba se também:
             await _firebaseClient
                 .Child("carrinhos")
                 .Child(carrinho.Id)
