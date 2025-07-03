@@ -31,15 +31,15 @@
   box-shadow: 5px 5px 15px 4px #aaaaaa2c;
 }
 
-.imagem-produto:hover {
-}
+.imagem-produto:hover {}
+
 .info-produto {
   flex: 1;
   color: #000000ef;
   padding: 10px;
   height: auto;
   position: sticky;
-  top: 20px; 
+  top: 20px;
 }
 
 .btn-voltar {
@@ -97,7 +97,8 @@
   font-size: 1.1rem;
   color: #000000f5;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* número de linhas visíveis */
+  -webkit-line-clamp: 2;
+  /* número de linhas visíveis */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -123,12 +124,20 @@
 
 .preco {
   font-size: 1.2rem;
-  color: #0c880c;
-  margin-bottom: 7px;
+  color: var(--color-accent);
+  margin: 7px 0px;
+  font-weight: 600;
+}
+
+.title-tamanho {
+  margin-top: 20px;
+  text-transform: uppercase;
 }
 
 .filtro-tamanhos {
-  margin: 20px 0px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
 }
 
 .filtro-tamanhos button {
@@ -139,6 +148,7 @@
   font-weight: 500;
   border-radius: 10px;
   width: 60px;
+  height: 40px;
   cursor: pointer;
 }
 
@@ -161,7 +171,7 @@
   text-transform: uppercase;
   margin-bottom: 20px;
   font-weight: 500;
-  box-shadow: 6px 6px 14px #00000021;
+  box-shadow: 6px 6px 14px #22191921;
 }
 
 .acoes .btn:hover {
@@ -224,3 +234,136 @@
   font-weight: 600;
 }
 
+
+.feedback-container {
+  margin-top: 40px;
+  padding: 90px;
+}
+
+.filtro-estrelas {
+  margin-bottom: 20px;
+}
+
+.header-feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filtros-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-feedback {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.media-nota {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.media-num{
+  text-align: center;
+  margin-left: 6px;
+  padding: 2px 0px;
+  padding-right: 4px;
+  font-size: 0.9rem;
+  border:1px solid #6866667e;
+}
+
+.btns-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+
+.feedback-container button {
+  background-color: #111;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.90rem;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.btns-filtros button.ativo {
+  background-color: #ffffff00;
+  color: #111;
+  border: 2px solid #000;
+}
+
+.lista-feedbacks {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.feedback-item {
+  border-bottom: 1px solid #cccccc9f;
+  padding: 20px 0;
+  padding-bottom: 25px;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0px;
+}
+
+.foto-perfil-feedback {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+.feedback-container .tile-feedback{
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+
+.feedback-item p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+
+.feedback-container input[type="text"],
+.feedback-container textarea,
+.feedback-container select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  border: 1.8px solid #aaa;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border 0.3s;
+}
+
+.feedback-container input[type="text"]:focus,
+.feedback-container textarea:focus,
+.feedback-container select:focus {
+  border-color: #111;
+  outline: none;
+}
+
+.feedback-container textarea {
+  resize: vertical;
+  min-height: 80px;
+}

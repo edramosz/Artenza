@@ -15,7 +15,7 @@ const Estrelas = ({ nota, max = 5 }) => {
       <FontAwesomeIcon
         key={i}
         icon={faStarFull}
-        style={{ color: i <= nota ? "#FFD700" : "#ccc", marginRight: 2 }}
+        style={{ color: i <= nota ? "#111" : "#ccc", marginRight: 2 }}
       />
     );
   }
@@ -28,9 +28,14 @@ const ProdutoDetalhe = () => {
   const [carregando, setCarregando] = useState(true);
   const [idUsuario, setIdUsuario] = useState(null);
   const [nomeUsuario, setNomeUsuario] = useState("");
+  const [urlUsuario, setUrlUsuario] = useState("");
   const [erro, setErro] = useState(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState(null);
   const [produtosRelacionados, setProdutosRelacionados] = useState([]);
+  const [quantidadeExibida, setQuantidadeExibida] = useState(3);
+
+  const [filtroEstrela, setFiltroEstrela] = useState(null);
+
 
   // Feedbacks e avaliação
   const [feedbacks, setFeedbacks] = useState([]);
@@ -92,11 +97,17 @@ const ProdutoDetalhe = () => {
 
     const nomeSalvo = localStorage.getItem("nomeUsuario") || "";
     setNomeUsuario(nomeSalvo);
+
+    const urlSalva = localStorage.getItem("perfilUrl") || "";
+    setUrlUsuario(urlSalva);
+
+    console.log(localStorage.getItem("perfilUrl"));
+
   }, []);
 
   const carregarFeedbacks = async (idProduto) => {
     try {
-      // Aqui supondo que sua API aceite query param idProduto
+
       const response = await fetch(`https://localhost:7294/api/Feedback?idProduto=${idProduto}`);
       if (!response.ok) throw new Error("Erro ao carregar feedbacks");
       const dados = await response.json();
@@ -122,6 +133,10 @@ const ProdutoDetalhe = () => {
     return [];
   };
 
+  const feedbacksFiltrados = filtroEstrela
+    ? feedbacks.filter(f => f.nota === filtroEstrela)
+    : feedbacks;
+
   const adicionarAoCarrinho = async () => {
     if (!idUsuario) {
       alert("Você precisa estar logado.");
@@ -133,8 +148,50 @@ const ProdutoDetalhe = () => {
       return;
     }
 
-    alert(`Produto ${produto.nome} no tamanho ${tamanhoSelecionado} adicionado ao carrinho!`);
+    const idProduto = produto.id;
+
+    try {
+      const resposta = await fetch("https://localhost:7294/Carrinho");
+      const todos = await resposta.json();
+
+      const existente = todos.find(c =>
+        c.idUsuario === idUsuario &&
+        c.idProduto === idProduto &&
+        c.tamanho === tamanhoSelecionado // compara também o tamanho!
+      );
+
+      if (existente) {
+        const novaQuantidade = existente.quantidade + 1;
+        await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUsuario,
+            idProduto,
+            quantidade: novaQuantidade,
+            tamanho: tamanhoSelecionado // envia tamanho no PUT também
+          })
+        });
+      } else {
+        await fetch("https://localhost:7294/Carrinho", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUsuario,
+            idProduto,
+            quantidade: 1,
+            tamanho: tamanhoSelecionado // envia tamanho no POST
+          })
+        });
+      }
+
+      alert(`Produto ${produto.nome} no tamanho ${tamanhoSelecionado} adicionado ao carrinho!`);
+    } catch (err) {
+      console.error("Erro ao adicionar:", err);
+      alert("Erro ao adicionar ao carrinho.");
+    }
   };
+
 
   const enviarFeedback = async () => {
     if (!nomeUsuario) {
@@ -162,7 +219,9 @@ const ProdutoDetalhe = () => {
       nota: novaNota,
       nomeUsuario: nomeUsuario,
       dataCriacao: new Date().toISOString(),
+      perfilUrl: urlUsuario
     };
+
 
     try {
       const response = await fetch("https://localhost:7294/api/Feedback", {
@@ -222,28 +281,32 @@ const ProdutoDetalhe = () => {
             <h2 className="name-prod">{produto.nome}</h2>
             <span className='heart'><FontAwesomeIcon icon={faHeart} /></span>
           </div>
+
           <p className="tipo-prod">{produto.tipo}</p>
+
+          <div className="media-avaliacoes">
+            <Estrelas nota={Math.round(mediaNotas)} />
+            <span className='media-num'> {mediaNotas.toFixed(1)}</span>
+          </div>
+
+          <p className="preco">
+            {produto.preco.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </p>
+
           <div className="descricao-div">
             <p className="descricao">{produto.descricao}</p>
             <a href="#descrição">ver-mais</a>
           </div>
 
-          {/* Aqui exibimos a média das avaliações com estrelas */}
-          <div className="media-avaliacoes">
-            <Estrelas nota={Math.round(mediaNotas)} />
-            <span> {mediaNotas.toFixed(1)}</span>
-          </div>
+
 
           <div className="detalhes-produto">
-            <p className="preco">
-              {produto.preco.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </p>
 
+            <h4 className="title-tamanho">Tamanhos disponíveis:</h4>
             <div className="filtro-tamanhos">
-              <h4 className="title-tamanho">Tamanhos disponíveis:</h4>
               {tamanhos.length > 0 ? (
                 tamanhos.map((tam) => (
                   <button
@@ -334,23 +397,75 @@ const ProdutoDetalhe = () => {
       </div>
 
       <div className="feedback-container">
-        <h3>Avaliações do Produto</h3>
+        <div className="filtro-estrelas">
+          <div className="header-feedback">
+            <div className="filtros-titles">
+              <h3 className='title-feedback'>Avaliações do Produto</h3>
+              <span className="media-nota">{mediaNotas.toFixed(1)} de 5.0 </span>
+            </div>
+            <div className="btns-filtros">
+              <button
+                onClick={() => setFiltroEstrela(null)}
+                className={filtroEstrela === null ? 'ativo' : ''}
+              >
+                Tudo
+              </button>
+              {[5, 4, 3, 2, 1].map(nota => {
+                const count = feedbacks.filter(f => f.nota === nota).length;
+                return (
+                  <button
+                    key={nota}
+                    onClick={() => setFiltroEstrela(nota)}
+                    className={filtroEstrela === nota ? 'ativo' : ''}
+                  >
+                    {nota} Estrela{nota > 1 ? 's' : ''} ({count})
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+
 
         {feedbacks.length === 0 && <p>Este produto ainda não possui avaliações.</p>}
+        {feedbacksFiltrados.length === 0 && (
+          <p>Nenhum feedback encontrado com {filtroEstrela} estrela(s).</p>
+        )}
+
 
         <ul className="lista-feedbacks">
-          {feedbacks.map(fb => (
+          {feedbacksFiltrados.slice(0, quantidadeExibida).map(fb => (
             <li key={fb.id} className="feedback-item">
-
-              <p><em>{fb.nomeUsuario}</em> em {new Date(fb.dataCriacao).toLocaleDateString()}</p>
-              <p>
-                <Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}
-              </p>
-              <p><strong>{fb.titulo}</strong></p>
-              <p>{fb.comentario}</p>
+              <div>
+                <p><Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}</p>
+              </div>
+              <div className="feedback-header">
+                <img
+                  src={fb.perfilUrl || "https://via.placeholder.com/40?text=U"}
+                  alt="Foto do usuário"
+                  className="foto-perfil-feedback"
+                />
+                <p className='nome-feedback'>{fb.nomeUsuario}</p>
+                <p className='data-feedback'>{new Date(fb.dataCriacao).toLocaleDateString()}</p>
+              </div>
+              <div>
+                <p className='tile-feedback'>{fb.titulo}</p>
+                <p className='comentario-feedback'>"{fb.comentario}"</p>
+              </div>
             </li>
           ))}
         </ul>
+        {quantidadeExibida < feedbacksFiltrados.length && (
+          <button
+            className="btn-carregar-mais"
+            onClick={() => setQuantidadeExibida(quantidadeExibida + 3)}
+          >
+            Carregar-mais
+          </button>
+        )}
+
+
 
         <h4>Deixe sua avaliação</h4>
         <input

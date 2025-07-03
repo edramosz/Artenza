@@ -269,7 +269,6 @@ const Masculino = () => {
           />
         </div>
 
-        <ConteudoGenero />
       </div>
     </>
   );
