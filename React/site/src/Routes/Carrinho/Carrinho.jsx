@@ -146,7 +146,7 @@ function Carrinho() {
               <th>Produto</th>
               <th>Tamanho</th>
               <th>Preço</th>
-              <th>Qtd.</th>
+              <th>Qtd</th>
               <th>Subtotal</th>
               <th></th>
             </tr>
@@ -158,24 +158,28 @@ function Carrinho() {
                 <tr key={item.id}>
                   <td><input type="checkbox" checked={selecionados[item.id] || false} onChange={() => toggleSelecionado(item.id)} /></td>
                   <td>
-                    <img
-                      className="img-item"
-                      src={Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
-                        ? produto.urlImagens[0]
-                        : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"}
-                      alt={produto.nome}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
-                      }}
-                    />
+                    <Link to={`/produto/${produto.id}`}>
+                      <img
+                        className="img-item"
+                        src={Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
+                          ? produto.urlImagens[0]
+                          : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"}
+                        alt={produto.nome}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
+                        }}
+                      />
+                    </Link>
                   </td>
                   <td className="nomes-prods">
-                    <p>{produto.nome}</p>
-                    <p>{produto.tipo}</p>
+                    <Link to={`/produto/${produto.id}`} className="link-produto">
+                      <p className="nome">{produto.nome}</p>
+                      <p className="tipo">{produto.tipo}</p>
+                    </Link>
                   </td>
-                  <td>{item.tamanho}</td>
-                  <td>R$ {produto.preco?.toFixed(2)}</td>
+                  <td><p className="tamanho">{item.tamanho}</p></td>
+                  <td><p className="_preco">R$ {produto.preco?.toFixed(2)}</p></td>
                   <td>
                     <div className="botoes-qtd">
                       <button onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)} disabled={!item.quantidade || item.quantidade <= 1}>-</button>
@@ -183,9 +187,10 @@ function Carrinho() {
                       <button onClick={() => alterarQuantidade(item, (item.quantidade || 1) + 1)}>+</button>
                     </div>
                   </td>
-                  <td>R$ {(produto.preco * item.quantidade).toFixed(2)}</td>
-                  <td><button onClick={() => removerItem(item.id)}><i class="fa-solid fa-trash"></i></button></td>
+                  <td><p className="_preco">R$ {(produto.preco * item.quantidade).toFixed(2)}</p></td>
+                  <td><button onClick={() => removerItem(item.id)} className="remove-btn"><i className="fa-solid fa-xmark"></i></button></td>
                 </tr>
+
               );
             })}
           </tbody>
