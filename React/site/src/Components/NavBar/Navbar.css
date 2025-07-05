@@ -1,239 +1,479 @@
-.all-menu{
+/* Estilos gerais */
+.all-menu {
   width: 100%;
   max-width: 2100px;
-  margin: 0;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
 }
 
-.top-menu{
+.top-menu {
   width: 100%;
   height: auto;
-  padding: 10px 40px;
+  padding: 15px 40px;
   background-color: #ffffff;
-}
-
-.top-menu i{
-  color: #000;
-}
-
-.top-menu nav{  
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 30px;
   align-items: center;
 }
 
-.top-menu .main-user{
+.top-menu nav {  
   display: flex;
-  gap: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 30px;
 }
 
 .top-menu nav ul{
   list-style: none;
 }
 
-.top-menu .search{
-  width: 35%;  
+/* Logo */
+.logo img {
+  transition: transform 0.3s ease;
 }
 
-.top-menu .search form {
+.logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Barra de pesquisa */
+.search {
+  width: 40%;
+  max-width: 500px;
+}
+
+.search form {
+  display: flex;
   align-items: center;
   width: 100%;
-  background-color: #b6b6b8;
-  padding: 5px 5px 5px 10px;
-  border-radius: 7px;
-  justify-content: space-between;    
+  background-color: #f5f5f5;
+  padding: 8px 15px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
 }
 
-.top-menu .search-item{
+.search form:focus-within {
+  box-shadow: 0 0 0 1.3px #000000a4;
+}
+
+.search-item {
   display: flex;
   gap: 10px;
+  width: 100%;
+  align-items: center;
 }
 
-.top-menu .search-btn{
-  background: none;
-  border: none;
-  font-size: 1.1rem;
-  background-color: #fff;
-  padding: 8px 12px;  
-  border-radius: 7px;
-
-}  
-
-.top-menu .search-btn:hover{
-  background-color: rgba(255, 255, 255, 0.767);
-  transition: 0.2s;
-}
-
-.top-menu .clear-btn{
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-   /*border-right: 2px solid #00000070;
-  padding-right: 10px; */
-}  
-
-.top-menu .search input[type="search"] {
+.search input[type="search"] {
   flex: 1;
   width: 100%;
   border: none;
   outline: none;
-  padding: 0px;
+  padding: 5px;
   font-size: 1rem;
   background: transparent;
 }
 
-
-.top-menu .search input[type="search"]::placeholder {
-  color: #000000
+.search input[type="search"]::placeholder {
+  color: #777;
 }
 
-/* Esconde o ícone de limpar no Chrome, Edge e Safari */
-input[type="search"]::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-  appearance: none;
-  display: none;
-}
-
-.top-menu .acount ul{
-  display: flex;  
-  gap: 10px;
-}
-
-.top-menu .acount ul a{
-  text-decoration: none;
-  color: #000000;
-  font-size: 1.1rem;
-  padding-right: 10px;
-}
-
-.top-menu .acount ul li:first-child a {
-  border-right: 2px solid #686363ee;
-}
-
-.top-menu .acount ul a:hover{
-  color: #fff;
+.search-btn, .clear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 1rem;
   transition: color 0.3s;
 }
 
-.top-menu .perfil-foto{
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 50%;  
-  box-shadow:  0 0 0 2px #414144;  
-  transform: translateY(2px);
+.search-btn:hover, .clear-btn:hover {
+  color: #000;
 }
 
-.menu-user .main-user a{
-  text-decoration: none;
-  color: #111;
-}
-
-.top-menu .icons ul{
+/* Menu do usuário */
+.menu-user ul {
   display: flex;
-  flex-direction: row;
-  gap: 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
 }
 
-.top-menu .icons ul i{
-  font-size: 23px;
+.main-user {
+  display: flex;
+  gap: 15px;
+  align-items: center;
 }
 
+.perfil-foto {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #000;
+  transition: transform 0.3s;
+  margin-top: 2px;
+}
 
+.perfil-foto:hover {
+  transform: scale(1.1);
+}
+
+.user-item {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.user-item:first-child {
+  font-weight: 600;
+}
+
+.acount ul {
+  display: flex;
+  gap: 15px;
+}
+
+.acount a {
+  text-decoration: none;
+  color: #000;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.acount a:hover {
+  color: #555;
+}
+
+.icons ul {
+  display: flex;
+  gap: 20px;
+}
+
+.icons i {
+  font-size: 1.5rem;
+  transition: transform 0.3s;
+  cursor: pointer;
+  color: #000;
+}
+
+.icons i:hover {
+  color: #333;
+}
+
+/* Menu principal */
 .main-menu {
   width: 100%;
   height: auto;
-  padding: 10px 40px 0px 40px;
-  border-top: 1px solid #ddd9d9;  
-  border-bottom: 1px solid #ddd9d9;
+  padding: 0px 40px;
+  border-top: 1px solid #eee;  
+  border-bottom: 1px solid #eee;
   background-color: #fff;
+  position: relative;
 }
 
-.main-menu ul{
+.main-menu header {
   display: flex;
-  list-style: none;
-  gap: 20px;
   justify-content: center;
 }
 
-.main-menu .nav-item{
+.nav-items {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-items a {
   text-decoration: none;
   color: #000;
-  font-weight: 500;
-  font-size: 1.08rem;
-  padding-bottom: 10px;
-  padding-left:10px;
-  padding-right: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 10px 0 0 0 ;
   position: relative;
   display: inline-block;
   transition: color 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 10px;
 }
 
-.main-menu .nav-item::after {
+.nav-items a::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: 0px;
   left: 0;
   height: 2px;
   width: 100%;
   background-color: #000;
-  transform: scaleX(0); /*esconde*/
+  transform: scaleX(0);
   transform-origin: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
-.main-menu .nav-item:hover {
-  color: #1d1c1ce3;
+.nav-items a:hover {
+  color: #333;
 }
 
-.main-menu .nav-item:hover::after,
-.main-menu .nav-item.active::after{
-  transform: scaleX(1); /*aparece*/
+.nav-items a:hover::after,
+.nav-items a.active::after {
+  transform: scaleX(1);
 }
 
-
+/* Botão mobile */
 .btn-mob {
   display: none;
   background-color: transparent;
   border: none;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   cursor: pointer;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  color: #000;
 }
 
-@media (max-width: 640px) {
+/* Menu Lateral Mobile */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
 
-  .main-menu .nav-items,
-  .main-menu .buttons {
+.mobile-menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background-color: #fff;
+  z-index: 999;
+  transition: all 0.4s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  left: 0;
+}
+
+.mobile-menu-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-perfil-foto {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #000;
+}
+
+.mobile-user-info {
+  text-align: center;
+}
+
+.mobile-user-info p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+
+.mobile-login-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.mobile-login-btn, .mobile-register-btn {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.mobile-login-btn {
+  background-color: #000;
+  color: white;
+}
+
+.mobile-login-btn:hover {
+  background-color: #333;
+}
+
+.mobile-register-btn {
+  border: 1px solid #000;
+  color: #000;
+}
+
+.mobile-register-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.mobile-nav-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-items li a {
+  display: block;
+  padding: 15px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+  transition: all 0.3s;
+}
+
+.mobile-nav-items li a:hover,
+.mobile-nav-items li a.active {
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+.mobile-nav-items li i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .top-menu {
+    padding: 15px 30px;
+  }
+  
+  .search {
+    width: 50%;
+  }
+  
+  .main-menu {
+    padding: 15px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-menu {
+    padding: 15px 20px;
+  }
+  
+  .logo img {
+    width: 150px;
+  }
+  
+  .search {
+    width: 60%;
+  }
+  
+  .main-menu {
+    padding: 15px 20px 15px 60px;
+  }
+  
+  .nav-items {
     display: none;
   }
-
-  .main-menu li {
-    margin-bottom: 15px;
-  }
-
-  .main-menu a {
-    padding: 0px 2px 3px 2px;
-  }
-
-  .main-menu .nav-items.open {
-    display: block;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    max-height: 0;
-  }
-
+  
   .btn-mob {
     display: block;
   }
-
-  .main-menu .logo {
-    margin-left: 10%;
+  
+  .menu-user ul {
+    flex-direction: column;
+    align-items: flex-end;
   }
+  
+  .main-user {
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+  
+  .user-item {
+    display: none;
+  }
+  
+  .acount ul {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-menu {
+    padding: 10px 15px;
+  }
+  
+  .logo img {
+    width: 120px;
+  }
+  
+  .search {
+    width: 70%;
+  }
+  
+  .search form {
+    padding: 5px 10px;
+  }
+  
+  .acount {
+    display: none;
+  }
+  
+  .icons {
+    display: none;
+  }
+  
+  .mobile-menu {
+    width: 250px;
+  }
+}
+
+
+
+/* Esconde o ícone de limpar no Chrome, Edge e Safari */
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Esconde o ícone de limpar no Firefox */
+input[type="search"]::-moz-search-clear {
+  display: none;
+}
+
+/* Esconde o ícone de limpar no Edge */
+input[type="search"]::-ms-clear {
+  display: none;
 }
