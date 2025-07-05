@@ -4,60 +4,121 @@
   margin: 0 auto;
   padding: 40px;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 40px;
 }
 
 .lista-carrinho {
   flex: 3;
-  padding: 20px;
+  padding: 0px 20px;
+  overflow-x: auto;
 }
 
-.cabecalho-carrinho,
-.item-carrinho {
-  display: grid;
-  grid-template-columns:
-    20px    /* checkbox */
-    190px   /* imagem */
-    1.5fr   /* nome */
-    100px   /* tamanho */
-    100px   /* preço */
-    140px   /* quantidade */
-    120px   /* subtotal */
-    100px;  /* botão remover */
-  align-items: center;
-  gap: 20px;
-  padding: 10px 0;
+.lista-carrinho h1{
+    margin-bottom: 20px;
 }
 
-.cabecalho-carrinho {
-  font-weight: bold;
-  border-bottom: 2px solid #ccc;
-  margin-bottom: 15px;
+.tabela-carrinho {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 16px;
 }
 
-.item-carrinho {
+.tabela-carrinho th,
+.tabela-carrinho td {
+  padding: 12px 10px;
   border-bottom: 1px solid #ccc;
-  padding: 20px 0;
+  text-align: center;
+  vertical-align: middle;
 }
 
+
 .img-item {
-  width: 100%;
-  height: 170px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
   border-radius: 8px;
 }
 
+.tabela-carrinho td.nomes-prods {
+  text-align: left !important;
+}
+
+
+
+/* Define largura para cada coluna da tabela */
+.tabela-carrinho th:nth-child(1),
+.tabela-carrinho td:nth-child(1) {
+  width: 30px; /* Checkbox */
+}
+
+.tabela-carrinho th:nth-child(2),
+.tabela-carrinho td:nth-child(2) {
+  width:200px; /* Imagem */
+}
+
+.tabela-carrinho th:nth-child(3),
+.tabela-carrinho td:nth-child(3) {
+  width: 270px; /* Produto (nome, tipo, categoria) */
+}
+
+.tabela-carrinho th:nth-child(4),
+.tabela-carrinho td:nth-child(4) {
+  width: 60px; /* Tamanho */
+}
+
+.tabela-carrinho th:nth-child(5),
+.tabela-carrinho td:nth-child(5) {
+  width: 190px; /* Preço */
+}
+
+.tabela-carrinho th:nth-child(6),
+.tabela-carrinho td:nth-child(6) {
+  width: 120px; /* Qtd */
+}
+
+.tabela-carrinho th:nth-child(7),
+.tabela-carrinho td:nth-child(7) {
+  width: 120px; /* Subtotal */
+}
+
+.tabela-carrinho th:nth-child(8),
+.tabela-carrinho td:nth-child(8) {
+  width: 100px; /* Botão remover */
+}
+
+.nomes-prods .nome{
+  font-size:1.02rem;
+  color: #000000e5;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.nomes-prods .tipo{
+  color: #111;
+  font-weight: 500;
+}
+
+.tamanho{
+  font-weight: 500;
+  font-size: 1.12rem;
+}
+
+._preco{
+  font-size: 1.06rem;
+  font-weight: 500;
+}
+
 .botoes-qtd {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 }
 
 .botoes-qtd button {
-  width: 30px;
-  height: 30px;
+  width: 23px;
+  height: 23px;
   font-weight: bold;
   border: 1px solid #ccc;
   background-color: #f4f4f4;
@@ -70,29 +131,22 @@
   text-align: center;
 }
 
-.item-carrinho p {
-  margin: 4px 0;
+.tabela-carrinho button {
+  cursor: pointer;
 }
 
 .resumo {
+  position: sticky;
+  top: 20px;
   flex: 1;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  height: fit-content;
-  background-color: #fafafa;
+  min-width: 200px;
+  margin-top: 20px;
+  align-self: start;
+
 }
 
 .resumo h1 {
   font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.items-count-carrinho,
-.frete,
-.cupon,
-.total,
-.btn-compra {
   margin-bottom: 20px;
 }
 
@@ -127,6 +181,63 @@
   background-color: #444;
 }
 
-button {
+.remove-btn{
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+}
+
+/* Carrinho vazio */
+.carrinho-null {
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 40px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.carrinho-null .title-null {
+  font-size: 3rem;
+  text-transform: uppercase;
+  color: #222;
+}
+
+.carrinho-null .text-null {
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.carrinho-null span > i {
+  font-size: 10rem;
+  margin: 30px;
+  color: #222;
+}
+
+.carrinho-null button {
+  padding: 6px 12px;
+  border: 2px solid #333;
+  background: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 600;
   cursor: pointer;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .tabela-carrinho {
+    font-size: 14px;
+  }
+
+  .img-item {
+    width: 70px;
+    height: 70px;
+  }
+
+  .botao-comprar {
+    font-size: 14px;
+  }
 }

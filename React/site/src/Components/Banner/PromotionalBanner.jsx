@@ -1,97 +1,117 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './PromotionalBanner.css';
-import { Link } from 'react-router-dom'
-
-const slides = [
-    {
-        title: 'ton ton ton sahur',
-        subtitle: 'ton ton ',
-        image: '././img/fundo.png',
-    },
-    {
-        title: 'liliri lari laa',
-        subtitle: 'elefante',
-        image: '././img/fundo.png',
-    },
-];
-
-const sidePromos = [
-    {
-        title: 'trala leiro lala',
-        image: '././img/fundo.png',
-    },
-    {
-        title: 'la vaca saturno',
-        image: 'https://i.imgur.com/voHf9HP.png',
-    },
-];
 
 const PromotionalBanner = () => {
-    const [current, setCurrent] = React.useState(0);
+    const [current, setCurrent] = useState(0);
+    
+    const slides = [
+        {
+            title: 'ton ton ton sahur',
+            subtitle: 'ton ton',
+            image: './img/fundo.png',
+        },
+        {
+            title: 'liliri lari laa',
+            subtitle: 'elefante',
+            image: './img/fundo.png',
+        },
+    ];
 
-    React.useEffect(() => {
+    const sidePromos = [
+        {
+            title: 'trala leiro lala',
+            image: './img/fundo.png',
+        },
+        {
+            title: 'la vaca saturno',
+            image: 'https://i.imgur.com/voHf9HP.png',
+        },
+    ];
+
+    // Auto-rotate slides
+    useEffect(() => {
         const interval = setInterval(() => {
             setCurrent((prev) => (prev + 1) % slides.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [slides.length]);
 
-    const currentSlide = slides[current];
+    const goToPrevSlide = () => {
+        setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+    };
+
+    const goToNextSlide = () => {
+        setCurrent((prev) => (prev + 1) % slides.length);
+    };
 
     return (
-        <div className="hero-layout">
-            <div
-                className="carousel"
+        <div className="promotional-banner">
+            {/* Main Carousel */}
+            <div 
+                className="main-carousel"
                 style={{
-                    backgroundImage: `url(${currentSlide.image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
+                    backgroundImage: `url(${slides[current].image})`,
                 }}
             >
-                <button className="btn-caroussel" onClick={() => setCurrent((current - 1 + slides.length) % slides.length)}>
+                <button 
+                    className="carousel-button prev"
+                    onClick={goToPrevSlide}
+                    aria-label="Previous slide"
+                >
                     <i className="fa-solid fa-chevron-left"></i>
                 </button>
-                <div className="carousel-slide">
+                
+                <div className="carousel-content">
                     <div className="text-content">
-                        <p>{currentSlide.subtitle}</p>
-                        <h2>{currentSlide.title}</h2>
-                        <Link to='/Colecao' className="shop-btn">SHOP kkk</Link>
+                        <p className="subtitle">{slides[current].subtitle}</p>
+                        <h2 className="title">{slides[current].title}</h2>
+                        <Link to="/Colecao" className="shop-button">
+                            SHOP NOW
+                        </Link>
                     </div>
                 </div>
-                <button onClick={() => setCurrent((current + 1) % slides.length)}>
+                
+                <button 
+                    className="carousel-button next"
+                    onClick={goToNextSlide}
+                    aria-label="Next slide"
+                >
                     <i className="fa-solid fa-chevron-right"></i>
                 </button>
-                <div className="dots">
+                
+                <div className="carousel-dots">
                     {slides.map((_, idx) => (
-                        <span
+                        <button
                             key={idx}
                             className={`dot ${idx === current ? 'active' : ''}`}
                             onClick={() => setCurrent(idx)}
-                        ></span>
+                            aria-label={`Go to slide ${idx + 1}`}
+                        />
                     ))}
                 </div>
             </div>
 
-            <div className="sidebar" >
+            {/* Side Promos */}
+            <div className="side-promotions">
                 {sidePromos.map((promo, index) => (
                     <div
-                        className="promo-box"
                         key={index}
+                        className="promo-card"
                         style={{
                             backgroundImage: `url(${promo.image})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
                         }}
                     >
                         <div className="promo-overlay">
-                            <div className="promo-text">
-                                <p>{promo.title}</p>
-                                <a href="#" className="shop-link">SHOP NOW</a>
+                            <div className="promo-content">
+                                <p className="promo-title">{promo.title}</p>
+                                <Link to="/Colecao" className="promo-button">
+                                    SHOP NOW
+                                </Link>
                             </div>
                         </div>
                     </div>
                 ))}
-
             </div>
         </div>
     );
