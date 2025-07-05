@@ -15,15 +15,7 @@ const InfoService = () => {
                         <p>Para todos produtos acima de R$ 100,00</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="icon">
-                        <i className="fa-solid fa-arrow-rotate-left"></i>
-                    </div>
-                    <div className="texts">
-                        <h2>Devoluções em 30 dias</h2>
-                        <p>Para produtos do site</p>
-                    </div>
-                </div>
+                
                 <div className="card">
                     <div className="icon">
                        <i className="fa-solid fa-wallet"></i>

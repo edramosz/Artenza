@@ -6,11 +6,11 @@
     display: flex;
     overflow: hidden;
     justify-content: space-between;
+    background-color: #8888;
 }
 
 .content-hero{
     flex: 1;
-    max-width: 50%;
     min-width: 50%;
     padding: 0px 40px;
 }
