@@ -37,6 +37,8 @@
   gap: 20px;
   overflow: hidden;
   margin-right: 20px;
+  top: 20;
+  position: sticky;
 }
 
 .sidebar summary {
@@ -95,6 +97,7 @@
   text-align: start;
   font-size: 0.7rem;
   user-select: none; /* tira o marcado seleção do texto */
+
 }
 
 .cor-label input {
@@ -106,15 +109,9 @@
   height: 24px;
   border-radius: 50%;
   border: 7px solid var(--color-black);
-}
-
-.cor-circulo {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid transparent;
   transition: border 0.2s ease;
 }
+
 
 .cor-ativa,
 .cor-ativa:hover {
