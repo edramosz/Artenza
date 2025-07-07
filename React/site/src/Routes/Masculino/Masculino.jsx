@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import './Masculino.css';
 import SidebarFiltros from '../../Components/SidebarFiltros';
 import SecaoProdutos from '../../Components/SecaoProdutos';
 import Flag from '../../Components/Banner/Flag';
-import ConteudoGenero from '../../Components/ConteudoGenero';
+
 const Masculino = () => {
   const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
   const [produtos, setProdutos] = useState([]);
-  const [produtosMaisVendidos, setProdutosMaisVendidos] = useState([]);
-  const [produtosLancamentos, setProdutosLancamentos] = useState([]);
   const [erro, setErro] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [produtosVisiveis, setProdutosVisiveis] = useState(12);
   const [idUsuario, setIdUsuario] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagina, setPagina] = useState(Number(searchParams.get("page")) || 1);
+  const [produtosPorPagina, setProdutosPorPagina] = useState(12);
   const [filtros, setFiltros] = useState({
     categorias: [],
     subcategorias: [],
@@ -27,79 +24,48 @@ const Masculino = () => {
   });
 
   const mapaCores = {
-    Amarelo: "#FFD700",
-    Azul: "#0000FF",
-    Branco: "#FFFFFF",
-    Cinza: "#808080",
-    Laranja: "#FFA500",
-    Marrom: "#A52A2A",
-    Preto: "#000000",
-    Rosa: "#FFC0CB",
-    Roxo: "#800080",
-    Verde: "#008000",
-    Vermelho: "#FF0000"
+    Amarelo: "#FFD700", Azul: "#0000FF", Branco: "#FFFFFF",
+    Cinza: "#808080", Laranja: "#FFA500", Marrom: "#A52A2A",
+    Preto: "#000000", Rosa: "#FFC0CB", Roxo: "#800080",
+    Verde: "#008000", Vermelho: "#FF0000"
   };
 
-  const CoresDisponiveis = ["Amarelo", "Azul", "Branco", "Cinza", "Laranja", "Marrom", "Preto", "Rosa", "Roxo", "Verde", "Vermelho"];
+  const CoresDisponiveis = Object.keys(mapaCores);
 
   const ChecksList = [
     {
-      title: 'Categorias',
-      tipo: 'categorias',
+      title: 'Categorias', tipo: 'categorias',
       checksLists: ["Blusas", "Calças", "Tênnis", "Camisas", "Meias"]
     },
     {
-      title: 'Sub-Categorias',
-      tipo: 'subcategorias',
+      title: 'Sub-Categorias', tipo: 'subcategorias',
       checksLists: ["Casual", "Esportivo", "Social"]
     },
     {
-      title: 'Tamanhos',
-      tipo: 'tamanhos',
+      title: 'Tamanhos', tipo: 'tamanhos',
       categoriaTamanho: [
-        {
-          tipo: 'Roupas',
-          checksLists: ["PP", "P", "M", "G", "GG"]
-        },
-        {
-          tipo: 'Calçados',
-          checksLists: ["34", "35", "36", "38", "40", "42", "44", "46", "47", "48"]
-        }
+        { tipo: 'Roupas', checksLists: ["PP", "P", "M", "G", "GG"] },
+        { tipo: 'Calçados', checksLists: ["34", "35", "36", "38", "40", "42", "44", "46", "47", "48"] }
       ]
-    },
+    }
   ];
 
   useEffect(() => {
     const buscarDados = async () => {
       setLoading(true);
       try {
-        // TODOS OS PRODUTOS
         const resTodos = await fetch("https://localhost:7294/Produto");
         const todosData = await resTodos.json();
         const masculinos = todosData.filter(prod => ["Masculino", "Unissex"].includes(prod.genero));
-
-
         const formatar = (lista) => lista.map(prod => ({
           ...prod,
           urlImagens: Array.isArray(prod.urlImagens) && prod.urlImagens.length > 0 && typeof prod.urlImagens[0] === "string"
             ? prod.urlImagens
             : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
         }));
-
         setProdutos(formatar(masculinos));
 
-        // MAIS VENDIDOS
-        const resMaisVendidos = await fetch("https://localhost:7294/Produto/mais-vendidos");
-        const dataMaisVendidos = await resMaisVendidos.json();
-        setProdutosMaisVendidos(formatar(dataMaisVendidos.filter(p => ["Masculino", "Unissex"].includes(p.genero))));
-
-        // LANÇAMENTOS
-        const resLancamentos = await fetch("https://localhost:7294/Produto/lancamentos");
-        const dataLancamentos = await resLancamentos.json();
-        setProdutosLancamentos(formatar(dataLancamentos.filter(p => ["Masculino", "Unissex"].includes(p.genero))));
-
-
-        setErro(null);
+         setErro(null);
       } catch (err) {
         console.error("Erro ao buscar produtos:", err);
         setErro("Erro ao carregar produtos.");
@@ -124,7 +90,6 @@ const Masculino = () => {
     };
     setFiltros(filtrosIniciais);
   }, []);
-
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
@@ -155,13 +120,11 @@ const Masculino = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-
     if (filtros.categorias.length > 0) params.set('categoria', filtros.categorias.join(','));
     if (filtros.subcategorias.length > 0) params.set('subcategoria', filtros.subcategorias.join(','));
     if (filtros.tamanhos.length > 0) params.set('tamanho', filtros.tamanhos.join(','));
     if (filtros.cores.length > 0) params.set('cor', filtros.cores.join(','));
     if (filtros.preco) params.set('preco', `${filtros.preco[0]}-${filtros.preco[1]}`);
-
     setSearchParams(params);
   }, [filtros]);
 
@@ -177,9 +140,7 @@ const Masculino = () => {
 
   const removerFiltro = (tipo, valor) => {
     setFiltros(prev => {
-      if (tipo === 'preco') {
-        return { ...prev, preco: [0, 2600] };
-      }
+      if (tipo === 'preco') return { ...prev, preco: [0, 2600] };
       const novoFiltro = prev[tipo].filter(item => item !== valor);
       return { ...prev, [tipo]: novoFiltro };
     });
@@ -194,7 +155,8 @@ const Masculino = () => {
     return categoriaOk && subcategoriaOk && tamanhoOk && corOk && precoOk;
   });
 
- 
+  const totalPaginas = Math.ceil(produtosFiltrados.length / produtosPorPagina);
+
   return (
     <>
       <Flag />
@@ -205,6 +167,7 @@ const Masculino = () => {
             <p>{produtosFiltrados.length} Resultado{produtosFiltrados.length !== 1 ? 's' : ''}</p>
           </div>
         </div>
+
         <div className="flex-conteiner">
           <SidebarFiltros
             filtros={filtros}
@@ -225,50 +188,73 @@ const Masculino = () => {
               <div className="erro"><h3>{erro}</h3></div>
             ) : (
               <>
+                {/* <div className="controle-pagina">
+                  <label htmlFor="qtd">Produtos por página:</label>
+                  <select
+                    id="qtd"
+                    value={produtosPorPagina}
+                    onChange={(e) => {
+                      setProdutosPorPagina(Number(e.target.value));
+                      setPagina(1);
+                    }}
+                  >
+                    <option value={3}>3</option> 
+                    <option value={6}>6</option>
+                    <option value={12}>12</option>
+                    <option value={24}>24</option>
+                    <option value={48}>48</option>
+                  </select>
+                </div> */}
+
                 <div className="masc-produtos">
-                  {produtosFiltrados.map((prod) => (
-                    <Link to={`/produto/${prod.id}`} key={prod.id}>
-                      <div className="card-prods">
-                        <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
-                        <div className="text-card">
-                          <h4 className="nome">{prod.nome}</h4>
-                          <p className="categoria">{prod.categoria}</p>
-                          <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+                  {produtosFiltrados
+                    .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
+                    .map((prod) => (
+                      <Link to={`/produto/${prod.id}`} key={prod.id}>
+                        <div className="card-prods">
+                          <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
+                          <div className="text-card">
+                            <p className="categoria">{prod.categoria}</p>
+                            <h4 className="nome">{prod.nome}</h4>
+                            <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+                          </div>
                         </div>
-                        {/* <div className="btns-actions">
-                        <button onClick={(e) => { e.preventDefault(); adicionarAoCarrinho(prod); }}>Adicionar ao Carrinho</button>
-                      </div> */}
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
                 </div>
 
-                {produtosFiltrados.length > produtosVisiveis && (
-                  <div className='carregar-mais'>
-                    <button onClick={() => {
-                      setPagina(prev => prev + 1);
-                      setProdutosVisiveis(prev => prev + 12);
-                    }} className="carregar-mais-btn">
-                      Carregar mais
+                <div className="paginacao">
+                  <button
+                    onClick={() => setPagina((prev) => Math.max(prev - 1, 1))}
+                    disabled={pagina === 1}
+                    className="seta"
+                  >
+                    <i className="fa-solid fa-chevron-left"></i>
+                  </button>
+
+                  {Array.from({ length: totalPaginas }, (_, i) => (
+                    <button
+                      id='page'
+                      key={i}
+                      className={pagina === i + 1 ? 'pagina-ativa' : ''}
+                      onClick={() => setPagina(i + 1)}
+                    >
+                      {i + 1}
                     </button>
-                  </div>
-                )}
+                  ))}
+
+                  <button
+                    onClick={() => setPagina((prev) => Math.min(prev + 1, totalPaginas))}
+                    disabled={pagina === totalPaginas}
+                    className="seta"
+                  >
+                    <i className="fa-solid fa-chevron-right"></i>
+                  </button>
+                </div>
               </>
             )}
           </main>
         </div>
-        <div className='secoes-prods'>
-          <SecaoProdutos
-            titulo="Mais Vendidos"
-            produtos={produtosMaisVendidos}
-          />
-
-          <SecaoProdutos
-            titulo="Novidades"
-            produtos={produtosLancamentos}
-          />
-        </div>
-
       </div>
     </>
   );
