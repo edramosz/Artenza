@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './PerfilComponents.css';
+import './Enderecos.css';
 import NavProfile from '../NavProfile';
 
 const Enderecos = () => {
