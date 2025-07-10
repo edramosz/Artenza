@@ -12,6 +12,9 @@ namespace Core.Models.DTO_s.Create
     {
         [Required]
         public string CEP { get; set; }
+
+        public string UsuarioId { get; set; }
+
         [Required]
         public string Estado { get; set; }
         [Required]
