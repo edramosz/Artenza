@@ -105,10 +105,12 @@ const ProdutoDetalhe = () => {
 
   }, []);
 
-  const carregarFeedbacks = async (idProduto) => {
+
+  const carregarFeedbacks = async (IdProduto) => {
     try {
 
-      const response = await fetch(`https://localhost:7294/api/Feedback?idProduto=${idProduto}`);
+      const response = await fetch(`https://localhost:7294/api/Feedback?idProduto=${IdProduto}`);
+      console.log(IdProduto);
       if (!response.ok) throw new Error("Erro ao carregar feedbacks");
       const dados = await response.json();
       setFeedbacks(dados);
@@ -221,7 +223,6 @@ const ProdutoDetalhe = () => {
       dataCriacao: new Date().toISOString(),
       perfilUrl: urlUsuario
     };
-
 
     try {
       const response = await fetch("https://localhost:7294/api/Feedback", {

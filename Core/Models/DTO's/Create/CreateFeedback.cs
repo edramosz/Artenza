@@ -8,6 +8,8 @@ namespace Core.Models.DTO_s.Create
 {
     public class CreateFeedback
     {
+        public string IdProduto { get; set; }
+        public string IdUsuario { get; set; }
         public string Titulo { get; set; }
         public string Comentario { get; set; }
         public int Nota { get; set; }

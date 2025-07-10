@@ -46,6 +46,9 @@ namespace API.Services
         public async Task<Feedback> AddFeedbackAsync(CreateFeedback feedbackDto)
         {
             var feedback = _mapper.Map<Feedback>(feedbackDto);
+            feedback.IdProduto = feedbackDto.IdProduto;
+            feedback.IdUsuario = feedbackDto.IdUsuario;
+
 
             // Setar DataCriacao na hora da criação se não veio no DTO
             if (feedback.DataCriacao == default)

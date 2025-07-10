@@ -54,7 +54,7 @@ namespace API.Controllers
         /// <response code="201">Retorna o feedback criado com o ID.</response>
         /// <response code="400">Se os dados enviados forem inválidos.</response>
         [HttpPost]
-        public async Task<ActionResult<Feedback>> Create(CreateFeedback createFeedback)
+        public async Task<ActionResult<Feedback>> Create([FromBody] CreateFeedback createFeedback)
         {
             var feedback = await _feedbackService.AddFeedbackAsync(createFeedback);
             return CreatedAtAction(nameof(GetById), new { id = feedback.Id }, feedback);
