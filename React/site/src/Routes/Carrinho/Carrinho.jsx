@@ -140,7 +140,7 @@ function Carrinho() {
 
         <table className="tabela-carrinho">
           <thead>
-            <tr>
+            <tr className="sb">
               <th></th>
               <th>Imagem</th>
               <th>Produto</th>

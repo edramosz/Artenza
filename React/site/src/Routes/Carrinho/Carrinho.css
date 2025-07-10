@@ -24,6 +24,26 @@
   font-size: 16px;
 }
 
+
+thead .sb th:first-child {
+  border-top-left-radius: 10px;
+  background-color: var(--color-accent);
+}
+
+thead .sb th:last-child {
+  border-top-right-radius: 10px;
+  
+  background-color: var(--color-accent);
+}
+
+thead .sb th {
+  background-color: #f0f0f0;
+  padding: 12px;
+  
+  background-color: var(--color-accent);
+}
+
+
 .tabela-carrinho th,
 .tabela-carrinho td {
   padding: 12px 10px;
