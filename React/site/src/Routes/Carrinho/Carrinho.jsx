@@ -183,7 +183,7 @@ function Carrinho() {
                   <td>
                     <div className="botoes-qtd">
                       <button onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)} disabled={!item.quantidade || item.quantidade <= 1}>-</button>
-                      <span>{item.quantidade ?? 1}</span>
+                      <span className="numeros-span">{item.quantidade ?? 1}</span>
                       <button onClick={() => alterarQuantidade(item, (item.quantidade || 1) + 1)}>+</button>
                     </div>
                   </td>

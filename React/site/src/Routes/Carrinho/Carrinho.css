@@ -79,22 +79,22 @@ thead .sb th {
 
 .tabela-carrinho th:nth-child(3),
 .tabela-carrinho td:nth-child(3) {
-  width: 270px; /* Produto (nome, tipo, categoria) */
+  width: 220px; /* Produto (nome, tipo, categoria) */
 }
 
 .tabela-carrinho th:nth-child(4),
 .tabela-carrinho td:nth-child(4) {
-  width: 60px; /* Tamanho */
+  width: 20px; /* Tamanho */
 }
 
 .tabela-carrinho th:nth-child(5),
 .tabela-carrinho td:nth-child(5) {
-  width: 190px; /* Preço */
+  width: 160px; /* Preço */
 }
 
 .tabela-carrinho th:nth-child(6),
 .tabela-carrinho td:nth-child(6) {
-  width: 120px; /* Qtd */
+  width: 100px; /* Qtd */
 }
 
 .tabela-carrinho th:nth-child(7),
@@ -115,7 +115,7 @@ thead .sb th {
 }
 
 .nomes-prods .tipo{
-  color: #111;
+  color: #444;
   font-weight: 500;
 }
 
@@ -137,8 +137,8 @@ thead .sb th {
 }
 
 .botoes-qtd button {
-  width: 23px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
   font-weight: bold;
   border: 1px solid #ccc;
   background-color: #f4f4f4;
@@ -261,3 +261,5 @@ thead .sb th {
     font-size: 14px;
   }
 }
+
+
