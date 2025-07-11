@@ -41,6 +41,20 @@ namespace API.Services
 
             return feedback;
         }
+        public async Task<List<Feedback>> GetFeedbacksPorIdProduto(string idProduto)
+        {
+            var todosFeedbacks = await _firebaseClient
+                .Child("feedbacks")
+                .OnceAsync<Feedback>();
+
+            var feedbacksFiltrados = todosFeedbacks
+                .Where(f => f.Object.IdProduto == idProduto)
+                .Select(f => f.Object)
+                .ToList();
+
+            return feedbacksFiltrados;
+        }
+
 
         // Adicionar um novo Feedback
         public async Task<Feedback> AddFeedbackAsync(CreateFeedback feedbackDto)

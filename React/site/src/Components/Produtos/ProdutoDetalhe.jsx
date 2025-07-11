@@ -15,7 +15,7 @@ const Estrelas = ({ nota, max = 5 }) => {
       <FontAwesomeIcon
         key={i}
         icon={faStarFull}
-        style={{ color: i <= nota ? "#111" : "#ccc", marginRight: 2 }}
+        style={{ color: i <= nota ? "#f1d323ff" : "#ccc", marginRight: 2 }}
       />
     );
   }
@@ -81,6 +81,7 @@ const ProdutoDetalhe = () => {
 
         // Após carregar produto, carregar feedbacks
         carregarFeedbacks(dados.id);
+        console.log(id)
       } catch (err) {
         setErro(err.message);
       } finally {
@@ -109,8 +110,8 @@ const ProdutoDetalhe = () => {
   const carregarFeedbacks = async (IdProduto) => {
     try {
 
-      const response = await fetch(`https://localhost:7294/api/Feedback?idProduto=${IdProduto}`);
-      console.log(IdProduto);
+      const response = await fetch(`https://localhost:7294/api/Feedback/produto/${IdProduto}`);
+      console.log(IdProduto)
       if (!response.ok) throw new Error("Erro ao carregar feedbacks");
       const dados = await response.json();
       setFeedbacks(dados);
