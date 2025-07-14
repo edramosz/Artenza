@@ -35,11 +35,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ArtenzaPolicy", policy =>
     {
-        policy.WithOrigins("https://artenza.onrender.com") // url da hospedagem Render
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy
+            .WithOrigins("https://artenza.netlify.app", "https://artenza.onrender.com") // todos os domínios válidos
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
+
 
 var app = builder.Build();
 
