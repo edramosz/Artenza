@@ -90,95 +90,111 @@ const Cadastro = () => {
     }
   };
 
-  const handleSubmitCompleto = async (e) => {
-    e.preventDefault();
+const handleSubmitCompleto = async (e) => {
+  e.preventDefault();
 
-    if (!formData.DiaNascimento || !formData.MesNascimento || !formData.AnoNascimento) {
-      alert("Por favor, selecione uma data de nascimento válida.");
-      return;
+  if (!formData.DiaNascimento || !formData.MesNascimento || !formData.AnoNascimento) {
+    alert("Por favor, selecione uma data de nascimento válida.");
+    return;
+  }
+
+  try {
+    // 1. Criar usuário no Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      formData.Email,
+      formData.SenhaHash
+    );
+    const firebaseUserId = userCredential.user.uid;
+
+    // 2. Criar endereço com UsuarioId
+    const responseEndereco = await fetch("https://localhost:7294/Endereco", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formDataEndereco,
+        UsuarioId: firebaseUserId, //necessário para o backend
+      }),
+    });
+
+    if (!responseEndereco.ok) {
+      const error = await responseEndereco.text();
+      throw new Error(`Erro ao cadastrar endereço: ${error}`);
     }
 
-    try {
-      const responseEndereco = await fetch("https://localhost:7294/Endereco", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formDataEndereco),
-      });
+    const endereco = await responseEndereco.json();
 
-      if (!responseEndereco.ok) {
-        const error = await responseEndereco.text();
-        throw new Error(`Erro ao cadastrar endereço: ${error}`);
-      }
+    // 3. Criar usuário no backend
+    const responseUsuario = await fetch("https://localhost:7294/Usuario", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        NomeCompleto: formData.NomeCompleto,
+        Email: formData.Email,
+        Telefone: formData.Telefone,
+        SenhaHash: formData.SenhaHash,
+        IdEndereco: endereco.id,
+        isAdmin: formData.isAdmin,
+        DiaNascimento: formData.DiaNascimento,
+        MesNascimento: formData.MesNascimento,
+        AnoNascimento: formData.AnoNascimento,
+        PerfilUrl: formData.PerfilUrl || "https://exemplo.com/default-profile.png",
+      }),
+    });
 
-      const endereco = await responseEndereco.json();
-
-      const responseUsuario = await fetch("https://localhost:7294/Usuario", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          NomeCompleto: formData.NomeCompleto,
-          Email: formData.Email,
-          Telefone: formData.Telefone,
-          SenhaHash: formData.SenhaHash,
-          IdEndereco: endereco.id,
-          isAdmin: formData.isAdmin,
-          DiaNascimento: formData.DiaNascimento,
-          MesNascimento: formData.MesNascimento,
-          AnoNascimento: formData.AnoNascimento,
-          PerfilUrl: formData.PerfilUrl || "https://exemplo.com/default-profile.png",
-        }),
-      });
-
-      if (!responseUsuario.ok) {
-        const error = await responseUsuario.text();
-        throw new Error(`Erro ao cadastrar usuário: ${error}`);
-      }
-
-      await createUserWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
-      await signInWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
-
-      alert("Cadastro completo realizado com sucesso!");
-
-      localStorage.setItem("nomeUsuario", formData.NomeCompleto);
-      localStorage.setItem("email", formData.Email);
-      localStorage.setItem("isAdmin", formData.isAdmin.toString());
-      localStorage.setItem("perfilUrl", formData.PerfilUrl || "");
-      window.dispatchEvent(new Event("storage"));
-
-      setFormData({
-        NomeCompleto: "",
-        Email: "",
-        Telefone: "",
-        SenhaHash: "",
-        IdEndereco: "",
-        isAdmin: false,
-        DiaNascimento: "",
-        MesNascimento: "",
-        AnoNascimento: "",
-        DataNascimento: "",
-        PerfilUrl: "",
-      });
-
-      setFormDataEndereco({
-        CEP: "",
-        Estado: "",
-        Cidade: "",
-        Bairro: "",
-        Rua: "",
-        Numero: "",
-        Complemento: "",
-      });
-
-      navigate('/');
-    } catch (error) {
-      console.error("Erro:", error.message || error);
-      if (error.code === "auth/email-already-in-use") {
-        alert("Este email já está em uso. Tente outro ou recupere sua senha.");
-      } else {
-        alert("Erro ao realizar cadastro completo.\n" + (error?.message || error));
-      }
+    if (!responseUsuario.ok) {
+      const error = await responseUsuario.text();
+      throw new Error(`Erro ao cadastrar usuário: ${error}`);
     }
-  };
+
+    // 4. Autenticar usuário após cadastro
+    await signInWithEmailAndPassword(auth, formData.Email, formData.SenhaHash);
+
+    alert("Cadastro completo realizado com sucesso!");
+
+    // 5. Salvar dados no localStorage
+    localStorage.setItem("nomeUsuario", formData.NomeCompleto);
+    localStorage.setItem("email", formData.Email);
+    localStorage.setItem("isAdmin", formData.isAdmin.toString());
+    localStorage.setItem("perfilUrl", formData.PerfilUrl || "");
+    window.dispatchEvent(new Event("storage"));
+
+    // 6. Limpar formulários
+    setFormData({
+      NomeCompleto: "",
+      Email: "",
+      Telefone: "",
+      SenhaHash: "",
+      IdEndereco: "",
+      isAdmin: false,
+      DiaNascimento: "",
+      MesNascimento: "",
+      AnoNascimento: "",
+      DataNascimento: "",
+      PerfilUrl: "",
+    });
+
+    setFormDataEndereco({
+      CEP: "",
+      Estado: "",
+      Cidade: "",
+      Bairro: "",
+      Rua: "",
+      Numero: "",
+      Complemento: "",
+    });
+
+    navigate('/');
+  } catch (error) {
+    console.error("Erro:", error.message || error);
+    if (error.code === "auth/email-already-in-use") {
+      alert("Este email já está em uso. Tente outro ou recupere sua senha.");
+    } else {
+      alert("Erro ao realizar cadastro completo.\n" + (error?.message || error));
+    }
+  }
+};
+
 
   return (
     <div className="form-container">

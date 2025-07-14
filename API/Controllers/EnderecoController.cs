@@ -38,14 +38,12 @@ namespace API.Controllers
             return Ok(endereco);
         }
 
-        // Buscar endereços por usuário
+        // Buscar endereços por usuário - retorna lista mesmo se vazia, nunca 404
         [HttpGet("por-usuario/{usuarioId}")]
         public async Task<ActionResult<List<Endereco>>> GetEnderecosPorUsuario(string usuarioId)
         {
             var enderecos = await _enderecoService.GetEnderecosPorUsuarioAsync(usuarioId);
-            if (enderecos == null || enderecos.Count == 0)
-                return NotFound();
-            return Ok(enderecos);
+            return Ok(enderecos ?? new List<Endereco>());
         }
 
         // Criar endereço

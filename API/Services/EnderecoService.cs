@@ -5,6 +5,7 @@ using Core.Models.DTO_s.Create;
 using Core.Models.DTO_s.Update;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -38,15 +39,17 @@ namespace API.Services
             }).ToList();
         }
 
-        // Obter enderecos por usuarioId
+        // Obter enderecos por usuarioId - usando filtro no Firebase (requer index no db)
         public async Task<List<Endereco>> GetEnderecosPorUsuarioAsync(string usuarioId)
         {
             var enderecos = await _firebaseClient
                 .Child("enderecos")
+                .OrderBy("UsuarioId")
+                .EqualTo(usuarioId)
                 .OnceAsync<Endereco>();
 
             return enderecos
-                .Where(e => e.Object != null && e.Object.UsuarioId == usuarioId)
+                .Where(e => e.Object != null)
                 .Select(e =>
                 {
                     var obj = e.Object;

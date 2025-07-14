@@ -16,46 +16,53 @@ const Enderecos = () => {
     ativo: false
   });
 
-  const email = localStorage.getItem("email");
-  const nomeCompleto = localStorage.getItem("nomeCompletoUser");
-
   useEffect(() => {
-    const carregarDados = async () => {
+    const carregarEnderecos = async () => {
       try {
-        const resUsuario = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
-        const usuarioData = await resUsuario.json();
-        setUsuario(usuarioData);
+        const idUsuario = localStorage.getItem("idUsuario");
+        const nomeCompletoUser = localStorage.getItem("nomeCompletoUser");
 
-        const resEnderecos = await fetch(`https://localhost:7294/Endereco/   ${usuarioData.id}`);
+        if (!idUsuario) {
+          console.error("ID do usuário não encontrado no localStorage");
+          return;
+        }
+
+        setUsuario({ id: idUsuario, nome: nomeCompletoUser });
+
+        const resEnderecos = await fetch(`https://localhost:7294/Endereco/por-usuario/${idUsuario.trim()}`);
         if (resEnderecos.ok) {
           const listaEnderecos = await resEnderecos.json();
           setEnderecos(listaEnderecos);
         } else {
-          setEnderecos([]); // nenhum endereço cadastrado
+          setEnderecos([]);
         }
-
       } catch (error) {
-        console.error("Erro ao carregar dados:", error);
+        console.error("Erro ao carregar endereços:", error);
       }
     };
 
-    if (email) carregarDados();
-  }, [email]);
+    carregarEnderecos();
+  }, []);
 
   const handleSalvarEndereco = async (e) => {
     e.preventDefault();
     try {
+      const enderecoComUsuario = {
+        ...novoEndereco,
+        UsuarioId: usuario.id.trim()
+      };
+
       if (enderecoEditando) {
         await fetch(`https://localhost:7294/Endereco/${enderecoEditando.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...novoEndereco, usuarioId: usuario.id }),
+          body: JSON.stringify(enderecoComUsuario),
         });
       } else {
         await fetch(`https://localhost:7294/Endereco`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...novoEndereco, usuarioId: usuario.id }),
+          body: JSON.stringify(enderecoComUsuario),
         });
       }
 
@@ -83,7 +90,11 @@ const Enderecos = () => {
         await fetch(`https://localhost:7294/Endereco/${endereco.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...endereco, ativo: endereco.id === idSelecionado })
+          body: JSON.stringify({
+            ...endereco,
+            ativo: endereco.id === idSelecionado,
+            UsuarioId: usuario.id.trim()
+          })
         });
       }
       window.location.reload();
@@ -138,7 +149,11 @@ const Enderecos = () => {
                   </div>
                 ))}
                 {!modoEdicao && (
-                  <button onClick={() => { setModoEdicao(true); setEnderecoEditando(null); setNovoEndereco({ rua: '', numero: '', bairro: '', cidade: '', cep: '', ativo: false }); }}>
+                  <button onClick={() => {
+                    setModoEdicao(true);
+                    setEnderecoEditando(null);
+                    setNovoEndereco({ rua: '', numero: '', bairro: '', cidade: '', cep: '', ativo: false });
+                  }}>
                     ➕ Adicionar Novo Endereço
                   </button>
                 )}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../Db/FireBase";
+import defaultProfile from '../../../public/img/userDefault.png'
 import "./Navbar.css";
 import NavItem from "./NavItem";
 
@@ -102,7 +103,7 @@ const Navbar = () => {
               <img src="./img/logo.png" alt="Logo" width={180} />
             </Link>
           </div>
-          
+
           <div className="search">
             <form
               onSubmit={(e) => {
@@ -133,7 +134,7 @@ const Navbar = () => {
               </div>
             </form>
           </div>
-          
+
           <div className="menu-user">
             <ul>
               {usuarioLogado ? (
@@ -141,10 +142,11 @@ const Navbar = () => {
                   <li className="main-user">
                     <div className="icon-perfil">
                       <Link to="/perfil">
-                        <img 
-                          src={perfilUrl || "/img/userDefault.png"} 
-                          alt="" 
-                          className="perfil-foto" 
+                        <img
+                          src={perfilUrl || defaultProfile}
+                          alt="Foto de Perfil"
+                          className="perfil-foto"
+                          onError={(e) => e.currentTarget.src = defaultProfile}
                         />
                       </Link>
                     </div>
@@ -197,7 +199,7 @@ const Navbar = () => {
               <i className="fa-solid fa-bars"></i>
             )}
           </button>
-          
+
           <nav>
             <ul className={`nav-items ${openMenu ? "open" : ""}`}>
               {items.map((item) => (
@@ -215,20 +217,21 @@ const Navbar = () => {
       </div>
 
       {/* Menu Lateral Mobile */}
-      <div 
-        className={`mobile-menu-overlay ${openMenu ? "active" : ""}`} 
+      <div
+        className={`mobile-menu-overlay ${openMenu ? "active" : ""}`}
         onClick={toggleMenu}
       ></div>
-      
+
       <div className={`mobile-menu ${openMenu ? "active" : ""}`}>
         <div className="mobile-menu-header">
           {usuarioLogado ? (
             <>
               <Link to="/perfil" onClick={toggleMenu}>
-                <img 
-                  src={perfilUrl || "/img/userDefault.png"} 
-                  alt="Perfil" 
-                  className="mobile-perfil-foto" 
+                <img
+                  src={perfilUrl || defaultProfile}
+                  alt="Foto de Perfil"
+                  className="perfil-img"
+                  onError={(e) => e.currentTarget.src = defaultProfile}
                 />
               </Link>
               <div className="mobile-user-info">
@@ -249,12 +252,12 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        
+
         <ul className="mobile-nav-items">
           {items.map((item) => (
             <li key={item.id}>
-              <Link 
-                to={item.url} 
+              <Link
+                to={item.url}
                 className={location.pathname === item.url ? "active" : ""}
                 onClick={toggleMenu}
               >
@@ -262,7 +265,7 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-          
+
           {usuarioLogado && (
             <>
               <li>
