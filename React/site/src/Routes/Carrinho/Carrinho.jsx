@@ -13,10 +13,10 @@ function Carrinho() {
   useEffect(() => {
     const carregarDados = async () => {
       try {
-        const resUsuario = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
+        const resUsuario = await fetch(`https://artenza.onrender.com/Usuario/por-email/${email}`);
         const usuario = await resUsuario.json();
 
-        const resCarrinho = await fetch("https://localhost:7294/Carrinho");
+        const resCarrinho = await fetch("https://artenza.onrender.com/Carrinho");
         const carrinho = await resCarrinho.json();
         const carrinhoUsuario = carrinho.filter(item => item.idUsuario === usuario.id);
         setItensCarrinho(carrinhoUsuario);
@@ -27,7 +27,7 @@ function Carrinho() {
         });
         setSelecionados(estadoInicialSelecionados);
 
-        const resProdutos = await fetch("https://localhost:7294/Produto");
+        const resProdutos = await fetch("https://artenza.onrender.com/Produto");
         const listaProdutos = await resProdutos.json();
         setProdutos(listaProdutos);
       } catch (err) {
@@ -62,7 +62,7 @@ function Carrinho() {
     };
 
     try {
-      const response = await fetch(`https://localhost:7294/Carrinho/${item.id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Carrinho/${item.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -84,7 +84,7 @@ function Carrinho() {
   };
 
   const removerItem = async (id) => {
-    await fetch(`https://localhost:7294/Carrinho/${id}`, { method: "DELETE" });
+    await fetch(`https://artenza.onrender.com/Carrinho/${id}`, { method: "DELETE" });
     setItensCarrinho(prev => prev.filter(item => item.id !== id));
     setSelecionados(prev => {
       const novoSelecionados = { ...prev };

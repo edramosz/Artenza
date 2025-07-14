@@ -41,7 +41,7 @@ const Perfil = () => {
     const id = localStorage.getItem("idUsuario");
 
     try {
-      const response = await fetch(`https://localhost:7294/Usuario/${id}/perfil`, {
+      const response = await fetch(`https://artenza.onrender.com/Usuario/${id}/perfil`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ perfilUrl: novoUsuario.perfilUrl }),
@@ -121,7 +121,7 @@ const Perfil = () => {
     const id = localStorage.getItem("idUsuario");
 
     try {
-      const resGet = await fetch(`https://localhost:7294/Usuario/${id}`);
+      const resGet = await fetch(`https://artenza.onrender.com/Usuario/${id}`);
       const usuarioExistente = await resGet.json();
 
       const [ano, mes, dia] = form.dataNascimento.split('-');
@@ -141,7 +141,7 @@ const Perfil = () => {
         perfilUrl: usuarioExistente.perfilUrl
       };
 
-      const response = await fetch(`https://localhost:7294/Usuario/${id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Usuario/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(corpoCompleto),
@@ -185,7 +185,7 @@ const Perfil = () => {
     const carregarUsuarioAPI = async () => {
       const id = localStorage.getItem("idUsuario");
       try {
-        const response = await fetch(`https://localhost:7294/Usuario/${id}`);
+        const response = await fetch(`https://artenza.onrender.com/Usuario/${id}`);
         const user = await response.json();
 
         const dataNascimento = new Date(user.anoNascimento, user.mesNascimento - 1, user.diaNascimento);

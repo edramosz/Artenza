@@ -13,7 +13,7 @@
     useEffect(() => {
       const fetchUsuarios = async () => {
         try {
-          const response = await fetch("https://localhost:7294/Usuario"); // Atualize se o endpoint for diferente
+          const response = await fetch("https://artenza.onrender.com/Usuario"); // Atualize se o endpoint for diferente
           if (!response.ok) {
             throw new Error("Erro ao carregar usuários.");
           }
@@ -46,7 +46,7 @@
     const handleDeleteUsuario = async (id) => {
       console.log("Excluindo usuário com ID:", id);
       try {
-        const response = await fetch(`https://localhost:7294/Usuario/${id}`, {
+        const response = await fetch(`https://artenza.onrender.com/Usuario/${id}`, {
           method: "DELETE",
         });
 
