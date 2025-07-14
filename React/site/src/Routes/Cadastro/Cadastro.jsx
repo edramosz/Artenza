@@ -99,7 +99,7 @@ const Cadastro = () => {
     }
 
     try {
-      const responseEndereco = await fetch("https://localhost:7294/Endereco", {
+      const responseEndereco = await fetch("https://artenza.onrender.com/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataEndereco),
@@ -112,7 +112,7 @@ const Cadastro = () => {
 
       const endereco = await responseEndereco.json();
 
-      const responseUsuario = await fetch("https://localhost:7294/Usuario", {
+      const responseUsuario = await fetch("https://artenza.onrender.com/Usuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
