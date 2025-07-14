@@ -96,7 +96,7 @@ const Navbar = () => {
           </div>
           <div className="search">
   
-</div>
+
 
           <div className="menu-user">
             <ul>
