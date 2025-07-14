@@ -67,7 +67,7 @@ const PromotionalBanner = () => {
                         <p className="subtitle">{slides[current].subtitle}</p>
                         <h2 className="title">{slides[current].title}</h2>
                         <Link to="/Colecao" className="shop-button">
-                            SHOP NOW
+                            Ver Agora
                         </Link>
                     </div>
                 </div>

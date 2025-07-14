@@ -5,7 +5,10 @@ using Core.Models.DTO_s.Create;
 using Core.Models.DTO_s.Update;
 using Firebase.Database;
 using Firebase.Database.Query;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace API.Services
 {
@@ -28,54 +31,77 @@ namespace API.Services
                 .Child("enderecos")
                 .OnceAsync<Endereco>();
 
-            return enderecos.Select(item => item.Object).ToList();
+            return enderecos.Select(item =>
+            {
+                var obj = item.Object;
+                obj.Id = item.Key;
+                return obj;
+            }).ToList();
+        }
+
+        // Obter enderecos por usuarioId - usando filtro no Firebase (requer index no db)
+        public async Task<List<Endereco>> GetEnderecosPorUsuarioAsync(string usuarioId)
+        {
+            var enderecos = await _firebaseClient
+                .Child("enderecos")
+                .OrderBy("UsuarioId")
+                .EqualTo(usuarioId)
+                .OnceAsync<Endereco>();
+
+            return enderecos
+                .Where(e => e.Object != null)
+                .Select(e =>
+                {
+                    var obj = e.Object;
+                    obj.Id = e.Key;
+                    return obj;
+                })
+                .ToList();
         }
 
         // Obter um Endereco pelo ID
-        public async Task<Endereco> GetEnderecoAsync(string id)
+        public async Task<Endereco> GetEnderecoPorIdAsync(string id)
         {
             var enderecos = await _firebaseClient
                 .Child("enderecos")
                 .OnceAsync<Endereco>();
 
-            var endereco = enderecos
-                .FirstOrDefault(p => p.Object != null && p.Object.Id == id)
-                ?.Object;
+            var enderecoItem = enderecos.FirstOrDefault(e => e.Key == id);
+            if (enderecoItem == null)
+                return null;
 
+            var endereco = enderecoItem.Object;
+            endereco.Id = enderecoItem.Key;
             return endereco;
         }
-        
 
         // Adicionar um novo Endereco
         public async Task<Endereco> AddEnderecoAsync(CreateEndereco enderecoDto)
         {
             var endereco = _mapper.Map<Endereco>(enderecoDto);
 
-            // Primeiro cria o documento no Firebase
             var response = await _firebaseClient
                 .Child("enderecos")
                 .PostAsync(endereco);
 
-            // Agora que o Firebase gerou a chave, seta o Id no objeto
             endereco.Id = response.Key;
 
-            // Atualiza o registro no Firebase já com o Id
             await _firebaseClient
                 .Child("enderecos")
                 .Child(endereco.Id)
                 .PutAsync(endereco);
 
-            // Adicionar o ID do endereco ao usuario através de algum modo
             return endereco;
         }
 
         // Atualizar um Endereco pelo ID
         public async Task UpdateEnderecoAsync(string id, UpdateEndereco enderecoDto)
         {
-            var enderecoExistente = await GetEnderecoAsync(id);
+            var enderecoExistente = await GetEnderecoPorIdAsync(id);
             if (enderecoExistente != null)
             {
                 _mapper.Map(enderecoDto, enderecoExistente);
+                enderecoExistente.Id = id; // garantir id
                 await _firebaseClient
                     .Child("enderecos")
                     .Child(id)

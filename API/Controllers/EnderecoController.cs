@@ -4,6 +4,8 @@ using API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Core.Models.DTO_s.Create;
 using Core.Models.DTO_s.Update;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace API.Controllers
 {
@@ -18,39 +20,33 @@ namespace API.Controllers
             _enderecoService = enderecoService;
         }
 
-        /// <summary>
-        /// Endpoint para listar todos os endereços.
-        /// </summary>
-        /// <returns></returns>
-        ///
+        // Listar todos os endereços
         [HttpGet]
         public async Task<ActionResult<List<Endereco>>> GetEnderecos()
         {
-            return await _enderecoService.GetEnderecosAsync();
+            var enderecos = await _enderecoService.GetEnderecosAsync();
+            return Ok(enderecos);
         }
 
-        /// <summary>
-        /// Endpoint para listar algum endereço pelo id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        ///
+        // Buscar endereço por ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<Endereco>> GetEndereco(string id)
+        public async Task<ActionResult<Endereco>> GetEnderecoPorId(string id)
         {
-            
-            var endereco = await _enderecoService.GetEnderecoAsync(id);
+            var endereco = await _enderecoService.GetEnderecoPorIdAsync(id);
             if (endereco == null)
                 return NotFound();
-
-            return endereco;
+            return Ok(endereco);
         }
 
-        /// <summary>
-        /// Endpoint para adicionar um endereço.
-        /// </summary>
-        /// <param name="enderecoDto"></param>
-        ///
+        // Buscar endereços por usuário - retorna lista mesmo se vazia, nunca 404
+        [HttpGet("por-usuario/{usuarioId}")]
+        public async Task<ActionResult<List<Endereco>>> GetEnderecosPorUsuario(string usuarioId)
+        {
+            var enderecos = await _enderecoService.GetEnderecosPorUsuarioAsync(usuarioId);
+            return Ok(enderecos ?? new List<Endereco>());
+        }
+
+        // Criar endereço
         [HttpPost]
         public async Task<ActionResult> CreateEndereco([FromBody] CreateEndereco enderecoDto)
         {
@@ -59,21 +55,14 @@ namespace API.Controllers
 
             var enderecoCriado = await _enderecoService.AddEnderecoAsync(enderecoDto);
 
-            return CreatedAtAction(nameof(GetEndereco), new { id = enderecoCriado.Id }, enderecoCriado);
+            return CreatedAtAction(nameof(GetEnderecoPorId), new { id = enderecoCriado.Id }, enderecoCriado);
         }
 
-
-
-        /// <summary>
-        /// Endpoint para editar algum endereço pelo id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="endereco"></param>
-        ///
+        // Atualizar endereço
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEndereco(string id, UpdateEndereco endereco)
         {
-            var existingEndereco = await _enderecoService.GetEnderecoAsync(id);
+            var existingEndereco = await _enderecoService.GetEnderecoPorIdAsync(id);
             if (existingEndereco == null)
                 return NotFound();
 
@@ -81,15 +70,11 @@ namespace API.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Endpoint para deletar algum endereço pelo id.
-        /// </summary>
-        /// <param name="id"></param>
-        ///
+        // Deletar endereço
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEndereco(string id)
         {
-            var existingEndereco = await _enderecoService.GetEnderecoAsync(id);
+            var existingEndereco = await _enderecoService.GetEnderecoPorIdAsync(id);
             if (existingEndereco == null)
                 return NotFound();
 
