@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NavProfile from './NavProfile';
+import defaultProfile from '../../../public/img/userDefault.png'
 import './Perfil.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -225,10 +226,12 @@ const Perfil = () => {
           <div className="perfil-header">
             <div className="perfil-img-wrapper">
               <img
-                src={usuario.perfilUrl || "./img/userDefault.png"}
+                src={usuario.perfilUrl || defaultProfile}
                 alt="Foto de Perfil"
                 className="perfil-img"
+                onError={(e) => e.currentTarget.src = defaultProfile}
               />
+
               <button
                 onClick={() => document.getElementById('inputFile').click()}
                 className="btn-edit-img"
@@ -287,7 +290,7 @@ const Perfil = () => {
                 {erros.geral && <p className="erro-campo">{erros.geral}</p>}
               </form>
             ) : (
-              <>              
+              <>
                 <p><strong>Email:</strong> {usuario.email}</p>
                 <p><strong>Telefone:</strong> {usuario.telefone}</p>
                 <p><strong>Data de Nascimento:</strong> {usuario.dataNascimento || '---'}</p>

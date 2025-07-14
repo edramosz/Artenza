@@ -42,8 +42,6 @@ function AppContent() {
         <Route path="/Produto/:id" element={<ProdutoDetalhe /> } />        
         <Route path="/Produto/:id" element={<Masculino/>} />
         <Route path="/Colecao" element={<Colecao />} />
-        <Route path="/Cadastro" element={<Cadastro />} />
-        <Route path="/Login" element={<Login />} />
         <Route path="/masculino" element={<Masculino />} />        
         <Route path="/feminino" element={<Feminino />} />
 
@@ -72,9 +70,13 @@ function AppContent() {
         <Route path="/Admin/editar-endereco/:id" element={<EditarEndereco />} />
       </Route>
 
-      {/* Rota 404 com Layout Simples */}
+      
       <Route element={<LayoutSimples />}>
         <Route path="*" element={<NotFound />} />
+
+        
+        <Route path="/Cadastro" element={<Cadastro />} />
+        <Route path="/Login" element={<Login />} />
       </Route>
     </Routes>
   );

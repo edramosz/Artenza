@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../Db/FireBase";
+import defaultProfile from '../../../public/img/userDefault.png';
 import "./Navbar.css";
 import NavItem from "./NavItem";
 
@@ -13,6 +14,9 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [perfilUrl, setPerfilUrl] = useState("");
 
+  const toggleMenu = () => {
+    setOpenMenu(!openMenu);
+  };
 
   const items = [
     { id: 1, url: "/", label: "Home" },
@@ -24,14 +28,11 @@ const Navbar = () => {
     { id: 7, url: "/contato", label: "Contato" },
     { id: 8, url: "/sobre", label: "Sobre" },
   ];
-6
 
   const carregarDadosUsuario = () => {
     const nomeCompleto = localStorage.getItem("nomeUsuario");
     const emailStr = localStorage.getItem("email");
     const isAdminStr = localStorage.getItem("isAdmin");
-
-
     const isAdmin = isAdminStr === "true";
 
     if (nomeCompleto && emailStr) {
@@ -44,12 +45,10 @@ const Navbar = () => {
       setUsuarioLogado(null);
     }
   };
-  // useEffect para monitorar alterações na autenticação e localStorage
+
   useEffect(() => {
-    // Carrega os dados do usuário ao montar o componente
     carregarDadosUsuario();
 
-    // Escuta mudanças na autenticação
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         carregarDadosUsuario();
@@ -58,15 +57,13 @@ const Navbar = () => {
       }
     });
 
-    // Escuta mudanças manuais no localStorage
     window.addEventListener("storage", carregarDadosUsuario);
 
     return () => {
       unsubscribe();
       window.removeEventListener("storage", carregarDadosUsuario);
     };
-  }, []); // Este useEffect agora é executado uma vez ao montar o componente
-
+  }, []);
 
   useEffect(() => {
     const updatePerfilUrl = () => {
@@ -74,16 +71,13 @@ const Navbar = () => {
       setPerfilUrl(url);
     };
 
-    // Escuta o evento customizado
     window.addEventListener("perfilAtualizado", updatePerfilUrl);
-    updatePerfilUrl(); // Carrega inicialmente
+    updatePerfilUrl();
 
     return () => {
       window.removeEventListener("perfilAtualizado", updatePerfilUrl);
     };
   }, []);
-
-
 
   return (
     <div className="all-menu">
@@ -94,42 +88,70 @@ const Navbar = () => {
               <img src="./img/logo.png" alt="Logo" width={180} />
             </Link>
           </div>
-          <div className="search">
-            </div>
-  
 
+          <div className="search">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                console.log("Buscando por:", searchTerm);
+              }}
+            >
+              <div className="search-item">
+                <input
+                  type="search"
+                  name="searchInput"
+                  placeholder="Buscar produtos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button
+                    type="button"
+                    className="clear-btn"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    <i className="fa fa-times" />
+                  </button>
+                )}
+                <button type="submit" className="search-btn">
+                  <i className="fa fa-search" />
+                </button>
+              </div>
+            </form>
+          </div>
 
           <div className="menu-user">
             <ul>
               {usuarioLogado ? (
-                <>
-                  <li className="main-user">
-                    <div className="icon-perfil">
-                      <Link to="/perfil">
-                        <img src={perfilUrl || "/img/userDefault.png"} alt="" className="perfil-foto" />
-                      </Link>
-                    </div>
-                    <div>
-                      <Link to="/perfil">
-                        <p className="user-item">Olá, {usuarioLogado.nome}</p>
-                        <p className="user-item">{usuarioLogado.email}</p>
-                      </Link>
-                    </div>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <div className="acount">
-                    <ul>
-                      <li>
-                        <Link to="/Cadastro">Junte-se a nós</Link>
-                      </li>
-                      <li>
-                        <Link to="/Login">Entrar</Link>
-                      </li>
-                    </ul>
+                <li className="main-user">
+                  <div className="icon-perfil">
+                    <Link to="/perfil">
+                      <img
+                        src={perfilUrl || defaultProfile}
+                        alt="Foto de Perfil"
+                        className="perfil-foto"
+                        onError={(e) => (e.currentTarget.src = defaultProfile)}
+                      />
+                    </Link>
                   </div>
-                </>
+                  <div>
+                    <Link to="/perfil">
+                      <p className="user-item">Olá, {usuarioLogado.nome}</p>
+                      <p className="user-item">{usuarioLogado.email}</p>
+                    </Link>
+                  </div>
+                </li>
+              ) : (
+                <div className="acount">
+                  <ul>
+                    <li>
+                      <Link to="/Cadastro">Junte-se a nós</Link>
+                    </li>
+                    <li>
+                      <Link to="/Login">Entrar</Link>
+                    </li>
+                  </ul>
+                </div>
               )}
             </ul>
           </div>
@@ -151,6 +173,14 @@ const Navbar = () => {
 
       <div className="main-menu">
         <header>
+          <button className="btn-mob" onClick={toggleMenu}>
+            {openMenu ? (
+              <i className="fa-solid fa-xmark"></i>
+            ) : (
+              <i className="fa-solid fa-bars"></i>
+            )}
+          </button>
+
           <nav>
             <ul className={`nav-items ${openMenu ? "open" : ""}`}>
               {items.map((item) => (
@@ -164,7 +194,7 @@ const Navbar = () => {
             </ul>
           </nav>
 
-          <button className="btn-mob" onClick={() => setOpenMenu(!openMenu)}>
+          <button className="btn-mob" onClick={toggleMenu}>
             {openMenu ? (
               <i className="fa-solid fa-xmark"></i>
             ) : (
@@ -172,6 +202,73 @@ const Navbar = () => {
             )}
           </button>
         </header>
+
+        {/* Menu Lateral Mobile */}
+        <div
+          className={`mobile-menu-overlay ${openMenu ? "active" : ""}`}
+          onClick={toggleMenu}
+        ></div>
+
+        <div className={`mobile-menu ${openMenu ? "active" : ""}`}>
+          <div className="mobile-menu-header">
+            {usuarioLogado ? (
+              <>
+                <Link to="/perfil" onClick={toggleMenu}>
+                  <img
+                    src={perfilUrl || defaultProfile}
+                    alt="Foto de Perfil"
+                    className="perfil-img"
+                    onError={(e) => (e.currentTarget.src = defaultProfile)}
+                  />
+                </Link>
+                <div className="mobile-user-info">
+                  <Link to="/perfil" onClick={toggleMenu}>
+                    <p>Olá, {usuarioLogado.nome}</p>
+                    <p>{usuarioLogado.email}</p>
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="mobile-login-options">
+                <Link to="/Login" onClick={toggleMenu} className="mobile-login-btn">
+                  Entrar
+                </Link>
+                <Link to="/Cadastro" onClick={toggleMenu} className="mobile-register-btn">
+                  Cadastre-se
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <ul className="mobile-nav-items">
+            {items.map((item) => (
+              <li key={item.id}>
+                <Link
+                  to={item.url}
+                  className={location.pathname === item.url ? "active" : ""}
+                  onClick={toggleMenu}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+
+            {usuarioLogado && (
+              <>
+                <li>
+                  <Link to="/Carrinho" onClick={toggleMenu}>
+                    <i className="fa-solid fa-cart-shopping"></i> Carrinho
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Favoritos" onClick={toggleMenu}>
+                    <i className="fa-solid fa-heart"></i> Favoritos
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );
