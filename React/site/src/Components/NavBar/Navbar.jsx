@@ -95,6 +95,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="search">
+            </div>
   
 
 
