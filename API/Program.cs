@@ -49,7 +49,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 // Aplicar CORS (antes de Authorization)
-app.UseCors("PermitirTudo");
+app.UseCors("ArtenzaPolicy");
 
 // Swagger apenas no modo de desenvolvimento
 if (app.Environment.IsDevelopment())
