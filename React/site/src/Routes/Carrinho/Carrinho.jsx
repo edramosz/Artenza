@@ -83,7 +83,6 @@ function Carrinho() {
     }
   };
 
-
   const removerItem = async (id) => {
     await fetch(`https://localhost:7294/Carrinho/${id}`, { method: "DELETE" });
     setItensCarrinho(prev => prev.filter(item => item.id !== id));
@@ -139,86 +138,63 @@ function Carrinho() {
       <div className="lista-carrinho">
         <h1>Meu Carrinho</h1>
 
-        <div className="cabecalho-carrinho">
-          <div className="col-checkbox"></div>
-          <div className="col-img"></div>
-          <div className="col-produto">Produto</div>
-          <div className="col-tamanho">Tamanho</div>
-          <div className="col-preco">Preço</div>
-          <div className="col-quantidade">Qtd.</div>
-          <div className="col-subtotal">Subtotal</div>
-          <div className="col-remover"></div>
-        </div>
+        <table className="tabela-carrinho">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Imagem</th>
+              <th>Produto</th>
+              <th>Tamanho</th>
+              <th>Preço</th>
+              <th>Qtd</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {itensCarrinho.map(item => {
+              const produto = getProduto(item.idProduto);
+              return (
+                <tr key={item.id}>
+                  <td><input type="checkbox" checked={selecionados[item.id] || false} onChange={() => toggleSelecionado(item.id)} /></td>
+                  <td>
+                    <Link to={`/produto/${produto.id}`}>
+                      <img
+                        className="img-item"
+                        src={Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
+                          ? produto.urlImagens[0]
+                          : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"}
+                        alt={produto.nome}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
+                        }}
+                      />
+                    </Link>
+                  </td>
+                  <td className="nomes-prods">
+                    <Link to={`/produto/${produto.id}`} className="link-produto">
+                      <p className="nome">{produto.nome}</p>
+                      <p className="tipo">{produto.tipo}</p>
+                    </Link>
+                  </td>
+                  <td><p className="tamanho">{item.tamanho}</p></td>
+                  <td><p className="_preco">R$ {produto.preco?.toFixed(2)}</p></td>
+                  <td>
+                    <div className="botoes-qtd">
+                      <button onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)} disabled={!item.quantidade || item.quantidade <= 1}>-</button>
+                      <span>{item.quantidade ?? 1}</span>
+                      <button onClick={() => alterarQuantidade(item, (item.quantidade || 1) + 1)}>+</button>
+                    </div>
+                  </td>
+                  <td><p className="_preco">R$ {(produto.preco * item.quantidade).toFixed(2)}</p></td>
+                  <td><button onClick={() => removerItem(item.id)} className="remove-btn"><i className="fa-solid fa-xmark"></i></button></td>
+                </tr>
 
-        {itensCarrinho.map(item => {
-          const produto = getProduto(item.idProduto);
-          return (
-            <div key={item.id} className="item-carrinho">
-              <div className="col-checkbox">
-                <input
-                  type="checkbox"
-                  checked={selecionados[item.id] || false}
-                  onChange={() => toggleSelecionado(item.id)}
-                />
-              </div>
-
-              <div className="col-img">
-                <img
-                  className="img-item"
-                  src={
-                    Array.isArray(produto.urlImagens) && produto.urlImagens.length > 0 && produto.urlImagens[0] !== "string"
-                      ? produto.urlImagens[0]
-                      : "https://placeholde.co/300x200.png?text=Produto+sem+imagem"
-                  }
-                  alt={produto.nome}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://placeholde.co/300x200.png?text=Produto+sem+imagem";
-                  }}
-                />
-              </div>
-
-              <div className="col-produto">
-                <p>{produto.nome}</p>
-                <p>{produto.tipo}</p>
-                <p>{produto.categoria}</p>
-              </div>
-
-              <div className="col-tamanho">
-                <p>{item.tamanho}</p>
-              </div>
-
-              <div className="col-preco">
-                <p>R$ {produto.preco?.toFixed(2)}</p>
-              </div>
-
-              <div className="col-quantidade">
-                <div className="botoes-qtd">
-                  <button
-                    onClick={() => alterarQuantidade(item, item.quantidade ? item.quantidade - 1 : 1)}
-                    disabled={!item.quantidade || item.quantidade <= 1}
-                  >
-                    -
-                  </button>
-                  <span>{item.quantidade ?? 1}</span>
-                  <button
-                    onClick={() => alterarQuantidade(item, (item.quantidade || 1) + 1)}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div className="col-subtotal">
-                <p>R$ {(produto.preco * item.quantidade).toFixed(2)}</p>
-              </div>
-
-              <div className="col-remover">
-                <button onClick={() => removerItem(item.id)}>Remover</button>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </tbody>
+        </table>
       </div>
 
       <div className="resumo">
@@ -242,14 +218,11 @@ function Carrinho() {
           <h3>Total da Compra: R$ {totalSelecionado.toFixed(2)}</h3>
         </div>
         <div className="btn-compra">
-          <button onClick={handleFinalizarPedido} className="botao-comprar">
-            Comprar
-          </button>
+          <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>
         </div>
       </div>
     </div>
   );
-
 }
 
 export default Carrinho;

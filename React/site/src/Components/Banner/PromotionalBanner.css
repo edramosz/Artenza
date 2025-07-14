@@ -1,185 +1,172 @@
-.hero-layout {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-  max-width: 1700px;
-  margin: auto;
-  padding: 20px 40px;
-  margin-top: 50px;
+.promotional-banner {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+    padding: 20px 40px;
 }
 
-.hero-layout .carousel {
-  flex: 2;
-  height: 420px;
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  flex-direction: column;  
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.425);
+/* Main Carousel Styles */
+.main-carousel {
+    flex: 2;
+    height: 420px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.425);
 }
 
-.hero-layout .carousel-slide {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-  width: 100%;
-  background: transparent;
-  box-shadow: none;  
+.carousel-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 60px;
 }
 
-.hero-layout .carousel-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.text-content {
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    max-width: 50%;
 }
 
-.hero-layout .text-content {  
-  position: absolute;
-  top: 0;
-  left: 60px;
-  height: 100%;
-  display: flex;
-  flex-direction:column;
-  justify-content: center;
-  text-align: start;
-  align-items: start;
-  color: white;
-  gap: 10px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+.text-content .subtitle {
+    font-size: 0.9rem;
+    color: #f5f5f5;
+    margin-bottom: 8px;
 }
 
-.hero-layout .text-content p {
-  font-size: 0.9rem;
-  color: #f5f5f5;
+.text-content .title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
 }
 
-.hero-layout .text-content h2 {
-  font-size: 1.5rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+.shop-button {
+    display: inline-block;
+    background: #ff4c3b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.3s;
 }
 
-.hero-layout .text-content .price {
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-  display: block;
-
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+.shop-button:hover {
+    background: #e04132;
 }
 
-.hero-layout .shop-btn {
-  background: #ff4c3b;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 35px;
+    background: rgb(245, 243, 243);
+    color: rgba(0, 0, 0, 0.733);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s;
 }
 
-.hero-layout .carousel button {
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  margin: 0px 15px;
-  width: 35px;
-  height: 35px;
-  transform: translateY(-50%);
-  background: rgb(245, 243, 243);
-  color: rgba(0, 0, 0, 0.733);
-  border-radius: 20px;
-  z-index: 10;
-  font-size: 1.3rem;
+.carousel-button:hover {
+    background: #fff;
+    transform: translateY(-50%) scale(1.1);
 }
 
-.hero-layout .carousel button:first-of-type {
-  left: 0;
+.carousel-button.prev {
+    left: 15px;
 }
 
-.hero-layout .carousel button:last-of-type {
-  right: 0;
+.carousel-button.next {
+    right: 15px;
 }
 
-.hero-layout .dots {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px;
-  gap: 10px;
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
-.hero-layout .dot {
-  width: 10px;
-  height: 10px;
-  background: #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.3s;
+.dot {
+    width: 10px;
+    height: 10px;
+    background: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: background 0.3s;
 }
 
-.hero-layout .dot.active {
-  background: #ff4c3b;
+.dot.active {
+    background: #ff4c3b;
 }
 
-.hero-layout .sidebar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* Side Promotions Styles */
+.side-promotions {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-
-.hero-layout .promo-box {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  height: 150px;
-  display: flex;
-  align-items: flex-end;
-  position: relative;
-  overflow: hidden;
-  color: white;
-  background-size: cover;
-  background-position: center;
-  flex: 1;  
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.425);
+.promo-card {
+    flex: 1;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.425);
 }
 
-.hero-layout .promo-box .promo-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.233); /* escurecimento */
-  display: flex;
-  align-items: flex-end;
-  padding: 15px;
-  box-sizing: border-box;
+.promo-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.233);
+    display: flex;
+    align-items: flex-end;
+    padding: 15px;
 }
 
-.hero-layout .promo-text p {
-  margin: 0;
-  font-weight: bold;
-  color: #fff;
+.promo-content {
+    color: white;
 }
 
-
-.hero-layout .shop-link {
-  text-decoration: none;
-  font-size: 0.9rem;
-  color: #fff;
-  margin-top: 4px;
-  display: inline-block;
+.promo-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1rem;
 }
 
-
-.hero-layout .promo-box img {
-  width: 70px;
-  height: auto;
-  border-radius: 4px;
+.promo-button {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #fff;
+    margin-top: 8px;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
+.promo-button:hover {
+    color: #ff4c3b;
+}
