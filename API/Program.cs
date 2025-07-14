@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Adiciona controllers
 builder.Services.AddControllers();
 
-// Configura o AutoMapper
+// Configura AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Registro dos serviços
@@ -21,22 +21,12 @@ builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ICupomService, CupomService>();
 
-// Swagger/OpenAPI
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
-});
-
-// Configuração do CORS
+// Configura CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy
-            .WithOrigins(
+        policy.WithOrigins(
                 "http://localhost:5173",
                 "https://artenza.netlify.app",
                 "https://artenza.onrender.com"
@@ -46,26 +36,33 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
+
 var app = builder.Build();
 
-// Aplicar o CORS logo no início
+// Necessário para o pipeline funcionar direito
+app.UseRouting();
+
+// Aplica CORS (deve estar entre UseRouting e UseEndpoints/MapControllers)
 app.UseCors();
 
-// Redirecionamento para HTTPS
 app.UseHttpsRedirection();
 
-// Swagger somente em desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Autorização
 app.UseAuthorization();
 
-// Mapeia os endpoints dos controllers
 app.MapControllers();
 
-// Inicia o app
 app.Run();
