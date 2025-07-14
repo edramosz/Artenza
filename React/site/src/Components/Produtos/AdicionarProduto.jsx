@@ -77,7 +77,7 @@ const AdicionarProduto = () => {
         return;
       }
 
-      const response = await fetch("https://localhost:7294/Produto", {
+      const response = await fetch("https://artenza.onrender.com/Produto", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

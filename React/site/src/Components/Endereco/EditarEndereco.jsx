@@ -20,7 +20,7 @@ const EditarEndereco = () => {
   useEffect(() => {
     const fetchEndereco = async () => {
       try {
-        const response = await fetch(`https://localhost:7294/Endereco/${id}`);
+        const response = await fetch(`https://artenza.onrender.com/Endereco/${id}`);
         if (!response.ok) throw new Error("Erro ao carregar endereço.");
 
         const data = await response.json();
@@ -55,7 +55,7 @@ const EditarEndereco = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`https://localhost:7294/Endereco/${id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Endereco/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

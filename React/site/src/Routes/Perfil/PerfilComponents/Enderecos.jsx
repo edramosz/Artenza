@@ -13,12 +13,12 @@ const Enderecos = () => {
     const carregarDados = async () => {
       try {
         // Busca o usuário pelo e-mail
-        const resUsuario = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
+        const resUsuario = await fetch(`https://artenza.onrender.com/Usuario/por-email/${email}`);
         const usuarioData = await resUsuario.json();
         setUsuario(usuarioData);
 
         // Busca o endereço usando o idEndereco do usuário
-        const resEndereco = await fetch(`https://localhost:7294/Endereco/${usuarioData.idEndereco}`);
+        const resEndereco = await fetch(`https://artenza.onrender.com/Endereco/${usuarioData.idEndereco}`);
         const enderecoData = await resEndereco.json();
         setEndereco(enderecoData);
       } catch (error) {

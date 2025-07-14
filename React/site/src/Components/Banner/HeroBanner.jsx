@@ -36,7 +36,7 @@ const HeroBanner = () => {
         const buscarProdutos = async () => {
             try {
                 setLoading(true);
-                const res = await fetch("https://localhost:7294/Produto/lancamentos");
+                const res = await fetch("https://artenza.onrender.com/Produto/lancamentos");
                 const data = await res.json();
 
                 const filtrados = data.filter(p => ["Masculino", "Unissex"].includes(p.genero));
