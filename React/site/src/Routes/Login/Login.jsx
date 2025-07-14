@@ -18,7 +18,7 @@ export default function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
 
       // Consulta na sua API
-      const response = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
+      const response = await fetch(`https://artenza.onrender.com/Usuario/por-email/${email}`);
 
       if (!response.ok) {
         throw new Error("Usuário não encontrado na API");
