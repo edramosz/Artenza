@@ -81,5 +81,33 @@ namespace API.Controllers
             await _enderecoService.DeleteEnderecoAsync(id);
             return NoContent();
         }
+
+        [HttpPut("ativar/{id}")]
+        public async Task<ActionResult> AtivarEndereco(string id)
+        {
+            var endereco = await _enderecoService.GetEnderecoPorIdAsync(id);
+            if (endereco == null)
+                return NotFound();
+
+            await _enderecoService.DesativarTodosDoUsuario(endereco.UsuarioId); // zera os outros
+            endereco.Ativo = true;
+
+            await _enderecoService.UpdateEnderecoAsync(id, new UpdateEndereco
+            {
+                CEP = endereco.CEP,
+                Estado = endereco.Estado,
+                Cidade = endereco.Cidade,
+                Bairro = endereco.Bairro,
+                Rua = endereco.Rua,
+                Numero = endereco.Numero,
+                Complemento = endereco.Complemento,
+                UsuarioId = endereco.UsuarioId,
+                Ativo = true
+            });
+
+            return NoContent();
+        }
+
+
     }
 }

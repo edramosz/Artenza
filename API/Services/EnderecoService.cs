@@ -117,5 +117,22 @@ namespace API.Services
                 .Child(id)
                 .DeleteAsync();
         }
+
+        public async Task DesativarTodosDoUsuario(string usuarioId)
+        {
+            var enderecos = await GetEnderecosPorUsuarioAsync(usuarioId);
+
+            foreach (var endereco in enderecos)
+            {
+                endereco.Ativo = false;
+                await _firebaseClient
+                    .Child("enderecos")
+                    .Child(endereco.Id)
+                    .PutAsync(endereco);
+            }
+        }
+
+
+
     }
 }
