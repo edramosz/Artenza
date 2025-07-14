@@ -33,9 +33,9 @@ builder.Services.AddSwaggerGen(options =>
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PermitirTudo", policy =>
+    options.AddPolicy("ArtenzaPolicy", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Porta correta do seu frontend Vite/React
+        policy.WithOrigins("https://artenza.onrender.com") // url da hospedagem Render
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
