@@ -33,35 +33,38 @@ builder.Services.AddSwaggerGen(options =>
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ArtenzaPolicy", policy =>
+    options.AddDefaultPolicy(policy =>
     {
         policy
-            .WithOrigins("https://artenza.netlify.app", "https://artenza.onrender.com") // todos os domínios válidos
+            .WithOrigins(
+                "http://localhost:5173",
+                "https://artenza.netlify.app",
+                "https://artenza.onrender.com"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
-
 var app = builder.Build();
+
+// Aplicar o CORS logo no início
+app.UseCors();
 
 // Redirecionamento para HTTPS
 app.UseHttpsRedirection();
 
-// Aplicar CORS (antes de Authorization)
-app.UseCors("ArtenzaPolicy");
-
-// Swagger apenas no modo de desenvolvimento
+// Swagger somente em desenvolvimento
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Autorização (caso você venha a usar [Authorize])
+// Autorização
 app.UseAuthorization();
 
-// Mapear os endpoints dos controllers
+// Mapeia os endpoints dos controllers
 app.MapControllers();
 
 // Inicia o app
