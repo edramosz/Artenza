@@ -38,21 +38,21 @@ function FinalizarPedido() {
     const carregarDados = async () => {
       try {
         // Usuário
-        const resUsuario = await fetch(`https://localhost:7294/Usuario/por-email/${email}`);
+        const resUsuario = await fetch(`https://artenza.onrender.com/Usuario/por-email/${email}`);
         const usuarioData = await resUsuario.json();
         setUsuario(usuarioData);
 
         // Endereço
-        const resEndereco = await fetch(`https://localhost:7294/Endereco/${usuarioData.idEndereco}`);
+        const resEndereco = await fetch(`https://artenza.onrender.com/Endereco/${usuarioData.idEndereco}`);
         const enderecoData = await resEndereco.json();
         setEndereco(enderecoData);
 
         // Produtos e Carrinho
-        const resProdutos = await fetch("https://localhost:7294/Produto");
+        const resProdutos = await fetch("https://artenza.onrender.com/Produto");
         const listaProdutos = await resProdutos.json();
         setProdutos(listaProdutos);
 
-        const resCarrinho = await fetch("https://localhost:7294/Carrinho");
+        const resCarrinho = await fetch("https://artenza.onrender.com/Carrinho");
         const listaCarrinho = await resCarrinho.json();
 
         const selecionadosIds = JSON.parse(localStorage.getItem("itensSelecionados") || "[]");
@@ -121,7 +121,7 @@ function FinalizarPedido() {
 
     try {
       // Envia a venda
-      const res = await fetch("https://localhost:7294/Venda", {
+      const res = await fetch("https://artenza.onrender.com/Venda", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(venda)
@@ -139,7 +139,7 @@ function FinalizarPedido() {
         metodoPagamento
       };
 
-      const resTransacao = await fetch("https://localhost:7294/Transacao", {
+      const resTransacao = await fetch("https://artenza.onrender.com/Transacao", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(transacao)
@@ -149,7 +149,7 @@ function FinalizarPedido() {
         // Limpa o carrinho do backend
         await Promise.all(
           itensSelecionados.map(item =>
-            fetch(`https://localhost:7294/Carrinho/${item.id}`, {
+            fetch(`https://artenza.onrender.com/Carrinho/${item.id}`, {
               method: "DELETE"
             })
           )

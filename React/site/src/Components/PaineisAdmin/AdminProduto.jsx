@@ -13,7 +13,7 @@ const AdminProduto = () => {
   useEffect(() => {
     const fetchProdutos = async () => {
       try {
-        const response = await fetch("https://localhost:7294/Produto");
+        const response = await fetch("https://artenza.onrender.com/Produto");
         if (!response.ok) {
           throw new Error("Erro ao carregar produtos.");
         }
@@ -42,7 +42,7 @@ const AdminProduto = () => {
   const handleDeleteProduct = async (id) => {
     console.log("Excluindo produto com ID:", id); // Adicione este log
     try {
-      const response = await fetch(`https://localhost:7294/Produto/${id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Produto/${id}`, {
         method: "DELETE",
       });
 

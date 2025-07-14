@@ -73,7 +73,7 @@ const Feminino = () => {
     const buscarDados = async () => {
       setLoading(true);
       try {
-        const resTodos = await fetch("https://localhost:7294/Produto");
+        const resTodos = await fetch("https://artenza.onrender.com/Produto");
         const todosData = await resTodos.json();
         const femininos = todosData.filter(prod => ["Feminino", "Unissex"].includes(prod.genero));
 
@@ -86,11 +86,11 @@ const Feminino = () => {
 
         setProdutos(formatar(femininos));
 
-        const resMaisVendidos = await fetch("https://localhost:7294/Produto/mais-vendidos");
+        const resMaisVendidos = await fetch("https://artenza.onrender.com/mais-vendidos");
         const dataMaisVendidos = await resMaisVendidos.json();
         setProdutosMaisVendidos(formatar(dataMaisVendidos.filter(p => ["Feminino", "Unissex"].includes(p.genero))));
 
-        const resLancamentos = await fetch("https://localhost:7294/Produto/lancamentos");
+        const resLancamentos = await fetch("https://artenza.onrender.com/Produto/lancamentos");
         const dataLancamentos = await resLancamentos.json();
         setProdutosLancamentos(formatar(dataLancamentos.filter(p => ["Feminino", "Unissex"].includes(p.genero))));
 

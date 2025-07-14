@@ -33,6 +33,7 @@ const Enderecos= () => {
       const response = await fetch(`https://artenza.onrender.com/Endereco/por-usuario/${idUsuario}`);
       if (!response.ok) {
         throw new Error("Erro ao buscar endereços");
+
       }
       const data = await response.json();
       setEnderecos(data);

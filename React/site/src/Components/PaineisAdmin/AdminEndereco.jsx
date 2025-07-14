@@ -13,7 +13,7 @@ const AdminEndereco = () => {
   useEffect(() => {
     const fetchEnderecos = async () => {
       try {
-        const response = await fetch("https://localhost:7294/Endereco");
+        const response = await fetch("https://artenza.onrender.com/Endereco");
         if (!response.ok) {
           throw new Error("Erro ao carregar endereços.");
         }
@@ -41,7 +41,7 @@ const AdminEndereco = () => {
 
   const handleDeleteEndereco = async (id) => {
     try {
-      const response = await fetch(`https://localhost:7294/Endereco/${id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Endereco/${id}`, {
         method: "DELETE",
       });
 

@@ -45,7 +45,7 @@ const AdicionarEndereco = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://localhost:7294/Endereco", {
+      const response = await fetch("https://artenza.onrender.com/Endereco", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataEndereco),

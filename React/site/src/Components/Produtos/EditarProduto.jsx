@@ -25,7 +25,7 @@ const EditarProduto = () => {
   useEffect(() => {
     const fetchProduto = async () => {
       try {
-        const response = await fetch(`https://localhost:7294/Produto/${id}`);
+        const response = await fetch(`https://artenza.onrender.com/Produto/${id}`);
         if (!response.ok) {
           throw new Error("Erro ao carregar produto.");
         }
@@ -77,7 +77,7 @@ const EditarProduto = () => {
     };
   
     try {
-      const response = await fetch(`https://localhost:7294/Produto/${id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Produto/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
