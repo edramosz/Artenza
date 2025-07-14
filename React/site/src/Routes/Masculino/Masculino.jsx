@@ -74,7 +74,8 @@ const Masculino = () => {
       setLoading(true);
       try {
         // TODOS OS PRODUTOS
-        const resTodos = await fetch("https://localhost:7294/Produto");
+        const resTodos = await fetch("https://artenza.onrender.com/Produto");
+        console.log(resTodos)
         const todosData = await resTodos.json();
         const masculinos = todosData.filter(prod => ["Masculino", "Unissex"].includes(prod.genero));
 
@@ -89,12 +90,12 @@ const Masculino = () => {
         setProdutos(formatar(masculinos));
 
         // MAIS VENDIDOS
-        const resMaisVendidos = await fetch("https://localhost:7294/Produto/mais-vendidos");
+        const resMaisVendidos = await fetch("https://artenza.onrender.com/Produto/mais-vendidos");
         const dataMaisVendidos = await resMaisVendidos.json();
         setProdutosMaisVendidos(formatar(dataMaisVendidos.filter(p => ["Masculino", "Unissex"].includes(p.genero))));
 
         // LANÇAMENTOS
-        const resLancamentos = await fetch("https://localhost:7294/Produto/lancamentos");
+        const resLancamentos = await fetch("https://artenza.onrender.com/Produto/lancamentos");
         const dataLancamentos = await resLancamentos.json();
         setProdutosLancamentos(formatar(dataLancamentos.filter(p => ["Masculino", "Unissex"].includes(p.genero))));
 

@@ -51,13 +51,13 @@ const ProdutoDetalhe = () => {
   useEffect(() => {
     const buscarProduto = async () => {
       try {
-        const resposta = await fetch(`https://localhost:7294/Produto/${id}`);
+        const resposta = await fetch(`https://artenza.onrender.com/Produto/${id}`);
         if (!resposta.ok) throw new Error("Produto não encontrado");
         const dados = await resposta.json();
         setProduto(dados);
 
         // Buscar produtos relacionados 
-        const resTodos = await fetch("https://localhost:7294/Produto");
+        const resTodos = await fetch("https://artenza.onrender.com/Produto");
         const todos = await resTodos.json();
 
         const embaralhar = (array) => {
@@ -110,7 +110,7 @@ const ProdutoDetalhe = () => {
   const carregarFeedbacks = async (IdProduto) => {
     try {
 
-      const response = await fetch(`https://localhost:7294/api/Feedback/produto/${IdProduto}`);
+      const response = await fetch(`https://artenza.onrender.com/api/Feedback/produto/${IdProduto}`);
       console.log(IdProduto)
       if (!response.ok) throw new Error("Erro ao carregar feedbacks");
       const dados = await response.json();
@@ -154,7 +154,7 @@ const ProdutoDetalhe = () => {
     const idProduto = produto.id;
 
     try {
-      const resposta = await fetch("https://localhost:7294/Carrinho");
+      const resposta = await fetch("https://artenza.onrender.com/Carrinho");
       const todos = await resposta.json();
 
       const existente = todos.find(c =>
@@ -165,7 +165,7 @@ const ProdutoDetalhe = () => {
 
       if (existente) {
         const novaQuantidade = existente.quantidade + 1;
-        await fetch(`https://localhost:7294/Carrinho/${existente.id}`, {
+        await fetch(`https://artenza.onrender.com/Carrinho/${existente.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -176,7 +176,7 @@ const ProdutoDetalhe = () => {
           })
         });
       } else {
-        await fetch("https://localhost:7294/Carrinho", {
+        await fetch("https://artenza.onrender.com/Carrinho", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -226,7 +226,7 @@ const ProdutoDetalhe = () => {
     };
 
     try {
-      const response = await fetch("https://localhost:7294/api/Feedback", {
+      const response = await fetch("https://artenza.onrender.com/api/Feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(feedback),
