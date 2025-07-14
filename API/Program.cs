@@ -1,6 +1,9 @@
 using Core.Interfaces;
 using API.Services;
+using Core.Models.DTO_s;using API.Services;
+using Core.Interfaces;
 using Core.Models.DTO_s;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,41 +24,43 @@ builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ICupomService, CupomService>();
 
-// Configura CORS
+// Configuração do CORS (liberando geral para testes)
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins(
+        policy
+            .WithOrigins(
                 "http://localhost:5173",
                 "https://artenza.netlify.app",
                 "https://artenza.onrender.com"
             )
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials(); // importante se usar autenticação
     });
 });
 
-// Swagger/OpenAPI
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    options.IncludeXmlComments(xmlPath);
+    c.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();
 
-// Necessário para o pipeline funcionar direito
-app.UseRouting();
+// Habilita CORS
+app.UseCors("AllowAll");
 
-// Aplica CORS (deve estar entre UseRouting e UseEndpoints/MapControllers)
-app.UseCors();
-
+// HTTPS
 app.UseHttpsRedirection();
 
-if (app.Environment.IsDevelopment())
+// Swagger
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

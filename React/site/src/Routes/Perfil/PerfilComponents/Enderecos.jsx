@@ -1,218 +1,165 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import './Enderecos.css';
 
-const Enderecos= () => {
-  const idUsuario = localStorage.getItem("idUsuario");
+export default function Enderecos() {
   const [enderecos, setEnderecos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState("");
-  const [form, setForm] = useState({
-    id: null,
-    rua: "",
-    numero: "",
-    cidade: "",
-    estado: "",
-    cep: "",
-  });
-  const [isEditando, setIsEditando] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [cep, setCep] = useState("");
+  const [estado, setEstado] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [rua, setRua] = useState("");
+  const [numero, setNumero] = useState("");
+  const [complemento, setComplemento] = useState("");
+  const [enderecoAtivoId, setEnderecoAtivoId] = useState("");
+
+  const usuarioId = localStorage.getItem("idUsuario");
 
   useEffect(() => {
-    if (!idUsuario) {
-      setErro("Usuário não logado");
-      setLoading(false);
-      return;
-    }
-
     fetchEnderecos();
-  }, [idUsuario]);
+  }, []);
 
-  async function fetchEnderecos() {
-    setLoading(true);
-    setErro("");
-
+  const fetchEnderecos = async () => {
     try {
-      const response = await fetch(`https://artenza.onrender.com/Endereco/por-usuario/${idUsuario}`);
-      if (!response.ok) {
-        throw new Error("Erro ao buscar endereços");
-
-      }
+      const response = await fetch(`https://artenza.onrender.com/Endereco/por-usuario/${usuarioId}`);
+      if (!response.ok) throw new Error("Erro ao buscar endereços");
       const data = await response.json();
       setEnderecos(data);
-    } catch (err) {
-      setErro(err.message);
-    } finally {
-      setLoading(false);
+
+      const ativo = data.find(e => e.ativo);
+      if (ativo) setEnderecoAtivoId(ativo.id);
+
+    } catch (error) {
+      console.error("Erro ao buscar endereços:", error);
     }
-  }
+  };
 
-  function limparFormulario() {
-    setForm({ id: null, rua: "", numero: "", cidade: "", estado: "", cep: "" });
-    setIsEditando(false);
-    setErro("");
-  }
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
-
-  async function handleSalvar(e) {
+  const handleSalvar = async (e) => {
     e.preventDefault();
 
-    // Validação simples
-    if (!form.rua || !form.numero || !form.cidade || !form.estado || !form.cep) {
-      setErro("Preencha todos os campos.");
-      return;
-    }
-
-    setErro("");
+    const novoEndereco = {
+      usuarioId,
+      cep,
+      estado,
+      cidade,
+      bairro,
+      rua,
+      numero,
+      complemento,
+      ativo: false
+    };
 
     try {
-      let response;
-      if (isEditando) {
-        // Atualizar endereço
-        response = await fetch(`https://artenza.onrender.com/Endereco/${form.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        });
-      } else {
-        // Criar novo endereço
-        const novoEndereco = { ...form, usuarioId: idUsuario };
-        response = await fetch(`https://artenza.onrender.com/Endereco`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(novoEndereco),
-        });
-      }
+      const response = await fetch("https://artenza.onrender.com/Endereco", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoEndereco),
+      });
 
       if (!response.ok) {
-        throw new Error("Erro ao salvar endereço");
+        const errorText = await response.text();
+        throw new Error(`Erro ao salvar: ${response.status} - ${errorText}`);
       }
 
-      limparFormulario();
-      fetchEnderecos();
+      const enderecoCriado = await response.json();
+      setEnderecos([...enderecos, enderecoCriado]);
+      setShowForm(false);
 
-    } catch (err) {
-      setErro(err.message);
+      setCep(""); setEstado(""); setCidade(""); setBairro("");
+      setRua(""); setNumero(""); setComplemento("");
+
+    } catch (error) {
+      console.error("Erro ao salvar endereço:", error.message);
+      alert("Erro ao salvar. Verifique os campos.");
     }
-  }
+  };
 
-  async function handleExcluir(id) {
-    if (!window.confirm("Deseja realmente excluir este endereço?")) return;
+  const handleExcluir = async (id) => {
+    if (!window.confirm("Tem certeza que deseja excluir este endereço?")) return;
 
     try {
       const response = await fetch(`https://artenza.onrender.com/Endereco/${id}`, {
         method: "DELETE",
       });
 
+      if (!response.ok) throw new Error("Erro ao excluir");
+
+      setEnderecos(enderecos.filter((e) => e.id !== id));
+    } catch (error) {
+      console.error("Erro ao excluir endereço:", error.message);
+    }
+  };
+
+  const handleSelecionarAtivo = async (id) => {
+    try {
+      const response = await fetch(`https://artenza.onrender.com/Endereco/ativar/${id}`, {
+        method: "PUT",
+      });
+
       if (!response.ok) {
-        throw new Error("Erro ao excluir endereço");
+        const errorText = await response.text();
+        throw new Error(`Erro ao ativar endereço: ${errorText}`);
       }
 
-      fetchEnderecos();
+      // Atualiza lista
+      const novaLista = enderecos.map((end) =>
+        end.id === id ? { ...end, ativo: true } : { ...end, ativo: false }
+      );
 
-    } catch (err) {
-      alert(err.message);
+      setEnderecos(novaLista);
+      setEnderecoAtivoId(id);
+    } catch (error) {
+      console.error("Erro ao marcar como ativo:", error.message);
     }
-  }
-
-  function handleEditar(endereco) {
-    setForm(endereco);
-    setIsEditando(true);
-    setErro("");
-  }
-
-  if (loading) return <p>Carregando endereços...</p>;
-  if (erro) return <p style={{ color: "red" }}>{erro}</p>;
+  };
 
   return (
-    <div>
+    <div className="enderecos-container">
       <h2>Meus Endereços</h2>
 
-      {enderecos.length === 0 && <p>Nenhum endereço cadastrado.</p>}
+      <button onClick={() => setShowForm(!showForm)}>
+        {showForm ? "Cancelar" : "Adicionar Novo Endereço"}
+      </button>
 
-      <ul>
-        {enderecos.map((endereco) => (
-          <li key={endereco.id} style={{ marginBottom: "10px" }}>
-            <strong>{endereco.rua}, {endereco.numero}</strong><br />
-            {endereco.cidade} - {endereco.estado}, CEP: {endereco.cep}
-            <br />
-            <button onClick={() => handleEditar(endereco)}>Editar</button>{" "}
-            <button onClick={() => handleExcluir(endereco.id)}>Excluir</button>
-          </li>
-        ))}
-      </ul>
+      {showForm && (
+        <form onSubmit={handleSalvar} className="endereco-form">
+          <input type="text" value={cep} onChange={(e) => setCep(e.target.value)} placeholder="CEP" required />
+          <input type="text" value={estado} onChange={(e) => setEstado(e.target.value)} placeholder="Estado" required />
+          <input type="text" value={cidade} onChange={(e) => setCidade(e.target.value)} placeholder="Cidade" required />
+          <input type="text" value={bairro} onChange={(e) => setBairro(e.target.value)} placeholder="Bairro" required />
+          <input type="text" value={rua} onChange={(e) => setRua(e.target.value)} placeholder="Rua" required />
+          <input type="text" value={numero} onChange={(e) => setNumero(e.target.value)} placeholder="Número" required />
+          <input type="text" value={complemento} onChange={(e) => setComplemento(e.target.value)} placeholder="Complemento" />
+          <button type="submit">Salvar</button>
+        </form>
+      )}
 
-      <hr />
+      <div className="lista-enderecos">
+        {enderecos.length === 0 ? (
+          <p>Nenhum endereço cadastrado.</p>
+        ) : (
+          enderecos.map((endereco) => (
+            <div key={endereco.id} className={`endereco-card ${endereco.ativo ? "ativo" : ""}`}>
+              <label className="radio-endereco">
+                <input
+                  type="radio"
+                  name="enderecoAtivo"
+                  checked={endereco.id === enderecoAtivoId}
+                  onChange={() => handleSelecionarAtivo(endereco.id)}
+                />
+                <span>Usar como endereço principal</span>
+              </label>
 
-      <h3>{isEditando ? "Editar Endereço" : "Adicionar Novo Endereço"}</h3>
-
-      <form onSubmit={handleSalvar} style={{ maxWidth: "400px" }}>
-        <label>
-          Rua:
-          <input
-            type="text"
-            name="rua"
-            value={form.rua}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Número:
-          <input
-            type="text"
-            name="numero"
-            value={form.numero}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Cidade:
-          <input
-            type="text"
-            name="cidade"
-            value={form.cidade}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          Estado:
-          <input
-            type="text"
-            name="estado"
-            value={form.estado}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        <label>
-          CEP:
-          <input
-            type="text"
-            name="cep"
-            value={form.cep}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-
-        {erro && <p style={{ color: "red" }}>{erro}</p>}
-
-        <button type="submit">{isEditando ? "Salvar Alterações" : "Adicionar Endereço"}</button>
-        {isEditando && (
-          <button type="button" onClick={limparFormulario} style={{ marginLeft: "10px" }}>
-            Cancelar
-          </button>
+              <p><strong>CEP:</strong> {endereco.cep}</p>
+              <p><strong>Endereço:</strong> {endereco.rua}, {endereco.numero} - {endereco.bairro}, {endereco.cidade} - {endereco.estado}</p>
+              {endereco.complemento && <p><strong>Complemento:</strong> {endereco.complemento}</p>}
+              <div className="botoes-endereco">
+                <button onClick={() => handleExcluir(endereco.id)}>Excluir</button>
+              </div>
+            </div>
+          ))
         )}
-      </form>
+      </div>
     </div>
   );
-};
-export default Enderecos;
+}

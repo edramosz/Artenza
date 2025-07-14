@@ -13,5 +13,7 @@ namespace Core.Interfaces
         Task<Endereco> AddEnderecoAsync(CreateEndereco enderecoDto);
         Task UpdateEnderecoAsync(string id, UpdateEndereco enderecoDto);
         Task DeleteEnderecoAsync(string id);
+        Task DesativarTodosDoUsuario(string usuarioId);
+
     }
 }

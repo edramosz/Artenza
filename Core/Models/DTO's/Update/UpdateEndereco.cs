@@ -8,6 +8,8 @@ namespace Core.Models.DTO_s.Update
 {
     public class UpdateEndereco
     {
+
+        public string UsuarioId { get; set; }
         public string CEP { get; set; }
         public string Estado { get; set; }
         public string Cidade { get; set; }
@@ -15,5 +17,6 @@ namespace Core.Models.DTO_s.Update
         public string Rua { get; set; }
         public string Numero { get; set; }
         public string Complemento { get; set; }
+        public bool Ativo { get; set; }
     }
 }
