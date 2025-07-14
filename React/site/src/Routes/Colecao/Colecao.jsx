@@ -94,7 +94,7 @@ const ListaProdutos = () => {
   useEffect(() => {
     const fetchProdutos = async () => {
       try {
-        const response = await fetch("https://localhost:7294/Produto");
+        const response = await fetch("https://https://artenza.onrender.com/Produto");
         if (!response.ok) throw new Error("Erro ao buscar produtos");
 
         const data = await response.json();
