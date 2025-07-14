@@ -13,6 +13,7 @@ namespace Core.Interfaces
     {
         Task<List<Feedback>> GetFeedbacksAsync();
         Task<Feedback> GetFeedbackAsync(string id);
+        public Task<List<Feedback>> GetFeedbacksPorIdProduto(string idProduto);
         Task<Feedback> AddFeedbackAsync(CreateFeedback FeedbackDto);
         Task UpdateFeedbackAsync(string id, UpdateFeedback Feedback);
         Task DeleteFeedbackAsync(string id);

@@ -6,17 +6,17 @@ import React, { useRef, useEffect, useState } from 'react';
 const slides = [
   {
     image: '././img/fundo.png',
-    title: "Blusa da Bielv",
+    title: "Coleção faten",
     subtitle: 'Novos lançamentos da marca',
   },
   {
     image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',   
-    title: "Blusa da Bielv",
+    title: "Coleção Atelo",
     subtitle: 'Novos lançamentos da marca',
   },
   {
     image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',    
-    title: "Blusa da Bielv",
+    title: "Coleção Kiew",
     subtitle: 'Novos lançamentos da marca',
   },
 ];

@@ -47,6 +47,22 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Retorna uma lista de feedbacks específicos pelo ID do produto.
+        /// </summary>
+        /// <param name="idProduto">ID do feedback.</param>
+        /// <returns>Objetos Feedbacks correspondente ao ID do produto.</returns>
+        /// <response code="200">Retorna o feedback encontrado.</response>
+        /// <response code="404">Se o feedback não for encontrado.</response>
+        [HttpGet("produto/{IdProduto}")]
+        public async Task<ActionResult<List<Feedback>>> GetByIdProduto(string IdProduto)
+        {
+            var feedback = await _feedbackService.GetFeedbacksPorIdProduto(IdProduto);
+            if (feedback == null)
+                return NotFound();
+
+            return Ok(feedback);
+        }
+        /// <summary>
         /// Cria um novo feedback.
         /// </summary>
         /// <param name="createFeedback">Dados para criação do feedback.</param>
@@ -54,7 +70,7 @@ namespace API.Controllers
         /// <response code="201">Retorna o feedback criado com o ID.</response>
         /// <response code="400">Se os dados enviados forem inválidos.</response>
         [HttpPost]
-        public async Task<ActionResult<Feedback>> Create(CreateFeedback createFeedback)
+        public async Task<ActionResult<Feedback>> Create([FromBody] CreateFeedback createFeedback)
         {
             var feedback = await _feedbackService.AddFeedbackAsync(createFeedback);
             return CreatedAtAction(nameof(GetById), new { id = feedback.Id }, feedback);
