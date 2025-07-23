@@ -2,44 +2,94 @@
   width: 100%;
   max-width: 2000px;
   margin: 0 auto;
-  padding: 20px 10px 20px 20px;
+  padding: 20px 30px 20px 30px;
 }
 
 .produto-detalhe-container {
   display: flex;
+  justify-content: center;
+  margin: 0 auto;
   flex-direction: row;
   gap: 20px;
-  align-items: flex-start;
+  align-items: flex-start;  
+  max-width: 1800px;
 }
 
-.imagens-container {
-  flex: 3;
-  max-width: 70%;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  height: auto;
-  padding-top: 10px;
+.carrossel-produto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 45%;}
+
+.carrossel-principal {
+  position: relative;
+  width: 85%;
+  height: 540px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.imagem-produto {
+.carrossel-produto .imagem-grande {
   width: 100%;
-  height: 420px;
+  max-width: 540px;
+  height: 100%;
   object-fit: cover;
-  cursor: pointer;
-  transition: box-shadow 0.3s ease;
+  border-radius: 8px;
   box-shadow: 5px 5px 15px 4px #aaaaaa2c;
+  background-color: brown;
 }
 
-.imagem-produto:hover {}
+.carrossel-produto .btn-carrossel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: none;
+  padding: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.carrossel-produto .btn-carrossel.esquerda {
+  left: 0;
+}
+
+.carrossel-produto .btn-carrossel.direita {
+  right: 0;
+}
+
+.carrossel-produto .miniaturas {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.carrossel-produto .miniatura {
+  width: 100px;
+  height: 120px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: border 0.3s ease;
+}
+
+.carrossel-produto .miniatura.ativa {
+  border-color: #000;
+}
+
 
 .info-produto {
   flex: 1;
+  max-width: 400px;
   color: #000000ef;
   padding: 10px;
   height: auto;
-  position: sticky;
-  top: 20px;
 }
 
 .btn-voltar {
