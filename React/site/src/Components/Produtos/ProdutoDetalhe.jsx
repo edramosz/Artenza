@@ -35,8 +35,6 @@ const ProdutoDetalhe = () => {
   const [quantidadeExibida, setQuantidadeExibida] = useState(3);
 
   const [filtroEstrela, setFiltroEstrela] = useState(null);
-  const [imagemAtual, setImagemAtual] = useState(0);
-
 
 
   // Feedbacks e avaliação
@@ -256,38 +254,29 @@ const ProdutoDetalhe = () => {
 
   return (
     <div className="prod-detalhe-container">
-      <div className="btn" >
+      <div className="btn">
         <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
       </div>
 
       <div className="produto-detalhe-container">
-        <div className="carrossel-produto">
-          <div className="carrossel-principal">
-            <button className="btn-carrossel esquerda" onClick={() => setImagemAtual((imagemAtual - 1 + produto.urlImagens.length) % produto.urlImagens.length)}>
-              &#10094;
-            </button>
-            <img
-              src={produto.urlImagens[imagemAtual]}
-              alt={`Imagem ${imagemAtual + 1}`}
-              className="imagem-grande"
-            />
-            <button className="btn-carrossel direita" onClick={() => setImagemAtual((imagemAtual + 1) % produto.urlImagens.length)}>
-              &#10095;
-            </button>
-          </div>
-          <div className="miniaturas">
-            {produto.urlImagens.map((img, i) => (
+        <div className="imagens-container">
+          {produto.urlImagens && produto.urlImagens.length > 0 ? (
+            produto.urlImagens.map((img, i) => (
               <img
                 key={i}
                 src={img}
-                alt={`Miniatura ${i + 1}`}
-                className={`miniatura ${i === imagemAtual ? 'ativa' : ''}`}
-                onClick={() => setImagemAtual(i)}
+                alt={`Imagem do produto ${i + 1}`}
+                className="imagem-produto"
               />
-            ))}
-          </div>
+            ))
+          ) : (
+            <img
+              src="http://via.placeholder.com/600x400.png?text=Sem+imagem"
+              alt="Sem imagem"
+              className="imagem-produto"
+            />
+          )}
         </div>
-
 
         <div className="info-produto">
           <div className="produto-head">
