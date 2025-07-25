@@ -32,9 +32,10 @@ const ProdutoDetalhe = () => {
   const [erro, setErro] = useState(null);
   const [tamanhoSelecionado, setTamanhoSelecionado] = useState(null);
   const [produtosRelacionados, setProdutosRelacionados] = useState([]);
+  const [quantidade, setQuantidade] = useState(1);
   const [quantidadeExibida, setQuantidadeExibida] = useState(3);
-
   const [filtroEstrela, setFiltroEstrela] = useState(null);
+  const [selecao, setSelecao] = useState("descricao")
 
 
   // Feedbacks e avaliação
@@ -47,6 +48,231 @@ const ProdutoDetalhe = () => {
   const [novaNota, setNovaNota] = useState(0);
 
   const navigate = useNavigate();
+
+
+
+  function RenderConteudo() {
+    switch (selecao) {
+      case "descricao":
+        return (
+          <section id="descrição">
+            <div className="info-prods">
+              <h2 className="title-info">Detalhes do Produtos</h2>
+              <p className="descr">"{produto.descricao}"</p>
+            </div>
+          </section>
+        );
+      case "tabela":
+        return (
+          <section>
+            <div className="ficha-container">
+              <table className="tabela-info">
+                <thead>
+                  <tr>
+                    <td>Produto</td>
+                    <td>Informações</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span className='info-span'>Categoria:</span></td>
+                    <td>{produto.categoria}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Estoque Disponível:</span></td>
+                    <td>{produto.estoque}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Tamanhos Disponíveis:</span></td>
+                    <td>{obterTamanhos().join(', ')}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Material:</span></td>
+                    <td>{produto.material}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Cor:</span></td>
+                    <td>{produto.cor}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Gênero:</span></td>
+                    <td>{produto.genero}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Tipo:</span></td>
+                    <td>{produto.tipo}</td>
+                  </tr>
+                  <tr>
+                    <td><span className='info-span'>Marca:</span></td>
+                    <td>{produto.marca}</td>
+                  </tr>
+                  {/*   <tr>
+                    <td><span className='info-span'>Quantidade Vendida:</span></td>
+                    <td>{produto.quantidadeVendida}</td>
+                  </tr>
+                     <tr>
+                    <td><span className='info-span'>Data de Cadastro:</span></td>
+                    <td>{new Date(produto.dataCriacao).toLocaleDateString()}</td>
+                  </tr> */}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        );
+      case "feedback":
+        return (
+          <div className="feedback-container">
+            <div className="feedback-header">
+              <div className="rating-overview">
+                <div className="average-rating">
+                  <span className="rating-value media-notas">{mediaNotas.toFixed(1)}</span>
+                  <span className="rating-text">de 5</span>
+                </div>
+                <div className="stars-large">
+                  <Estrelas nota={Math.round(mediaNotas)} max={5} />
+                </div>
+                <div className="review-count">({feedbacks.length} Avaliações)</div>
+              </div>
+            </div>
+
+            <div className="review-controls">
+              <div className="review-list-header">
+                <h3 className='title-review'>Lista de Avaliações</h3>
+                <span className="showing-results">
+                  Mostrando 1-{Math.min(quantidadeExibida, feedbacksFiltrados.length)} de {feedbacksFiltrados.length} resultados
+                </span>
+              </div>
+
+              <div className="filter-sort">
+                <div className="filter-section">
+                  <select
+                    value={filtroEstrela || ''}
+                    onChange={(e) => setFiltroEstrela(e.target.value ? Number(e.target.value) : null)}
+                    className="star-filter"
+                  >
+                    <option value="">Todas as avaliações</option>
+                    <option value="5">5 Estrelas</option>
+                    <option value="4">4 Estrelas</option>
+                    <option value="3">3 Estrelas</option>
+                    <option value="2">2 Estrelas</option>
+                    <option value="1">1 Estrela</option>
+                  </select>
+                </div>
+
+                <div className="sort-section">
+                  <select className="sort-select">
+                    <option>Mais recentes</option>
+                    <option>Mais antigas</option>
+                    <option>Melhores avaliações</option>
+                    <option>Piores avaliações</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {feedbacks.length === 0 && (
+              <div className="no-reviews">
+                <p>Este produto ainda não possui avaliações.</p>
+              </div>
+            )}
+
+            {feedbacksFiltrados.length === 0 && filtroEstrela && (
+              <div className="no-filtered-reviews">
+                <p>Nenhuma avaliação encontrada com {filtroEstrela} estrela(s).</p>
+              </div>
+            )}
+
+            <div className="review-list">
+              {feedbacksFiltrados.slice(0, quantidadeExibida).map((fb, index) => (
+                <div key={fb.id} className="review-item">
+                  <div className="review-meta">
+                    <div className="reviewer-info">
+                      <img
+                        src={fb.perfilUrl || "https://via.placeholder.com/40?text=U"}
+                        alt={`${fb.nomeUsuario}`}
+                        className="reviewer-avatar"
+                      />
+                      <span className="reviewer-name">{fb.nomeUsuario}</span>
+                    </div>
+                    <div className="review-rating">
+                      <div className="review-date">
+                        {new Date(fb.dataCriacao).toLocaleDateString('pt-BR')}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="review-content">
+                    <h4 className="review-title">{fb.titulo}</h4>
+                    <p className="review-text">{fb.comentario}</p>
+                    <Estrelas nota={fb.nota} max={5} />
+                    <span className="rating-value">{fb.nota.toFixed(1)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {quantidadeExibida < feedbacksFiltrados.length && (
+              <button
+                className="load-more-btn"
+                onClick={() => setQuantidadeExibida(quantidadeExibida + 4)}
+              >
+                Carregar mais avaliações
+              </button>
+            )}
+
+            <div className="add-review-form">
+              <h3>Adicione sua avaliação</h3>
+
+
+              <div className="form-group">
+                <label>Sua Avaliação *</label>
+                <div className="rating-stars">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <FontAwesomeIcon
+                      key={star}
+                      icon={star <= novaNota ? faStarFull : faStarRegular}
+                      onClick={() => setNovaNota(star)}
+                      style={{ color: star <= novaNota ? "#f1d323ff" : "#ccc", cursor: "pointer" }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Adicionar Título *</label>
+                <input
+                  type="text"
+                  placeholder="Escreva um título aqui"
+                  value={novoTitulo}
+                  onChange={e => setNovoTitulo(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Detalhes da Avaliação *</label>
+                <textarea
+                  placeholder="Escreva aqui"
+                  value={novoComentario}
+                  onChange={e => setNovoComentario(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Foto/Video (Opcional)</label>
+                <div className="upload-area">
+                  <p>Arraste uma foto ou vídeo aqui</p>
+                  <button className="browse-btn">Procurar</button>
+                </div>
+              </div>
+
+              <button className="submit-review-btn" onClick={enviarFeedback}>
+                Enviar Avaliação
+              </button>
+            </div>
+          </div>
+        );
+    }
+  }
+
 
   useEffect(() => {
     const buscarProduto = async () => {
@@ -164,7 +390,8 @@ const ProdutoDetalhe = () => {
       );
 
       if (existente) {
-        const novaQuantidade = existente.quantidade + 1;
+        const novaQuantidade = existente.quantidade + quantidade;
+
         await fetch(`https://artenza.onrender.com/Carrinho/${existente.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -182,7 +409,7 @@ const ProdutoDetalhe = () => {
           body: JSON.stringify({
             idUsuario,
             idProduto,
-            quantidade: 1,
+            quantidade,
             tamanho: tamanhoSelecionado // envia tamanho no POST
           })
         });
@@ -287,9 +514,16 @@ const ProdutoDetalhe = () => {
           <p className="tipo-prod">{produto.tipo}</p>
 
           <div className="media-avaliacoes">
-            <Estrelas nota={Math.round(mediaNotas)} />
-            <span className='media-num'> {mediaNotas.toFixed(1)}</span>
+            {feedbacks.length > 0 ? (
+              <>
+                <Estrelas nota={Math.round(mediaNotas)} />
+                <span className='media-num'>{mediaNotas.toFixed(1)}</span>
+              </>
+            ) : (
+              <p className="sem-avaliacoes">Sem avaliações</p>
+            )}
           </div>
+
 
           <p className="preco">
             {produto.preco.toLocaleString("pt-BR", {
@@ -300,7 +534,7 @@ const ProdutoDetalhe = () => {
 
           <div className="descricao-div">
             <p className="descricao">{produto.descricao}</p>
-            <a href="#descrição">ver-mais</a>
+            <a href="#descrição"><button onClick={() => setSelecao("descricao")}>ver-mais</button></a>
           </div>
 
 
@@ -325,9 +559,26 @@ const ProdutoDetalhe = () => {
             </div>
           </div>
 
+          <div className="botoes-qtd" id='qtd-det'>
+            <p className='title-qtd'>Quantidade:</p>
+            <button
+              onClick={() => setQuantidade(prev => Math.max(prev - 1, 1))}
+              disabled={quantidade <= 1}>
+              <span className='ind'>-</span>
+            </button>
+            <span className="numeros-span">{quantidade}</span>
+            <button onClick={() => setQuantidade(prev => prev + 1)}>
+              <span className='ind'>+</span>
+            </button>
+          </div>
+
+
           <div className="acoes">
             <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
               Adicionar ao Carrinho
+            </button>
+            <button className="btn comprar-agora" onClick={adicionarAoCarrinho}>
+              Compre Agora
             </button>
           </div>
 
@@ -337,59 +588,25 @@ const ProdutoDetalhe = () => {
         </div>
       </div>
 
-      <section id="descrição">
-        <div className="info-prods">
-          <h2 className="title-info">Detalhes do Produtos</h2>
-          <p className="descr">"{produto.descricao}"</p>
-        </div>
-        <div className="ficha-container">
-          <h2 className="title-info">Informações Técnicas</h2>
-          <table className="tabela-info">
-            <tbody>
-              <tr>
-                <td><span className='info-span'>Categoria:</span></td>
-                <td>{produto.categoria}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Estoque Disponível:</span></td>
-                <td>{produto.estoque}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Tamanhos Disponíveis:</span></td>
-                <td>{obterTamanhos().join(', ')}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Material:</span></td>
-                <td>{produto.material}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Cor:</span></td>
-                <td>{produto.cor}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Gênero:</span></td>
-                <td>{produto.genero}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Tipo:</span></td>
-                <td>{produto.tipo}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Marca:</span></td>
-                <td>{produto.marca}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Quantidade Vendida:</span></td>
-                <td>{produto.quantidadeVendida}</td>
-              </tr>
-              <tr>
-                <td><span className='info-span'>Data de Cadastro:</span></td>
-                <td>{new Date(produto.dataCriacao).toLocaleDateString()}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+
+      <div className="selecao-produtos">
+        <ul className="items-prod">
+          <li className={selecao === "descricao" ? "active" : ""}>
+            <button className='btn-selecao' onClick={() => setSelecao("descricao")}>Descrição</button>
+          </li>
+          <li className={selecao === "tabela" ? "active" : ""}>
+            <button className='btn-selecao' onClick={() => setSelecao("tabela")}>Informações Técnicas</button>
+          </li>
+          <li className={selecao === "feedback" ? "active" : ""}>
+            <button className='btn-selecao' onClick={() => setSelecao("feedback")}>Feedbacks</button>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        {RenderConteudo()}
+      </div>
+
 
       <div className="secoes-prodrudos">
         <SecaoProdutos
@@ -397,100 +614,11 @@ const ProdutoDetalhe = () => {
           produtos={produtosRelacionados}
         />
       </div>
-
-      <div className="feedback-container">
-        <div className="filtro-estrelas">
-          <div className="header-feedback">
-            <div className="filtros-titles">
-              <h3 className='title-feedback'>Avaliações do Produto</h3>
-              <span className="media-nota">{mediaNotas.toFixed(1)} de 5.0 </span>
-            </div>
-            <div className="btns-filtros">
-              <button
-                onClick={() => setFiltroEstrela(null)}
-                className={filtroEstrela === null ? 'ativo' : ''}
-              >
-                Tudo
-              </button>
-              {[5, 4, 3, 2, 1].map(nota => {
-                const count = feedbacks.filter(f => f.nota === nota).length;
-                return (
-                  <button
-                    key={nota}
-                    onClick={() => setFiltroEstrela(nota)}
-                    className={filtroEstrela === nota ? 'ativo' : ''}
-                  >
-                    {nota} Estrela{nota > 1 ? 's' : ''} ({count})
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-
-
-        {feedbacks.length === 0 && <p>Este produto ainda não possui avaliações.</p>}
-        {feedbacksFiltrados.length === 0 && (
-          <p>Nenhum feedback encontrado com {filtroEstrela} estrela(s).</p>
-        )}
-
-
-        <ul className="lista-feedbacks">
-          {feedbacksFiltrados.slice(0, quantidadeExibida).map(fb => (
-            <li key={fb.id} className="feedback-item">
-              <div>
-                <p><Estrelas nota={fb.nota} /> {fb.nota.toFixed(1)}</p>
-              </div>
-              <div className="feedback-header">
-                <img
-                  src={fb.perfilUrl || "https://via.placeholder.com/40?text=U"}
-                  alt="Foto do usuário"
-                  className="foto-perfil-feedback"
-                />
-                <p className='nome-feedback'>{fb.nomeUsuario}</p>
-                <p className='data-feedback'>{new Date(fb.dataCriacao).toLocaleDateString()}</p>
-              </div>
-              <div>
-                <p className='tile-feedback'>{fb.titulo}</p>
-                <p className='comentario-feedback'>"{fb.comentario}"</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-        {quantidadeExibida < feedbacksFiltrados.length && (
-          <button
-            className="btn-carregar-mais"
-            onClick={() => setQuantidadeExibida(quantidadeExibida + 3)}
-          >
-            Carregar-mais
-          </button>
-        )}
-
-
-
-        <h4>Deixe sua avaliação</h4>
-        <input
-          type="text"
-          placeholder="Título do feedback"
-          value={novoTitulo}
-          onChange={e => setNovoTitulo(e.target.value)}
-        />
-        <textarea
-          placeholder="Comentário"
-          value={novoComentario}
-          onChange={e => setNovoComentario(e.target.value)}
-        />
-        <select value={novaNota} onChange={e => setNovaNota(Number(e.target.value))}>
-          <option value={0}>Selecione a nota</option>
-          {[1, 2, 3, 4, 5].map(n => (
-            <option key={n} value={n}>{n}</option>
-          ))}
-        </select>
-        <button onClick={enviarFeedback}>Enviar Avaliação</button>
-      </div>
     </div>
   );
 };
 
 export default ProdutoDetalhe;
+
+
+
