@@ -68,16 +68,7 @@ const Masculino = () => {
         }));
         setProdutos(formatar(masculinos));
 
-        // MAIS VENDIDOS
-        const resMaisVendidos = await fetch("https://artenza.onrender.com/Produto/mais-vendidos");
-        const dataMaisVendidos = await resMaisVendidos.json();
-        setProdutosMaisVendidos(formatar(dataMaisVendidos.filter(p => ["Masculino", "Unissex"].includes(p.genero))));
-
-        // LANÇAMENTOS
-        const resLancamentos = await fetch("https://artenza.onrender.com/Produto/lancamentos");
-        const dataLancamentos = await resLancamentos.json();
-        setProdutosLancamentos(formatar(dataLancamentos.filter(p => ["Masculino", "Unissex"].includes(p.genero))));
-
+        
 
         setErro(null);
 

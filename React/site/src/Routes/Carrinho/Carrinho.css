@@ -157,13 +157,22 @@ thead .cabecalho-table th {
 }
 
 .botoes-qtd button {
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   font-weight: bold;
-  border: 1px solid #ccc;
+  border: 2px solid #444;
   background-color: #f4f4f4;
   cursor: pointer;
   border-radius: 4px;
+  align-items: center;
+}
+
+.botoes-qtd button:disabled{  
+  border: 2px solid #8f8a8a;
+}
+
+.botoes-qtd button> .ind{
+  font-size: 1.2rem;
 }
 
 .botoes-qtd span {

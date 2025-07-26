@@ -1,21 +1,20 @@
-.secoes-prods{
-  margin-top: 100px;
-}
+
 
 .secao-prod{
   width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
+  max-width: 1200px;
   position: relative;
-  overflow: hidden;
-  padding: 20px;
+  margin: 0 auto;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+
 }
 
-.secao-prod .secao-titulo {
+.secao-titulo {
   font-size: 1.6rem;
   margin-bottom: 20px;
   text-transform: uppercase;
-  font-weight: 700;
 }
 
 .secao-prod .secao-produtos {
@@ -58,11 +57,11 @@
 }
 
 .secao-prod .btn-carrossel.esquerda {
-  left: 20px;
+  left: -55px;
 }
 
 .secao-prod .btn-carrossel.direita {
-  right: 20px;
+  right: -55px;
 }
 
 a {
