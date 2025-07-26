@@ -11,23 +11,39 @@ const SecaoProdutos = ({ titulo, endpoint }) => {
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
 
-  // Buscar os produtos do endpoint
   useEffect(() => {
     const buscarProdutos = async () => {
       try {
         setLoading(true);
+        console.log("Endpoint usado:", endpoint);
         const res = await fetch(endpoint);
-        const data = await res.json();
 
-        const formatar = (lista) => lista.map(prod => ({
+        const contentType = res.headers.get("content-type") || "";
+        const rawText = await res.text();
+
+        if (!res.ok) {
+          throw new Error(`Erro HTTP ${res.status}: ${rawText}`);
+        }
+
+        if (!contentType.includes("application/json")) {
+          throw new Error(`Resposta não é JSON: ${rawText}`);
+        }
+
+        const data = JSON.parse(rawText);
+
+        const embaralhados = data.sort(() => Math.random() - 0.5);
+
+        const formatados = embaralhados.slice(0, 8).map((prod) => ({
           ...prod,
-          urlImagens: Array.isArray(prod.urlImagens) && prod.urlImagens.length > 0 && typeof prod.urlImagens[0] === "string"
-            ? prod.urlImagens
-            : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
+          urlImagens:
+            Array.isArray(prod.urlImagens) &&
+              prod.urlImagens.length > 0 &&
+              typeof prod.urlImagens[0] === "string"
+              ? prod.urlImagens
+              : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"],
         }));
 
-        const filtrados = data.filter(p => ["Masculino", "Unissex"].includes(p.genero)); // pode remover se quiser mostrar todos
-        setProdutos(formatar(filtrados));
+        setProdutos(formatados);
         setErro(null);
       } catch (err) {
         console.error("Erro ao buscar produtos da seção:", err);
@@ -49,27 +65,28 @@ const SecaoProdutos = ({ titulo, endpoint }) => {
 
   const scroll = (direcao) => {
     const el = carrosselRef.current;
-    const scrollAmount = 1000;
+    const scrollAmount = 1800;
 
     if (el) {
       el.scrollBy({
         left: direcao === 'esquerda' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
-      setTimeout(verificarBotoes, 300);
+      // NÃO chamar verificarBotoes aqui para evitar verificar antes do scroll terminar
     }
   };
 
   useEffect(() => {
-    verificarBotoes();
-
     const el = carrosselRef.current;
+
+    verificarBotoes(); // Verifica logo após os produtos carregarem
+
     const handleResize = () => verificarBotoes();
 
     if (el) {
-      el.addEventListener('scroll', verificarBotoes);
-      window.addEventListener('resize', handleResize);
+      el.addEventListener('scroll', verificarBotoes); // Atualiza os botões sempre que scroll acontecer
     }
+    window.addEventListener('resize', handleResize);
 
     return () => {
       if (el) el.removeEventListener('scroll', verificarBotoes);
@@ -78,47 +95,50 @@ const SecaoProdutos = ({ titulo, endpoint }) => {
   }, [produtos]);
 
   return (
-    <div className="secao-prod">
-      <h3 className="secao-titulo">{titulo}</h3>
-      <div className="carrossel-wrapper">
+    <>
+      <div>
+        <h3 className="secao-titulo">{titulo}</h3>
+      </div>
+      <div className="secao-prod">
         {showLeft && (
           <button className="btn-carrossel esquerda" onClick={() => scroll('esquerda')}>
             <i className="fa-solid fa-chevron-left"></i>
           </button>
         )}
-
-        <div className="secao-produtos" ref={carrosselRef}>
-          {loading ? (
-            <p>Carregando...</p>
-          ) : erro ? (
-            <p>{erro}</p>
-          ) : produtos.length === 0 ? (
-            <p>Nenhum produto disponível</p>
-          ) : (
-            produtos.map((prod) => (
-              <Link to={`/produto/${prod.id}`} key={prod.id}>
-                <div className="card-prods">
-                  <img
-                    src={prod.urlImagens[0]}
-                    alt={prod.nome}
-                    onError={(e) => {
-                      e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
-                    }}
-                  />
-                  <div className="text-card">
-                    <h4 className="nome">{prod.nome}</h4>
-                    <p className="categoria">{prod.categoria}</p>
-                    <p className="preco">
-                      {prod.preco.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL"
-                      })}
-                    </p>
+        <div className="carrossel-wrapper">
+          <div className="secao-produtos" ref={carrosselRef}>
+            {loading ? (
+              <p>Carregando...</p>
+            ) : erro ? (
+              <p>{erro}</p>
+            ) : produtos.length === 0 ? (
+              <p>Nenhum produto disponível</p>
+            ) : (
+              produtos.map((prod) => (
+                <Link to={`/produto/${prod.id}`} key={prod.id}>
+                  <div className="card-prods">
+                    <img
+                      src={prod.urlImagens[0]}
+                      alt={prod.nome}
+                      onError={(e) => {
+                        e.target.src = 'http://via.placeholder.com/300x200.png?text=Produto+sem+imagem';
+                      }}
+                    />
+                    <div className="text-card">
+                      <h4 className="nome">{prod.nome}</h4>
+                      <p className="categoria">{prod.categoria}</p>
+                      <p className="preco">
+                        {prod.preco.toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))
-          )}
+                </Link>
+              ))
+            )}
+          </div>
         </div>
 
         {showRight && (
@@ -127,7 +147,7 @@ const SecaoProdutos = ({ titulo, endpoint }) => {
           </button>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

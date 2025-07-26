@@ -37,7 +37,6 @@ const ProdutoDetalhe = () => {
   const [filtroEstrela, setFiltroEstrela] = useState(null);
   const [selecao, setSelecao] = useState("descricao")
 
-
   // Feedbacks e avaliação
   const [feedbacks, setFeedbacks] = useState([]);
   const [mediaNotas, setMediaNotas] = useState(0);
@@ -48,8 +47,6 @@ const ProdutoDetalhe = () => {
   const [novaNota, setNovaNota] = useState(0);
 
   const navigate = useNavigate();
-
-
 
   function RenderConteudo() {
     switch (selecao) {
@@ -106,14 +103,6 @@ const ProdutoDetalhe = () => {
                     <td><span className='info-span'>Marca:</span></td>
                     <td>{produto.marca}</td>
                   </tr>
-                  {/*   <tr>
-                    <td><span className='info-span'>Quantidade Vendida:</span></td>
-                    <td>{produto.quantidadeVendida}</td>
-                  </tr>
-                     <tr>
-                    <td><span className='info-span'>Data de Cadastro:</span></td>
-                    <td>{new Date(produto.dataCriacao).toLocaleDateString()}</td>
-                  </tr> */}
                 </tbody>
               </table>
             </div>
@@ -144,6 +133,7 @@ const ProdutoDetalhe = () => {
               </div>
 
               <div className="filter-sort">
+                <h3 className="filter-title">Ordernar por:</h3>
                 <div className="filter-section">
                   <select
                     value={filtroEstrela || ''}
@@ -156,15 +146,6 @@ const ProdutoDetalhe = () => {
                     <option value="3">3 Estrelas</option>
                     <option value="2">2 Estrelas</option>
                     <option value="1">1 Estrela</option>
-                  </select>
-                </div>
-
-                <div className="sort-section">
-                  <select className="sort-select">
-                    <option>Mais recentes</option>
-                    <option>Mais antigas</option>
-                    <option>Melhores avaliações</option>
-                    <option>Piores avaliações</option>
                   </select>
                 </div>
               </div>
@@ -183,7 +164,7 @@ const ProdutoDetalhe = () => {
             )}
 
             <div className="review-list">
-              {feedbacksFiltrados.slice(0, quantidadeExibida).map((fb, index) => (
+              {feedbacksFiltrados.slice(0, quantidadeExibida).map((fb) => (
                 <div key={fb.id} className="review-item">
                   <div className="review-meta">
                     <div className="reviewer-info">
@@ -221,7 +202,6 @@ const ProdutoDetalhe = () => {
 
             <div className="add-review-form">
               <h3>Adicione sua avaliação</h3>
-
 
               <div className="form-group">
                 <label>Sua Avaliação *</label>
@@ -273,19 +253,21 @@ const ProdutoDetalhe = () => {
     }
   }
 
-
   useEffect(() => {
     const buscarProduto = async () => {
       try {
+        // Busca produto pelo ID
         const resposta = await fetch(`https://artenza.onrender.com/Produto/${id}`);
         if (!resposta.ok) throw new Error("Produto não encontrado");
         const dados = await resposta.json();
         setProduto(dados);
 
-        // Buscar produtos relacionados 
+        // Busca todos os produtos para mostrar relacionados
         const resTodos = await fetch("https://artenza.onrender.com/Produto");
+        if (!resTodos.ok) throw new Error("Erro ao buscar produtos relacionados");
         const todos = await resTodos.json();
 
+        // Embaralhar produtos para dar variedade
         const embaralhar = (array) => {
           return array
             .map(item => ({ item, sort: Math.random() }))
@@ -293,6 +275,7 @@ const ProdutoDetalhe = () => {
             .map(({ item }) => item);
         };
 
+        // Filtra todos exceto o atual e garante urlImagens
         const relacionados = embaralhar(
           todos
             .filter(p => p.id !== dados.id)
@@ -303,11 +286,11 @@ const ProdutoDetalhe = () => {
                 : ["http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"]
             }))
         ).slice(0, 8);
+
         setProdutosRelacionados(relacionados);
 
-        // Após carregar produto, carregar feedbacks
+        // Carrega feedbacks do produto
         carregarFeedbacks(dados.id);
-        console.log(id)
       } catch (err) {
         setErro(err.message);
       } finally {
@@ -319,25 +302,15 @@ const ProdutoDetalhe = () => {
   }, [id]);
 
   useEffect(() => {
-    const idSalvo = localStorage.getItem("idUsuario");
-    setIdUsuario(idSalvo);
-
-    const nomeSalvo = localStorage.getItem("nomeUsuario") || "";
-    setNomeUsuario(nomeSalvo);
-
-    const urlSalva = localStorage.getItem("perfilUrl") || "";
-    setUrlUsuario(urlSalva);
-
-    console.log(localStorage.getItem("perfilUrl"));
-
+    // Pega dados do usuário do localStorage
+    setIdUsuario(localStorage.getItem("idUsuario"));
+    setNomeUsuario(localStorage.getItem("nomeUsuario") || "");
+    setUrlUsuario(localStorage.getItem("perfilUrl") || "");
   }, []);
-
 
   const carregarFeedbacks = async (IdProduto) => {
     try {
-
       const response = await fetch(`https://artenza.onrender.com/api/Feedback/produto/${IdProduto}`);
-      console.log(IdProduto)
       if (!response.ok) throw new Error("Erro ao carregar feedbacks");
       const dados = await response.json();
       setFeedbacks(dados);
@@ -386,7 +359,7 @@ const ProdutoDetalhe = () => {
       const existente = todos.find(c =>
         c.idUsuario === idUsuario &&
         c.idProduto === idProduto &&
-        c.tamanho === tamanhoSelecionado // compara também o tamanho!
+        c.tamanho === tamanhoSelecionado
       );
 
       if (existente) {
@@ -399,7 +372,7 @@ const ProdutoDetalhe = () => {
             idUsuario,
             idProduto,
             quantidade: novaQuantidade,
-            tamanho: tamanhoSelecionado // envia tamanho no PUT também
+            tamanho: tamanhoSelecionado
           })
         });
       } else {
@@ -410,7 +383,7 @@ const ProdutoDetalhe = () => {
             idUsuario,
             idProduto,
             quantidade,
-            tamanho: tamanhoSelecionado // envia tamanho no POST
+            tamanho: tamanhoSelecionado
           })
         });
       }
@@ -421,7 +394,6 @@ const ProdutoDetalhe = () => {
       alert("Erro ao adicionar ao carrinho.");
     }
   };
-
 
   const enviarFeedback = async () => {
     if (!nomeUsuario) {
@@ -524,7 +496,6 @@ const ProdutoDetalhe = () => {
             )}
           </div>
 
-
           <p className="preco">
             {produto.preco.toLocaleString("pt-BR", {
               style: "currency",
@@ -537,10 +508,7 @@ const ProdutoDetalhe = () => {
             <a href="#descrição"><button onClick={() => setSelecao("descricao")}>ver-mais</button></a>
           </div>
 
-
-
           <div className="detalhes-produto">
-
             <h4 className="title-tamanho">Tamanhos disponíveis:</h4>
             <div className="filtro-tamanhos">
               {tamanhos.length > 0 ? (
@@ -572,7 +540,6 @@ const ProdutoDetalhe = () => {
             </button>
           </div>
 
-
           <div className="acoes">
             <button className="btn adicionar-carrinho" onClick={adicionarAoCarrinho}>
               Adicionar ao Carrinho
@@ -588,7 +555,6 @@ const ProdutoDetalhe = () => {
         </div>
       </div>
 
-
       <div className="selecao-produtos">
         <ul className="items-prod">
           <li className={selecao === "descricao" ? "active" : ""}>
@@ -603,22 +569,15 @@ const ProdutoDetalhe = () => {
         </ul>
       </div>
 
-      <div>
+      <div className="conteudo-detalhe">
         {RenderConteudo()}
       </div>
 
-
-      <div className="secoes-prodrudos">
-        <SecaoProdutos
-          titulo="Você também pode gostar"
-          produtos={produtosRelacionados}
-        />
+      <div className="secoes-produtos">
+        <SecaoProdutos titulo="Você também pode gostar" endpoint="https://artenza.onrender.com/Produto" />
       </div>
     </div>
   );
 };
 
 export default ProdutoDetalhe;
-
-
-
