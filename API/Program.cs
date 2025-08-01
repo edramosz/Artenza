@@ -20,6 +20,8 @@ builder.Services.AddScoped<IVendaService, VendaService>();
 builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ICupomService, CupomService>();
+builder.Services.AddScoped<IFavoritoService, FavoritoService>();
+
 
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
