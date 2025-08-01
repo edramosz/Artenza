@@ -64,7 +64,7 @@ const Perfil = () => {
   const editImage = async (files) => {
     if (!files || files.length === 0) return;
 
-    try {
+    try { 
       const file = files[0];
       const formData = new FormData();
       formData.append("file", file);
