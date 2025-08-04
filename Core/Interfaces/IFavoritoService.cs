@@ -13,6 +13,7 @@ namespace Core.Interfaces
     {
         Task<List<Favorito>> GetFavoritosAsync();
         Task<Favorito> GetFavoritoAsync(string id);
+        Task<List<Favorito>> GetFavoritoPorIdUsuario(string idUsuario);
         Task<Favorito> AddFavoritoAsync(CreateFavorito favoritoDto);
         Task UpdateFavoritoAsync(string id, UpdateFavorito favorito);
         Task DeleteFavoritoAsync(string id);

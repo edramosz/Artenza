@@ -41,6 +41,21 @@ namespace API.Services
             return favorito;
         }
 
+        // Obter Favoritos por ID do Usuário
+        public async Task<List<Favorito>> GetFavoritoPorIdUsuario(string idUsuario)
+        {
+            var todosFavoritos = await _firebaseClient
+                .Child("favoritos")
+                .OnceAsync<Favorito>();
+
+            var favoritosFiltrados = todosFavoritos
+                .Where(f => f.Object.UsuarioId == idUsuario)
+                .Select(f => f.Object)
+                .ToList();
+
+            return favoritosFiltrados;
+        }
+
         // Adicionar um novo Favorito
         public async Task<Favorito> AddFavoritoAsync(CreateFavorito favoritoDto)
         {
