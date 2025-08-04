@@ -1,0 +1,46 @@
+.add-container {
+    width: 100%;
+    height: 300px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-cupom {
+    background-color: rgba(233, 226, 240, 0.486);
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+}
+
+.form-group-cupom {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-cupom label {
+    color: #111;
+    font-size: 1.1rem;
+}
+
+.form-group-cupom input[type="text"] {
+    padding: 5px 10px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+    background: transparent;
+    transition: border-color 0.5s;
+    outline: none;
+}
+
+.form-group-endereco input:focus {
+    border-color: #222;
+}
+
+.form-group-endereco input::placeholder {
+    color: #696565;
+}

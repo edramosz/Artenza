@@ -203,7 +203,6 @@ const Navbar = () => {
           </button>
         </header>
 
-        {/* Menu Lateral Mobile */}
         <div
           className={`mobile-menu-overlay ${openMenu ? "active" : ""}`}
           onClick={toggleMenu}

@@ -1,12 +1,25 @@
 import React from 'react'
 import './PerfilComponents.css'
+import './Cupom.css'
 import NavProfile from '../NavProfile'
 
 const Cupons = () => {
   return (
     <div className='perfil-page'>
-      <NavProfile />      
-      <h1>jjjj</h1>
+      <NavProfile />  
+      <div className="add-container">
+        <div className="add-cupom">
+          <div className="form-group-cupom">
+              <label>Digite seu cupom:</label>
+              <input type="text" name="cupom" placeholder='EXEMPLO10...'/>
+          </div>
+          <div className="form-group-cupom">
+            <button className="add-cupom">
+              Adquirir
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

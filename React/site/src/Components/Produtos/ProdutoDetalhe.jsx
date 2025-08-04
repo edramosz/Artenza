@@ -7,6 +7,7 @@ import { faStar as faStarRegular, faHeart } from '@fortawesome/free-regular-svg-
 import { faStar as faStarFull } from '@fortawesome/free-solid-svg-icons';
 
 import SecaoProdutos from '../../Components/SecaoProdutos';
+import Dropdown from '../DropDown';
 
 const Estrelas = ({ nota, max = 5 }) => {
   const estrelas = [];
@@ -37,14 +38,13 @@ const ProdutoDetalhe = () => {
   const [filtroEstrela, setFiltroEstrela] = useState(null);
   const [selecao, setSelecao] = useState("descricao")
 
-  // Feedbacks e avaliação
   const [feedbacks, setFeedbacks] = useState([]);
   const [mediaNotas, setMediaNotas] = useState(0);
 
-  // Novos feedbacks
   const [novoTitulo, setNovoTitulo] = useState("");
   const [novoComentario, setNovoComentario] = useState("");
   const [novaNota, setNovaNota] = useState(0);
+
 
   const navigate = useNavigate();
 
@@ -135,19 +135,16 @@ const ProdutoDetalhe = () => {
               <div className="filter-sort">
                 <h3 className="filter-title">Ordernar por:</h3>
                 <div className="filter-section">
-                  <select
-                    value={filtroEstrela || ''}
-                    onChange={(e) => setFiltroEstrela(e.target.value ? Number(e.target.value) : null)}
-                    className="star-filter"
-                  >
-                    <option value="">Todas as avaliações</option>
-                    <option value="5">5 Estrelas</option>
-                    <option value="4">4 Estrelas</option>
-                    <option value="3">3 Estrelas</option>
-                    <option value="2">2 Estrelas</option>
-                    <option value="1">1 Estrela</option>
-                  </select>
+                  <div className='DropDonw'>
+                    <Dropdown
+                      value={filtroEstrela}
+                      onChange={setFiltroEstrela}
+                      options={[5, 4, 3, 2, 1]}
+                      placeholder="Todas as avaliações"
+                    />
+                  </div>
                 </div>
+
               </div>
             </div>
 
@@ -230,7 +227,7 @@ const ProdutoDetalhe = () => {
               <div className="form-group">
                 <label>Detalhes da Avaliação *</label>
                 <textarea
-                  placeholder="Escreva aqui"
+                  placeholder="Escreva aqui...  "
                   value={novoComentario}
                   onChange={e => setNovoComentario(e.target.value)}
                 />
@@ -239,7 +236,8 @@ const ProdutoDetalhe = () => {
               <div className="form-group">
                 <label>Foto/Video (Opcional)</label>
                 <div className="upload-area">
-                  <p>Arraste uma foto ou vídeo aqui</p>
+                  <p>Arraste uma foto ou vídeo.</p>
+                  <span className='add-img'><i class="fa-solid fa-images"></i></span>
                   <button className="browse-btn">Procurar</button>
                 </div>
               </div>
@@ -445,6 +443,42 @@ const ProdutoDetalhe = () => {
     }
   };
 
+  const favoritarProduto = async (produtoId) => {
+    const usuarioId = localStorage.getItem('idUsuario');
+
+    if (!usuarioId) {
+      alert("Você precisa estar logado para favoritar.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://artenza.onrender.com/Favorito`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          UsuarioId: usuarioId,
+          ProdutoId: produtoId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error('Erro na API: ' + JSON.stringify(errorData));
+      }
+
+      alert('Produto adicionado aos favoritos!');
+    } catch (erro) {
+      console.error('Erro ao favoritar produto:', erro);
+      alert('Erro ao favoritar.');
+    }
+  };
+
+
+
+
+
   if (carregando) return <p>Carregando produto...</p>;
   if (erro) return <p>{erro}</p>;
   if (!produto) return <p>Produto não encontrado</p>;
@@ -480,7 +514,11 @@ const ProdutoDetalhe = () => {
         <div className="info-produto">
           <div className="produto-head">
             <h2 className="name-prod">{produto.nome}</h2>
-            <span className='heart'><FontAwesomeIcon icon={faHeart} /></span>
+            <button className='favoritar-btn' onClick={() => favoritarProduto(produto.id)}>
+              <FontAwesomeIcon icon={faHeart} />
+            </button>
+
+
           </div>
 
           <p className="tipo-prod">{produto.tipo}</p>

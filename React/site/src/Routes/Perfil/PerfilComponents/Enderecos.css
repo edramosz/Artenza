@@ -1,14 +1,17 @@
+/* Backdrop com overlay suave */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  backdrop-filter: blur(2px);
+  transition: opacity 0.3s ease;
 }
 
 .modal {
@@ -17,6 +20,196 @@
   border-radius: 8px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   position: relative;
 }
+
+.enderecos-container {
+  width: 100%;
+  margin: 10px 20px;
+}
+
+.enderecos-container .top-endereco {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 20px 20px;
+}
+
+.enderecos-container .top-endereco h2 {
+  font-size: 1.8rem;
+  color: #111;
+}
+
+.enderecos-container .top-endereco button {
+  padding: 7px 14px;
+  cursor: pointer;
+  background-color: #111;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  border-radius: 10px;
+}
+
+.enderecos-container .endereco-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.enderecos-container .lista-enderecos {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  padding: 10px 20px;
+}
+
+.enderecos-container .endereco-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 10px 0 10px;
+  border-top: 1px solid #99999991;
+}
+
+.enderecos-container .endereco-card:nth-child(1) {
+  border: none;
+}
+
+.enderecos-container .endereco-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #222;
+}
+
+.enderecos-container .endereco-header h4 {
+  margin-bottom: 8px;
+}
+
+.enderecos-container .endereco-card .card-content {
+  display: flex;
+  gap: 25px;
+}
+
+.enderecos-container .endereco-card .card-content .ativo-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.enderecos-container .card-content .ativo-div input[type="radio"] {
+  transform: scale(1.49);
+  accent-color: #111;
+}
+
+.enderecos-container .botoes-endereco {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.enderecos-container .botoes-endereco button {
+  padding: 7px 12px;
+  cursor: pointer;
+  border: 2px solid #111;
+  background: none;
+  color: #000000;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 7px;
+}
+
+.btn-excluir {
+  border: 2px solid #d11616 !important;
+  color: #d11616 !important;
+  font-weight: 600;
+}
+
+.enderecos-container .botoes-endereco button .icons-btn {
+  font-size: 0.93rem;
+}
+
+.modal.endereco-modal-form {
+  background: rgb(252, 252, 252);
+  width: 100%;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: none;
+}
+
+.endereco-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: start;
+}
+.rua-numero {
+  display: flex;
+  gap: 15px;
+}
+
+.rua-numero .form-group-endereco:last-child input {
+  width: 100%;
+}
+
+.form-group-endereco {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-endereco label {
+  font-size: 15px;
+  color: #111;
+  margin: 5px;
+  font-weight: 600;
+}
+
+.form-group-endereco input {
+  padding: 5px 10px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  background: transparent;
+  transition: border-color 0.5s;
+  outline: none;
+}
+
+.form-group-endereco input:focus {
+  border-color: #222;
+}
+
+.form-group-endereco input::placeholder {
+  color: #696565;
+}
+
+.btns-form {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btns-form button {
+  padding: 8px 14px;
+  min-width: 100px;
+  cursor: pointer;
+  background-color: #111;
+  border: none;
+  color: #fff;
+  font-size: 0.96rem;
+  border-radius: 10px;
+  box-shadow: 3px 3px 12px #5e5d5dc9;
+}
+.btns-form .cancelar-btn{
+  background: transparent;
+  border: 2px solid #111;
+  color: #111;
+  font-weight: 600;
+}
+
+

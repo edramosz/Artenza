@@ -2,33 +2,32 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../Db/FireBase";
-import './AdminPainel.css';
 import SideBar from "../NavBar/SideBar";
 
-const AdminProduto = () => {
+const AdminCupom = () => {
   const navigate = useNavigate();
-  const [produtos, setProdutos] = useState([]);
+  const [cupons, setCupons] = useState([]);
   const [erro, setErro] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
   const [pagina, setPagina] = useState(1);
-  const porPagina = 10;
+  const itensPorPagina = 10;
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const fetchProdutos = async () => {
+    const fetchCupons = async () => {
       try {
-        const response = await fetch("https://artenza.onrender.com/Produto");
+        const response = await fetch("https://artenza.onrender.com/Cupom");
         if (!response.ok) {
-          throw new Error("Erro ao carregar produtos.");
+          throw new Error("Erro ao carregar cupons.");
         }
         const data = await response.json();
-        setProdutos(data);
+        setCupons(data);
       } catch (error) {
-        setErro("Não foi possível carregar os produtos.");
+        setErro("Não foi possível carregar os cupons.");
         console.error(error);
       }
     };
 
-    fetchProdutos();
+    fetchCupons();
   }, []);
 
   const handleLogout = async () => {
@@ -42,53 +41,57 @@ const AdminProduto = () => {
     }
   };
 
-  const handleDeleteProduct = async (id) => {
+  const handleDeleteCupom = async (id) => {
     try {
-      const response = await fetch(`https://artenza.onrender.com/Produto/${id}`, {
+      const response = await fetch(`https://artenza.onrender.com/Cupom/${id}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao excluir produto.");
+        throw new Error("Erro ao excluir cupom.");
       }
 
-      setProdutos(produtos.filter((produto) => produto.id !== id));
+      setCupons(cupons.filter((cupom) => cupom.id !== id));
     } catch (error) {
-      setErro("Erro ao excluir o produto.");
+      setErro("Erro ao excluir o cupom.");
       console.error(error);
     }
   };
 
-  // Filtragem
-  const produtosFiltrados = produtos.filter((produto) =>
-    produto.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    produto.categoria.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filtrar cupons pela busca no código
+  const cuponsFiltrados = cupons.filter((cupom) =>
+    cupom.codigo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPaginas = Math.ceil(produtosFiltrados.length / porPagina);
-  const inicio = (pagina - 1) * porPagina;
-  const produtosPaginados = produtosFiltrados.slice(inicio, inicio + porPagina);
+  // Paginação
+  const totalPaginas = Math.ceil(cuponsFiltrados.length / itensPorPagina);
+  const inicio = (pagina - 1) * itensPorPagina;
+  const cuponsPaginados = cuponsFiltrados.slice(inicio, inicio + itensPorPagina);
 
   return (
     <div className="container-dashboard">
       <SideBar />
       <div className="admin-painel">
-        <h2 className="title">Painel de Produtos</h2>
+        <h2 className="title">Painel de Cupons</h2>
 
         {erro && <p style={{ color: "red" }}>{erro}</p>}
 
         <div className="btn-actions">
-          <button onClick={() => navigate("/admin/adicionar-produto")}>Adicionar Produto</button>
-          <button onClick={handleLogout} className="logout-btn">Sair</button>
+          <button onClick={() => navigate("/admin/adicionar-cupom")}>
+            Adicionar Cupom
+          </button>
+          <button onClick={handleLogout} className="logout-btn">
+            Sair
+          </button>
         </div>
 
         <div className="top-table">
-          <h2>Lista de Produtos</h2>
+          <h2>Lista de Cupons</h2>
           <div className="search-item">
             <input
               type="search"
               name="searchInput"
-              placeholder="Buscar produtos..."
+              placeholder="Buscar cupons..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -113,30 +116,39 @@ const AdminProduto = () => {
         <table className="table">
           <thead>
             <tr>
-              <th>ID do produto</th>
-              <th>Nome</th>
-              <th>Preço</th>
-              <th>Categoria</th>
+              <th>ID</th>
+              <th>Código</th>
+              <th>Desconto (%)</th>
+              <th>Ativo</th>
               <th>Ações</th>
             </tr>
           </thead>
-
           <tbody>
-            {produtosPaginados.length === 0 ? (
+            {cuponsPaginados.length === 0 ? (
               <tr>
-                <td colSpan="5">Nenhum produto encontrado.</td>
+                <td colSpan="5">Nenhum cupom encontrado.</td>
               </tr>
             ) : (
-              produtosPaginados.map((produto) => (
-                <tr key={produto.id}>
-                  <td>{produto.id}</td>
-                  <td>{produto.nome}</td>
-                  <td>R$ {parseFloat(produto.preco).toFixed(2)}</td>
-                  <td>{produto.categoria}</td>
+              cuponsPaginados.map((cupom) => (
+                <tr key={cupom.id}>
+                  <td>{cupom.id}</td>
+                  <td>{cupom.codigo}</td>
+                  <td>{cupom.valor}%</td>
+                  <td>{cupom.ativo ? "Sim" : "Não"}</td>
                   <td>
-                    <button className="editar" onClick={() => navigate(`/admin/editar-produto/${produto.id}`)}>Editar</button>
+                    <button
+                      className="editar"
+                      onClick={() => navigate(`/admin/editar-cupom/${cupom.id}`)}
+                    >
+                      Editar
+                    </button>
                     {searchTerm && (
-                      <button className="excluir" onClick={() => handleDeleteProduct(produto.id)}>Excluir</button>
+                      <button
+                        className="excluir"
+                        onClick={() => handleDeleteCupom(cupom.id)}
+                      >
+                        Excluir
+                      </button>
                     )}
                   </td>
                 </tr>
@@ -145,7 +157,6 @@ const AdminProduto = () => {
           </tbody>
         </table>
 
-        {/* Paginação */}
         {totalPaginas > 1 && (
           <div className="paginacao">
             <button
@@ -158,7 +169,6 @@ const AdminProduto = () => {
 
             {Array.from({ length: totalPaginas }, (_, i) => (
               <button
-                id="page"
                 key={i}
                 className={pagina === i + 1 ? "pagina-ativa" : ""}
                 onClick={() => setPagina(i + 1)}
@@ -181,4 +191,4 @@ const AdminProduto = () => {
   );
 };
 
-export default AdminProduto;
+export default AdminCupom;
