@@ -9,6 +9,11 @@ const AdminEndereco = () => {
   const navigate = useNavigate();
   const [enderecos, setEnderecos] = useState([]);
   const [erro, setErro] = useState("");
+  const [busca, setBusca] = useState(""); // Campo de busca
+
+  // Paginação
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const enderecosPorPagina = 10;
 
   useEffect(() => {
     const fetchEnderecos = async () => {
@@ -56,6 +61,33 @@ const AdminEndereco = () => {
     }
   };
 
+  // Filtrando resultados com base na busca
+  const enderecosFiltrados = enderecos.filter((endereco) => {
+    const termo = busca.toLowerCase();
+    return (
+      endereco.cep?.toLowerCase().includes(termo) ||
+      endereco.estado?.toLowerCase().includes(termo) ||
+      endereco.cidade?.toLowerCase().includes(termo)
+    );
+  });
+
+  // Paginação com dados filtrados
+  const totalPaginas = Math.ceil(enderecosFiltrados.length / enderecosPorPagina);
+  const indexInicial = (paginaAtual - 1) * enderecosPorPagina;
+  const indexFinal = indexInicial + enderecosPorPagina;
+  const enderecosPaginados = enderecosFiltrados.slice(indexInicial, indexFinal);
+
+  const mudarPagina = (novaPagina) => {
+    if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+      setPaginaAtual(novaPagina);
+    }
+  };
+
+  const handleBuscaChange = (e) => {
+    setBusca(e.target.value);
+    setPaginaAtual(1); // Reinicia para a primeira página ao buscar
+  };
+
   return (
     <div className="container-dashboard">
       <SideBar />
@@ -70,10 +102,27 @@ const AdminEndereco = () => {
 
         <div className="top-table">
           <h2>Lista de Endereços</h2>
-          <div className="search">
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <input type="search" placeholder="Buscar endereços..." />
+          <div className="search-item">
+            <input
+              type="search"
+              placeholder="Buscar endereços..."
+              value={busca}
+              onChange={handleBuscaChange}
+            />
+            {busca && (
+              <button
+                type="button"
+                className="clear-btn"
+                onClick={() => setBusca("")}
+              >
+                <i className="fa fa-times" />
+              </button>
+            )}
+            <button type="submit" className="search-btn">
+              <i className="fa fa-search" />
+            </button>
           </div>
+
         </div>
 
         <table className="table">
@@ -88,12 +137,12 @@ const AdminEndereco = () => {
           </thead>
 
           <tbody>
-            {enderecos.length === 0 ? (
+            {enderecosPaginados.length === 0 ? (
               <tr>
-                <td colSpan="9">Nenhum endereço encontrado.</td>
+                <td colSpan="5">Nenhum endereço encontrado.</td>
               </tr>
             ) : (
-              enderecos.map((endereco) => (
+              enderecosPaginados.map((endereco) => (
                 <tr key={endereco.id}>
                   <td>{endereco.id}</td>
                   <td>{endereco.cep}</td>
@@ -108,6 +157,32 @@ const AdminEndereco = () => {
             )}
           </tbody>
         </table>
+
+        {/* Paginação */}
+        {totalPaginas > 1 && (
+          <div className="paginacao">
+            <button onClick={() => mudarPagina(paginaAtual - 1)} disabled={paginaAtual === 1}>
+              <i className="fa-solid fa-chevron-left"></i>
+            </button>
+
+            {[...Array(totalPaginas)].map((_, index) => {
+              const numeroPagina = index + 1;
+              return (
+                <button
+                  key={numeroPagina}
+                  className={paginaAtual === numeroPagina ? "pagina-ativa" : ""}
+                  onClick={() => mudarPagina(numeroPagina)}
+                >
+                  {numeroPagina}
+                </button>
+              );
+            })}
+
+            <button onClick={() => mudarPagina(paginaAtual + 1)} disabled={paginaAtual === totalPaginas}>
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

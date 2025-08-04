@@ -6,8 +6,8 @@ import {
   faUsers,
   faCartShopping,
   faLocationDot,
+  faTicket
 } from '@fortawesome/free-solid-svg-icons';
-
 
 
 import '../PaineisAdmin/AdminPainel.css';
@@ -49,6 +49,16 @@ const SideBar = () => {
             </button>
           </Link>
         </li>
+         <li>
+          <Link to="/AdminCupons">
+            <button className={isActive('/AdminCupons') ? 'active' : ''}>
+             <FontAwesomeIcon icon={faTicket} />Cupons
+            </button>
+          </Link>
+        </li>
+
+        
+
       </ul>
     </aside>
   );

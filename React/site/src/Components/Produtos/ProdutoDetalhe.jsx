@@ -443,6 +443,42 @@ const ProdutoDetalhe = () => {
     }
   };
 
+  const favoritarProduto = async (produtoId) => {
+    const usuarioId = localStorage.getItem('idUsuario');
+
+    if (!usuarioId) {
+      alert("Você precisa estar logado para favoritar.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://artenza.onrender.com/Favorito`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          UsuarioId: usuarioId,
+          ProdutoId: produtoId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error('Erro na API: ' + JSON.stringify(errorData));
+      }
+
+      alert('Produto adicionado aos favoritos!');
+    } catch (erro) {
+      console.error('Erro ao favoritar produto:', erro);
+      alert('Erro ao favoritar.');
+    }
+  };
+
+
+
+
+
   if (carregando) return <p>Carregando produto...</p>;
   if (erro) return <p>{erro}</p>;
   if (!produto) return <p>Produto não encontrado</p>;
@@ -478,7 +514,11 @@ const ProdutoDetalhe = () => {
         <div className="info-produto">
           <div className="produto-head">
             <h2 className="name-prod">{produto.nome}</h2>
-            <button className='favoritar-btn'><FontAwesomeIcon icon={faHeart} /></button>
+            <button className='favoritar-btn' onClick={() => favoritarProduto(produto.id)}>
+              <FontAwesomeIcon icon={faHeart} />
+            </button>
+
+
           </div>
 
           <p className="tipo-prod">{produto.tipo}</p>

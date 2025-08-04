@@ -32,11 +32,12 @@ import Carrinho from './Routes/Carrinho/Carrinho';
 import Masculino from './Routes/Masculino/Masculino';
 import Feminino from './Routes/Feminino/Feminino';
 import FinalizarPedido from './Routes/FinalizarPedido/FinalizarPedido';
+import AdminCupon from './Components/PaineisAdmin/AdminCupon';
+import AdicionarCupom from './Components/Cupom/AdicionarCupom';
 
 function AppContent() {
   return (
     <Routes>
-      {/* Rotas com Layout Normal */}
       <Route element={<LayoutNormal />}>
         <Route path="/" element={<Home />} />
         <Route path="/Produto/:id" element={<ProdutoDetalhe /> } />        
@@ -68,6 +69,9 @@ function AppContent() {
         <Route path="/AdminEndereco" element={<AdminEndereco />} />
         <Route path="/Admin/adicionar-endereco" element={<AdicionarEndereco />} />
         <Route path="/Admin/editar-endereco/:id" element={<EditarEndereco />} />
+
+        <Route path="/AdminCupons" element={<AdminCupon />} />
+        <Route path="Admin/adicionar-cupom" element={<AdicionarCupom />} />
       </Route>
 
       
