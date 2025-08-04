@@ -46,7 +46,28 @@ namespace API.Services
 
             return produto;
         }
+        public async Task<List<Produto>> BuscarPorTermoAsync(string termo)
+        {
+            if (string.IsNullOrWhiteSpace(termo))
+                return new List<Produto>();
 
+            termo = termo.ToLower();
+
+            var produtos = await _firebaseClient
+                .Child("produtos")
+                .OnceAsync<Produto>();
+
+            var resultados = produtos
+                .Select(p => p.Object)
+                .Where(p =>
+                    (!string.IsNullOrEmpty(p.Nome) && p.Nome.ToLower().Contains(termo)) ||
+                    (!string.IsNullOrEmpty(p.Descricao) && p.Descricao.ToLower().Contains(termo)) ||
+                    (!string.IsNullOrEmpty(p.Categoria) && p.Categoria.ToLower().Contains(termo))
+                )
+                .ToList();
+
+            return resultados;
+        }
         public async Task<List<Produto>> FiltrarProdutos(FiltroProduto filtros)
         {
             var collection = _firestoreDb.Collection("produtos");
