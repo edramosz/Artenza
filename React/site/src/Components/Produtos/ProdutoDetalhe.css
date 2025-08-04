@@ -110,8 +110,15 @@
   align-items: center;
   color: #000000;
   font-weight: 500;
-  font-size: 1rem;
   text-decoration: underline;
+}
+
+.descricao-div button{
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .detalhes-produto {
@@ -219,6 +226,8 @@
   color: #223;
   font-weight: 500;
 }
+
+
 
 #descrição h2 {
   text-transform: uppercase;
@@ -567,7 +576,6 @@
   cursor: pointer;
   transition: all 0.3s;
   margin-top: 10px;
-  width: 100%;
   text-transform: uppercase;
   font-weight: 600;
 }
