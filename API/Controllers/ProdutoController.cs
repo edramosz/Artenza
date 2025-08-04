@@ -57,7 +57,21 @@ namespace API.Controllers
             var produtos = await _produtoService.ObterProdutosMaisVendidos();
             return Ok(produtos);
         }
+        /// <summary>
+        /// Endpoint para listar produtos com ligação aos termos de busca.
+        /// </summary>
+        /// <param name="termo"></param>
+        /// <returns></returns>
+        ///
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Produto>>> BuscarPorTermo([FromQuery] string termo)
+        {
+            if (string.IsNullOrWhiteSpace(termo))
+                return BadRequest("O termo de busca não pode ser vazio.");
 
+            var resultados = await _produtoService.BuscarPorTermoAsync(termo);
+            return Ok(resultados);
+        }
         /// <summary>
         /// Endpoint para filtrar produtos.
         /// </summary>
