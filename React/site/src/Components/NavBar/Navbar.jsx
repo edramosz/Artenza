@@ -13,6 +13,7 @@ const Navbar = () => {
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [perfilUrl, setPerfilUrl] = useState("");
+  const [termo, setTermo] = useState("");
 
   const toggleMenu = () => {
     setOpenMenu(!openMenu);
@@ -65,6 +66,14 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (termo.trim() !== "") {
+      navigate(`/busca?termo=${encodeURIComponent(termo)}`);
+      setTermo("");
+    }
+  };
+
   useEffect(() => {
     const updatePerfilUrl = () => {
       const url = localStorage.getItem("perfilUrl");
@@ -93,7 +102,10 @@ const Navbar = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log("Buscando por:", searchTerm);
+                if (searchTerm.trim() !== "") {
+                  navigate(`/busca?termo=${encodeURIComponent(searchTerm.trim())}`);
+                  setSearchTerm(""); // limpa o campo após buscar (opcional)
+                }
               }}
             >
               <div className="search-item">
