@@ -46,6 +46,21 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Endpoint para listar algum favorito pelo id do usuario.
+        /// </summary>
+        /// <param name="idUsuario"></param>
+        /// <returns></returns>
+        ///
+        [HttpGet("{idUsuario}")]
+        public async Task<ActionResult<List<Favorito>>> GetFavoritoPorIdUsuario(string idUsuario)
+        {
+            var favorito = await _favoritoService.GetFavoritoPorIdUsuario(idUsuario);
+            if (favorito == null)
+                return NotFound();
+
+            return favorito;
+        }
+        /// <summary>
         /// Endpoint para adicionar um favorito.
         /// </summary>
         /// <param name="favoritoDto"></param>
