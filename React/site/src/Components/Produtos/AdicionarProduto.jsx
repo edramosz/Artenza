@@ -138,12 +138,26 @@ const AdicionarProduto = () => {
         )}
 
         <label htmlFor="categoria">Categoria:</label>
+        <select name="categoria" id="categoria"> 
+          <option value="Blusa">Blusa</option>
+          <option value="Calçado">Calçado</option>
+          <option value="Acessórios">Acessórios</option>
+          <option value="Calças">Blusa</option>
+          <option value="Short">Short</option>
+        </select>
         <input type="text" required id="categoria" value={categoria} onChange={(e) => setCategoria(e.target.value)} />
 
         <label htmlFor="estoque">Estoque:</label>
         <input type="number" required id="estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} />
 
         <label htmlFor="tamanhos">Tamanhos:</label>
+        <select name="tamanhos" id="tamanhos"> 
+          <option value="PP">PP</option>
+          <option value="P">P</option>
+          <option value="M">M</option>
+          <option value="G">G</option>
+          <option value="GG">GG</option>
+        </select>
         <input type="text" required id="tamanhos"
           value={tamanhos.join(", ")}
           onChange={(e) => setTamanhos(e.target.value.split(",").map(t => t.trim()))}
@@ -157,6 +171,11 @@ const AdicionarProduto = () => {
         <input type="text" required id="cor" value={cor} onChange={(e) => setCor(e.target.value)} />
 
         <label htmlFor="genero">Gênero:</label>
+        <select name="genero" id="genero"> 
+          <option value="Masculino">Masculino</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Unissex">Unissex</option>
+        </select>
         <input type="text" required id="genero" value={genero} onChange={(e) => setGenero(e.target.value)} />
 
         <label htmlFor="tipo">Tipo:</label>

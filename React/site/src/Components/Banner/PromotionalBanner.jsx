@@ -9,23 +9,23 @@ const PromotionalBanner = () => {
         {
             title: 'ton ton ton sahur',
             subtitle: 'ton ton',
-            image: './img/fundo.png',
+            image: './img/banner7.png',
         },
         {
             title: 'liliri lari laa',
             subtitle: 'elefante',
-            image: './img/fundo.png',
+            image: './img/banner8.png',
         },
     ];
 
     const sidePromos = [
         {
             title: 'trala leiro lala',
-            image: './img/fundo.png',
+            image: './img/banner.png',
         },
         {
             title: 'la vaca saturno',
-            image: 'https://i.imgur.com/voHf9HP.png',
+            image: './img/banner6.png',
         },
     ];
 
