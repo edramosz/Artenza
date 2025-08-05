@@ -1,35 +1,61 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Favoritos.css';
 import NavProfile from '../NavProfile';
+import {  } from '@fortawesome/free-regular-svg-icons';
+import { faHeart} from '@fortawesome/free-solid-svg-icons';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Favoritos = () => {
   const [favoritos, setFavoritos] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    const carregarFavoritos = async () => {
+    const carregarFavoritosComProdutos = async () => {
       try {
         const usuarioId = localStorage.getItem('idUsuario');
-        const resposta = await fetch(`https://artenza.onrender.com/Favorito/${usuarioId}`);
+        const resposta = await fetch(`https://artenza.onrender.com/Favorito/usuario/${usuarioId}`);
+        
         if (!resposta.ok) throw new Error('Erro ao buscar favoritos');
 
-        const dados = await resposta.json();
-        setFavoritos(dados);
+        const favoritosData = await resposta.json();
+
+        const promessas = favoritosData.map(async (fav) => {
+          const res = await fetch(`https://artenza.onrender.com/Produto/${fav.produtoId}`);
+          if (!res.ok) throw new Error('Erro ao buscar produto');
+          const produto = await res.json();
+          return { ...produto, favoritoId: fav.id }; // Incluímos o ID do favorito
+        });
+
+        const produtosComFavoritoId = await Promise.all(promessas);
+        setFavoritos(produtosComFavoritoId);
       } catch (erro) {
-        console.error('Erro ao carregar favoritos:', erro);
+        console.error('Erro ao carregar produtos dos favoritos:', erro);
       } finally {
         setCarregando(false);
       }
     };
 
-    carregarFavoritos();
+    carregarFavoritosComProdutos();
   }, []);
 
-  return (
+  const handleRemoverFavorito = async (favoritoId) => {
+    try {
+      const res = await fetch(`https://artenza.onrender.com/Favorito/${favoritoId}`, {
+        method: 'DELETE',
+      });
 
+      if (!res.ok) throw new Error('Erro ao remover favorito');
+
+      // Remover do estado local
+      setFavoritos(prev => prev.filter(prod => prod.favoritoId !== favoritoId));
+    } catch (erro) {
+      console.error('Erro ao excluir favorito:', erro);
+    }
+  };
+
+  return (
     <div className='perfil-page'>
       <NavProfile />
       <div className="pagina-favoritos">
@@ -41,14 +67,13 @@ const Favoritos = () => {
         ) : (
           <div className="produtos-container">
             {favoritos.map((prod) => (
-              <Link to={`/produto/${prod.id}`} key={prod.id} className="link-produto">
-                <div className="card-prods">
+              <div key={prod.id} className="card-prods">
+                <Link to={`/produto/${prod.id}`} className="link-produto">
                   <img
                     src={prod.urlImagens?.[0]}
                     alt={prod.nome}
                     onError={(e) => {
-                      e.target.src =
-                        'http://via.placeholder.com/300x200.png?text=Produto+sem+imagem';
+                      e.target.src = 'http://via.placeholder.com/300x200.png?text=Produto+sem+imagem';
                     }}
                   />
                   <div className="text-card">
@@ -61,8 +86,15 @@ const Favoritos = () => {
                       })}
                     </p>
                   </div>
-                </div>
-              </Link>
+                </Link>
+
+                <button
+                  className="btn-remover-favorito"
+                  onClick={() => handleRemoverFavorito(prod.favoritoId)}
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </button>
+              </div>
             ))}
           </div>
         )}

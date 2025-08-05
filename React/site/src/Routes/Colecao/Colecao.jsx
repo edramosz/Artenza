@@ -7,7 +7,6 @@ const ListaProdutos = () => {
 
   const [produtos, setProdutos] = useState([]);
   const [erro, setErro] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
   const [filtros, setFiltros] = useState({
     categorias: [],
     subcategorias: [],
