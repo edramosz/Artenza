@@ -1,8 +1,6 @@
 using Core.Interfaces;
-using API.Services;
-using Core.Models.DTO_s;using API.Services;
-using Core.Interfaces;
 using Core.Models.DTO_s;
+using API.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +22,6 @@ builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ICupomService, CupomService>();
 builder.Services.AddScoped<IFavoritoService, FavoritoService>();
-
 
 // Configuração do CORS (liberando geral para testes)
 builder.Services.AddCors(options =>
@@ -50,7 +47,10 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
 });
 
 var app = builder.Build();
