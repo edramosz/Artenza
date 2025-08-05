@@ -81,7 +81,7 @@ thead .cabecalho-table th {
 /* Define largura para cada coluna da tabela */
 .tabela-carrinho th:nth-child(1),
 .tabela-carrinho td:nth-child(1) {
-  width: 30px;
+  width: 300px;
   /* Checkbox */
 }
 

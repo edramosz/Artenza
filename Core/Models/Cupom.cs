@@ -12,5 +12,6 @@ namespace Core.Models
         public string Codigo { get; set; }
         public double Valor { get; set; }
         public bool Ativo { get; set; }
+        public DateTime Validade { get; set; }
     }
 }
