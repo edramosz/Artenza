@@ -51,7 +51,7 @@ namespace API.Controllers
         /// <param name="idUsuario"></param>
         /// <returns></returns>
         ///
-        [HttpGet("{idUsuario}")]
+        [HttpGet("usuario/{idUsuario}")]
         public async Task<ActionResult<List<Favorito>>> GetFavoritoPorIdUsuario(string idUsuario)
         {
             var favorito = await _favoritoService.GetFavoritoPorIdUsuario(idUsuario);

@@ -34,6 +34,7 @@ import Feminino from './Routes/Feminino/Feminino';
 import FinalizarPedido from './Routes/FinalizarPedido/FinalizarPedido';
 import AdminCupon from './Components/PaineisAdmin/AdminCupon';
 import AdicionarCupom from './Components/Cupom/AdicionarCupom';
+import Busca from './Components/Busca';
 
 function AppContent() {
   return (
@@ -56,6 +57,9 @@ function AppContent() {
         <Route path="/Pagamentos" element={<Pagamentos />} />
         <Route path="/Pedidos" element={<Pedidos />} />
         <Route path="/Config" element={<Config />} />
+
+        
+        <Route path="/Busca" element={<Busca />} />
 
         <Route path="/Admin" element={<AdminPainel />} />
         <Route path="/AdminProduto" element={<AdminProduto />} />

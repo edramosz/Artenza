@@ -44,3 +44,10 @@
 .form-group-endereco input::placeholder {
     color: #696565;
 }
+
+.form-group-cupom button{
+    padding: 8px 12px;
+    width: 240px;
+    height: 90px;
+    border-radius: 20px;
+}
