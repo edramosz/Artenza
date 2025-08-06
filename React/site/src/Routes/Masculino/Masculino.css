@@ -375,6 +375,10 @@
   margin-top: 5px;
 }
 
+.masc-nenhum-resultado{
+  margin: 30px 40px;
+}
+
 .content {
   width: 100%;
   margin-left: 20px;
@@ -386,7 +390,7 @@
   flex-wrap: wrap;
   padding: 10px 25px;
   gap: 40px;
-  justify-content: center;
+  justify-content: start;
 }
 
 .content .card-prods {

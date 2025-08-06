@@ -1,0 +1,18 @@
+.pagina-busca {
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 20px 40px;
+}
+
+
+.pagina-busca .titulo-busca{
+    font-weight: 500;
+    color: #222;
+    padding: 0px 20px;
+}
+
+.pagina-busca .nenhum-resultado{
+    padding:  0px 20px;
+}
+

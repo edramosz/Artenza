@@ -5,6 +5,11 @@ import SidebarFiltros from '../../Components/SidebarFiltros';
 import SecaoProdutos from '../../Components/SecaoProdutos';
 import Flag from '../../Components/Banner/Flag';
 
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as faStarRegular, faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faStar as faStarFull, faHeart as faHeartSolid, faCartPlus, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+
 const Masculino = () => {
   const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
@@ -15,6 +20,10 @@ const Masculino = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagina, setPagina] = useState(Number(searchParams.get("page")) || 1);
   const [produtosPorPagina, setProdutosPorPagina] = useState(12);
+
+  const [favoritos, setFavoritos] = useState([]);
+
+
   const [filtros, setFiltros] = useState({
     categorias: [],
     subcategorias: [],
@@ -68,7 +77,7 @@ const Masculino = () => {
         }));
         setProdutos(formatar(masculinos));
 
-        
+
 
         setErro(null);
 
@@ -84,6 +93,7 @@ const Masculino = () => {
     buscarDados();
 
     const id = localStorage.getItem("idUsuario");
+
     setIdUsuario(id);
 
     const precoURL = searchParams.get('preco')?.split('-').map(Number);
@@ -163,6 +173,78 @@ const Masculino = () => {
 
   const totalPaginas = Math.ceil(produtosFiltrados.length / produtosPorPagina);
 
+  const favoritarProduto = async (produtoId) => {
+    if (!idUsuario) {
+      alert("Você precisa estar logado para favoritar.");
+      return;
+    }
+
+    try {
+      const jaFavoritado = favoritos.includes(produtoId);
+
+      if (jaFavoritado) {
+        const resposta = await fetch("https://artenza.onrender.com/Favorito");
+        const favoritosAPI = await resposta.json();
+
+        const favoritoExistente = favoritosAPI.find(
+          fav => fav.usuarioId === idUsuario && fav.produtoId === produtoId
+        );
+
+        if (favoritoExistente) {
+          await fetch(`https://artenza.onrender.com/Favorito/${favoritoExistente.id}`, {
+            method: "DELETE",
+          });
+
+          setFavoritos(prev => prev.filter(id => id !== produtoId));
+          alert("Produto removido dos favoritos.");
+        }
+      } else {
+        const response = await fetch(`https://artenza.onrender.com/Favorito`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            UsuarioId: idUsuario,
+            ProdutoId: produtoId,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error('Erro na API: ' + JSON.stringify(errorData));
+        }
+
+        setFavoritos(prev => [...prev, produtoId]);
+        alert('Produto adicionado aos favoritos!');
+      }
+    } catch (erro) {
+      console.error('Erro ao favoritar/desfavoritar produto:', erro);
+      alert('Erro ao processar favorito.');
+    }
+  };
+
+
+  useEffect(() => {
+    const verificarFavoritos = async () => {
+      if (!idUsuario) return;
+
+      try {
+        const resposta = await fetch(`https://artenza.onrender.com/Favorito`);
+        const favoritosAPI = await resposta.json();
+
+        const idsFavoritados = favoritosAPI
+          .filter(fav => fav.usuarioId === idUsuario)
+          .map(fav => fav.produtoId);
+
+        setFavoritos(idsFavoritados);
+      } catch (error) {
+        console.error("Erro ao verificar favoritos:", error);
+      }
+    };
+
+    verificarFavoritos();
+  }, [idUsuario]);
+
+
   return (
     <>
       <Flag />
@@ -212,51 +294,87 @@ const Masculino = () => {
                   </select>
                 </div> */}
 
-                <div className="masc-produtos">
-                  {produtosFiltrados
-                    .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
-                    .map((prod) => (
-                      <Link to={`/produto/${prod.id}`} key={prod.id}>
-                        <div className="card-prods">
-                          <img src={prod.urlImagens[0]} alt={prod.nome} onError={(e) => { e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem"; }} />
-                          <div className="text-card">
-                            <p className="categoria">{prod.categoria}</p>
-                            <h4 className="nome">{prod.nome}</h4>
-                            <p className="preco">{prod.preco.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</p>
+                {produtosFiltrados.length === 0 ? (
+                  <p className="nenhum-resultado masc-nenhum-resultado">Nenhum produto encontrado com os filtros aplicados.</p>
+                ) : (
+                  <div className="masc-produtos">
+                    {produtosFiltrados
+                      .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
+                      .map((prod) => (
+                        <Link to={`/produto/${prod.id}`} key={prod.id}>
+                          <div className="card-prods">
+                            <img
+                              src={prod.urlImagens[0]}
+                              alt={prod.nome}
+                              onError={(e) => {
+                                e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
+                              }}
+                            />
+                            <FontAwesomeIcon icon={faBagShopping} />
+                            <div className="text-card">
+                              <div className="head-prod">
+                                <p className="categoria">{prod.categoria}</p>
+                                <button
+                                  className='favoritar-btn'
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    favoritarProduto(prod.id);
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={favoritos.includes(prod.id) ? faHeartSolid : faHeartRegular}
+                                    style={{ color: favoritos.includes(prod.id) ? 'red' : 'black' }}
+                                  />
+                                </button>
+
+                              </div>
+                              <h4 className="nome">{prod.nome}</h4>
+                              <p className="preco">
+                                {prod.preco.toLocaleString("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                })}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    ))}
-                </div>
+                        </Link>
+                      ))}
+                  </div>
+                )}
 
-                <div className="paginacao">
-                  <button
-                    onClick={() => setPagina((prev) => Math.max(prev - 1, 1))}
-                    disabled={pagina === 1}
-                    className="seta"
-                  >
-                    <i className="fa-solid fa-chevron-left"></i>
-                  </button>
 
-                  {Array.from({ length: totalPaginas }, (_, i) => (
+                {produtosFiltrados.length > 0 && (
+                  <div className="paginacao">
                     <button
-                      id='page'
-                      key={i}
-                      className={pagina === i + 1 ? 'pagina-ativa' : ''}
-                      onClick={() => setPagina(i + 1)}
+                      onClick={() => setPagina((prev) => Math.max(prev - 1, 1))}
+                      disabled={pagina === 1}
+                      className="seta"
                     >
-                      {i + 1}
+                      <i className="fa-solid fa-chevron-left"></i>
                     </button>
-                  ))}
 
-                  <button
-                    onClick={() => setPagina((prev) => Math.min(prev + 1, totalPaginas))}
-                    disabled={pagina === totalPaginas}
-                    className="seta"
-                  >
-                    <i className="fa-solid fa-chevron-right"></i>
-                  </button>
-                </div>
+                    {Array.from({ length: totalPaginas }, (_, i) => (
+                      <button
+                        id='page'
+                        key={i}
+                        className={pagina === i + 1 ? 'pagina-ativa' : ''}
+                        onClick={() => setPagina(i + 1)}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() => setPagina((prev) => Math.min(prev + 1, totalPaginas))}
+                      disabled={pagina === totalPaginas}
+                      className="seta"
+                    >
+                      <i className="fa-solid fa-chevron-right"></i>
+                    </button>
+                  </div>
+                )}
+
               </>
             )}
           </main>
