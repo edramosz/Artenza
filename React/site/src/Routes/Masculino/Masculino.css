@@ -478,7 +478,7 @@
 
 .btn-carrinho-wrapper{
   position: absolute;
-  transform: translate(10px, -35px);
+  transform: translate(10px, -50px);
 }
 
 .tamanhos-disponiveis{
@@ -495,12 +495,13 @@
 .add-carr{
   display: flex;
   gap: 10px;
-  background-color: #fff;
-  border: 1px solid #000;
+  background-color: #613f3f;
   cursor: pointer;
-  border-radius: 15px;
-  padding: 10px;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 10px;
 }
+
 .add-carr svg{
   transform: scale(1.5);
 }
