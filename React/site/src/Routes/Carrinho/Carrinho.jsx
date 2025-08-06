@@ -141,7 +141,7 @@ const aplicarCupom = async () => {
     const hoje = new Date();
 
     if (!cupom.resgatado || new Date(cupom.validade) < hoje) {
-      alert("Cupom expirado ou inativo.");
+      alert("Cupom expirado ou não resgatado.");
       return;
     }
 
