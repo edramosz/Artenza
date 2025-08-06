@@ -105,25 +105,33 @@ function Carrinho() {
     }));
   };
 
-  const handleFinalizarPedido = () => {
-    const selecionadosIds = Object.values(selecionados).filter(Boolean);
-    if (selecionadosIds.length === 0) {
-      alert("Você precisa selecionar pelo menos um item para continuar.");
-      return;
-    }
-
-   navigate("/FinalizarPedido", {
-  state: {
-    cupom: cupomAplicado,
-    valorFrete,
-    total: totalComDesconto ?? totalSelecionado + valorFrete,
-    desconto: totalComDesconto ? (totalSelecionado - (totalComDesconto - valorFrete)) : 0
+ const handleFinalizarPedido = () => {
+  const selecionadosIds = Object.values(selecionados).filter(Boolean);
+  if (selecionadosIds.length === 0) {
+    alert("Você precisa selecionar pelo menos um item para continuar.");
+    return;
   }
-});
-  };
+
+  navigate("/FinalizarPedido", {
+    state: {
+      cupom: cupomAplicado,
+      valorFrete,
+      total: totalComDesconto ?? totalSelecionado + valorFrete,
+      desconto: totalComDesconto ? (totalSelecionado - (totalComDesconto - valorFrete)) : 0
+    }
+  });
+};
+
+ const totalSelecionado = itensCarrinho.reduce((total, item) => {
+  if (!selecionados[item.id]) return total;
+  const produto = getProduto(item.idProduto);
+  return total + (produto.preco || 0) * item.quantidade;
+}, 0);
+
+
 const aplicarCupom = async () => {
   try {
-    const res = await fetch(`https://artenza.onrender.com/Cupom/${cupomDigitado}`);
+    const res = await fetch(`https://artenza.onrender.com/Cupom/codigo/${cupomDigitado}`);
     if (!res.ok) {
       alert("Cupom não encontrado.");
       return;
@@ -137,17 +145,15 @@ const aplicarCupom = async () => {
       return;
     }
 
-    const subtotal = totalSelecionado; // apenas produtos
     let desconto = 0;
 
-    // tipoDesconto virá do backend, veja sugestão anterior de adicionar no model
     if (cupom.tipoDesconto === "Porcentagem") {
-      desconto = subtotal * (cupom.valor / 100);
+      desconto = totalSelecionado * (cupom.valor / 100);
     } else {
       desconto = cupom.valor;
     }
 
-    const totalFinal = subtotal - desconto + valorFrete;
+    const totalFinal = totalSelecionado - desconto + valorFrete;
 
     setCupomAplicado(cupom);
     setTotalComDesconto(totalFinal);
@@ -161,11 +167,6 @@ const aplicarCupom = async () => {
   }
 };
 
-  const totalSelecionado = itensCarrinho.reduce((total, item) => {
-    if (!selecionados[item.id]) return total;
-    const produto = getProduto(item.idProduto);
-    return total + (produto.preco || 0) * item.quantidade;
-  }, 0);
 
   if (isLoading) {
     return <div className="loading">Carregando carrinho...</div>;
@@ -262,26 +263,27 @@ const aplicarCupom = async () => {
           </select>
 
         </div>
-        <div className="cupom">
-          <h2>Digite seu cupom:</h2>
-          <input
-          type="text"
-          value={cupomDigitado}
-          onChange={(e) => setCupomDigitado(e.target.value)}
-          disabled={cupomAplicado !== null}
-          />
+       <div className="cupom">
+  <h2>Digite seu cupom:</h2>
+  <input
+    type="text"
+    value={cupomDigitado}
+    onChange={(e) => setCupomDigitado(e.target.value)}
+    disabled={cupomAplicado !== null}
+  />
   <button onClick={aplicarCupom} disabled={cupomAplicado !== null}>Aplicar</button>
   {cupomAplicado && <p style={{ color: "green" }}>Cupom "{cupomAplicado.codigo}" aplicado!</p>}
 </div>
 
       <div className="total">
-        <h3>Subtotal: R$ {totalSelecionado.toFixed(2)}</h3>
-        <h3>Frete: R$ {valorFrete.toFixed(2)}</h3>
-        {cupomAplicado && (
-        <h3>Desconto: - R$ {(totalSelecionado - (totalComDesconto - valorFrete)).toFixed(2)}</h3>
-        )}
-        <h2>Total Final: R$ {(totalComDesconto ?? (totalSelecionado + valorFrete)).toFixed(2)}</h2>
-      </div>
+  <h3>Subtotal: R$ {totalSelecionado.toFixed(2)}</h3>
+  <h3>Frete: R$ {valorFrete.toFixed(2)}</h3>
+  {cupomAplicado && (
+    <h3>Desconto: - R$ {(totalSelecionado - (totalComDesconto - valorFrete)).toFixed(2)}</h3>
+  )}
+  <h2>Total Final: R$ {(totalComDesconto ?? (totalSelecionado + valorFrete)).toFixed(2)}</h2>
+</div>
+
 
         <div className="btn-compra">
           <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>

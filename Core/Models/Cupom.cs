@@ -10,7 +10,8 @@ namespace Core.Models
     {
         public string Id { get; set; }
         public string Codigo { get; set; }
-        public string Aplicado { get; set; }
+        public string TipoDesconto { get; set; }
+        public bool Aplicado { get; set; }
         public double Valor { get; set; }
         public bool Resgatado { get; set; }
         public DateTime Validade { get; set; }
