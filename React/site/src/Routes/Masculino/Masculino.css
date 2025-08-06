@@ -6,6 +6,7 @@
 }
 
 
+
 .masc-content {
   display: flex;
   justify-content: space-between;
@@ -470,8 +471,39 @@
   background-color: #242323;
 }
 
+.head-prod{
+  display: flex;
+  justify-content: space-between;
+}
 
+.btn-carrinho-wrapper{
+  position: absolute;
+  transform: translate(10px, -35px);
+}
 
+.tamanhos-disponiveis{
+  background-color: #961f1f;
+}
+
+.favoritar-btn{
+  background: none;
+  border: none;
+  transform: scale(1.6);
+  padding-right: 5px;
+}
+
+.add-carr{
+  display: flex;
+  gap: 10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: pointer;
+  border-radius: 15px;
+  padding: 10px;
+}
+.add-carr svg{
+  transform: scale(1.5);
+}
 
 .controle-pagina {
   display: flex;

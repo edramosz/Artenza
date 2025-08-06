@@ -557,10 +557,6 @@ const ProdutoDetalhe = () => {
                 style={{ color: favoritado ? 'red' : 'black' }}
               />
             </button>
-
-
-
-
           </div>
 
           <p className="tipo-prod">{produto.tipo}</p>

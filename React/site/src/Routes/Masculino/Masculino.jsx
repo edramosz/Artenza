@@ -20,6 +20,8 @@ const Masculino = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagina, setPagina] = useState(Number(searchParams.get("page")) || 1);
   const [produtosPorPagina, setProdutosPorPagina] = useState(12);
+  const [hoveredId, setHoveredId] = useState(null);
+  const [mostrarTamanhosId, setMostrarTamanhosId] = useState(null);
 
   const [favoritos, setFavoritos] = useState([]);
 
@@ -244,6 +246,56 @@ const Masculino = () => {
     verificarFavoritos();
   }, [idUsuario]);
 
+  const adicionarAoCarrinho = async (idProduto, tamanhoSelecionado) => {
+    if (!idUsuario) {
+      alert("Você precisa estar logado.");
+      return;
+    }
+
+    try {
+      const resposta = await fetch("https://artenza.onrender.com/Carrinho");
+      const todos = await resposta.json();
+
+      const existente = todos.find(c =>
+        c.idUsuario === idUsuario &&
+        c.idProduto === idProduto &&
+        c.tamanho === tamanhoSelecionado
+      );
+
+      if (existente) {
+        const novaQuantidade = existente.quantidade + 1;
+
+        await fetch(`https://artenza.onrender.com/Carrinho/${existente.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUsuario,
+            idProduto,
+            quantidade: novaQuantidade,
+            tamanho: tamanhoSelecionado
+          })
+        });
+      } else {
+        await fetch("https://artenza.onrender.com/Carrinho", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            idUsuario,
+            idProduto,
+            quantidade: 1,
+            tamanho: tamanhoSelecionado
+          })
+        });
+      }
+
+      alert(`Produto adicionado ao carrinho (tamanho ${tamanhoSelecionado})`);
+    } catch (err) {
+      console.error("Erro ao adicionar:", err);
+      alert("Erro ao adicionar ao carrinho.");
+    }
+  };
+
+
 
   return (
     <>
@@ -297,12 +349,13 @@ const Masculino = () => {
                 {produtosFiltrados.length === 0 ? (
                   <p className="nenhum-resultado masc-nenhum-resultado">Nenhum produto encontrado com os filtros aplicados.</p>
                 ) : (
-                  <div className="masc-produtos">
-                    {produtosFiltrados
-                      .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
-                      .map((prod) => (
-                        <Link to={`/produto/${prod.id}`} key={prod.id}>
-                          <div className="card-prods">
+                  <div className="masc-produtos">{produtosFiltrados
+                    .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
+                    .map((prod) => {
+
+                      return (
+                        <div className="card-prods" key={prod.id}>
+                          <Link to={`/produto/${prod.id}`}>
                             <img
                               src={prod.urlImagens[0]}
                               alt={prod.nome}
@@ -310,25 +363,65 @@ const Masculino = () => {
                                 e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
                               }}
                             />
-                            <FontAwesomeIcon icon={faBagShopping} />
-                            <div className="text-card">
-                              <div className="head-prod">
-                                <p className="categoria">{prod.categoria}</p>
-                                <button
-                                  className='favoritar-btn'
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    favoritarProduto(prod.id);
-                                  }}
-                                >
-                                  <FontAwesomeIcon
-                                    icon={favoritos.includes(prod.id) ? faHeartSolid : faHeartRegular}
-                                    style={{ color: favoritos.includes(prod.id) ? 'red' : 'black' }}
-                                  />
-                                </button>
+                          </Link>                         
 
+                          <div
+                            className="btn-carrinho-wrapper"
+                            onMouseEnter={() => setHoveredId(prod.id)}
+                            onMouseLeave={() => setHoveredId(null)}
+                          >
+                            {mostrarTamanhosId === prod.id ? (
+                              <div className="tamanhos-disponiveis">
+                                {prod.tamanhos?.map((t, i) => (
+                                  <button
+                                    key={i}
+                                    className="btn-tamanho"
+                                    onClick={() => {
+                                      adicionarAoCarrinho(prod.id, t);
+                                      setMostrarTamanhosId(null); // esconde após clique
+                                    }}
+                                  >
+                                    {t}
+                                  </button>
+                                ))}
                               </div>
+                            ) : (         
+                              <button
+                                className="add-carr"
+                                onClick={() =>
+                                  setMostrarTamanhosId(mostrarTamanhosId === prod.id ? null : prod.id)
+                                }
+                              >
+                                <FontAwesomeIcon icon={faBagShopping} />
+                                {hoveredId === prod.id && (
+                                  <span className="texto-hover">Adicionar ao Carrinho</span>
+                                )}
+                              </button>
+                            )}
+                          </div>
+
+
+
+
+                          <div className="text-card">
+                            <div className="head-prod">
+                              <p className="categoria">{prod.categoria}</p>
+                              <button
+                                className='favoritar-btn'
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  favoritarProduto(prod.id);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={favoritos.includes(prod.id) ? faHeartSolid : faHeartRegular}
+                                  style={{ color: favoritos.includes(prod.id) ? 'red' : 'black' }}
+                                />
+                              </button>
+                            </div>
+
+                            <Link to={`/produto/${prod.id}`}>
                               <h4 className="nome">{prod.nome}</h4>
                               <p className="preco">
                                 {prod.preco.toLocaleString("pt-BR", {
@@ -336,11 +429,13 @@ const Masculino = () => {
                                   currency: "BRL",
                                 })}
                               </p>
-                            </div>
+                            </Link>
                           </div>
-                        </Link>
-                      ))}
+                        </div>
+                      );
+                    })}
                   </div>
+
                 )}
 
 
