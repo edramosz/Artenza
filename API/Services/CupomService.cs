@@ -32,7 +32,7 @@ namespace API.Services
         }
 
         // Obter um Cupom pelo ID
-        public async Task<Cupom> GetCupomAsync(string id)
+        public async Task<Cupom> GetCupomPorId(string id)
         {
             var cupom = (await _firebaseClient
                 .Child("cupons")
@@ -42,6 +42,15 @@ namespace API.Services
             return cupom;
         }
 
+        public async Task<Cupom> GetCupomPorCodigo(string cod)
+        {
+            var cupom = (await _firebaseClient
+                .Child("cupons")
+                .OnceAsync<Cupom>())
+                .FirstOrDefault(p => p.Object.Codigo == cod)?.Object;
+
+            return cupom;
+        }
         // Adicionar um novo Cupom
         public async Task<Cupom> AddCupomAsync(CreateCupom cupomDto)
         {
@@ -68,7 +77,7 @@ namespace API.Services
         // Atualizar um Cupom pelo ID
         public async Task UpdateCupomAsync(string id, UpdateCupom cupomDto)
         {
-            var cupomExistente = await GetCupomAsync(id);
+            var cupomExistente = await GetCupomPorId(id);
             if (cupomExistente != null)
             {
                 _mapper.Map(cupomDto, cupomExistente);
