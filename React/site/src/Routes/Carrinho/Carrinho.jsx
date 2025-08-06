@@ -6,6 +6,11 @@ function Carrinho() {
   const [itensCarrinho, setItensCarrinho] = useState([]);
   const [produtos, setProdutos] = useState([]);
   const [selecionados, setSelecionados] = useState({});
+  const [cupomDigitado, setCupomDigitado] = useState("");
+  const [cupomAplicado, setCupomAplicado] = useState(null);
+  const [totalComDesconto, setTotalComDesconto] = useState(null);
+  const [valorFrete, setValorFrete] = useState(0);
+
   const [isLoading, setIsLoading] = useState(true);
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
@@ -107,8 +112,54 @@ function Carrinho() {
       return;
     }
 
-    navigate("/FinalizarPedido");
+   navigate("/FinalizarPedido", {
+  state: {
+    cupom: cupomAplicado,
+    valorFrete,
+    total: totalComDesconto ?? totalSelecionado + valorFrete,
+    desconto: totalComDesconto ? (totalSelecionado - (totalComDesconto - valorFrete)) : 0
+  }
+});
   };
+const aplicarCupom = async () => {
+  try {
+    const res = await fetch(`https://artenza.onrender.com/Cupom/${cupomDigitado}`);
+    if (!res.ok) {
+      alert("Cupom não encontrado.");
+      return;
+    }
+
+    const cupom = await res.json();
+    const hoje = new Date();
+
+    if (!cupom.ativo || new Date(cupom.validade) < hoje) {
+      alert("Cupom expirado ou inativo.");
+      return;
+    }
+
+    const subtotal = totalSelecionado; // apenas produtos
+    let desconto = 0;
+
+    // tipoDesconto virá do backend, veja sugestão anterior de adicionar no model
+    if (cupom.tipoDesconto === "Porcentagem") {
+      desconto = subtotal * (cupom.valor / 100);
+    } else {
+      desconto = cupom.valor;
+    }
+
+    const totalFinal = subtotal - desconto + valorFrete;
+
+    setCupomAplicado(cupom);
+    setTotalComDesconto(totalFinal);
+
+    localStorage.setItem("cupomAplicado", JSON.stringify(cupom));
+    localStorage.setItem("valorDesconto", desconto.toString());
+
+  } catch (err) {
+    console.error("Erro ao aplicar cupom:", err);
+    alert("Erro ao aplicar cupom.");
+  }
+};
 
   const totalSelecionado = itensCarrinho.reduce((total, item) => {
     if (!selecionados[item.id]) return total;
@@ -204,19 +255,34 @@ function Carrinho() {
         </div>
         <div className="frete">
           <h2>Frete:</h2>
-          <select>
-            <option value="">Azure - 10,00</option>
-            <option value="">Mounts - 30,00</option>
-            <option value="">Nousy - 8,00</option>
+          <select onChange={e => setValorFrete(Number(e.target.value))}>
+            <option value="10">Azure - 10,00</option>
+            <option value="30">Mounts - 30,00</option>
+            <option value="8">Nousy - 8,00</option>
           </select>
+
         </div>
-        <div className="cupon">
+        <div className="cupom">
           <h2>Digite seu cupom:</h2>
-          <input type="text" />
-        </div>
-        <div className="total">
-          <h3>Total da Compra: R$ {totalSelecionado.toFixed(2)}</h3>
-        </div>
+          <input
+          type="text"
+          value={cupomDigitado}
+          onChange={(e) => setCupomDigitado(e.target.value)}
+          disabled={cupomAplicado !== null}
+          />
+  <button onClick={aplicarCupom} disabled={cupomAplicado !== null}>Aplicar</button>
+  {cupomAplicado && <p style={{ color: "green" }}>Cupom "{cupomAplicado.codigo}" aplicado!</p>}
+</div>
+
+      <div className="total">
+        <h3>Subtotal: R$ {totalSelecionado.toFixed(2)}</h3>
+        <h3>Frete: R$ {valorFrete.toFixed(2)}</h3>
+        {cupomAplicado && (
+        <h3>Desconto: - R$ {(totalSelecionado - (totalComDesconto - valorFrete)).toFixed(2)}</h3>
+        )}
+        <h2>Total Final: R$ {(totalComDesconto ?? (totalSelecionado + valorFrete)).toFixed(2)}</h2>
+      </div>
+
         <div className="btn-compra">
           <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>
         </div>
