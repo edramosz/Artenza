@@ -6,6 +6,7 @@
 }
 
 
+
 .masc-content {
   display: flex;
   justify-content: space-between;
@@ -375,6 +376,10 @@
   margin-top: 5px;
 }
 
+.masc-nenhum-resultado{
+  margin: 30px 40px;
+}
+
 .content {
   width: 100%;
   margin-left: 20px;
@@ -386,7 +391,7 @@
   flex-wrap: wrap;
   padding: 10px 25px;
   gap: 40px;
-  justify-content: center;
+  justify-content: start;
 }
 
 .content .card-prods {
@@ -429,19 +434,6 @@
   color: #000000;
 }
 
-.card-prods button {
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-transform: none;
-  height: 38px;
-  border: none;
-  background-color: #111;
-  color: var(--color-white);
-  cursor: pointer;
-  border-radius: 5px;
-  width: 100%;
-  padding: 4px 10px;
-}
 
 
 .nenhum-produto-encontrado {
@@ -479,8 +471,40 @@
   background-color: #242323;
 }
 
+.head-prod{
+  display: flex;
+  justify-content: space-between;
+}
 
+.btn-carrinho-wrapper{
+  position: absolute;
+  transform: translate(10px, -50px);
+}
 
+.tamanhos-disponiveis{
+  background-color: #961f1f;
+}
+
+.favoritar-btn{
+  background: none;
+  border: none;
+  transform: scale(1.6);
+  padding-right: 5px;
+}
+
+.add-carr{
+  display: flex;
+  gap: 10px;
+  background-color: #613f3f;
+  cursor: pointer;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 10px;
+}
+
+.add-carr svg{
+  transform: scale(1.5);
+}
 
 .controle-pagina {
   display: flex;

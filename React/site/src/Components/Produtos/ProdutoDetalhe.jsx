@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './ProdutoDetalhe.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as faStarRegular, faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faStar as faStarFull } from '@fortawesome/free-solid-svg-icons';
+import { faStar as faStarRegular, faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faStar as faStarFull, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+
 
 import SecaoProdutos from '../../Components/SecaoProdutos';
 import Dropdown from '../DropDown';
@@ -37,6 +38,7 @@ const ProdutoDetalhe = () => {
   const [quantidadeExibida, setQuantidadeExibida] = useState(3);
   const [filtroEstrela, setFiltroEstrela] = useState(null);
   const [selecao, setSelecao] = useState("descricao")
+  const [favoritado, setFavoritado] = useState(false);
 
   const [feedbacks, setFeedbacks] = useState([]);
   const [mediaNotas, setMediaNotas] = useState(0);
@@ -444,39 +446,74 @@ const ProdutoDetalhe = () => {
   };
 
   const favoritarProduto = async (produtoId) => {
-    const usuarioId = localStorage.getItem('idUsuario');
-
-    if (!usuarioId) {
+    if (!idUsuario) {
       alert("Você precisa estar logado para favoritar.");
       return;
     }
 
     try {
-      const response = await fetch(`https://artenza.onrender.com/Favorito`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          UsuarioId: usuarioId,
-          ProdutoId: produtoId,
-        }),
-      });
+      // Se já está favoritado, remove
+      if (favoritado) {
+        // Buscar o ID do favorito para excluir
+        const resposta = await fetch("https://artenza.onrender.com/Favorito");
+        const favoritos = await resposta.json();
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error('Erro na API: ' + JSON.stringify(errorData));
+        const favoritoExistente = favoritos.find(
+          fav => fav.usuarioId === idUsuario && fav.produtoId === produtoId
+        );
+
+        if (favoritoExistente) {
+          await fetch(`https://artenza.onrender.com/Favorito/${favoritoExistente.id}`, {
+            method: "DELETE",
+          });
+
+          setFavoritado(false);
+          alert("Produto removido dos favoritos.");
+        }
+      } else {
+        // Caso não esteja favoritado, adiciona
+        const response = await fetch(`https://artenza.onrender.com/Favorito`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            UsuarioId: idUsuario,
+            ProdutoId: produtoId,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error('Erro na API: ' + JSON.stringify(errorData));
+        }
+
+        setFavoritado(true);
+        alert('Produto adicionado aos favoritos!');
       }
-
-      alert('Produto adicionado aos favoritos!');
     } catch (erro) {
-      console.error('Erro ao favoritar produto:', erro);
-      alert('Erro ao favoritar.');
+      console.error('Erro ao favoritar/desfavoritar produto:', erro);
+      alert('Erro ao processar favorito.');
     }
   };
 
+  useEffect(() => {
+  const verificarFavorito = async () => {
+    if (!idUsuario || !id) return;
 
+    try {
+      const resposta = await fetch(`https://artenza.onrender.com/Favorito`);
+      const favoritos = await resposta.json();
 
+      const jaFavoritado = favoritos.some(fav => fav.usuarioId === idUsuario && fav.produtoId === id);
+      setFavoritado(jaFavoritado);
+    } catch (error) {
+      console.error("Erro ao verificar favorito:", error);
+    }
+  };
+
+  verificarFavorito();
+}, [idUsuario, id]);
 
 
   if (carregando) return <p>Carregando produto...</p>;
@@ -515,10 +552,11 @@ const ProdutoDetalhe = () => {
           <div className="produto-head">
             <h2 className="name-prod">{produto.nome}</h2>
             <button className='favoritar-btn' onClick={() => favoritarProduto(produto.id)}>
-              <FontAwesomeIcon icon={faHeart} />
+              <FontAwesomeIcon
+                icon={favoritado ? faHeartSolid : faHeartRegular}
+                style={{ color: favoritado ? 'red' : 'black' }}
+              />
             </button>
-
-
           </div>
 
           <p className="tipo-prod">{produto.tipo}</p>

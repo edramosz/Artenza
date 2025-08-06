@@ -9,8 +9,8 @@ import HeroBanner from '../../Components/Banner/HeroBanner.jsx'
 const Home = () => {
   return (
     <div>
-      {/* <Banner />  */}
-      <HeroBanner />
+       {/* <Banner />   */}
+       <HeroBanner /> 
       <InfoService />
       <PromotionalBanner />
     {/*   <Categories /> */}
