@@ -275,7 +275,7 @@ function FinalizarPedido() {
         )}
 
         {/* Campo de cupom */}
-        <div className="cupon">
+        {/* <div className="cupon">
           <label>Cupom de desconto:</label>
           <input
             type="text"
@@ -284,7 +284,7 @@ function FinalizarPedido() {
             onChange={(e) => setCupom(e.target.value)}
           />
           <button onClick={validarCupom}>Aplicar</button>
-        </div>
+        </div> */}
       </div>
 
       {/* Resumo */}
