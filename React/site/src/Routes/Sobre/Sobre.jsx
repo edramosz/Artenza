@@ -36,11 +36,11 @@ const Sobre = () => {
                     <div className="img-secao"></div>
                     <div className="secao-hero-sobre">
                         <div className="text-secao">
-                            <label htmlFor=""></label>
+                            <label className='border-label'></label>
                             <p>Sobre-nos</p>
                         </div>
                         <div className="title-secao">
-                            <h2><span>Explore nossas coleções</span></h2>
+                            <h2>Explore nossas coleções</h2>
                             <p>
                                 Se inspire com nossas peças exclusivas e monte looks que refletem sua personalidade. Roupas femininas, masculinas e acessórios com qualidade e atitude para o dia a dia.
                             </p>
