@@ -20,9 +20,7 @@ const Masculino = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [pagina, setPagina] = useState(Number(searchParams.get("page")) || 1);
   const [produtosPorPagina, setProdutosPorPagina] = useState(12);
-  const [hoveredId, setHoveredId] = useState(null);
   const [mostrarTamanhosId, setMostrarTamanhosId] = useState(null);
-
   const [favoritos, setFavoritos] = useState([]);
 
 
@@ -61,6 +59,9 @@ const Masculino = () => {
     }
   ];
 
+
+  
+
   useEffect(() => {
     const buscarDados = async () => {
       setLoading(true);
@@ -68,7 +69,6 @@ const Masculino = () => {
         // TODOS OS PRODUTOS
         const resTodos = await fetch("https://artenza.onrender.com/Produto");
         console.log(resTodos)
-
         const todosData = await resTodos.json();
         const masculinos = todosData.filter(prod => ["Masculino", "Unissex"].includes(prod.genero));
         const formatar = (lista) => lista.map(prod => ({
@@ -367,8 +367,6 @@ const Masculino = () => {
 
                           <div
                             className="btn-carrinho-wrapper"
-                            onMouseEnter={() => setHoveredId(prod.id)}
-                            onMouseLeave={() => setHoveredId(null)}
                           >
                             {mostrarTamanhosId === prod.id ? (
                               <div className="tamanhos-disponiveis">
@@ -384,6 +382,7 @@ const Masculino = () => {
                                     {t}
                                   </button>
                                 ))}
+                                <button onClick={() => setMostrarTamanhosId(false)} className='cancelar-tamanho'><i className="fa-solid fa-xmark"></i></button>
                               </div>
                             ) : (         
                               <button
@@ -392,17 +391,13 @@ const Masculino = () => {
                                   setMostrarTamanhosId(mostrarTamanhosId === prod.id ? null : prod.id)
                                 }
                               >
-                                <FontAwesomeIcon icon={faBagShopping} />
-                                {hoveredId === prod.id && (
-                                  <span className="texto-hover">Adicionar ao Carrinho</span>
-                                )}
+                                <FontAwesomeIcon icon={faBagShopping} />                             
+                                  <span className="texto-hover">Adicionar ao Carrinho</span>                                
                               </button>
+
+                              
                             )}
-                          </div>
-
-
-
-
+                          </div>                            
                           <div className="text-card">
                             <div className="head-prod">
                               <p className="categoria">{prod.categoria}</p>

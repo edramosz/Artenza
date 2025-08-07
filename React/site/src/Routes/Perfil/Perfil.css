@@ -1,18 +1,259 @@
-
 .perfil-page-main {
   width: 100%;
   max-width: 2000px;
-  display: flex;
   margin: 0 auto;
+  display: flex;
   min-height: 100vh;
 }
 
 .perfil-container {
   width: 100%;
   min-height: 100vh;
-  height: auto; 
+  height: auto;
+  display: flex;
+  padding: 20px 40px;
+  gap: 40px;
 }
 
+.perfil-info {
+  flex: 1;
+}
+
+.perfil-titles {
+  border-bottom: 1px solid #77777779;
+}
+
+.perfil-titles h2 {
+  font-size: 26px;
+  color: #111;
+  margin-bottom: 5px;
+}
+
+.perfil-titles h3 {
+  font-size: 17px;
+  color: #444;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+
+.perfil-detalhes {
+  margin-top: 20px;
+}
+
+.perfil-info-container {
+  display: flex;
+  gap: 30px;
+}
+
+.form-group-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.form-group-perfil {
+  display: flex;
+  gap: 5px;
+}
+
+.form-group-nasc {
+  display: flex;
+}
+
+.form-group-perfil label,
+.form-group-nasc label {
+  width: 80px;
+  font-weight: 700;
+  color: #111;
+  display: flex;
+  align-items: center;
+}
+
+.form-group-nasc label {
+  width: 180px;
+  font-weight: 600;
+}
+
+.form-group-perfil .group-prop {
+  border: 1px solid #777;
+  border-radius: 25px;
+  min-width: 400px;
+  padding: 7px 16px;
+}
+
+.form-group-nasc .data-prop {
+  padding: 7px 10px;
+}
+
+.data-perfil {
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+  color: #0f0f0f;
+  border-left: 3px solid #111;
+  border-radius: 2px;
+  padding-left: 10px;
+}
+
+.data-perfil label {
+  font-weight: 500;
+}
+
+.perfil-actions button {
+  padding: 8px 12px;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+}
+
+.perfil-actions .btn-editar {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.form-perfil {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.perfil-edit {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+.perfil-edit label {
+  width: 180px;
+  font-weight: 600;
+  color: #111;
+}
+
+.perfil-edit input {
+  border: 1px solid #777;
+  border-radius: 25px;
+  padding: 7px 16px;
+  min-width: 400px;
+  font-size: 1rem;
+}
+
+.perfil-edit input[type="date"] {
+  padding: 7px 10px;
+}
+
+.erro-campo {
+  color: #ff0000;
+  font-size: 0.8rem;
+  margin-top: 5px;
+  margin-left: 185px;
+}
+
+.btns-edit {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-salvar {
+  padding: 8px 12px;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+}
+
+.btn-salvar:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+#btn-cancelar {
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #111;
+  border: 2px solid #111;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+}
+
+#btn-cancelar:hover {
+  background-color: #e0e0e0;
+}
+
+.mensagem-sucesso {
+  color: #008000;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.perfil-photo {
+  flex: 1;
+  background-color: #f0edede0;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.perfil-img-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-top: 20px;
+}
+
+.perfil-img {
+  width: 260px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #19191a;
+}
+
+.btn-edit-img {
+  padding: 10px 12px;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+  box-shadow: 2px 4px 12px #11111163;
+}
+
+.perfil-container button:hover{
+  opacity: 0.9;
+  transition: 0.3s;
+  scale: 1.02;
+}
+
+.img-extensao{
+  color: #555;
+  font-size: 0.9rem;
+}
+
+
+/*    
 .perfil-img-wrapper {
   width: 100%;
   height: 160px;
@@ -33,7 +274,7 @@
   box-shadow: 0 0 0 3px #fff, 0 0 0 6px #19191a;
 }
 
-.perfil-img-wrapper .btn-edit-img {
+perfil-img-wrapper. .btn-edit-img {
   transform: translate(-20px, -20px);
   background-color: #fff;
   border: none;
@@ -179,4 +420,4 @@
 
 #btn-cancelar {
   background-color: var(--color-accent);
-}
+} */
