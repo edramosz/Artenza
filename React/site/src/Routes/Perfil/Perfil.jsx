@@ -64,7 +64,7 @@ const Perfil = () => {
   const editImage = async (files) => {
     if (!files || files.length === 0) return;
 
-    try { 
+    try {
       const file = files[0];
       const formData = new FormData();
       formData.append("file", file);
@@ -161,10 +161,15 @@ const Perfil = () => {
         dataNascimento: new Date(ano, mes - 1, dia).toLocaleDateString("pt-BR")
       }));
 
-      setEditando(false);
       setMensagemSucesso("Dados atualizados com sucesso!");
       setErros({});
-      setTimeout(() => setMensagemSucesso(""), 4000);
+
+      setTimeout(() => {
+        setEditando(false);
+        setMensagemSucesso("");
+      }, 3000);
+
+
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
       setErros({ geral: "Erro ao atualizar." });
@@ -223,35 +228,11 @@ const Perfil = () => {
       <NavProfile />
       <div className="perfil-container">
         <div className="perfil-info">
-          <div className="perfil-header">
-            <div className="perfil-img-wrapper">
-              <img
-                src={usuario.perfilUrl || defaultProfile}
-                alt="Foto de Perfil"
-                className="perfil-img"
-                onError={(e) => e.currentTarget.src = defaultProfile}
-              />
-
-              <button
-                onClick={() => document.getElementById('inputFile').click()}
-                className="btn-edit-img"
-                title="Alterar foto de perfil"
-              >
-                <FontAwesomeIcon icon={faCamera} />
-              </button>
-              <input
-                id="inputFile"
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={e => editImage(e.target.files)}
-              />
-            </div>
+          <div className="perfil-titles">
+            <h2>Meu Perfil</h2>
+            <h3>Gerenciar sua conta</h3>
           </div>
-
           <div className={`perfil-detalhes ${editando ? 'editando' : ''}`}>
-            <h2>Olá, {usuario.nome}</h2>
-
             {editando ? (
               <form className='form-perfil' onSubmit={salvarEdicao}>
                 <div className='perfil-edit'>
@@ -288,48 +269,103 @@ const Perfil = () => {
                 </div>
 
                 {erros.geral && <p className="erro-campo">{erros.geral}</p>}
+
+
+                <div className='perfil-actions'>
+                  {mensagemSucesso && <p className="mensagem-sucesso">{mensagemSucesso}</p>}
+                  <div className='btns-edit'>
+                    <button
+                      className="btn-salvar"
+                      type="submit"
+                      disabled={carregando}
+                    >
+                      {carregando ? 'Salvando...' : 'Salvar'}
+                    </button>
+                    <button
+                      type="button"
+                      id="btn-cancelar"
+                      onClick={() => setEditando(false)}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
               </form>
             ) : (
               <>
-                <p><strong>Email:</strong> {usuario.email}</p>
-                <p><strong>Telefone:</strong> {usuario.telefone}</p>
-                <p><strong>Data de Nascimento:</strong> {usuario.dataNascimento || '---'}</p>
-                <p><strong>Data de Cadastro:</strong> {usuario.dataCadastro || '---'}</p>
+                <div className="perfil-info-container">
+                  <div className="form-group-hero">
+                    <div className="form-group-perfil">
+                      <label>Nome:</label>
+                      <div className='group-prop'> {usuario.nome}</div>
+                    </div>
+                    <div className="form-group-perfil">
+                      <label>Email:</label>
+                      <div className='group-prop'> {usuario.email}</div>
+                    </div>
+                    <div className="form-group-perfil">
+                      <label>Telefone:</label>
+                      <div className='group-prop'> {usuario.telefone}</div>
+                    </div>
+                    <div className="form-group-nasc">
+                      <label >Data de Nascimento:</label>
+                      <div className='data-prop' > {usuario.dataNascimento || '---'}</div>
+                    </div>
+                  </div>
+
+
+                  <div className="perfil-actions">
+                    <button
+                      className="btn-editar"
+                      onClick={() => {
+                        setForm({
+                          nome: usuario.nome,
+                          telefone: usuario.telefone,
+                          dataNascimento: formatarDataParaInput(usuario.dataNascimento)
+                        });
+                        setEditando(true);
+                      }}
+                    >
+                      <i class="fa-solid fa-pencil"></i> Editar
+                    </button>
+                  </div>
+                </div>
+
+                <div className="data-perfil">
+                  <label>Data de Cadastro:</label>
+                  <p>{usuario.dataCadastro || '---'}</p>
+                </div>
               </>
             )}
-
-            <div className="perfil-actions">
-              {mensagemSucesso && <p className="mensagem-sucesso">{mensagemSucesso}</p>}
-
-              {editando ? (
-                <div className='btns-edit'>
-                  <button
-                    className="btn-salvar"
-                    onClick={salvarEdicao}
-                    disabled={carregando}
-                  >
-                    {carregando ? 'Salvando...' : 'Salvar'}
-                  </button>
-                  <button id="btn-cancelar" onClick={() => setEditando(false)}>Cancelar</button>
-                </div>
-              ) : (
-                <button
-                  className="btn-editar"
-                  onClick={() => {
-                    setForm({
-                      nome: usuario.nome,
-                      telefone: usuario.telefone,
-                      dataNascimento: formatarDataParaInput(usuario.dataNascimento)
-                    });
-                    setEditando(true);
-                  }}
-                >
-                  Editar Informações
-                </button>
-              )}
-            </div>
           </div>
+        </div>
+        <div className="perfil-photo">
+            <div className="perfil-img-wrapper">
+              <img
+                src={usuario.perfilUrl || defaultProfile}
+                alt="Foto de Perfil"
+                className="perfil-img"
+                onError={(e) => e.currentTarget.src = defaultProfile}
+              />
 
+              <button
+                  onClick={() => document.getElementById('inputFile').click()}
+                  className="btn-edit-img"
+                  title="Alterar foto de perfil"
+                >
+                  Selecionar a imagem
+                </button> 
+              <input
+                id="inputFile"
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={e => editImage(e.target.files)}
+              />
+              
+              <p className="img-extensao">Extensão de arquivo: JPEG, PNG</p>
+
+            </div>
         </div>
       </div>
     </div>

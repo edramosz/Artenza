@@ -498,22 +498,22 @@ const ProdutoDetalhe = () => {
   };
 
   useEffect(() => {
-  const verificarFavorito = async () => {
-    if (!idUsuario || !id) return;
+    const verificarFavorito = async () => {
+      if (!idUsuario || !id) return;
 
-    try {
-      const resposta = await fetch(`https://artenza.onrender.com/Favorito`);
-      const favoritos = await resposta.json();
+      try {
+        const resposta = await fetch(`https://artenza.onrender.com/Favorito`);
+        const favoritos = await resposta.json();
 
-      const jaFavoritado = favoritos.some(fav => fav.usuarioId === idUsuario && fav.produtoId === id);
-      setFavoritado(jaFavoritado);
-    } catch (error) {
-      console.error("Erro ao verificar favorito:", error);
-    }
-  };
+        const jaFavoritado = favoritos.some(fav => fav.usuarioId === idUsuario && fav.produtoId === id);
+        setFavoritado(jaFavoritado);
+      } catch (error) {
+        console.error("Erro ao verificar favorito:", error);
+      }
+    };
 
-  verificarFavorito();
-}, [idUsuario, id]);
+    verificarFavorito();
+  }, [idUsuario, id]);
 
 
   if (carregando) return <p>Carregando produto...</p>;

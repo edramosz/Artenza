@@ -1,16 +1,14 @@
 .add-container {
     width: 100%;
-    height: 300px;
     padding: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    max-width: 2000px;
+    margin: 0 auto;
 }
 
 .add-cupom {
-    background-color: rgba(233, 226, 240, 0.486);
+    background-color: #f5f5f5;
     width: 100%;
-    height: 220px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,35 +17,43 @@
 
 .form-group-cupom {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
 }
 
 .form-group-cupom label {
     color: #111;
     font-size: 1.1rem;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .form-group-cupom input[type="text"] {
-    padding: 5px 10px;
-    border-radius: 15px;
-    border: 1px solid #ddd;
+    padding: 13px;
+    border-radius: 10px;
+    border: 2px solid #838181;
     font-size: 15px;
+    width:300px;
     background: transparent;
     transition: border-color 0.5s;
     outline: none;
+    background-color: #ffffff7e;
 }
 
-.form-group-endereco input:focus {
-    border-color: #222;
-}
-
-.form-group-endereco input::placeholder {
-    color: #696565;
+.form-group-cupom input:focus {
+    border-color: #111;
 }
 
 .form-group-cupom button{
-    padding: 8px 12px;
+    padding: 13px;
     width: 240px;
-    height: 90px;
-    border-radius: 20px;
+    height: auto;
+    font-size: 15px;
+    text-transform: uppercase;
+    border-radius: 10px;
+    background-color: #111;
+    color: #fff;
+    font-weight: 600;
 }
+
