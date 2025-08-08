@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Cards from "react-credit-cards-br";
 // import "react-credit-cards-br/dist/es/styles-compiled.css";
+console.log(Cards);
+//import "react-credit-cards-br/dist/styles-compiled.css";
 
 export default function CartaoSimulador() {
   const [state, setState] = useState({
