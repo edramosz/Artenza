@@ -10,13 +10,13 @@ namespace Core.Models
         public decimal Preco { get; set; }
         public string Descricao { get; set; }
         public List<string> UrlImagens { get; set; } = new List<string>();
-        public string Categoria { get; set; } // Exemplo: "Roupas", "Acessórios"
+        public string Categoria { get; set; } // Exemplo: "Roupas", "Calçados"
+        public string SubCategoria { get; set; }      // Exemplo: "Esportivo", "Social"
         public int Estoque { get; set; }
         public List<string> Tamanhos { get; set; }
         public string Material { get; set; }
         public string Cor { get; set; }
         public string Genero { get; set; }
-        public string Tipo { get; set; }      // Para acessórios (Exemplo: "Relógio", "Colar")
         public string Marca { get; set; }
         public DateTime DataCriacao { get; set; } = DateTime.UtcNow; // para lançamentos
         public int QuantidadeVendida { get; set; }  // para mais vendidos
