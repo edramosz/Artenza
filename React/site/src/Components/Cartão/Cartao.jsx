@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Cards from "react-credit-cards";
-import "react-credit-cards/lib/styles.css";
+import Cards from "react-credit-cards-2";
+//import "react-credit-cards/lib/styles.css";
 
 console.log(Cards);
 //import "react-credit-cards-br/dist/styles-compiled.css";
