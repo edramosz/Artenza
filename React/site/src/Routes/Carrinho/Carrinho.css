@@ -462,6 +462,12 @@
   background-color: rgba(211, 47, 47, 0.26);
 }
 
+.carrinho-container .total-final{
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
 
 /* Responsivo */
 @media (max-width: 768px) {

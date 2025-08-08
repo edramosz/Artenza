@@ -36,15 +36,30 @@ namespace API.Controllers
         /// <returns></returns>
         ///
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cupom>> GetCupom(string id)
+        public async Task<ActionResult<Cupom>> GetCupomPorId(string id)
         {
-            var cupom = await _cupomService.GetCupomAsync(id);
+            var cupom = await _cupomService.GetCupomPorId(id);
             if (cupom == null)
                 return NotFound();
 
             return cupom;
         }
 
+        /// <summary>
+        /// Endpoint para listar algum cupom pelo código.
+        /// </summary>
+        /// <param name="cod"></param>
+        /// <returns></returns>
+        ///
+        [HttpGet("codigo/{cod}")]
+        public async Task<ActionResult<Cupom>> GetCupomPorCodigo(string cod)
+        {
+            var cupom = await _cupomService.GetCupomPorCodigo(cod);
+            if (cupom == null)
+                return NotFound();
+
+            return cupom;
+        }
         /// <summary>
         /// Endpoint para adicionar um cupom.
         /// </summary>
@@ -58,7 +73,7 @@ namespace API.Controllers
 
             var cupomCriado = await _cupomService.AddCupomAsync(cupomDto);
 
-            return CreatedAtAction(nameof(GetCupom), new { id = cupomCriado.Id }, cupomCriado);
+            return CreatedAtAction(nameof(GetCupomPorId), new { id = cupomCriado.Id }, cupomCriado);
         }
 
 
@@ -72,7 +87,7 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCupom(string id, UpdateCupom cupom)
         {
-            var existingCupom = await _cupomService.GetCupomAsync(id);
+            var existingCupom = await _cupomService.GetCupomPorId(id);
             if (existingCupom == null)
                 return NotFound();
 
@@ -88,7 +103,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCupom(string id)
         {
-            var existingCupom = await _cupomService.GetCupomAsync(id);
+            var existingCupom = await _cupomService.GetCupomPorId(id);
             if (existingCupom == null)
                 return NotFound();
 

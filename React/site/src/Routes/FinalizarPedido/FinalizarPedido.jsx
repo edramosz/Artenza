@@ -16,6 +16,7 @@ function FinalizarPedido() {
 
   const email = localStorage.getItem("email");
   const nomeCompleto = localStorage.getItem("nomeCompletoUser");
+  const valorTotal = JSON.parse(localStorage.getItem("valorTotal"));
 
   // Lista de cupons válidos
   const cuponsValidos = [
@@ -275,7 +276,7 @@ function FinalizarPedido() {
         )}
 
         {/* Campo de cupom */}
-        <div className="cupon">
+        {/* <div className="cupon">
           <label>Cupom de desconto:</label>
           <input
             type="text"
@@ -284,12 +285,12 @@ function FinalizarPedido() {
             onChange={(e) => setCupom(e.target.value)}
           />
           <button onClick={validarCupom}>Aplicar</button>
-        </div>
+        </div> */}
       </div>
 
       {/* Resumo */}
       <div className="resumo-final">
-        <h2>Total: R$ {totalComDesconto.toFixed(2)}</h2>
+        <h2>Total: R$ {valorTotal.toFixed(2)}</h2>
         <button onClick={finalizarPedido} disabled={enviando}>
           {enviando ? "Finalizando..." : "Finalizar Pedido"}
         </button>
