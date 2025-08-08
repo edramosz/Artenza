@@ -14,5 +14,6 @@ namespace Core.Interfaces
         Task UpdateUsuarioAsync(string id, UpdateUsuario usuario);
         Task DeleteUsuarioAsync(string id);
         Task UpdateUsuarioFotoAsync(string id, Usuario usuario);
+        Task UpdateSenhaAsync(string id, Usuario usuario);
     }
 }
