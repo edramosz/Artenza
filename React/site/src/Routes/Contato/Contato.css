@@ -1,0 +1,274 @@
+.container-contact {
+  max-width: 1900px;
+  margin: 0 auto;
+}
+
+.banner-contact {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-image: url("../../../public/img/fundo.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.banner-contact h2 {
+  font-size: 2.1rem;
+  text-shadow: 4px 4px 12px #111111b2;
+  line-height: 3.8rem;
+  color: #fff;
+}
+
+.contact-page {
+  padding: 40px;
+}
+
+.contact-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 300px;
+  background-color: #111;
+  color: #fff;
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.contact-info h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.contact-info h2 {
+  font-size: 20px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.contact-info p {
+  color: #dfdcdc;
+  line-height: 1.6;
+}
+
+.container-contact .social-icons ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin-top: -30px;
+}
+
+.container-contact .social-icons ul i {
+  width: 45px;
+  height: 45px;
+  background-color: #333;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 30px;
+}
+
+.contact-form {
+  flex: 1.5;
+  min-width: 300px;
+  padding: 30px;
+}
+
+.contact-form .text-contact {
+  color: #333;
+  font-weight: 500;
+}
+
+.contact-form .text-contact span {
+  font-weight: 700;
+  color: #000;
+}
+
+.contact-form h2 {
+  font-size: 34px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.contact-form p {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.contact-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0px 20px;
+}
+
+.container-contact .form-group {
+  margin-bottom: 20px;
+}
+
+.container-contact .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #111;
+  font-weight: 500;
+}
+
+.container-contact .form-group input,
+.container-contact .form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #b4b3b3;
+  border-radius: 25px;
+  font-size: 16px;
+}
+
+.container-contact .form-group input:focus,
+.container-contact .form-group textarea:focus {
+  background-color: #f1f1f1;
+  border: 1px solid #111;
+  transition: 0.4s;
+}
+
+.container-contact .form-group textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.container-contact .submit-btn {
+  background-color: #111;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.container-contact .submit-btn:hover {
+  background-color: #333;
+}
+
+.newsletter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin: 50px 0px;
+    margin-bottom: 100px;
+}
+
+.newsletter-box p{    
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.newsletter-box p > span{    
+  font-weight: 700;
+  color: #000;
+}
+
+.newsletter-box h2{    
+  font-size: 38px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.newsletter-box h2 > span{    
+  color: #3f3c3c;
+}
+
+
+.newsletter-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.newsletter-form .div-form{
+    display: flex;    
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    padding: 7px 14px;
+    padding-left: 7px;
+    border-radius: 25px;
+    background-color: #111;    
+    box-shadow: 0px 0px 0px 5px #ffffff;
+    z-index: 100;
+}
+
+.newsletter-form .div-form input{
+    background: none;
+    border: none;
+    font-size: 1.00rem;
+    color: #fff;
+    outline: none;
+    padding: 8px 0px;
+    width: 200px;
+}
+
+.newsletter-form .div-form input::placeholder {
+    color: #ffffff;
+}
+
+.newsletter-box .div-form .newsletter-icon{
+    background-color: #333;
+    width: 35px;
+    height: 35px;    
+    border-radius: 35px;
+    display: flex;    
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.newsletter-box .div-form .newsletter-icon i{
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+
+.newsletter-form .subscribe-btn{
+    background-color: #111;
+    border: none;
+    cursor: pointer;
+    padding: 14px 20px;
+    padding-left: 40px;
+    border-radius: 0 25px 25px 0;
+    color: #fff;
+    font-size: 1rem;
+    margin-left: -22px;
+}
+
+.newsletter-form .subscribe-btn:hover{
+    opacity: 0.9;
+    transition: 0.4s;
+}
+
+
+
+@media (max-width: 768px) {
+  .contact-page {
+    flex-direction: column;
+  }
+}
+

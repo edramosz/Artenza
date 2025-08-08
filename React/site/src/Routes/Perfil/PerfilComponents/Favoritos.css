@@ -1,0 +1,33 @@
+.pagina-favoritos {
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 20px 0px;
+}
+
+.pagina-favoritos .produtos-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px 25px;
+  gap: 20px;
+  justify-content: start;
+}
+
+.pagina-favoritos .favoritos-title{
+    margin-left: 25px;
+    margin-bottom: 20px;
+}
+
+.pagina-favoritos .produtos-container .card-prods {
+  width: 250px;
+}
+
+.sem-favoritos{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}

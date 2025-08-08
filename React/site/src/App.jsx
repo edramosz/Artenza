@@ -36,6 +36,7 @@ import AdminCupon from './Components/PaineisAdmin/AdminCupon';
 import AdicionarCupom from './Components/Cupom/AdicionarCupom';
 import Busca from './Components/Busca';
 import Sobre from './Routes/Sobre/Sobre';
+import Contato from './Routes/Contato/Contato';
 
 function AppContent() {
   return (
@@ -47,7 +48,8 @@ function AppContent() {
         <Route path="/Colecao" element={<Colecao />} />
         <Route path="/masculino" element={<Masculino />} />        
         <Route path="/feminino" element={<Feminino />} />
-        <Route path="/Sobre" element={<Sobre />} />
+        <Route path="/Sobre" element={<Sobre />} />        
+        <Route path="/Contato" element={<Contato />} />
 
         <Route path="/Carrinho" element={<Carrinho />} />        
         <Route path="/FinalizarPedido" element={<FinalizarPedido />} />

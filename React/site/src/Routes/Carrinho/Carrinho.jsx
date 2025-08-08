@@ -10,10 +10,46 @@ function Carrinho() {
   const [cupomAplicado, setCupomAplicado] = useState(null);
   const [totalComDesconto, setTotalComDesconto] = useState(null);
   const [valorFrete, setValorFrete] = useState(0);
-
   const [isLoading, setIsLoading] = useState(true);
+  const [mensagemErro, setMensagemErro] = useState("");
+  const [modalAberto, setModalAberto] = useState(false);
+  const [itemSelecionado, setItemSelecionado] = useState(null);
+
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
+
+  const abrirModalTamanho = (item) => {
+    setItemSelecionado(item);
+    setModalAberto(true);
+  };
+
+  const fecharModal = () => {
+    setModalAberto(false);
+    setItemSelecionado(null);
+  };
+
+  const salvarTamanho = async (novoTamanho) => {
+    if (!itemSelecionado) return;
+
+    const payload = {
+      idUsuario: itemSelecionado.idUsuario,
+      idProduto: itemSelecionado.idProduto,
+      quantidade: itemSelecionado.quantidade,
+      tamanho: novoTamanho
+    };
+
+    await fetch(`https://artenza.onrender.com/Carrinho/${itemSelecionado.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    setItensCarrinho(prev =>
+      prev.map(i => i.id === itemSelecionado.id ? { ...i, tamanho: novoTamanho } : i)
+    );
+
+    fecharModal();
+  };
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -105,70 +141,77 @@ function Carrinho() {
     }));
   };
 
- const handleFinalizarPedido = () => {
-  const selecionadosIds = Object.values(selecionados).filter(Boolean);
-  if (selecionadosIds.length === 0) {
-    alert("Você precisa selecionar pelo menos um item para continuar.");
-    return;
-  }
+  const totalSelecionado = itensCarrinho.reduce((total, item) => {
+    if (!selecionados[item.id]) return total;
+    const produto = getProduto(item.idProduto);
+    return total + (produto.preco || 0) * item.quantidade;
+  }, 0);
 
-  navigate("/FinalizarPedido", {
-    state: {
-      cupom: cupomAplicado,
-      valorFrete,
-      total: totalComDesconto ?? totalSelecionado + valorFrete,
-      desconto: totalComDesconto ? (totalSelecionado - (totalComDesconto - valorFrete)) : 0
+  const aplicarCupom = async () => {
+    try {
+      const res = await fetch(`https://artenza.onrender.com/Cupom/codigo/${cupomDigitado}`);
+      if (!res.ok) {
+        alert("Cupom não encontrado.");
+        return;
+      }
+
+      const cupom = await res.json();
+      const hoje = new Date();
+
+      if (!cupom.resgatado || new Date(cupom.validade) < hoje) {
+        alert("Cupom expirado ou não resgatado.");
+        return;
+      }
+
+      let desconto = 0;
+
+      if (cupom.tipoDesconto === "Porcentagem") {
+        desconto = totalSelecionado * (cupom.valor / 100);
+      } else {
+        desconto = cupom.valor;
+      }
+
+      const totalFinal = totalSelecionado - desconto + valorFrete;
+
+      setCupomAplicado(cupom);
+      setTotalComDesconto(totalFinal);
+
+      localStorage.setItem("cupomAplicado", JSON.stringify(cupom));
+      localStorage.setItem("valorDesconto", desconto.toString());
+
+    } catch (err) {
+      console.error("Erro ao aplicar cupom:", err);
+      alert("Erro ao aplicar cupom.");
     }
-  });
-  localStorage.setItem("valorTotal", JSON.stringify(totalComDesconto ?? (totalSelecionado + valorFrete)));
+  };
 
-};
-
- const totalSelecionado = itensCarrinho.reduce((total, item) => {
-  if (!selecionados[item.id]) return total;
-  const produto = getProduto(item.idProduto);
-  return total + (produto.preco || 0) * item.quantidade;
-}, 0);
-
-
-const aplicarCupom = async () => {
-  try {
-    const res = await fetch(`https://artenza.onrender.com/Cupom/codigo/${cupomDigitado}`);
-    if (!res.ok) {
-      alert("Cupom não encontrado.");
+  const handleFinalizarPedido = () => {
+    const selecionadosIds = Object.values(selecionados).filter(Boolean);
+    if (selecionadosIds.length === 0) {
+      setMensagemErro("Você precisa selecionar pelo menos um item para continuar.");
+      setTimeout(() => setMensagemErro(""), 3000);
       return;
     }
 
-    const cupom = await res.json();
-    const hoje = new Date();
+    navigate("/FinalizarPedido", {
+      state: {
+        cupom: cupomAplicado,
+        valorFrete,
+        total: totalComDesconto ?? totalSelecionado + valorFrete,
+        desconto: totalComDesconto ? (totalSelecionado - (totalComDesconto - valorFrete)) : 0
+      }
+    });
 
-    if (!cupom.resgatado || new Date(cupom.validade) < hoje) {
-      alert("Cupom expirado ou não resgatado.");
-      return;
-    }
+    localStorage.setItem("valorTotal", JSON.stringify(totalComDesconto ?? (totalSelecionado + valorFrete)));
+  };
 
-    let desconto = 0;
-
-    if (cupom.tipoDesconto === "Porcentagem") {
-      desconto = totalSelecionado * (cupom.valor / 100);
-    } else {
-      desconto = cupom.valor;
-    }
-
-    const totalFinal = totalSelecionado - desconto + valorFrete;
-
-    setCupomAplicado(cupom);
-    setTotalComDesconto(totalFinal);
-
-    localStorage.setItem("cupomAplicado", JSON.stringify(cupom));
-    localStorage.setItem("valorDesconto", desconto.toString());
-
-  } catch (err) {
-    console.error("Erro ao aplicar cupom:", err);
-    alert("Erro ao aplicar cupom.");
-  }
-};
-
+  const desmarcarTodos = () => {
+    const novoSelecionados = {};
+    Object.keys(selecionados).forEach(id => {
+      novoSelecionados[id] = false;
+    });
+    setSelecionados(novoSelecionados);
+  };
 
   if (isLoading) {
     return <div className="loading">Carregando carrinho...</div>;
@@ -190,14 +233,17 @@ const aplicarCupom = async () => {
   return (
     <div className="carrinho-container">
       <div className="lista-carrinho">
-        <h1>Meu Carrinho</h1>
+        <div className="top-carrinho">
+          <label className="label-top-carr"></label>
+          <h1>Meu Carrinho</h1>
+        </div>
 
         <table className="tabela-carrinho">
           <thead>
             <tr className="cabecalho-table">
               <th></th>
-              <th>Imagem</th>
-              <th>Produto</th>
+              <th>Produtos</th>
+              <th></th>
               <th>Tamanho</th>
               <th>Preço</th>
               <th>Qtd</th>
@@ -210,7 +256,7 @@ const aplicarCupom = async () => {
               const produto = getProduto(item.idProduto);
               return (
                 <tr key={item.id}>
-                  <td><input type="checkbox" checked={selecionados[item.id] || false} onChange={() => toggleSelecionado(item.id)} /></td>
+                  <td><input type="checkbox" className="check-btn" checked={selecionados[item.id] || false} onChange={() => toggleSelecionado(item.id)} /></td>
                   <td>
                     <Link to={`/produto/${produto.id}`}>
                       <img
@@ -232,7 +278,12 @@ const aplicarCupom = async () => {
                       <p className="tipo">{produto.tipo}</p>
                     </Link>
                   </td>
-                  <td><p className="tamanho">{item.tamanho}</p></td>
+                  <td>
+                    <div className="tamanho-coluna">
+                      <p className="tamanho">{item.tamanho}</p>
+                      <button onClick={() => abrirModalTamanho(item)}><i className="fa-solid fa-chevron-down"></i></button>
+                    </div>
+                  </td>
                   <td><p className="_preco">R$ {produto.preco?.toFixed(2)}</p></td>
                   <td>
                     <div className="botoes-qtd">
@@ -242,55 +293,79 @@ const aplicarCupom = async () => {
                     </div>
                   </td>
                   <td><p className="_preco">R$ {(produto.preco * item.quantidade).toFixed(2)}</p></td>
-                  <td><button onClick={() => removerItem(item.id)} className="remove-btn"><i className="fa-solid fa-xmark"></i></button></td>
+                  <td><button onClick={() => removerItem(item.id)} className="remove-btn"><i className="fa-solid fa-trash"></i></button></td>
                 </tr>
-
               );
             })}
           </tbody>
         </table>
       </div>
 
-      <div className="resumo">
-        <h1>Resumo</h1>
-        <div className="items-count-carrinho">
-          <p>Itens selecionados: {Object.values(selecionados).filter(Boolean).length}</p>
-        </div>
-        <div className="frete">
-          <h2>Frete:</h2>
-          <select onChange={e => setValorFrete(Number(e.target.value))}>
-            <option value="10">Azure - 10,00</option>
-            <option value="30">Mounts - 30,00</option>
-            <option value="8">Nousy - 8,00</option>
-          </select>
+      <div className="conteiner-resumo">
+        <div className="resumo">
+          <div className="top-carrinho">
+            <h1>Resumo do Pedido</h1>
+            <label className="label-top-carr" style={{ backgroundColor: "#fff" }}></label>
+          </div>
 
-        </div>
-       <div className="cupom">
-  <h2>Digite seu cupom:</h2>
-  <input
-    type="text"
-    value={cupomDigitado}
-    onChange={(e) => setCupomDigitado(e.target.value)}
-    disabled={cupomAplicado !== null}
-  />
-  <button onClick={aplicarCupom} disabled={cupomAplicado !== null}>Aplicar</button>
-  {cupomAplicado && <p style={{ color: "green" }}>Cupom "{cupomAplicado.codigo}" aplicado!</p>}
-</div>
+          <div className="items-count-carrinho">
+            <p>Itens selecionados: {Object.values(selecionados).filter(Boolean).length}</p>
+            <p>R$ {totalSelecionado.toFixed(2)}</p>
+          </div>
 
-      <div className="total">
-  <h3>Subtotal: R$ {totalSelecionado.toFixed(2)}</h3>
-  <h3>Frete: R$ {valorFrete.toFixed(2)}</h3>
-  {cupomAplicado && (
-    <h3>Desconto: - R$ {(totalSelecionado - (totalComDesconto - valorFrete)).toFixed(2)}</h3>
-  )}
-  <h2>Total Final: R$ {(totalComDesconto ?? (totalSelecionado + valorFrete)).toFixed(2)}</h2>
-</div>
+          <div className="frete">
+            <h2>Frete:</h2>
+            <select onChange={e => setValorFrete(Number(e.target.value))}>
+              <option value="10">Azure - 10,00</option>
+              <option value="30">Mounts - 30,00</option>
+              <option value="8">Nousy - 8,00</option>
+            </select>
+          </div>
 
+          <div className="cupon">
+            <h2>Digite seu cupom:</h2>
+            <form className="cupom-form" onSubmit={e => { e.preventDefault(); aplicarCupom(); }}>
+              <input type="text" value={cupomDigitado} onChange={(e) => setCupomDigitado(e.target.value)} placeholder="Ex: TESTE2" disabled={cupomAplicado !== null} />
+              <button className="aplicar-cupom-btn" disabled={cupomAplicado !== null}>Aplicar</button>
+            </form>
+            {cupomAplicado && <p style={{ color: "green" }}>Cupom "{cupomAplicado.codigo}" aplicado!</p>}
+          </div>
 
-        <div className="btn-compra">
-          <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>
+          <div className="total">
+            <h3>Subtotal: R$ {totalSelecionado.toFixed(2)}</h3>
+            <h3>Frete: R$ {valorFrete.toFixed(2)}</h3>
+            {cupomAplicado && (
+              <h3>Desconto: - R$ {(totalSelecionado - (totalComDesconto - valorFrete)).toFixed(2)}</h3>
+            )}
+            <h2 className="total-final">Total Final: R$ {(totalComDesconto ?? (totalSelecionado + valorFrete)).toFixed(2)}</h2>
+          </div>
+
+          <div className="btn-compra">
+            {mensagemErro && <p className="erro-carrinho"><i className="fa-solid fa-circle-exclamation"></i> {mensagemErro}</p>}
+            <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>
+          </div>
+
+          {Object.values(selecionados).some(valor => valor) && (
+            <div className="desmarcar">
+              <button onClick={desmarcarTodos}>Desmarcar tudo</button>
+            </div>
+          )}
         </div>
       </div>
+
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3 className="tamanho-title">Selecione o tamanho:</h3>
+            {getProduto(itemSelecionado.idProduto)?.tamanhos?.map(tam => (
+              <button key={tam} className="btn-tamanho-alteracao" onClick={() => salvarTamanho(tam)}>
+                {tam}
+              </button>
+            ))}
+            <button className="cancelar-btn" onClick={fecharModal}><i className="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

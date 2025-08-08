@@ -404,7 +404,6 @@
   object-fit: cover;
   display: block;
   border: 1px solid #aaaaaa48;
-  border-radius: 10px;
 }
 
 .card-prods .text-card {
@@ -418,15 +417,15 @@
 }
 
 .card-prods .categoria {
-  color: #666;
+  color: #555;
   font-size: 1rem;
   margin: 8px 0px;
 }
 
 .card-prods .preco {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.2rem;
-  color: #000000;
+  color: #000;
 }
 
 .nenhum-produto-encontrado {

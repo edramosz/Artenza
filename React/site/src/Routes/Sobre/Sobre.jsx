@@ -6,12 +6,12 @@ const Sobre = () => {
             <div className="sobre-hero">
                 <div className="banner-sobre">
                     <div className="banner-sobre-content">
-                        <h2>Descubra a incomparável <span>elegância da Artenza</span></h2>
+                        <h2>Sobre nos</h2>
                     </div>
                 </div>
                 <div className="sobre-cards">
-                    <div className="card-sobre">  
-                        <div className="card-border"></div>                      
+                    <div className="card-sobre">
+                        <div className="card-border"></div>
                         <div className="card-top">
                             <span>1</span>
                             <h2>Quem somos</h2>
@@ -22,7 +22,7 @@ const Sobre = () => {
                     </div>
 
                     <div className="card-sobre">
-                        <div className="card-border"></div>  
+                        <div className="card-border"></div>
                         <div className="card-top">
                             <span>2</span>
                             <h2>Nossa missão</h2>
@@ -36,11 +36,11 @@ const Sobre = () => {
                     <div className="img-secao"></div>
                     <div className="secao-hero-sobre">
                         <div className="text-secao">
-                            <label htmlFor=""></label>
+                            <label className='border-label'></label>
                             <p>Sobre-nos</p>
                         </div>
                         <div className="title-secao">
-                            <h2><span>Explore nossas coleções</span></h2>
+                            <h2>Explore nossas coleções</h2>
                             <p>
                                 Se inspire com nossas peças exclusivas e monte looks que refletem sua personalidade. Roupas femininas, masculinas e acessórios com qualidade e atitude para o dia a dia.
                             </p>
@@ -61,10 +61,74 @@ const Sobre = () => {
                         </div>
                     </div>
                 </div>
+                <div className="processo-compra-conteiner">
+                    <div className="processo-compra-titles">
+                        <p><span>//</span> Nossa experiência</p>
+                        <h2><span>Nossa experiência</span> de Compra Comprovada</h2>
+                    </div>
+                    <div className="processo-compra-cards">
+                        <div className="processo-compra-card">
+                            <div className="card-compra-icone">
+                                <i className="fa fa-search" />
+                                <span>01</span>
+                            </div>
+                            <div className="card-processo-title">
+                                <h2>Descubra</h2>
+                            </div>
+                            <div className="card-processo-text">
+                                <p>Encontre roupas e acessórios únicos que combinam com o seu estilo.</p>
+                            </div>
+                        </div>
+
+
+                        <div className="processo-compra-card">
+                            <div className="card-compra-icone">
+                                <i class="fa-solid fa-shirt"></i>
+                                <span>02</span>
+                            </div>
+                            <div className="card-processo-title">
+                                <h2>Escolha</h2>
+                            </div>
+                            <div className="card-processo-text">
+                                <p>Combine peças com base em suas preferências e veja sugestões.</p>
+                            </div>
+                            <div className="border-processo"></div>
+                        </div>
+
+
+                        <div className="processo-compra-card">
+                            <div className="card-compra-icone">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>03</span>
+                            </div>
+                            <div className="card-processo-title">
+                                <h2>Compre</h2>
+                            </div>
+                            <div className="card-processo-text">
+                                <p>Finalize sua compra com segurança e diversas opções de pagamento.</p>
+                            </div>
+                            <div className="border-processo"></div>
+                        </div>
+
+                        <div className="processo-compra-card">
+                            <div className="card-compra-icone">
+                                <i class="fa-solid fa-truck-fast"></i>
+                                <span>04</span>
+                            </div>
+                            <div className="card-processo-title">
+                                <h2>Entrega</h2>
+                            </div>
+                            <div className="card-processo-text">
+                                <p>Receba suas peças favoritas com agilidade e carinho.</p>
+                            </div>
+                            <div className="border-processo"></div>
+                        </div>
+                    </div>
+                </div>
                 <div className="details-hero">
                     <details>
                         <summary>
-                            Sede
+                            Sede da Empresa
                             <span class="icon-button"></span>
                         </summary>
                         <div className='detail-content'>
