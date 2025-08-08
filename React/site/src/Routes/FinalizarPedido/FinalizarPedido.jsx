@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./FinalizarPedido.css";
+import CartaoSimulador from "../../Components/Cartão/Cartao";
 
 function FinalizarPedido() {
   // Estados principais
@@ -224,6 +225,7 @@ function FinalizarPedido() {
       </div>
 
       {/* Pagamento */}
+      <CartaoSimulador />
       <div className="pagamento">
         <h2>Forma de Pagamento</h2>
 
