@@ -21,7 +21,6 @@
   overflow: hidden;
 }
 
-/* Cards de produtos (igual masc-produtos) */
 .content {
   width: 100%;
 }
@@ -64,10 +63,4 @@
   color: #666;
   font-size: 1rem;
   margin-bottom: 10px;
-}
-
-.card-prods .preco {
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: #108f0c;
 }

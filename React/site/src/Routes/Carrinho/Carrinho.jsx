@@ -7,8 +7,46 @@ function Carrinho() {
   const [produtos, setProdutos] = useState([]);
   const [selecionados, setSelecionados] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [mensagemErro, setMensagemErro] = useState("");
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
+
+  const [modalAberto, setModalAberto] = useState(false);
+  const [itemSelecionado, setItemSelecionado] = useState(null);
+
+  const abrirModalTamanho = (item) => {
+    setItemSelecionado(item);
+    setModalAberto(true);
+  };
+
+  const fecharModal = () => {
+    setModalAberto(false);
+    setItemSelecionado(null);
+  };
+
+  const salvarTamanho = async (novoTamanho) => {
+    if (!itemSelecionado) return;
+
+    const payload = {
+      idUsuario: itemSelecionado.idUsuario,
+      idProduto: itemSelecionado.idProduto,
+      quantidade: itemSelecionado.quantidade,
+      tamanho: novoTamanho
+    };
+
+    await fetch(`https://artenza.onrender.com/Carrinho/${itemSelecionado.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    setItensCarrinho(prev =>
+      prev.map(i => i.id === itemSelecionado.id ? { ...i, tamanho: novoTamanho } : i)
+    );
+
+    fecharModal();
+  };
+
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -103,18 +141,34 @@ function Carrinho() {
   const handleFinalizarPedido = () => {
     const selecionadosIds = Object.values(selecionados).filter(Boolean);
     if (selecionadosIds.length === 0) {
-      alert("Você precisa selecionar pelo menos um item para continuar.");
+      setMensagemErro("Você precisa selecionar pelo menos um item para continuar.");
+
+      setTimeout(() => {
+        setMensagemErro("");
+      }, 3000);
+
       return;
     }
 
+    setMensagemErro("");
     navigate("/FinalizarPedido");
   };
+
 
   const totalSelecionado = itensCarrinho.reduce((total, item) => {
     if (!selecionados[item.id]) return total;
     const produto = getProduto(item.idProduto);
     return total + (produto.preco || 0) * item.quantidade;
   }, 0);
+
+  const desmarcarTodos = () => {
+    const novoSelecionados = {};
+    Object.keys(selecionados).forEach(id => {
+      novoSelecionados[id] = false;
+    });
+    setSelecionados(novoSelecionados);
+  };
+
 
   if (isLoading) {
     return <div className="loading">Carregando carrinho...</div>;
@@ -136,14 +190,17 @@ function Carrinho() {
   return (
     <div className="carrinho-container">
       <div className="lista-carrinho">
-        <h1>Meu Carrinho</h1>
+        <div className="top-carrinho">
+          <label className="label-top-carr"></label>
+          <h1>Meu Carrinho</h1>
+        </div>
 
         <table className="tabela-carrinho">
           <thead>
             <tr className="cabecalho-table">
               <th></th>
-              <th>Imagem</th>
-              <th>Produto</th>
+              <th>Produtos</th>
+              <th></th>
               <th>Tamanho</th>
               <th>Preço</th>
               <th>Qtd</th>
@@ -156,7 +213,7 @@ function Carrinho() {
               const produto = getProduto(item.idProduto);
               return (
                 <tr key={item.id}>
-                  <td><input type="checkbox" checked={selecionados[item.id] || false} onChange={() => toggleSelecionado(item.id)} /></td>
+                  <td><input type="checkbox" className="check-btn" checked={selecionados[item.id] || false} onChange={() => toggleSelecionado(item.id)} /></td>
                   <td>
                     <Link to={`/produto/${produto.id}`}>
                       <img
@@ -178,7 +235,12 @@ function Carrinho() {
                       <p className="tipo">{produto.tipo}</p>
                     </Link>
                   </td>
-                  <td><p className="tamanho">{item.tamanho}</p></td>
+                  <td>
+                    <div className="tamanho-coluna">
+                      <p className="tamanho">{item.tamanho}</p>
+                      <button onClick={() => abrirModalTamanho(item)}><i class="fa-solid fa-chevron-down"></i></button>
+                    </div>
+                  </td>
                   <td><p className="_preco">R$ {produto.preco?.toFixed(2)}</p></td>
                   <td>
                     <div className="botoes-qtd">
@@ -188,39 +250,68 @@ function Carrinho() {
                     </div>
                   </td>
                   <td><p className="_preco">R$ {(produto.preco * item.quantidade).toFixed(2)}</p></td>
-                  <td><button onClick={() => removerItem(item.id)} className="remove-btn"><i className="fa-solid fa-xmark"></i></button></td>
+                  <td><button onClick={() => removerItem(item.id)} className="remove-btn"><i className="fa-solid fa-trash"></i></button></td>
                 </tr>
-
               );
             })}
           </tbody>
         </table>
       </div>
 
-      <div className="resumo">
-        <h1>Resumo</h1>
-        <div className="items-count-carrinho">
-          <p>Itens selecionados: {Object.values(selecionados).filter(Boolean).length}</p>
-        </div>
-        <div className="frete">
-          <h2>Frete:</h2>
-          <select>
-            <option value="">Azure - 10,00</option>
-            <option value="">Mounts - 30,00</option>
-            <option value="">Nousy - 8,00</option>
-          </select>
-        </div>
-        <div className="cupon">
-          <h2>Digite seu cupom:</h2>
-          <input type="text" />
-        </div>
-        <div className="total">
-          <h3>Total da Compra: R$ {totalSelecionado.toFixed(2)}</h3>
-        </div>
-        <div className="btn-compra">
-          <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>
+      <div className="conteiner-resumo">
+        <div className="resumo">
+          <div className="top-carrinho">
+            <h1>Resumo do Pedido</h1>
+            <label className="label-top-carr" style={{ backgroundColor: "#fff" }}></label>
+          </div>
+          <div className="items-count-carrinho">
+            <p>Itens selecionados: {Object.values(selecionados).filter(Boolean).length}</p>
+            <p>R$ {totalSelecionado.toFixed(2)}</p>
+          </div>
+          <div className="frete">
+            <h2>Frete:</h2>
+            <select>
+              <option value="">Azure - 10,00</option>
+              <option value="">Mounts - 30,00</option>
+              <option value="">Nousy - 8,00</option>
+            </select>
+          </div>
+          <div className="cupon">
+            <h2>Digite seu cupom:</h2>
+            <form className="cupom-form">
+              <input type="text" placeholder="Ex: TESTE2" />
+              <button className="aplicar-cupom-btn">Aplicar</button>
+            </form>
+          </div>
+          <div className="total">
+            <h3>Total da Compra: <span>R$ {totalSelecionado.toFixed(2)}</span></h3>
+          </div>
+          <div className="btn-compra">
+            {mensagemErro && <p className="erro-carrinho"><i class="fa-solid fa-circle-exclamation"></i> {mensagemErro}</p>}
+            <button onClick={handleFinalizarPedido} className="botao-comprar">Comprar</button>
+          </div>
+
+          {Object.values(selecionados).some(valor => valor) && (
+            <div className="desmarcar">
+              <button onClick={desmarcarTodos}>Desmarcar tudo</button>
+            </div>
+          )}
         </div>
       </div>
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3 className="tamanho-title">Selecione o tamanho:</h3>
+            {getProduto(itemSelecionado.idProduto)?.tamanhos?.map(tam => (
+              <button key={tam} className="btn-tamanho-alteracao" onClick={() => salvarTamanho(tam)}>
+                {tam}
+              </button>
+            ))}
+            <button className="cancelar-btn" onClick={fecharModal}><i className="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
