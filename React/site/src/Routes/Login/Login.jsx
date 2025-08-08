@@ -74,31 +74,41 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleLogin}>
-        <h2 className="title">Login</h2>
+    <div className="login-container-hero">
+      <div className="login-banner">
 
-        <label htmlFor="Email">Email:</label>
-        <input
-          type="email"
-          placeholder="Digite seu email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div class="background-svg">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path fill="#0099ff" fill-opacity="1" d="M0,256L60,250.7C120,245,240,235,360,192C480,149,600,75,720,85.3C840,96,960,192,1080,224C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+          </svg>
+        </div>
+      </div>
+      <div className="login-container">
+        <form onSubmit={handleLogin}>
+          <h2 className="title">Login</h2>
 
-        <label htmlFor="Senha">Senha:</label>
-        <input
-          type="password"
-          placeholder="Digite sua senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          required
-        />
+          <label htmlFor="Email">Email:</label>
+          <input
+            type="email"
+            placeholder="Digite seu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        {erro && <p style={{ color: "red" }}>{erro}</p>}
-        <button type="submit">Entrar</button>
-      </form>
+          <label htmlFor="Senha">Senha:</label>
+          <input
+            type="password"
+            placeholder="Digite sua senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+          />
+
+          {erro && <p style={{ color: "red" }}>{erro}</p>}
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
     </div>
   );
 }
