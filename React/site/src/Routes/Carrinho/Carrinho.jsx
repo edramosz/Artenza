@@ -120,6 +120,8 @@ function Carrinho() {
       desconto: totalComDesconto ? (totalSelecionado - (totalComDesconto - valorFrete)) : 0
     }
   });
+  localStorage.setItem("valorTotal", JSON.stringify(totalComDesconto ?? (totalSelecionado + valorFrete)));
+
 };
 
  const totalSelecionado = itensCarrinho.reduce((total, item) => {
