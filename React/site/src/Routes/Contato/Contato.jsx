@@ -1,9 +1,29 @@
-import React from 'react'
+import React, { useState }from 'react'
 import { Link } from 'react-router-dom'
 import './Contato.css'
 
 const Contato = () => {
     
+    const [emailDigitado, setEmailDigitado] = useState("");
+
+    const handleNewsletterSubmit = async (e) => {
+    e.preventDefault(); // evita recarregar a página
+
+    try {
+      const response = await fetch("https://artenza.onrender.com/Email/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(emailDigitado)
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao criar inscrição na newsletter.");
+      }
+      setEmailDigitado(""); // limpa campo
+    } catch (error) {
+      console.error(error);
+    }
+  }
     return (
         <div className="container-contact">
             <div className="banner-contact">
@@ -75,14 +95,15 @@ const Contato = () => {
                     <p><span>//</span> Newsletter</p>
                     <h2>Inscreva-se para receber <br /> <span>ofertas e descontos</span> especiais</h2>
 
-                    <form className="newsletter-form">
+                    <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
                         <div className="div-form">
                             <div className="newsletter-icon">
-                                <i class="fa-solid fa-envelope"></i>
+                                <i className="fa-solid fa-envelope"></i>
                             </div>
                             <div className="form-group-contact">
-                                <input onClick={handleNewsletterClick}
+                                <input 
                                     type="email"
+                                    value={emailDigitado} onChange={(e) => setEmailDigitado(e.target.value)}
                                     id="email"
                                     placeholder="Digite seu e-mail"
                                     required
