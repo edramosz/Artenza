@@ -11,7 +11,7 @@ public class EmailService : IEmailService
 {
     private readonly string _smtpServer = "smtp.gmail.com";
     private readonly int _smtpPort = 465;
-    private readonly string _smtpUser = "edsonramosr726@gmail.com";
+    private readonly string _smtpUser = "artenza.ofc@gmail.com";
     private readonly string _smtpPass = "xkxl lmrp gkax ieaa";
     private readonly FirebaseClient _firebaseClient;
     private readonly IMapper _mapper;
