@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 20px 40px;
+  padding: 20px;
 }
 
 .masc-content {
@@ -30,7 +30,7 @@
 .flex-conteiner .sidebar {
   top: 0;
   align-self: flex-start;
-  width: 360px;
+  width: 340px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -377,20 +377,19 @@
 
 .content {
   width: 100%;
-  margin-left: 20px;
 }
 
 .content .masc-produtos {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  padding: 10px 25px;
-  gap: 40px;
+  padding: 10px 0px;
+  gap: 20px;
   justify-content: start;
 }
 
 .content .card-prods {
-  width: 250px;
+  width: 241px;
 }
 
 .masc-produtos a {

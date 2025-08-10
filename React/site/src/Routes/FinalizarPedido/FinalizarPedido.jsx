@@ -18,13 +18,6 @@ function FinalizarPedido() {
   const nomeCompleto = localStorage.getItem("nomeCompletoUser");
   const valorTotal = JSON.parse(localStorage.getItem("valorTotal"));
 
-  // Lista de cupons válidos
-  const cuponsValidos = [
-    { codigo: "desconto10", desconto: 0.10 },
-    { codigo: "fretegratis", desconto: 0.15 },
-    { codigo: "vip", desconto: 0.20 }
-  ];
-
   useEffect(() => {
     if (nomeCompleto) {
       setUsuarioLogado({ nome: nomeCompleto });
@@ -32,7 +25,6 @@ function FinalizarPedido() {
       setUsuarioLogado(null);
     }
   }, [nomeCompleto]);
-
 
   // Carregamento dos dados ao abrir a página
   useEffect(() => {
@@ -44,9 +36,20 @@ function FinalizarPedido() {
         setUsuario(usuarioData);
 
         // Endereço
-        const resEndereco = await fetch(`https://artenza.onrender.com/Endereco/${usuarioData.idEndereco}`);
-        const enderecoData = await resEndereco.json();
-        setEndereco(enderecoData);
+        // Endereço - busca apenas o ativo
+        const resEndereco = await fetch(`https://artenza.onrender.com/Endereco/por-usuario/${usuarioData.id}`);
+        const enderecosData = await resEndereco.json();
+
+        // Filtra o endereço ativo
+        const enderecoAtivo = enderecosData.find(e => e.ativo === true);
+
+        if (enderecoAtivo) {
+          setEndereco(enderecoAtivo);
+        } else {
+          setEndereco(null);
+          console.warn("Nenhum endereço ativo encontrado para o usuário.");
+        }
+
 
         // Produtos e Carrinho
         const resProdutos = await fetch("https://artenza.onrender.com/Produto");
@@ -82,16 +85,7 @@ function FinalizarPedido() {
   const totalComDesconto = total * (1 - desconto);
 
   // Validação do cupom digitado
-  const validarCupom = () => {
-    const cupomEncontrado = cuponsValidos.find(c => c.codigo.toLowerCase() === cupom.toLowerCase());
-    if (cupomEncontrado) {
-      setDesconto(cupomEncontrado.desconto);
-      alert(`Cupom "${cupomEncontrado.codigo}" aplicado!`);
-    } else {
-      setDesconto(0);
-      alert("Cupom inválido.");
-    }
-  };
+
 
   // Enviar pedido para a API
   const finalizarPedido = async () => {

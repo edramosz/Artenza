@@ -140,6 +140,19 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Endpoint que verifica se telefone existe
+        /// </summary>
+        /// <param name="telefone"></param>
+        /// <returns></returns>
+
+        [HttpGet("exists-telefone")]
+        public async Task<ActionResult<bool>> ExistsTelefone([FromQuery] string telefone)
+        {
+            var usuario = await _usuarioService.GetUsuarioByTelefoneAsync(telefone);
+            return Ok(usuario != null);
+        }
+
+
         /// Endpoint para atualizar a senha do usuario
         /// </summary>
         /// <param name="id"></param>
@@ -156,6 +169,7 @@ namespace API.Controllers
 
             // Atualize diretamente a entidade sem passar pelo UpdateUsuario que valida demais
             await _usuarioService.UpdateSenhaAsync(id, usuarioExistente);
+
 
             return NoContent();
         }
