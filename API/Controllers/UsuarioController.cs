@@ -152,8 +152,25 @@ namespace API.Controllers
             return Ok(usuario != null);
         }
 
+        /// Endpoint para atualizar a senha do usuario
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="UsuarioDto"></param>
+        /// <returns></returns>
+        [HttpPatch("{id}/senha")]
+        public async Task<IActionResult> RedefinirSenha(string id, [FromBody] UpdateUsuario UsuarioDto)
+        {
+            var usuarioExistente = await _usuarioService.GetUsuarioAsync(id);
+            if (usuarioExistente == null)
+                return NotFound();
 
+            usuarioExistente.SenhaHash = UsuarioDto.SenhaHash;
 
+            // Atualize diretamente a entidade sem passar pelo UpdateUsuario que valida demais
+            await _usuarioService.UpdateSenhaAsync(id, usuarioExistente);
+
+            return NoContent();
+        }
 
     }
 }

@@ -156,7 +156,13 @@ namespace API.Services
                 .Child(id)
                 .PutAsync(usuario);
         }
-
+        public async Task UpdateSenhaAsync(string id, Usuario usuario)
+        {
+            await _firebaseClient
+                .Child("usuarios")
+                .Child(id)
+                .PutAsync(usuario);
+        }
 
         // Deletar um produto pelo ID
         public async Task DeleteUsuarioAsync(string id)
