@@ -61,12 +61,12 @@ public class EmailService : IEmailService
     {
         var newsletter = _mapper.Map<Newsletter>(newsletterDto);
 
+        newsletter.DataInscricao = DateTime.UtcNow;
         var response = await _firebaseClient
             .Child("newsletters")
             .PostAsync(newsletter);
 
         newsletter.Id = response.Key;
-        newsletter.DataInscricao = DateTime.UtcNow;
         await _firebaseClient
             .Child("newsletters")
             .Child(newsletter.Id)

@@ -4,14 +4,49 @@ import './Contato.css'
 
 const Contato = () => {
     
-    const [emailDigitado, setEmailDigitado] = useState("");
+    const [EmailNewsletter, setEmailNewsletter] = useState("");
 
+    const [EmailContato, setEmailContato] = useState("");
+    const [Nome, setNome] = useState("");
+    const [Telefone, setTelefone] = useState("");
+    const [Servico, setServico] = useState("");
+    const [Mensagem, setMensagem] = useState("");
+
+    const handleContatoSubmit = async (e) => {
+        e.preventDefault(); // evita recarregar a página
+
+        const novoContato = {
+            emailContato: EmailContato,
+            nome: Nome,
+            telefone: Telefone,
+            servico: Servico,
+            mensagem: Mensagem
+        }
+        try {
+      const response = await fetch("https://artenza.onrender.com/Email/contato", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novoContato)
+      });
+
+      if (!response.ok) {
+        console.log(novoContato);
+        throw new Error("Erro ao criar o contato.");
+      }
+      setEmailContato("");
+      setNome("");
+      setMensagem(""); // limpa campo
+      setServico("");
+      setTelefone("");
+    } catch (error) {
+      console.error(error);
+    }
+    }
     const handleNewsletterSubmit = async (e) => {
     e.preventDefault(); // evita recarregar a página
 
     const novoNewsletter = {
-      email: emailDigitado,
-      data_inscricao: ''
+      emailNewsletter: EmailNewsletter
     };
     try {
       const response = await fetch("https://artenza.onrender.com/Email/newsletter", {
@@ -21,10 +56,10 @@ const Contato = () => {
       });
 
       if (!response.ok) {
-        console.log(emailDigitado);
+        console.log(novoNewsletter);
         throw new Error("Erro ao criar inscrição na newsletter.");
       }
-      setEmailDigitado(""); // limpa campo
+      setEmailNewsletter(""); // limpa campo
     } catch (error) {
       console.error(error);
     }
@@ -66,28 +101,28 @@ const Contato = () => {
                     <h2>Entre em Contato</h2>
                     <p>Fale com a nossa equipe pronta pra você!</p>
 
-                    <form className='form-contact'>
+                    <form className='form-contact' onSubmit={handleContatoSubmit}>
                         <div className="contact-hero">
                             <div className="form-group">
                                 <label htmlFor="name">Seu Nome *</label>
-                                <input type="text" id="name" placeholder="Ex. Edson Jose" required />
+                                <input type="text" value={Nome} onChange={(e) => setNome(e.target.value)} id="name" placeholder="Ex. Edson Jose" required />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="email">Email *</label>
-                                <input type="email" id="email" placeholder="Digite seu email" required />
+                                <input type="email" value={EmailContato} onChange={(e) => setEmailContato(e.target.value)} id="email-contato" placeholder="Digite seu email" required />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="phone">Telefone *</label>
-                                <input type="tel" id="phone" placeholder="Digite seu número de telefone" required />
+                                <input type="tel" value={Telefone} onChange={(e) => setTelefone(e.target.value)} id="phone" placeholder="Digite seu número de telefone" required />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="phone">Serviço *</label>
-                                <input type="tel" id="phone" placeholder="Ex: Devolução" required />
+                                <input type="tel" value={Servico} onChange={(e) => setServico(e.target.value)} id="phone" placeholder="Ex: Devolução" required />
                             </div>
 
                             <div className="form-group textarea">
                                 <label htmlFor="message">Sua Mensagem *</label>
-                                <textarea id="message" placeholder="Digite aqui..." required></textarea>
+                                <textarea value={Mensagem} onChange={(e) => setMensagem(e.target.value)} id="message" placeholder="Digite aqui..." required></textarea>
                             </div>
                         </div>
 
@@ -108,8 +143,8 @@ const Contato = () => {
                             <div className="form-group-contact">
                                 <input 
                                     type="email"
-                                    value={emailDigitado} onChange={(e) => setEmailDigitado(e.target.value)}
-                                    id="email"
+                                    value={EmailNewsletter} onChange={(e) => setEmailNewsletter(e.target.value)}
+                                    id="email-newsletter"
                                     placeholder="Digite seu e-mail"
                                     required
                                 />
