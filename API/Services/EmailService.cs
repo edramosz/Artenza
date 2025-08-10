@@ -12,7 +12,7 @@ public class EmailService : IEmailService
     private readonly string _smtpServer = "smtp.gmail.com";
     private readonly int _smtpPort = 465;
     private readonly string _smtpUser = "artenza.ofc@gmail.com";
-    private readonly string _smtpPass = "xkxl lmrp gkax ieaa";
+    private readonly string _smtpPass = "osqp gkze okpj borv";
     private readonly FirebaseClient _firebaseClient;
     private readonly IMapper _mapper;
 
@@ -40,7 +40,8 @@ public class EmailService : IEmailService
             .PutAsync(contato);
 
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("Equipe Artenza", _smtpUser));
+        var email = contato.Email;
+        message.From.Add(new MailboxAddress(contato.Nome, email));
         message.To.Add(new MailboxAddress("Artenza", _smtpUser));
         message.Subject = $"Novo contato de {contato.Nome}";
         message.Body = new TextPart("plain")
@@ -65,7 +66,7 @@ public class EmailService : IEmailService
             .PostAsync(newsletter);
 
         newsletter.Id = response.Key;
-
+        newsletter.DataInscricao = DateTime.UtcNow;
         await _firebaseClient
             .Child("newsletters")
             .Child(newsletter.Id)
