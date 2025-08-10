@@ -36,14 +36,14 @@ public class EmailController : ControllerBase
 
     // 2️⃣ Código de verificação para troca de senha
     [HttpPost("codigo-verificacao")]
-    public async Task<IActionResult> EnviarCodigo([FromBody] CodigoVerificacaoDto dados)
+    public async Task<IActionResult> EnviarCodigo([FromBody] CreateUsuario user)
     {
         var codigo = new Random().Next(100000, 999999).ToString();
         var corpoEmail = $"<p>Seu código de verificação é: <b>{codigo}</b></p>";
 
         // Aqui você salvaria no banco junto do usuário
         await _emailService.EnviarEmailAsync(
-            dados.Email,
+            user.Email,
             "Código de Verificação - Artenza",
             corpoEmail
         );
@@ -53,7 +53,7 @@ public class EmailController : ControllerBase
 
     // 3️⃣ Newsletter
     [HttpPost("newsletter")]
-    public async Task<IActionResult> InscreverNewsletter([FromBody] NewsletterDto inscricao)
+    public async Task<IActionResult> InscreverNewsletter([FromBody] CreateNewsletter inscricao)
     {
         var corpoEmail = "<p>Obrigado por se inscrever na nossa newsletter! 🎉</p>";
 
