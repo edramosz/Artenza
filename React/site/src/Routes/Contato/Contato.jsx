@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom'
 import './Contato.css'
 
 const Contato = () => {
-    const handleNewsletterClick = (e) => {
-        try {
-      const response = await fetch(`https://artenza.onrender.com/Email/Newsletter/${emailUsuario}`);
-    }
+    
     return (
         <div className="container-contact">
             <div className="banner-contact">
