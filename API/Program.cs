@@ -22,6 +22,7 @@ builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<ICupomService, CupomService>();
 builder.Services.AddScoped<IFavoritoService, FavoritoService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Configuração do CORS (liberando geral para testes)
 builder.Services.AddCors(options =>

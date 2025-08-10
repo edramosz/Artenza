@@ -45,6 +45,15 @@ namespace Core.Models.DTO_s
             CreateMap<Favorito, CreateFavorito>();
             CreateMap<CreateFavorito, Favorito>();
 
+            CreateMap<Cartao, CreateCartao>();
+            CreateMap<CreateCartao, Cartao>();
+
+            CreateMap<Contato, CreateContato>();
+            CreateMap<CreateContato, Contato>();
+
+            CreateMap<Newsletter, CreateNewsletter>();
+            CreateMap<CreateNewsletter, Newsletter>();
+
             // UPDATE
 
             CreateMap<Usuario, UpdateUsuario>();

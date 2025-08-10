@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import './Contato.css'
 
 const Contato = () => {
+    
     return (
         <div className="container-contact">
             <div className="banner-contact">
@@ -80,7 +81,7 @@ const Contato = () => {
                                 <i class="fa-solid fa-envelope"></i>
                             </div>
                             <div className="form-group-contact">
-                                <input
+                                <input onClick={handleNewsletterClick}
                                     type="email"
                                     id="email"
                                     placeholder="Digite seu e-mail"
