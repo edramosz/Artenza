@@ -1,70 +1,92 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+
+    const navigate = useNavigate()
+
+    function navegar(){
+        navigate("/Contato")
+    }
+
+
     return (
-        <footer className="footer">
-            <div className="footer-container">
-                {/* Seção Ajuda */}
-                <div className="footer-column">
-                    <h4>Ajuda</h4>
-                    <ul>
-                        <li><Link to="#">Pedidos</Link></li>
-                        <li><Link to="#">Entregas</Link></li>
-                        <li><Link to="#">Devoluções</Link></li>
-                        <li><Link to="#">Opções de pagamento</Link></li>
-                        <li><Link to="#">Contato</Link></li>
-                    </ul>
+        <footer className="footer-container">
+            <div className="footer-hero">
+                <div className="footer-top">
+                    <div>
+                        <label className='border-label'></label>
+                        <h2>Conheça a gente</h2>
+                    </div>
+                    <button onClick={navegar}>Contate-nos</button>
                 </div>
-
-                {/* Seção Sobre */}
-                <div className="footer-column">
-                    <details className='detalhes'>
-                        <summary>Sobre</summary>
-                        <ul>
-                            <li><Link to="#">Quem somos</Link></li>
-                            <li><Link to="#">Carreiras</Link></li>
-                            <li><Link to="#">Termos de uso</Link></li>
-                            <li><Link to="#">Privacidade</Link></li>
-                        </ul>
-                    </details>
-
-                    <ul className='footer-item'>
-                        <h4>Sobre</h4>
-                        <li><Link to="#">Quem somos</Link></li>
-                        <li><Link to="#">Carreiras</Link></li>
-                        <li><Link to="#">Termos de uso</Link></li>
-                        <li><Link to="#">Privacidade</Link></li>
-                    </ul>
-                </div>
-
-                {/* Seção Redes Sociais */}
-                <div className="footer-column">
-                    <details className='detalhes'>
-                        <summary>Redes Sociais</summary>
-                        <ul>
-                            <li><Link to="#">Instagram</Link></li>
-                            <li><Link to="#">Facebook</Link></li>
-                            <li><Link to="#">Twitter</Link></li>
-                            <li><Link to="#">YouTube</Link></li>
-                        </ul>
-                    </details>
-
-                    <ul className='footer-item'>
-                        <h4>Redes Sociais</h4>
-                        <div id='social-media'>
-                            <li><Link to="#"><i className="fa-brands fa-instagram"></i></Link></li>
-                            <li><Link to="#"><i className="fa-brands fa-facebook"></i></Link></li>
-                            <li><Link to="#"><i className="fa-brands fa-twitter"></i></Link></li>
-                            <li><Link to="#"><i className="fa-brands fa-youtube"></i></Link></li>
+                <div className="footer-content">
+                    <div className="footer-section">
+                        <h2>A Artenza</h2>
+                        <p>Nossa loja sempre está disponilvel, ofertando tudo do bom do melhor, sempre na simplicidade e na qualidade de nossos produtos</p>
+                        <div className="social-icons">
+                            <ul>
+                                <li><Link to="#"><i className="fa-brands fa-instagram"></i></Link></li>
+                                <li><Link to="#"><i className="fa-brands fa-facebook"></i></Link></li>
+                                <li><Link to="#"><i className="fa-brands fa-twitter"></i></Link></li>
+                                <li><Link to="#"><i className="fa-brands fa-youtube"></i></Link></li>
+                            </ul>
                         </div>
-                    </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h3>Navegação</h3>
+                        <ul className='navegacao'>
+                            <li>
+                                <Link to="/Sobre">Sobre-nos</Link>
+                            </li>
+                            <li>
+                                <Link to="/Feminino">Produtos Femininos</Link>
+                            </li>
+                            <li>
+                                <Link to="/Masculino">Produtos Masculinos</Link>
+                            </li>
+                            <li>
+                                <Link to="/Contato">Contato</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h3>Contato</h3>
+                        <ul>
+                            <li>
+                                (31) 9982-0921
+                            </li>
+                            <li>
+                                artenza.ofc@gmail.com
+                            </li>
+                            <li>
+                                102 Rua dos Anjos,<br />
+                                34515-228 Belo-Horizonte
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h3>Receba informações especiais </h3>
+                        <form className="footer-form">
+                            <input type="email" placeholder='Digite seu email' />
+                            <button>
+                                Enviar
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-            <div className="footer-bottom">
-                <p>© {new Date().getFullYear()} Artenza - Todos os direitos reservados.</p>
+            <div className="footer-aside">
+                <div>
+                    <p>Todos direitos reservados &copy; Artenza 2025</p>
+                </div>
+                <div>
+                    <Link>Termos e Diretrizes</Link>
+                    <p>|</p>
+                    <Link>Politica de Privacidade</Link>
+                </div>
             </div>
         </footer>
     );

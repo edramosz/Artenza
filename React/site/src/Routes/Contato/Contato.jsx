@@ -12,13 +12,13 @@ const Contato = () => {
                 <div className="contact-info">
                     <div>
                         <h1>Endereço</h1>
-                        <p> 102 Jardim Canadá,<br />
+                        <p> 102 Rua dos Anjos,<br />
                             34515-228 Belo-Horizonte</p>
                     </div>
                     <div>
                         <h2>Contato</h2>
-                        <p>Telefone: (31) 9 9237-2061<br />
-                            Email: Artenza@gmail.com</p>
+                        <p>Telefone: (31) 9982-0921<br />
+                            Email: artenza.ofc@gmail.com</p>
                     </div>
                     <div>
                         <h2>Horário de Funcionamento</h2>
@@ -59,7 +59,7 @@ const Contato = () => {
                                 <input type="tel" id="phone" placeholder="Ex: Devolução" required />
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group textarea">
                                 <label htmlFor="message">Sua Mensagem *</label>
                                 <textarea id="message" placeholder="Digite aqui..." required></textarea>
                             </div>

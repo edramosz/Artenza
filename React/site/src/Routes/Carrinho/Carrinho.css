@@ -55,22 +55,22 @@
 .carrinho-container thead .cabecalho-table th:first-child {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  background-color: #111;
+  background-color: #222;
 }
 
 .carrinho-container thead .cabecalho-table th:last-child {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  background-color: #111;
+  background-color: #222;
 }
 
 .carrinho-container thead .cabecalho-table th {
   padding: 12px;
-  background-color: #111;
+  background-color: #222;
 }
 
-.tabela-carrinho th,
-.tabela-carrinho td {
+.carrinho-container  .tabela-carrinho th,
+.carrinho-container  .tabela-carrinho td {
   padding: 12px 10px;
   border-bottom: 1px solid #ccc;
   text-align: center;
@@ -95,48 +95,48 @@
   /* Checkbox */
 }
 
-.tabela-carrinho th:nth-child(2),
-.tabela-carrinho td:nth-child(2) {
+.carrinho-container .tabela-carrinho th:nth-child(2),
+.carrinho-container .tabela-carrinho td:nth-child(2) {
   width: 190px;
   /* Imagem */
 }
 
-.tabela-carrinho th:nth-child(3),
-.tabela-carrinho td:nth-child(3) {
+.carrinho-container .tabela-carrinho th:nth-child(3),
+.carrinho-container .tabela-carrinho td:nth-child(3) {
   width: 260px;
   /* Produto (nome, tipo, categoria) */
 }
 
-.tabela-carrinho th:nth-child(4),
-.tabela-carrinho td:nth-child(4) {
+.carrinho-container .tabela-carrinho th:nth-child(4),
+.carrinho-container .tabela-carrinho td:nth-child(4) {
   width: 90px;
   /* Tamanho */
 }
 
-.tabela-carrinho th:nth-child(5),
-.tabela-carrinho td:nth-child(5) {
+.carrinho-container .tabela-carrinho th:nth-child(5),
+.carrinho-container .tabela-carrinho td:nth-child(5) {
   width: 160px;
   /* Preço */
 }
 
-.tabela-carrinho th:nth-child(6),
-.tabela-carrinho td:nth-child(6) {
+.carrinho-container .tabela-carrinho th:nth-child(6),
+.carrinho-container .tabela-carrinho td:nth-child(6) {
   width: 100px;
   /* Qtd */
 }
 
-.tabela-carrinho th:nth-child(7),
-.tabela-carrinho td:nth-child(7) {
+.carrinho-container .tabela-carrinho th:nth-child(7),
+.carrinho-container .tabela-carrinho td:nth-child(7) {
   width: 120px;
   /* Subtotal */
 }
 
-.tabela-carrinho th:nth-child(8),
-.tabela-carrinho td:nth-child(8) {
+.carrinho-container .tabela-carrinho th:nth-child(8),
+.carrinho-container .tabela-carrinho td:nth-child(8) {
   width: 100px;
   /* Botão remover */
 }
-.carrinho-container .check-btn {
+.carrinho-container .carrinho-container .check-btn {
   width: 20px;
   height: 18px;
   accent-color: #111;
@@ -182,7 +182,7 @@
   border-radius: 25px;
 }
 
-.botoes-qtd button {
+.carrinho-container .botoes-qtd button {
   width: 30px;
   height: 30px;
   font-weight: 500;
@@ -197,7 +197,7 @@
   border-radius: 20px;
 }
 
-.numeros-span {
+.carrinho-container .numeros-span {
   border-left: 2px solid #4444448f;
   border-right: 2px solid #4444448f;
   padding: 0px 12px;
@@ -208,25 +208,25 @@
   align-items: center;
 }
 
-.botoes-qtd button:disabled {
+.carrinho-container  .botoes-qtd button:disabled {
   color: #8f8a8a;
 }
 
-.botoes-qtd button > .ind {
+.carrinho-container .botoes-qtd button > .ind {
   font-size: 1.2rem;
 }
 
-.botoes-qtd span {
+.carrinho-container .botoes-qtd span {
   min-width: 24px;
   text-align: center;
 }
 
-.tabela-carrinho button {
+.carrinho-container .tabela-carrinho button {
   cursor: pointer;
 }
 
 .carrinho-container .conteiner-resumo {
-  background-color: #111;
+  background-color: #222;
   color: #fff;
   padding: 40px;
 }
@@ -273,27 +273,28 @@
   padding: 8px 12px;
   border: 1px solid #ffffff;
   border-radius: 25px;
-  background-color: #ffffffea;
+  background-color: #f5f4f4;
   font-size: 14px;
-  color: #111;
+  color: #444;
   font-weight: 600;
   outline: none;
 }
 
 .carrinho-container .cupon input {
   z-index: 1000;
-  box-shadow: 0 0 0 5px #111;
+  color: #333;
+  box-shadow: 0 0 0 5px #222;
 }
 
 .carrinho-container .cupon input::placeholder {
-  color: #111;
+  color: #444;
 }
 
 .carrinho-container .cupom-form .aplicar-cupom-btn {
   padding: 8px 12px;
   border: 1px solid #ffffff;
   border-radius: 0 25px 25px 0;
-  background-color: #ffffffea;
+  background-color: #f5f4f4;
   font-size: 14px;
   color: #111;
   font-weight: 600;
@@ -326,7 +327,7 @@
   cursor: pointer;
   transition: 0.3s ease;
   margin: 10px 0px;
-  box-shadow:0 0 0 4px #111, 0 0 0 5px #ffff;
+  box-shadow:0 0 0 4px #222, 0 0 0 5px #ffff;
 }
 
 .carrinho-container .botao-comprar:hover {
@@ -428,13 +429,13 @@
   cursor: pointer;
 }
 
-.modal-overlay .tamanho-title{
+.carrinho-container .modal-overlay .tamanho-title{
   color: #000;
   font-weight: 500;
   margin-bottom: 10px;
 }
 
-.modal-overlay .btn-tamanho-alteracao{
+.carrinho-container  .modal-overlay .btn-tamanho-alteracao{
   background-color: transparent;
   border: 2px solid #111;
   width: 50px;
@@ -443,13 +444,13 @@
   font-weight: 600;  
 }
 
-.modal-overlay .btn-tamanho-alteracao:hover{
+.carrinho-container .modal-overlay .btn-tamanho-alteracao:hover{
   background-color: #111;
   transition: 0.4s;
   color: #fff;
 }
 
-.modal-overlay .cancelar-btn{
+.carrinho-container .modal-overlay .cancelar-btn{
   background: none;
   border: none;
   font-size: 1.1rem;
@@ -457,15 +458,16 @@
   border-radius: 25px;
 }
 
-.modal-overlay .cancelar-btn:hover{
+.carrinho-container .modal-overlay .cancelar-btn:hover{
   transition: 0.4s;
   background-color: rgba(211, 47, 47, 0.26);
 }
 
-.carrinho-container .total-final{
+.carrinho-container .carrinho-container .total-final{
   font-weight: 500;
   text-transform: uppercase;
   margin-bottom: 10px;
+  font-size: 1.1rem;
 }
 
 

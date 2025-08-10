@@ -1,98 +1,208 @@
-/* Container geral */
-.form-container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.185);
-    border-radius: 24px;
-  }
-  
-  /* Título */
-  .form-container .title {
-    text-align: center;
-    margin-bottom: 50px;
-    color: #333;
-    text-transform: uppercase;
-    font-size: 2.2rem;
-  }
-  
-  /* Formulário de cadastro */
-  .form-user {
-    margin-bottom: 40px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    border-bottom: 1px solid #bebbbb;
-    padding-bottom: 60px;
-  }
-  
-  /* Formulário de endereço */
-  .form-address {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-  }
-  
-  /* Grupos de input */
-  .form-group {
-    flex: 1 1 45%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Labels */
-  .form-group label {
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #222;
-  }
-  
-  /* Inputs */
-  .form-group input, .form-group textarea{
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 14px;
-    font-size: 14px;
-    transition: border-color 0.3s;
+.cadastro-container-hero {
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+  display: flex;
+}
+
+.cadastro-container-hero .cadastro-banner {
+  flex: 2;
+  position: relative;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='10 0 400 1440'><g transform='rotate(90 160 160)'><path fill='%23fff' fill-opacity='1' d='M0,288L1440,96L1440,320L0,320Z'/></g></svg>");
+  /*
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='690 -200 500 1000'><g transform='rotate(90 720 160)'><path fill='%23fff' fill-opacity='1' d='M0,32L48,53.3C96,75,192,117,288,122.7C384,128,480,96,576,106.7C672,117,768,171,864,165.3C960,160,1056,96,1152,64C1248,32,1344,32,1392,32L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'/></g></svg>");
+ */
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: contain;
+  background-color: #333;
+}
+
+.cadastro-container-hero .form-container {
+  max-width: 500px; /*460*/
+  width: 100%;
+  padding: 40px 60px;
+  padding-right: 40px; /*0*/
+  flex: 1.8;
+}
+
+.cadastro-container-hero .form-container .title {
+  text-align: start;
+  margin-bottom: 1.5rem;
+  color: #111;
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+/* 
+.cadastro-container-hero .steps-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 30px;
+  color: #111;
+  font-weight: 500;
+}
+
+.cadastro-container-hero .steps-indicator div svg{
+  font-size: 2rem;
+} */
+
+.cadastro-container-hero .cadastro-container-hero .form-container form {
+  padding: 10px 0px;
+}
+
+.cadastro-container-hero .form-group-cadastro {
+  margin-bottom: 1.5rem;
+}
+
+.cadastro-container-hero .form-group-cadastro label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.cadastro-container-hero .form-group-cadastro input,
+.cadastro-container-hero .form-group-cadastro textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #aaa;
+  border-radius: 25px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.cadastro-container-hero .form-group-cadastro textarea {
+  min-height: 80px;
+  border-radius: 25px;
+  resize: vertical;
+}
+
+.cadastro-container-hero .form-group-cadastro input:focus,
+.cadastro-container-hero .form-group-cadastro textarea:focus {
+  border: 1px solid #333;
+  outline: none;
+}
+
+.cadastro-container-hero .input-senha-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #aaa;
+  border-radius: 25px;
+  padding-right: 10px;
+}
+
+.cadastro-container-hero .input-senha-container input {
+  flex: 1;
+  border: none !important;
+  padding: 10px 14px;
+}
+
+.cadastro-container-hero .btn-olho {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #222;
+  font-size: 1.1rem;
+  padding: 0 5px;
+}
+
+.cadastro-container-hero .form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 1.5rem;
+}
+
+.cadastro-container-hero .form-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cadastro-container-hero .form-button:not(.secondary) {
+  background-color: #222;
+  color: #fff;
+}
+
+.cadastro-container-hero .form-button.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 2px solid #333;
+}
+
+.cadastro-container-hero .form-button:hover {
+  opacity: 0.9;
+}
+
+.cadastro-container-hero .form-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cadastro-container-hero .error-message {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.cidade-estado {
+  display: flex;
+  gap: 15px;
+}
+
+.cidade-estado .form-group-cadastro:nth-child(1) {
+  width: 45%;
+}
+.cidade-estado .form-group-cadastro:nth-child(2) {
+  width: 100%;
+}
+
+.data-telefone{
+  display: flex;
+  gap: 15px;
+}
+
+.erros-tel-data{
+  margin-bottom: 10px;
+  margin-top: -10px;
+  display: flex;
+  justify-content: center;
+}
+
+
+@media (max-width: 948px) {
+  .cadastro-container-hero .cadastro-banner {
+    display: none;
   }
 
-  .form-group textarea{
-    height: 180px;
+  .cadastro-container-hero .form-container {
+    padding: 1.5rem 0;
+    margin: 1rem auto;
+    width: 100%;
   }
-  
-  .form-group input:focus,
-  .form-group textarea:focus {
-    border: 2px solid #4a90e2;
-    outline: none;
+
+  .cadastro-container-hero .form-actions {
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  /* Botão de envio */
-  .form-button {
-    margin-top: 50px;
-    padding: 12px 20px;
-    background-color: #3686e2;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.6s;
+}
+
+@media (max-width: 542px) {
+  .cadastro-container-hero .form-container {
+    padding: 1.5rem;
   }
-  
-  .form-button:hover {
-    background-color: #3a78c2;
-    box-shadow: 0 0 0 3px #fff,
-    0 0 0 7px #3a78c2;
-  }
-  
-  /* Responsivo */
-  @media (max-width: 600px) {
-    .form-group {
-      flex: 1 1 100%;
-    }
-  }
-  
+}
