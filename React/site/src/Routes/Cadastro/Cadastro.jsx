@@ -327,7 +327,6 @@ const Cadastro = () => {
     setErrorSenha("");
 
     if (!isStep1Filled()) {
-      alert("Preencha todos os campos obrigatórios antes de continuar.");
       return;
     }
 
@@ -459,12 +458,6 @@ const Cadastro = () => {
         throw new Error(await responseUsuario.text());
       }
 
-      // Salva dados no localStorage
-      localStorage.setItem("nomeUsuario", formData.NomeCompleto);
-      localStorage.setItem("email", formData.Email);
-      localStorage.setItem("isAdmin", "false");
-      localStorage.setItem("perfilUrl", formData.PerfilUrl || "");
-      window.dispatchEvent(new Event("storage"));
 
       setSuccessMessage("Cadastro realizado com sucesso!");
       setFormData(initialFormData);
@@ -626,7 +619,6 @@ const Cadastro = () => {
 
           {step === 2 && (
             <>
-              <div className="steps-indicator">endereco</div>
               <div className="form-address">
                 {errorEnderecoGeral && <p className="error-message">{errorEnderecoGeral}</p>}
 
