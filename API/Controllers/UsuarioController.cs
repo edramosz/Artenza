@@ -169,6 +169,7 @@ namespace API.Controllers
             // Atualize diretamente a entidade sem passar pelo UpdateUsuario que valida demais
             await _usuarioService.UpdateSenhaAsync(id, usuarioExistente);
 
+
             return NoContent();
         }
 
