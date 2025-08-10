@@ -152,7 +152,6 @@ namespace API.Controllers
             return Ok(usuario != null);
         }
 
-
         /// Endpoint para atualizar a senha do usuario
         /// </summary>
         /// <param name="id"></param>

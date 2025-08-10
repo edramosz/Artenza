@@ -32,14 +32,15 @@
   justify-content: center;
   align-items: center;
   padding: 40px;
-  padding-right: 0;
+  padding-left: 0;
   background-color: #fff;
 }
 
 .login-container-hero .login-container form {
   padding: 2rem 2.5rem;
   width: 100%;
-  max-width: 400px; /*390*/
+  max-width: 390px; 
+  padding-left: 0;
 }
 
 .login-container-hero .login-container .title {
