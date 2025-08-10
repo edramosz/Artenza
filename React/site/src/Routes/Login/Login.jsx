@@ -2,12 +2,16 @@ import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Components/Db/FireBase";
 import './Login.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
-export default function Login() {
+ function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false); // controle de visibilidade
+  const [animarOlho, setAnimarOlho] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -16,53 +20,31 @@ export default function Login() {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-
-      // Consulta na sua API
       const response = await fetch(`https://artenza.onrender.com/Usuario/por-email/${email}`);
 
-      if (!response.ok) {
-        throw new Error("Usuário não encontrado na API");
-      }
-
+      if (!response.ok) throw new Error("Usuário não encontrado na API");
       const usuario = await response.json();
-      console.log("Usuário retornado da API:", usuario); // Veja se "telefone" aparece aqui
-
-
-      // Salva os dados no localStorage
 
       const { diaNascimento, mesNascimento, anoNascimento } = usuario;
-
-      // Cria uma string no formato ISO: "1988-03-02"
       const dataNascimentoCompleta = `${anoNascimento}-${String(mesNascimento).padStart(2, '0')}-${String(diaNascimento).padStart(2, '0')}`;
-
       localStorage.setItem("dataNascimento", dataNascimentoCompleta);
-
 
       const nomes = usuario.nomeCompleto.trim().split(" ");
       const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
-
-      const emailMaiusculo = email;
-
-      // const firebaseEmail = userCredential.user.email;  --- CÓDIGO ANTIGO COM ERRO NAS MAIÚSCULAS
 
       localStorage.setItem("idUsuario", usuario.id);
       localStorage.setItem("idEndereco", usuario.idEndereco);
       localStorage.setItem("nomeUsuario", primeiroNome);
       localStorage.setItem("nomeCompletoUser", usuario.nomeCompleto);
       localStorage.setItem("isAdmin", usuario.isAdmin);
-      localStorage.setItem("email", emailMaiusculo);
+      localStorage.setItem("email", email);
       localStorage.setItem("telefone", usuario.telefone);
       localStorage.setItem("dataCadastro", usuario.dataCadastro);
       localStorage.setItem("perfilUrl", usuario.perfilUrl || "");
 
-
-
-
-      console.log(emailMaiusculo);
-      window.dispatchEvent(new Event("storage")); // ← dispara atualização da navbar
+      window.dispatchEvent(new Event("storage"));
       alert("Login feito com sucesso!");
-      window.location.href = "/"; // recarrega a página para garantir que localStorage esteja disponível
-
+      window.location.href = "/";
     } catch (error) {
       console.error("Erro no login:", error);
       if (error.code === "auth/invalid-credential") {
@@ -73,16 +55,20 @@ export default function Login() {
     }
   };
 
+
+
+  const toggleMostrarSenha = () => {
+    setMostrarSenha(!mostrarSenha);
+    setAnimarOlho(true);
+
+    // Remove a classe de animação após o tempo da transição
+    setTimeout(() => setAnimarOlho(false), 300);
+  };
+
+
   return (
     <div className="login-container-hero">
-      <div className="login-banner">
-
-        <div class="background-svg">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <path fill="#0099ff" fill-opacity="1" d="M0,256L60,250.7C120,245,240,235,360,192C480,149,600,75,720,85.3C840,96,960,192,1080,224C1200,256,1320,224,1380,208L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
-          </svg>
-        </div>
-      </div>
+      <div className="login-banner"></div>
       <div className="login-container">
         <form onSubmit={handleLogin}>
           <h2 className="title">Login</h2>
@@ -97,18 +83,49 @@ export default function Login() {
           />
 
           <label htmlFor="Senha">Senha:</label>
-          <input
-            type="password"
-            placeholder="Digite sua senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
+          <div className="input-senha-container">
+            <input
+            className="input-senha"
+              type={mostrarSenha ? "password" : "text"}
+              placeholder="Digite sua senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className={`btn-olho ${animarOlho ? "animar" : ""}`}
+              onClick={toggleMostrarSenha}
+            >
+              <FontAwesomeIcon icon={mostrarSenha ? faEyeSlash : faEye} />
+            </button>
+          </div>
+
+          <div className="esqueceu-senha">
+            <Link>Esqueceu sua senha?</Link>
+          </div>
 
           {erro && <p style={{ color: "red" }}>{erro}</p>}
-          <button type="submit">Entrar</button>
+          <button type="submit" className="logar-btn">Entrar</button>
+
+          <div className="login-google">
+            <div className="ou">
+              <label></label>
+              <p>ou</p>
+              <label></label>
+            </div>
+            <button className="logar-google">
+              <img src='../../../public/img/logo-google.png' alt="" />
+              Continuar com o Google
+            </button>
+          </div>
+
+          <div className="termo-link">
+            <Link>Temos de Serviços</Link>
+          </div>
         </form>
       </div>
     </div>
   );
-}
+};
+export default Login;

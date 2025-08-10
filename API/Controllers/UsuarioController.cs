@@ -139,6 +139,20 @@ namespace API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Endpoint que verifica se telefone existe
+        /// </summary>
+        /// <param name="telefone"></param>
+        /// <returns></returns>
+
+        [HttpGet("exists-telefone")]
+        public async Task<ActionResult<bool>> ExistsTelefone([FromQuery] string telefone)
+        {
+            var usuario = await _usuarioService.GetUsuarioByTelefoneAsync(telefone);
+            return Ok(usuario != null);
+        }
+
+
 
 
     }

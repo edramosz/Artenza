@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Core.Models.DTO_s.Update;
 using Microsoft.AspNetCore.Mvc;
 using Core.Models.DTO_s.Read;
+using Google.Api;
 
 namespace API.Services
 {
@@ -165,5 +166,21 @@ namespace API.Services
                 .Child(id)
                 .DeleteAsync();
         }
+
+        public async Task<Usuario> GetUsuarioByTelefoneAsync(string telefone)
+        {
+            var usuarios = await _firebaseClient
+                .Child("usuarios")
+                .OrderBy("Telefone")
+                .EqualTo(telefone)
+                .OnceAsync<Usuario>();
+
+            var usuario = usuarios.FirstOrDefault()?.Object;
+            return usuario;
+        }
+
+
+
+
     }
 }
