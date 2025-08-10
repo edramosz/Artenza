@@ -22,7 +22,8 @@ function Login() {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-      await buscarUsuarioEArmazenar(userCredential.user.email);
+      await buscarUsuarioEArmazenar(email);
+
     } catch (error) {
       console.error("Erro no login:", error);
       if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
