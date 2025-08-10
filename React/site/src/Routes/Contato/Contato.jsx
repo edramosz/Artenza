@@ -9,14 +9,19 @@ const Contato = () => {
     const handleNewsletterSubmit = async (e) => {
     e.preventDefault(); // evita recarregar a página
 
+    const novoNewsletter = {
+      email: emailDigitado,
+      data_inscricao: ''
+    };
     try {
       const response = await fetch("https://artenza.onrender.com/Email/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(emailDigitado)
+        body: JSON.stringify(novoNewsletter)
       });
 
       if (!response.ok) {
+        console.log(emailDigitado);
         throw new Error("Erro ao criar inscrição na newsletter.");
       }
       setEmailDigitado(""); // limpa campo
