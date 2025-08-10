@@ -111,13 +111,18 @@
 }
 
 .contact-hero {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px;
+}
+
+.contact-hero .form-group.textarea {
+  grid-column: span 2; 
 }
 
 .container-contact .form-group {
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .container-contact .form-group label {
@@ -145,6 +150,7 @@
 
 .container-contact .form-group textarea {
   height: 120px;
+  width: 100%;
   resize: vertical;
 }
 

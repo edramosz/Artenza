@@ -603,17 +603,21 @@ const ProdutoDetalhe = () => {
             </div>
           </div>
 
-          <div className="botoes-qtd" id='qtd-det'>
-            <p className='title-qtd'>Quantidade:</p>
-            <button
-              onClick={() => setQuantidade(prev => Math.max(prev - 1, 1))}
-              disabled={quantidade <= 1}>
-              <span className='ind'>-</span>
-            </button>
-            <span className="numeros-span">{quantidade}</span>
-            <button onClick={() => setQuantidade(prev => prev + 1)}>
-              <span className='ind'>+</span>
-            </button>
+          <div className="quantidade-container">
+            <div className="quantidade-div">
+              <p className='title-qtd'>Quantidade:</p>
+            </div>
+            <div className="botoes-qtd" id='qtd-det'>
+              <button
+                onClick={() => setQuantidade(prev => Math.max(prev - 1, 1))}
+                disabled={quantidade <= 1}>
+                <span className='ind'>-</span>
+              </button>
+              <span className="numeros-span">{quantidade}</span>
+              <button onClick={() => setQuantidade(prev => prev + 1)}>
+                <span className='ind'>+</span>
+              </button>
+            </div>
           </div>
 
           <div className="acoes">

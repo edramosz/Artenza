@@ -4,7 +4,7 @@ import './CadastroForm.css';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Components/Db/FireBase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const initialFormData = {
   NomeCompleto: "",
@@ -37,6 +37,7 @@ const Cadastro = () => {
   const [formDataEndereco, setFormDataEndereco] = useState(initialAddress);
   const [loading, setLoading] = useState(false);
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Erros Step 1
   const [errorNome, setErrorNome] = useState("");
@@ -66,13 +67,8 @@ const Cadastro = () => {
     }
   };
   const formatCEP = (value) => {
-    // Remove tudo que não for número
     const onlyNumbers = value.replace(/\D/g, "");
-
-    // Limita a 8 dígitos
     const limited = onlyNumbers.slice(0, 8);
-
-    // Formata como 00000-000
     if (limited.length > 5) {
       return limited.slice(0, 5) + "-" + limited.slice(5);
     } else {
@@ -81,14 +77,33 @@ const Cadastro = () => {
   };
 
   const checarTelefoneExistente = async (telefone) => {
-    const telefoneLimpo = telefone.replace(/\D/g, "");
-    const response = await fetch(`https://artenza.onrender.com/Usuario/exists-telefone?telefone=${telefoneLimpo}`);
-    if (!response.ok) {
-      throw new Error("Erro ao verificar telefone");
+    try {
+      const response = await fetch(`https://artenza.onrender.com/Usuario/exists-telefone?telefone=${telefone}`);
+
+      if (!response.ok) {
+        throw new Error(`Erro ao verificar telefone: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Resposta da API existe telefone:", data);
+
+      // Se data for booleano, retorne direto, senão ajuste aqui:
+      if (typeof data === "boolean") {
+        return data;
+      } else if (data.existe !== undefined) {
+        return data.existe;
+      }
+
+      // Caso resposta inesperada
+      return false;
+
+    } catch (error) {
+      console.error("Erro ao verificar telefone:", error);
+      setErrorTelefone("Não foi possível verificar o telefone. Tente novamente.");
+      return true; // Bloqueia cadastro em caso de erro
     }
-    const existe = await response.json();
-    return existe;
   };
+
 
 
   const handleChangeCEP = (e) => {
@@ -99,7 +114,6 @@ const Cadastro = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Remove números no nome completo
     if (name === "NomeCompleto") {
       const onlyLetters = value.replace(/[0-9]/g, "");
       setFormData((prev) => ({ ...prev, [name]: onlyLetters }));
@@ -107,7 +121,6 @@ const Cadastro = () => {
       return;
     }
 
-    // Máscara telefone
     if (name === "Telefone") {
       const masked = formatTelefone(value);
       setFormData((prev) => ({ ...prev, [name]: masked }));
@@ -117,22 +130,30 @@ const Cadastro = () => {
 
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Zera erros específicos ao digitar
     if (name === "Email") setErrorEmail("");
     if (name === "SenhaHash") setErrorSenha("");
     if (name === "DataNascimento") setErrorDataNascimento("");
   };
 
+  // onBlur para validar telefone
+  const handleBlurTelefone = async () => {
+    const telNumeros = formData.Telefone.replace(/\D/g, "");
+    if (telNumeros.length >= 10) {
+      const existe = await checarTelefoneExistente(telNumeros);
+      if (existe) {
+        setErrorTelefone("Este telefone já está cadastrado.");
+      } else {
+        setErrorTelefone("");
+      }
+    }
+  };
+
   useEffect(() => {
-    // Extrai só os números do CEP
     const cepNumeros = formDataEndereco.CEP.replace(/\D/g, "");
     if (cepNumeros.length === 8) {
       buscarEnderecoPorCEP(cepNumeros);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formDataEndereco.CEP]);
-
-
 
   const handleChangeEndereco = (e) => {
     const { name, value } = e.target;
@@ -146,7 +167,6 @@ const Cadastro = () => {
       return;
     }
 
-    // Não permite números em Cidade e Estado
     if (name === "Cidade" || name === "Estado") {
       const onlyLettersSpaces = value.replace(/[0-9]/g, "");
       setFormDataEndereco((prev) => ({ ...prev, [name]: onlyLettersSpaces }));
@@ -159,7 +179,6 @@ const Cadastro = () => {
 
     setFormDataEndereco((prev) => ({ ...prev, [name]: value }));
 
-    // Limpa erros ao digitar
     if (name === "Bairro" && value.trim() !== "") setErrorBairro("");
     if (name === "Rua" && value.trim() !== "") setErrorRua("");
     if (name === "Numero" && value.trim() !== "") setErrorNumero("");
@@ -172,18 +191,15 @@ const Cadastro = () => {
 
     if (inputDate > maxDate) {
       setErrorDataNascimento("Data máxima permitida é 31/12/2010");
-      // Opcional: limpar campo ou não atualizar o estado
     } else {
       setErrorDataNascimento("");
       setFormData(prev => ({ ...prev, DataNascimento: valor }));
     }
   }
 
-
-  // Busca endereço por CEP e valida
   const buscarEnderecoPorCEP = async (cep) => {
     if (cep.length !== 8) {
-      setErrorCEP("CEP inválido. Deve conter 9 dígitos.");
+      setErrorCEP("CEP inválido. Deve conter 8 dígitos.");
       setCepValido(false);
       return;
     }
@@ -210,8 +226,6 @@ const Cadastro = () => {
     }
   };
 
-
-  // Funções para verificar campos obrigatórios preenchidos (para habilitar botões)
   const isStep1Filled = () => {
     return (
       formData.NomeCompleto.trim() !== "" &&
@@ -233,8 +247,6 @@ const Cadastro = () => {
     );
   };
 
-
-  // Validações específicas ao tentar avançar para o próximo step
   const validarStep1 = () => {
     let valido = true;
 
@@ -262,7 +274,6 @@ const Cadastro = () => {
     return valido;
   };
 
-  // Validações específicas ao tentar submeter o form completo
   const validarStep2 = () => {
     let valido = true;
 
@@ -309,7 +320,6 @@ const Cadastro = () => {
   };
 
   const handleNext = () => {
-    // limpa erros antigos
     setErrorNome("");
     setErrorEmail("");
     setErrorTelefone("");
@@ -317,13 +327,11 @@ const Cadastro = () => {
     setErrorSenha("");
 
     if (!isStep1Filled()) {
-      // Não deixa avançar e alerta que faltam campos
       alert("Preencha todos os campos obrigatórios antes de continuar.");
       return;
     }
 
     if (!validarStep1()) {
-      // Erros detalhados aparecerão nos parágrafos
       return;
     }
 
@@ -331,7 +339,6 @@ const Cadastro = () => {
   };
 
   const handlePrev = () => {
-    // limpa erros do endereço quando volta para o primeiro step
     setErrorCEP("");
     setErrorEstado("");
     setErrorCidade("");
@@ -346,7 +353,8 @@ const Cadastro = () => {
     e.preventDefault();
     if (loading) return;
 
-    // limpa erros anteriores
+    // Limpa erros antes de validar tudo
+    setErrorTelefone("");
     setErrorEnderecoGeral("");
     setErrorCEP("");
     setErrorEstado("");
@@ -354,10 +362,30 @@ const Cadastro = () => {
     setErrorBairro("");
     setErrorRua("");
     setErrorNumero("");
-    setErrorTelefone("");
-    setErrorEmail("");  // Limpa o erro de email também
+    setErrorEmail("");
+    setErrorNome("");
+    setErrorDataNascimento("");
+    setErrorSenha("");
 
+    // Valida Step 1 antes de qualquer coisa:
+    const step1Valido = validarStep1();
+    if (!step1Valido) {
+      alert("Existem erros no primeiro passo. Você será redirecionado para corrigi-los.");
+      setStep(1);
+      return;
+    }
 
+    // Verifica se telefone já existe
+    const telefoneSemMascara = formData.Telefone.replace(/\D/g, "");
+    const telefoneJaExiste = await checarTelefoneExistente(telefoneSemMascara);
+
+    if (telefoneJaExiste) {
+      setErrorTelefone("Este telefone já está cadastrado.");
+      setStep(1);
+      return;
+    }
+
+    // Valida endereço e Step 2
     if (!isStep2Filled()) {
       alert("Preencha todos os campos obrigatórios do endereço.");
       return;
@@ -368,19 +396,10 @@ const Cadastro = () => {
     }
 
     setLoading(true);
-
     let createdFirebaseUser = null;
 
     try {
-      // VALIDAÇÃO TELEFONE ANTES DO CADASTRO
-      const telefoneExiste = await checarTelefoneExistente(formData.Telefone);
-      if (telefoneExiste) {
-        setErrorTelefone("Este telefone já está cadastrado.");
-        setLoading(false);
-        return; // Interrompe cadastro se telefone existir
-      }
-
-      // Criar usuário no Firebase Authentication
+      // Cria usuário no Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.Email,
@@ -389,68 +408,88 @@ const Cadastro = () => {
       createdFirebaseUser = userCredential.user;
       const firebaseUserId = createdFirebaseUser.uid;
 
+      // Prepara payload do endereço
       const enderecoPayload = {
         ...formDataEndereco,
         CEP: formDataEndereco.CEP.replace(/\D/g, ""),
         UsuarioId: firebaseUserId,
       };
 
-      const responseEndereco = await fetch("https://artenza.onrender.com/Endereco", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(enderecoPayload),
-      });
+      // Cria endereço na API
+      const responseEndereco = await fetch(
+        "https://artenza.onrender.com/Endereco",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(enderecoPayload),
+        }
+      );
 
       if (!responseEndereco.ok) {
         throw new Error(await responseEndereco.text());
       }
-
       const endereco = await responseEndereco.json();
 
+      // Prepara payload do usuário
       const usuarioPayload = {
         NomeCompleto: formData.NomeCompleto,
         Email: formData.Email,
-        Telefone: formData.Telefone.replace(/\D/g, ""),
+        Telefone: telefoneSemMascara,
         SenhaHash: formData.SenhaHash,
         IdEndereco: endereco.id ?? endereco.Id,
         isAdmin: false,
         DiaNascimento: parseInt(formData.DiaNascimento, 10) || 0,
         MesNascimento: parseInt(formData.MesNascimento, 10) || 0,
         AnoNascimento: parseInt(formData.AnoNascimento, 10) || 0,
-        PerfilUrl: formData.PerfilUrl || "https://exemplo.com/default-profile.png",
+        PerfilUrl:
+          formData.PerfilUrl || "https://exemplo.com/default-profile.png",
       };
 
-      const responseUsuario = await fetch("https://artenza.onrender.com/Usuario", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuarioPayload),
-      });
+      // Cria usuário na API
+      const responseUsuario = await fetch(
+        "https://artenza.onrender.com/Usuario",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(usuarioPayload),
+        }
+      );
 
       if (!responseUsuario.ok) {
         throw new Error(await responseUsuario.text());
       }
 
+      // Salva dados no localStorage
       localStorage.setItem("nomeUsuario", formData.NomeCompleto);
       localStorage.setItem("email", formData.Email);
       localStorage.setItem("isAdmin", "false");
       localStorage.setItem("perfilUrl", formData.PerfilUrl || "");
       window.dispatchEvent(new Event("storage"));
 
-      alert("Cadastro realizado com sucesso!");
+      setSuccessMessage("Cadastro realizado com sucesso!");
       setFormData(initialFormData);
       setFormDataEndereco(initialAddress);
       setStep(1);
-      navigate("/Login");
+      setTimeout(() => {
+        navigate("/Login");
+      }, 3000);
+
     } catch (error) {
       console.error(error);
 
-      // Tratamento específico para email já cadastrado
       if (error.code === "auth/email-already-in-use") {
         setErrorEmail("Este email já está cadastrado. Faça login ou use outro email.");
+        setStep(1);
+      } else if (error.code === "auth/invalid-email") {
+        setErrorEmail("O formato do email é inválido.");
+        setStep(1);
       } else {
-        setErrorEnderecoGeral("Erro ao realizar cadastro. " + (error?.message || error));
+        setErrorEnderecoGeral(
+          "Erro ao realizar cadastro. " + (error?.message || error)
+        );
       }
 
+      // Se criou no Firebase, mas API falhou → apaga o usuário Firebase criado
       if (createdFirebaseUser) {
         try {
           await createdFirebaseUser.delete();
@@ -461,221 +500,246 @@ const Cadastro = () => {
     }
   };
 
+
   return (
     <div className="cadastro-container-hero">
       <div className="form-container">
         <h2 className="title">Cadastre-se</h2>
         <form onSubmit={handleSubmitCompleto} className="form">
-          <div className="steps-indicator">Passo {step} de 2</div>
-
           {step === 1 && (
-            <div className="form-user">
-              <div className="form-group-cadastro">
-                <label htmlFor="NomeCompleto">Nome Completo:</label>
-                <input
-                  type="text"
-                  name="NomeCompleto"
-                  value={formData.NomeCompleto}
-                  onChange={handleChange}
-                  placeholder="Digite seu nome completo"
-                />
-                {errorNome && <p className="error-message">{errorNome}</p>}
-              </div>
-
-              <div className="form-group-cadastro">
-                <label htmlFor="Email">Email:</label>
-                <input
-                  type="email"
-                  name="Email"
-                  value={formData.Email}
-                  onChange={handleChange}
-                  placeholder="exemplo@dominio.com"
-                />
-                {errorEmail && <p className="error-message">{errorEmail}</p>}
-              </div>
-
-              <div className="form-group-cadastro">
-                <label htmlFor="Telefone">Telefone:</label>
-                <input
-                  type="text"
-                  name="Telefone"
-                  value={formData.Telefone}
-                  onChange={handleChange}
-                  maxLength={15}
-                  placeholder="(99) 99999-9999"
-                />
-                {errorTelefone && <p className="error-message">{errorTelefone}</p>}
-              </div>
-
-              <div className="form-group-cadastro">
-                <label htmlFor="DataNascimento">Data de Nascimento:</label>
-                {/* no input data de nascimento */}
-                <input
-                  type="date"
-                  name="DataNascimento"
-                  value={formData.DataNascimento}
-                  onChange={handleChangeDate}
-                  max="2010-12-31"
-                  placeholder="Selecione sua data de nascimento"
-                />
-
-                {errorDataNascimento && <p className="error-message">{errorDataNascimento}</p>}
-              </div>
-
-              <div className="form-group-cadastro">
-                <label htmlFor="SenhaHash">Senha:</label>
-                <div className="input-senha-container">
+            <>
+              {/* <div className="steps-indicator">
+                <div className="completo">
+                  <span>1</span>
+                  <FontAwesomeIcon icon={faUser} />
+                  <p>Dados</p>
+                </div>
+                <div className="icompleto">
+                  <span>2</span>
+                  <FontAwesomeIcon icon={faHouse} />
+                  <p>Endereço</p>
+                </div>
+              </div> */}
+              <div className="form-user">
+                <div className="form-group-cadastro">
+                  <label htmlFor="NomeCompleto">Nome Completo:</label>
                   <input
-                    type={mostrarSenha ? "password" : "text"}
-                    name="SenhaHash"
-                    value={formData.SenhaHash}
+                    type="text"
+                    name="NomeCompleto"
+                    value={formData.NomeCompleto}
                     onChange={handleChange}
-                    placeholder="Digite sua senha"
+                    placeholder="Digite seu nome completo"
                   />
+                  {errorNome && <p className="error-message">{errorNome}</p>}
+                </div>
+
+                <div className="form-group-cadastro">
+                  <label htmlFor="Email">Email:</label>
+                  <input
+                    type="email"
+                    name="Email"
+                    value={formData.Email}
+                    onChange={handleChange}
+                    placeholder="exemplo@dominio.com"
+                  />
+                  {errorEmail && <p className="error-message">{errorEmail}</p>}
+                </div>
+
+                <div className="data-telefone">
+                  <div className="form-group-cadastro">
+                    <label htmlFor="Telefone">Telefone:</label>
+                    <input
+                      type="text"
+                      name="Telefone"
+                      value={formData.Telefone}
+                      onChange={handleChange}
+                      onBlur={handleBlurTelefone}  // dispara a checagem ao perder o foco
+                      maxLength={15}
+                      placeholder="(99) 99999-9999"
+                    />
+                  </div>
+
+                  <div className="form-group-cadastro">
+                    <label htmlFor="DataNascimento">Data de Nascimento:</label>
+                    <input
+                      type="date"
+                      name="DataNascimento"
+                      value={formData.DataNascimento}
+                      onChange={handleChangeDate}
+                      max="2010-12-31"
+                      placeholder="Selecione sua data de nascimento"
+                    />
+                  </div>
+                </div>
+
+                <div className="erros-tel-data">
+                  {errorTelefone && <p className="error-message">{errorTelefone}</p>}
+                  {errorDataNascimento && <p className="error-message">{errorDataNascimento}</p>}
+                </div>
+
+                <div className="form-group-cadastro">
+                  <label htmlFor="SenhaHash">Senha:</label>
+                  <div className="input-senha-container">
+                    <input
+                      type={mostrarSenha ? "password" : "text"}
+                      name="SenhaHash"
+                      value={formData.SenhaHash}
+                      onChange={handleChange}
+                      placeholder="Digite sua senha"
+                    />
+                    <button
+                      type="button"
+                      className="btn-olho"
+                      onClick={() => setMostrarSenha(!mostrarSenha)}
+                      aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                    >
+                      <FontAwesomeIcon icon={mostrarSenha ? faEyeSlash : faEye} />
+                    </button>
+                  </div>
+                  {errorSenha && <p className="error-message">{errorSenha}</p>}
+                </div>
+                {successMessage && (
+                  <div className="mensagem-sucesso">
+                    <p>{successMessage}</p>
+                  </div>
+                )}
+                <div className="form-actions">
                   <button
                     type="button"
-                    className="btn-olho"
-                    onClick={() => setMostrarSenha(!mostrarSenha)}
-                    aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                    onClick={handleNext}
+                    className="form-button"
+                    style={{ marginTop: 10 }}
+                    disabled={
+                      !formData.NomeCompleto.trim() ||
+                      !formData.Email.trim() ||
+                      !formData.Telefone.trim() ||
+                      !formData.DataNascimento.trim() ||
+                      !formData.SenhaHash.trim()
+                    }
                   >
-                    <FontAwesomeIcon icon={mostrarSenha ? faEyeSlash : faEye} />
+                    Continuar
                   </button>
                 </div>
-                {errorSenha && <p className="error-message">{errorSenha}</p>}
               </div>
-
-              <div className="form-actions">
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="form-button"
-                  style={{ marginTop: 10 }}
-                  disabled={
-                    !formData.NomeCompleto.trim() ||
-                    !formData.Email.trim() ||
-                    !formData.Telefone.trim() ||
-                    !formData.DataNascimento.trim() ||
-                    !formData.SenhaHash.trim()
-                  }
-                >
-                  Continuar
-                </button>
-              </div>
-            </div>
+            </>
           )}
 
           {step === 2 && (
-            <div className="form-address">
-              {errorEnderecoGeral && <p className="error-message">{errorEnderecoGeral}</p>}
+            <>
+              <div className="steps-indicator">endereco</div>
+              <div className="form-address">
+                {errorEnderecoGeral && <p className="error-message">{errorEnderecoGeral}</p>}
 
-              <div className="form-group-cadastro">
-                <label htmlFor="CEP">CEP:</label>
-                <input
-                  type="text"
-                  name="CEP"
-                  value={formDataEndereco.CEP}
-                  onChange={handleChangeCEP}
-                  maxLength={9} // 8 números + 1 hífen
-                  placeholder="00000-000"
-                />
-                {errorCEP && <p className="error-message">{errorCEP}</p>}
-              </div>
-
-              <div className="cidade-estado">
                 <div className="form-group-cadastro">
-                  <label htmlFor="Estado">Estado:</label>
+                  <label htmlFor="CEP">CEP:</label>
                   <input
                     type="text"
-                    name="Estado"
-                    value={formDataEndereco.Estado}
-                    onChange={handleChangeEndereco}
-                    placeholder="Ex: SP"
+                    name="CEP"
+                    value={formDataEndereco.CEP}
+                    onChange={handleChangeCEP}
+                    maxLength={9} // 8 números + 1 hífen
+                    placeholder="00000-000"
                   />
-                  {errorEstado && <p className="error-message">{errorEstado}</p>}
+                  {errorCEP && <p className="error-message">{errorCEP}</p>}
+                </div>
+
+                <div className="cidade-estado">
+                  <div className="form-group-cadastro">
+                    <label htmlFor="Estado">Estado:</label>
+                    <input
+                      type="text"
+                      name="Estado"
+                      value={formDataEndereco.Estado}
+                      onChange={handleChangeEndereco}
+                      placeholder="Ex: SP"
+                    />
+                    {errorEstado && <p className="error-message">{errorEstado}</p>}
+                  </div>
+
+                  <div className="form-group-cadastro">
+                    <label htmlFor="Cidade">Cidade:</label>
+                    <input
+                      type="text"
+                      name="Cidade"
+                      value={formDataEndereco.Cidade}
+                      onChange={handleChangeEndereco}
+                      placeholder="Ex: São Paulo"
+                    />
+                    {errorCidade && <p className="error-message">{errorCidade}</p>}
+                  </div>
                 </div>
 
                 <div className="form-group-cadastro">
-                  <label htmlFor="Cidade">Cidade:</label>
+                  <label htmlFor="Bairro">Bairro:</label>
                   <input
                     type="text"
-                    name="Cidade"
-                    value={formDataEndereco.Cidade}
+                    name="Bairro"
+                    value={formDataEndereco.Bairro}
                     onChange={handleChangeEndereco}
-                    placeholder="Ex: São Paulo"
+                    placeholder="Ex: Centro"
                   />
-                  {errorCidade && <p className="error-message">{errorCidade}</p>}
+                  {errorBairro && <p className="error-message">{errorBairro}</p>}
                 </div>
-              </div>
 
-              <div className="form-group-cadastro">
-                <label htmlFor="Bairro">Bairro:</label>
-                <input
-                  type="text"
-                  name="Bairro"
-                  value={formDataEndereco.Bairro}
-                  onChange={handleChangeEndereco}
-                  placeholder="Ex: Centro"
-                />
-                {errorBairro && <p className="error-message">{errorBairro}</p>}
-              </div>
+                <div className="rua-numero">
+                  <div className="form-group-cadastro">
+                    <label htmlFor="Rua">Rua:</label>
+                    <input
+                      type="text"
+                      name="Rua"
+                      value={formDataEndereco.Rua}
+                      onChange={handleChangeEndereco}
+                      placeholder="Nome da rua"
+                    />
+                    {errorRua && <p className="error-message">{errorRua}</p>}
+                  </div>
 
-              <div className="rua-numero">
+                  <div className="form-group-cadastro">
+                    <label htmlFor="Numero">Número:</label>
+                    <input
+                      type="text"
+                      name="Numero"
+                      value={formDataEndereco.Numero}
+                      onChange={handleChangeEndereco}
+                      placeholder="Número"
+                    />
+                    {errorNumero && <p className="error-message">{errorNumero}</p>}
+                  </div>
+                </div>
+
                 <div className="form-group-cadastro">
-                  <label htmlFor="Rua">Rua:</label>
-                  <input
-                    type="text"
-                    name="Rua"
-                    value={formDataEndereco.Rua}
+                  <label htmlFor="Complemento">Complemento:</label>
+                  <textarea
+                    name="Complemento"
+                    value={formDataEndereco.Complemento}
                     onChange={handleChangeEndereco}
-                    placeholder="Nome da rua"
+                    placeholder="Apartamento, bloco, informações adicionais"
                   />
-                  {errorRua && <p className="error-message">{errorRua}</p>}
                 </div>
+                
 
-                <div className="form-group-cadastro">
-                  <label htmlFor="Numero">Número:</label>
-                  <input
-                    type="text"
-                    name="Numero"
-                    value={formDataEndereco.Numero}
-                    onChange={handleChangeEndereco}
-                    placeholder="Número"
-                  />
-                  {errorNumero && <p className="error-message">{errorNumero}</p>}
-                </div>
+                <div className="form-actions">
+                  <button type="button" onClick={handlePrev} className="form-button secondary">
+                    Voltar
+                  </button>
+                  <button
+                    type="submit"
+                    className="form-button"
+                    disabled={
+                      !formDataEndereco.CEP ||
+                      !formDataEndereco.Estado ||
+                      !formDataEndereco.Cidade ||
+                      !formDataEndereco.Bairro ||
+                      !formDataEndereco.Rua ||
+                      !formDataEndereco.Numero ||
+                      loading
+                    }
+                  >
+                    {loading ? "Enviando..." : "Cadastrar-se"}
+                  </button>
+                </div>                
               </div>
-
-              <div className="form-group-cadastro">
-                <label htmlFor="Complemento">Complemento:</label>
-                <textarea
-                  name="Complemento"
-                  value={formDataEndereco.Complemento}
-                  onChange={handleChangeEndereco}
-                  placeholder="Apartamento, bloco, informações adicionais"
-                />
-              </div>
-
-              <div className="form-actions">
-                <button type="button" onClick={handlePrev} className="form-button secondary">
-                  Voltar
-                </button>
-                <button
-                  type="submit"
-                  className="form-button"
-                  disabled={
-                    !formDataEndereco.CEP ||
-                    !formDataEndereco.Estado ||
-                    !formDataEndereco.Cidade ||
-                    !formDataEndereco.Bairro ||
-                    !formDataEndereco.Rua ||
-                    !formDataEndereco.Numero ||
-                    loading
-                  }
-                >
-                  {loading ? "Enviando..." : "Cadastrar-se"}
-                </button>
-              </div>
-            </div>
+            </>
           )}
         </form>
       </div>
