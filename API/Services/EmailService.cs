@@ -10,9 +10,9 @@ using Core.Interfaces;
 public class EmailService : IEmailService
 {
     private readonly string _smtpServer = "smtp.gmail.com";
-    private readonly int _smtpPort = 587;
-    private readonly string _smtpUser = "artenza.ofc@gmail.com";
-    private readonly string _smtpPass = "Artenzaedth1717";
+    private readonly int _smtpPort = 465;
+    private readonly string _smtpUser = "edsonramosr726@gmail.com";
+    private readonly string _smtpPass = "xkxl lmrp gkax ieaa";
     private readonly FirebaseClient _firebaseClient;
     private readonly IMapper _mapper;
 
@@ -123,7 +123,7 @@ public class EmailService : IEmailService
     private async Task EnviarEmailAsync(MimeMessage message)
     {
         using var client = new SmtpClient();
-        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.SslOnConnect);
         await client.AuthenticateAsync(_smtpUser, _smtpPass);
         await client.SendAsync(message);
         await client.DisconnectAsync(true);

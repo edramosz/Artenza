@@ -11,9 +11,9 @@ namespace API.Controllers
     [Route("[controller]")]
     public class EmailController : ControllerBase
     {
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
-        public EmailController(EmailService emailService)
+        public EmailController(IEmailService emailService)
         {
             _emailService = emailService;
         }
