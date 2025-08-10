@@ -5,13 +5,14 @@ using Firebase.Database;
 using MimeKit;
 using Firebase.Database.Query;
 using MailKit.Net.Smtp;
+using Core.Interfaces;
 
-public class EmailService
+public class EmailService : IEmailService
 {
     private readonly string _smtpServer = "smtp.gmail.com";
     private readonly int _smtpPort = 587;
-    private readonly string _smtpUser = "seuemail@artenza.com";
-    private readonly string _smtpPass = "SENHA_AQUI";
+    private readonly string _smtpUser = "artenza.ofc@gmail.com";
+    private readonly string _smtpPass = "Artenzaedth1717";
     private readonly FirebaseClient _firebaseClient;
     private readonly IMapper _mapper;
 
@@ -72,6 +73,7 @@ public class EmailService
 
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("Artenza", _smtpUser));
+        // tentar passar o nome do usuario ao invés de passaro email
         message.To.Add(new MailboxAddress(newsletter.Email, newsletter.Email));
         message.Subject = "Bem-vindo à Newsletter Artenza!";
         message.Body = new TextPart("plain")
