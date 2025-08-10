@@ -8,7 +8,7 @@ namespace Core.Models
 {
     public class Contato
     {
-        public string id { get; set; }
+        public string Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }

@@ -1,50 +1,47 @@
-﻿using Core.Models;
+﻿using AutoMapper;
 using Core.Models.DTO_s.Create;
+using Core.Models;
 using Firebase.Database;
-using Firebase.Database.Query;
-using Google.Cloud.Firestore.V1;
-using MailKit.Net.Smtp;
 using MimeKit;
-using System.Threading.Tasks;
+using Firebase.Database.Query;
+using MailKit.Net.Smtp;
 
 public class EmailService
 {
-    private readonly string _smtpServer = "smtp.gmail.com"; // exemplo
+    private readonly string _smtpServer = "smtp.gmail.com";
     private readonly int _smtpPort = 587;
     private readonly string _smtpUser = "seuemail@artenza.com";
     private readonly string _smtpPass = "SENHA_AQUI";
     private readonly FirebaseClient _firebaseClient;
+    private readonly IMapper _mapper;
 
-    public EmailService(IConfiguration configuration)
+    public EmailService(IConfiguration configuration, IMapper mapper)
     {
+        _mapper = mapper;
         var firebaseUrl = configuration["Firebase:DatabaseUrl"];
         _firebaseClient = new FirebaseClient(firebaseUrl);
     }
 
-
+    // ------------------- CONTATO -------------------
     public async Task EnviarContatoAsync(CreateContato contatoDto)
     {
-        // Salvar no Firebase
         var contato = _mapper.Map<Contato>(contatoDto);
-        var response = await _firebaseClient
-                       .Child("contatos")
-                       .PostAsync(contato);
 
-        // Agora que o Firebase gerou a chave, seta o Id no objeto
+        var response = await _firebaseClient
+            .Child("contatos")
+            .PostAsync(contato);
+
         contato.Id = response.Key;
 
-        // Atualiza o registro no Firebase já com o Id
         await _firebaseClient
             .Child("contatos")
             .Child(contato.Id)
             .PutAsync(contato);
 
-
-        // 2️⃣ Enviar e-mail para a empresa
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("Equipe Artenza", _smtpUser));
+        message.To.Add(new MailboxAddress("Artenza", _smtpUser));
         message.Subject = $"Novo contato de {contato.Nome}";
-
         message.Body = new TextPart("plain")
         {
             Text = $"Nome: {contato.Nome}\n" +
@@ -57,29 +54,26 @@ public class EmailService
         await EnviarEmailAsync(message);
     }
 
+    // ------------------- NEWSLETTER -------------------
     public async Task EnviarNewsletterAsync(CreateNewsletter newsletterDto)
     {
-        // Salvar no Firebase
         var newsletter = _mapper.Map<Newsletter>(newsletterDto);
-        var response = await _firebaseClient
-                       .Child("newsletters")
-                       .PostAsync(newsletter);
 
-        // Agora que o Firebase gerou a chave, seta o Id no objeto
+        var response = await _firebaseClient
+            .Child("newsletters")
+            .PostAsync(newsletter);
+
         newsletter.Id = response.Key;
 
-        // Atualiza o registro no Firebase já com o Id
         await _firebaseClient
             .Child("newsletters")
             .Child(newsletter.Id)
             .PutAsync(newsletter);
 
-        // 2️⃣ Enviar e-mail de boas-vindas para o usuário
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("Artenza", _smtpUser));
         message.To.Add(new MailboxAddress(newsletter.Email, newsletter.Email));
         message.Subject = "Bem-vindo à Newsletter Artenza!";
-
         message.Body = new TextPart("plain")
         {
             Text = $"Olá!\n\nObrigado por se inscrever na nossa newsletter.\n" +
@@ -89,6 +83,41 @@ public class EmailService
 
         await EnviarEmailAsync(message);
     }
+
+    // ------------------- CÓDIGO DE RECUPERAÇÃO DE SENHA -------------------
+    public async Task EnviarCodigoRecuperacaoAsync(string email)
+    {
+        // Gera código de 6 dígitos
+        var codigo = new Random().Next(100000, 999999).ToString();
+
+        // Salva no Firebase (opcional: com validade de tempo)
+        var dadosCodigo = new
+        {
+            Email = email,
+            Codigo = codigo,
+            CriadoEm = DateTime.UtcNow
+        };
+
+        await _firebaseClient
+            .Child("codigos_recuperacao")
+            .PostAsync(dadosCodigo);
+
+        // Envia o e-mail
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress("Artenza", _smtpUser));
+        message.To.Add(new MailboxAddress(email, email));
+        message.Subject = "Código de recuperação de senha";
+        message.Body = new TextPart("plain")
+        {
+            Text = $"Olá!\n\nSeu código para recuperação de senha é: {codigo}\n" +
+                   "Este código expira em 10 minutos.\n\n" +
+                   "Equipe Artenza"
+        };
+
+        await EnviarEmailAsync(message);
+    }
+
+    // ------------------- MÉTODO INTERNO DE ENVIO -------------------
     private async Task EnviarEmailAsync(MimeMessage message)
     {
         using var client = new SmtpClient();
@@ -97,34 +126,4 @@ public class EmailService
         await client.SendAsync(message);
         await client.DisconnectAsync(true);
     }
-
-
-
-
-
-
-
-
-
-    //public async Task EnviarEmailAsync(string destinatario, string assunto, string mensagemHtml)
-    //{
-    //    var message = new MimeMessage();
-    //    message.From.Add(new MailboxAddress("Artenza", _smtpUser));
-    //    message.To.Add(new MailboxAddress("", destinatario));
-    //    message.Subject = assunto;
-
-    //    var bodyBuilder = new BodyBuilder
-    //    {
-    //        HtmlBody = mensagemHtml
-    //    };
-    //    message.Body = bodyBuilder.ToMessageBody();
-
-    //    using (var client = new SmtpClient())
-    //    {
-    //        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
-    //        await client.AuthenticateAsync(_smtpUser, _smtpPass);
-    //        await client.SendAsync(message);
-    //        await client.DisconnectAsync(true);
-    //    }
-    //}
 }
