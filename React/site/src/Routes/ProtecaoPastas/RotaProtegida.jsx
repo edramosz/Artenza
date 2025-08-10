@@ -4,11 +4,13 @@ import { isLogged, isAdmin } from "./auth";
 
 // Para rotas que só usuário logado pode acessar
 export function RequireAuth() {
+  console.log("isLogged?", isLogged());
   if (!isLogged()) {
     return <Navigate to="/Login" replace />;
   }
   return <Outlet />;
 }
+
 
 // Para rotas que só admin pode acessar
 export function RequireAdmin() {

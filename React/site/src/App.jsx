@@ -4,7 +4,7 @@ import LayoutSimples from './Layouts/LayoutSimples';
 import NotFound from './Routes/NotFound/NotFound';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css'
+import './App.css';
 
 
 import Home from './Routes/Home/Home';
@@ -38,7 +38,8 @@ import AdicionarCupom from './Components/Cupom/AdicionarCupom';
 import Busca from './Components/Busca';
 import Sobre from './Routes/Sobre/Sobre';
 import Contato from './Routes/Contato/Contato';
-import { RequireAuth, RequireAdmin, RequireNoAuth } from './Routes/ProtecaoPastas/RotaProtegida.js';
+import { RequireAuth, RequireAdmin, RequireNoAuth } from './Routes/ProtecaoPastas/RotaProtegida';
+
 
 
 function AppContent() {
