@@ -17,6 +17,7 @@ namespace Core.Models
         public string NomeUsuario { get; set; }
         public DateTime DataCriacao { get; set; }
         public string PerfilUrl { get; set; }
+        public string?  URLMidia { get; set; }
 
     }
 
