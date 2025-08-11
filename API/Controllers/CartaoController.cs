@@ -71,10 +71,17 @@ namespace API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var cartaoCriado = await _cartaoService.AddCartaoAsync(cartaoDto);
-
-            return CreatedAtAction(nameof(GetCartao), new { id = cartaoCriado.Id }, cartaoCriado);
+            try
+            {
+                var cartaoCriado = await _cartaoService.AddCartaoAsync(cartaoDto);
+                return CreatedAtAction(nameof(GetCartao), new { id = cartaoCriado.Id }, cartaoCriado);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { mensagem = ex.Message });
+            }
         }
+
 
 
 

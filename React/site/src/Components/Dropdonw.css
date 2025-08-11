@@ -1,6 +1,6 @@
 .dropdown-container {
   position: relative;
-  width: 230px; /* ajuste conforme quiser */
+  width: 230px; 
   user-select: none;
 }
 

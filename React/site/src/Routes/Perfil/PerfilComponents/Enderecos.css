@@ -125,7 +125,7 @@
   gap: 7px;
 }
 
-.btn-excluir {
+.enderecos-container .btn-excluir {
   border: 2px solid #d11616 !important;
   color: #d11616 !important;
   font-weight: 600;
