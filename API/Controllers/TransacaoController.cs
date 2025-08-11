@@ -1,5 +1,7 @@
-﻿using Core.Interfaces;
+﻿using API.Services;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -48,10 +50,10 @@ namespace API.Controllers
         /// <param name="transacao"></param>
         /// 
         [HttpPost]
-        public async Task<ActionResult> CreateTransacao(Transacao transacao)
+        public async Task<ActionResult> CreateTransacao(CreateTransacao transacaoDto)
         {
-            await _transacaoService.AddTransacaoAsync(transacao);
-            return CreatedAtAction(nameof(GetTransacao), new { id = transacao.Id }, transacao);
+            var transacaoCriado = await _transacaoService.AddTransacaoAsync(transacaoDto);
+            return CreatedAtAction(nameof(GetTransacao), new { id = transacaoCriado.Id }, transacaoCriado);
         }
 
         /// <summary>
