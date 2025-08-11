@@ -1,5 +1,7 @@
-﻿using Core.Interfaces;
+﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models;
+using Core.Models.DTO_s.Create;
 using Firebase.Database;
 using Firebase.Database.Query;
 
@@ -8,11 +10,13 @@ namespace API.Services
     public class TransacaoService : ITransacaoService
     {
         private readonly FirebaseClient _firebaseClient;
+        private readonly IMapper _mapper;
 
-        public TransacaoService(IConfiguration configuration)
+        public TransacaoService(IConfiguration configuration, IMapper mapper)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
+            _mapper = mapper;
         }
 
         // Obter todos os transacaos
@@ -37,20 +41,26 @@ namespace API.Services
         }
 
         // Adicionar um novo transacao
-        public async Task AddTransacaoAsync(Transacao transacao)
+        public async Task<Transacao> AddTransacaoAsync(CreateTransacao transacaoDto)
         {
-            var result = await _firebaseClient
-            .Child("transacoes")
-            .PostAsync(transacao);
+            var transacao = _mapper.Map<Transacao>(transacaoDto);
 
-            // Atualizar o ID do transacao com a chave gerada
-            transacao.Id = result.Key;
+            // Primeiro cria o documento no Firebase
+            var response = await _firebaseClient
+                .Child("transacaos")
+                .PostAsync(transacao);
 
-            // Se quiser, você pode atualizar no Firebase também:
+            // Agora que o Firebase gerou a chave, seta o Id no objeto
+            transacao.Id = response.Key;
+
+            // Atualiza o registro no Firebase já com o Id
             await _firebaseClient
-                .Child("transacoes")
+                .Child("transacaos")
                 .Child(transacao.Id)
                 .PutAsync(transacao);
+
+            // Adicionar o ID do favorito ao usuario através de algum modo
+            return transacao;
         }
 
         // Atualizar um transacao pelo ID
