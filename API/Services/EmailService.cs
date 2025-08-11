@@ -134,4 +134,13 @@ public class EmailService : IEmailService
         await client.SendAsync(message);
         await client.DisconnectAsync(true);
     }
+    public async Task<CodigoVerificacao> GetCodigoAsync(string Cod)
+    {
+        var codigo = (await _firebaseClient
+            .Child("codigos-recuperacao")
+            .OnceAsync<CodigoVerificacao>())
+            .FirstOrDefault(p => p.Object.Codigo.ToString() == Cod)?.Object;//metodo LINQ
+
+        return codigo;
+    }
 }
