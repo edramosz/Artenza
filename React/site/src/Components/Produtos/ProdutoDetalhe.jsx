@@ -98,8 +98,8 @@ const ProdutoDetalhe = () => {
                     <td>{produto.genero}</td>
                   </tr>
                   <tr>
-                    <td><span className='info-span'>Tipo:</span></td>
-                    <td>{produto.tipo}</td>
+                    <td><span className='info-span'>Subcategoria:</span></td>
+                    <td>{produto.subCategoria}</td>
                   </tr>
                   <tr>
                     <td><span className='info-span'>Marca:</span></td>

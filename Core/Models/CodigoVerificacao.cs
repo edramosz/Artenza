@@ -11,7 +11,7 @@ namespace Core.Models
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        public string Codigo { get; set; }
+        public string ? Codigo { get; set; }
         public DateTime DataExpiracao { get; set; }
     }
 

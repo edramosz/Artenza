@@ -165,7 +165,7 @@ const Perfil = () => {
       const res = await fetch(`https://artenza.onrender.com/Usuario/${id}`);
       const user = await res.json();
 
-      if (senhaAtual === "testeTCC") {
+      if (senhaAtual === user.senhaHash) {
         setErroSenha('');
         setStepSenha(2);
       } else {
