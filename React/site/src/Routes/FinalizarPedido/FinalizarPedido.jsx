@@ -366,7 +366,7 @@ function FinalizarPedido() {
         </div>
       )}
     </div>
-  );
+  );  
 }
 
 export default FinalizarPedido;

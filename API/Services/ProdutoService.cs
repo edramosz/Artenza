@@ -222,5 +222,32 @@ namespace API.Services
                 .Take(10) // por exemplo, os 10 lançamentos mais recentes
                 .ToList();
         }
+        public async Task AtualizarEstoqueEQuantidadeVendidaAsync(List<ItemVenda> produtosVendidos)
+        {
+            var produtosFirebase = await _firebaseClient
+                .Child("produtos")
+                .OnceAsync<Produto>();
+
+            foreach (var item in produtosVendidos)
+            {
+                var produtoFirebase = produtosFirebase.FirstOrDefault(p => p.Object.Id == item.ProdutoId);
+                if (produtoFirebase == null)
+                    continue;
+
+                var produto = produtoFirebase.Object;
+
+                produto.Estoque -= item.Quantidade;
+                if (produto.Estoque < 0)
+                    produto.Estoque = 0;
+
+                produto.QuantidadeVendida += item.Quantidade;
+
+                await _firebaseClient
+                    .Child("produtos")
+                    .Child(produtoFirebase.Key)
+                    .PutAsync(produto);
+            }
+        }
+
     }
 }
