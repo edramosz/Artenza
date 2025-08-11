@@ -39,8 +39,8 @@ function Login() {
     try {
       const response = await fetch(`https://artenza.onrender.com/Usuario/por-email/${emailUsuario}`);
       if (!response.ok) throw new Error("Usuário não encontrado na API");
+          
       const usuario = await response.json();
-
       const { diaNascimento, mesNascimento, anoNascimento } = usuario;
       const dataNascimentoCompleta = `${anoNascimento}-${String(mesNascimento).padStart(2, '0')}-${String(diaNascimento).padStart(2, '0')}`;
       localStorage.setItem("dataNascimento", dataNascimentoCompleta);

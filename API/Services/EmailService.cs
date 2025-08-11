@@ -10,9 +10,9 @@ using Core.Interfaces;
 public class EmailService : IEmailService
 {
     private readonly string _smtpServer = "smtp.gmail.com";
-    private readonly int _smtpPort = 587;
+    private readonly int _smtpPort = 465;
     private readonly string _smtpUser = "artenza.ofc@gmail.com";
-    private readonly string _smtpPass = "Artenzaedth1717";
+    private readonly string _smtpPass = "osqp gkze okpj borv";
     private readonly FirebaseClient _firebaseClient;
     private readonly IMapper _mapper;
 
@@ -27,7 +27,7 @@ public class EmailService : IEmailService
     public async Task EnviarContatoAsync(CreateContato contatoDto)
     {
         var contato = _mapper.Map<Contato>(contatoDto);
-
+        contato.DataEnvio = DateTime.UtcNow;
         var response = await _firebaseClient
             .Child("contatos")
             .PostAsync(contato);
@@ -40,7 +40,8 @@ public class EmailService : IEmailService
             .PutAsync(contato);
 
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress("Equipe Artenza", _smtpUser));
+        var email = contato.Email;
+        message.From.Add(new MailboxAddress(contato.Nome, email));
         message.To.Add(new MailboxAddress("Artenza", _smtpUser));
         message.Subject = $"Novo contato de {contato.Nome}";
         message.Body = new TextPart("plain")
@@ -60,12 +61,12 @@ public class EmailService : IEmailService
     {
         var newsletter = _mapper.Map<Newsletter>(newsletterDto);
 
+        newsletter.DataInscricao = DateTime.UtcNow;
         var response = await _firebaseClient
             .Child("newsletters")
             .PostAsync(newsletter);
 
         newsletter.Id = response.Key;
-
         await _firebaseClient
             .Child("newsletters")
             .Child(newsletter.Id)
@@ -123,7 +124,7 @@ public class EmailService : IEmailService
     private async Task EnviarEmailAsync(MimeMessage message)
     {
         using var client = new SmtpClient();
-        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
+        await client.ConnectAsync(_smtpServer, _smtpPort, MailKit.Security.SecureSocketOptions.SslOnConnect);
         await client.AuthenticateAsync(_smtpUser, _smtpPass);
         await client.SendAsync(message);
         await client.DisconnectAsync(true);
