@@ -12,10 +12,7 @@ const Perfil = () => {
     telefone: '',
     perfilUrl: ''
   });
-
-  const novoCodigoVerificacao {
-    Email: 
-  }
+  
   const [editando, setEditando] = useState(false);
   const [form, setForm] = useState({
     nome: '',
