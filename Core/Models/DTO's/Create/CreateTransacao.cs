@@ -8,5 +8,9 @@ namespace Core.Models.DTO_s.Create
 {
     public class CreateTransacao
     {
+        public string VendaId { get; set; }
+        public DateOnly Data { get; set; }
+        public int Parcelamento { get; set; }
+        public string MetodoPagamento { get; set; }
     }
 }

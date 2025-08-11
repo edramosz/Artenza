@@ -54,6 +54,9 @@ namespace Core.Models.DTO_s
             CreateMap<Newsletter, CreateNewsletter>();
             CreateMap<CreateNewsletter, Newsletter>();
 
+            CreateMap<CodigoVerificacao, CreateCodigoVerificacao>();
+            CreateMap<CreateCodigoVerificacao, CodigoVerificacao>();
+
             // UPDATE
 
             CreateMap<Usuario, UpdateUsuario>();
