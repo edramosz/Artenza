@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const EsqueceuSenha = () => {
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState("");
-    const [codigo, setCodigo] = useState("");
+    const [codigo, setCodigo] = useState();
     const [novaSenha, setNovaSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
     const [erro, setErro] = useState("");
@@ -16,10 +16,25 @@ const EsqueceuSenha = () => {
     const handleEnviarEmail = async () => {
         setErro("");
 
+          if (!email) {
+            setErro("Por favor, digite seu email.");
+            return;
+        }
+        const novoCodigo = {
+            Email: email // Gera um código aleatório de 6 dígitos
+        }
         try {
             // 🔹 CONSUMIR SEU ENDPOINT DE ENVIO DE EMAIL AQUI:
-            // await fetch("/api/enviar-codigo", { method: "POST", body: JSON.stringify({ email }) })
-
+             await fetch("https://artenza.onrender.com/Email/recuperar-senha", 
+                { 
+                    method: "POST", 
+                    headers: {
+                    "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify( novoCodigo ) 
+                    
+                })
+            console.log(novoCodigo);
             setStep(2); // Avança para inserir código
         } catch (err) {
             setErro("Erro ao enviar email. Tente novamente.");
@@ -32,13 +47,17 @@ const EsqueceuSenha = () => {
 
         try {
             // 🔹 CONSUMIR SEU ENDPOINT DE VALIDAÇÃO DE CÓDIGO AQUI:
-            // const resp = await fetch(`/api/validar-codigo?email=${email}&codigo=${codigo}`)
-            // if (!resp.ok) throw new Error();
+             const resp = await fetch('https://artenza.onrender.com/Email/recuperar-senha')
+             if (!resp.ok) throw new Error();
 
-            // 🔹 Se precisar do idUsuario para trocar a senha, busque agora:
-            // const userResp = await fetch(`/api/usuario/por-email/${email}`);
-            // const usuario = await userResp.json();
-            // setIdUsuario(usuario.id);
+            const data = await resp.json();
+            if (data.codigo !== codigo) {
+                setErro("Código inválido ou expirado.");
+                return;
+            }
+            const userResp = await fetch(`/api/usuario/por-email/${email}`);
+            const usuario = await userResp.json();
+            setIdUsuario(usuario.id);
 
             setStep(3); // Avança para redefinição de senha
         } catch (err) {

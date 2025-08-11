@@ -38,6 +38,22 @@ namespace API.Controllers
             await _emailService.EnviarCodigoRecuperacaoAsync(codVerDTO);
             return Ok(new { mensagem = "Código de recuperação enviado com sucesso!" });
         }
+
+        /// <summary>
+        /// Endpoint para listar algum codigo.
+        /// </summary>
+        /// <param name="codigo"></param>
+        /// <returns></returns>
+        ///
+        [HttpGet("codigo/{codigo}")]
+        public async Task<ActionResult<CodigoVerificacao>> GetCodigoAsync(string codigo)
+        {
+            var Cod = await _emailService.GetCodigoAsync(codigo);
+            if (Cod == null)
+                return NotFound();
+
+            return Cod;
+        }
     }
 
 }

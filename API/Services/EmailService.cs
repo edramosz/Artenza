@@ -13,7 +13,7 @@ public class EmailService : IEmailService
     private readonly string _smtpServer = "smtp.gmail.com";
     private readonly int _smtpPort = 465;
     private readonly string _smtpUser = "artenza.ofc@gmail.com";
-    private readonly string _smtpPass = "osqp gkze okpj borv";
+    private readonly string _smtpPass = "xehu oism dsme neim";
     private readonly FirebaseClient _firebaseClient;
     private readonly IMapper _mapper;
 
@@ -133,5 +133,14 @@ public class EmailService : IEmailService
         await client.AuthenticateAsync(_smtpUser, _smtpPass);
         await client.SendAsync(message);
         await client.DisconnectAsync(true);
+    }
+    public async Task<CodigoVerificacao> GetCodigoAsync(string Cod)
+    {
+        var codigo = (await _firebaseClient
+            .Child("codigos-recuperacao")
+            .OnceAsync<CodigoVerificacao>())
+            .FirstOrDefault(p => p.Object.Codigo.ToString() == Cod)?.Object;//metodo LINQ
+
+        return codigo;
     }
 }
