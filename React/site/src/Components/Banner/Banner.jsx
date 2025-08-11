@@ -2,20 +2,21 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import './Banner.css';
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const slides = [
   {
-    image: '././img/fundo.png',
+    image: '././img/imagem-fundo-a.jpg',
     title: "Coleção faten",
     subtitle: 'Novos lançamentos da marca',
   },
   {
-    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',   
+    image: '././img/imagem-fundo-l.jpg',   
     title: "Coleção Atelo",
     subtitle: 'Novos lançamentos da marca',
   },
   {
-    image: 'https://static.vecteezy.com/ti/fotos-gratis/p2/48987511-streetwear-conjunto-moda-modelo-na-moda.jpg',    
+    image: '././img/fundo.png',    
     title: "Coleção Kiew",
     subtitle: 'Novos lançamentos da marca',
   },
@@ -24,6 +25,7 @@ const slides = [
 const Banner = () => {
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate()
 
   const scrollToIndex = (index) => {
     const container = carouselRef.current;
@@ -45,6 +47,10 @@ const Banner = () => {
     setCurrentIndex(newIndex);
     scrollToIndex(newIndex);
   };
+
+  const navegar = () =>{
+    navigate("/Colecao")
+  }
 
   // Autoplay effect
   useEffect(() => {
@@ -68,7 +74,7 @@ const Banner = () => {
             <div className="carousel-text">
               <h2 className='element-title'>{slide.title}</h2>
               <p className='element-text'>{slide.subtitle}</p>
-              <button className='element-btn'>Saiba Mais</button>
+              <button className='element-btn' onClick={navegar}>Saiba Mais</button>
             </div>
           </div>
         ))}

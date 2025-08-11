@@ -70,12 +70,12 @@
 
 .carousel-wrapper .carousel-text .element-btn {
   font-size: 1.2rem;
-  text-transform: uppercase;
+  text-transform: none;
   font-weight: 600;
   padding: 8px 12px;
-  border-radius: 5px;
+  border-radius: 25px;
   border: none;
-  background: linear-gradient(240deg, rgb(221, 110, 7), rgb(190, 83, 21));
+  background: #111;
   color: #ffff;
   cursor: pointer;
   box-shadow: 5px 4px 13px #1b1b1aa8;

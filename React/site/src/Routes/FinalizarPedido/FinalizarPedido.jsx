@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import "./FinalizarPedido.css";
+import ModalEnderecos from "./ModalEnderecos";
 import ListaCartoes from "../../Components/Cartão/ListaCartoes";
 
 function FinalizarPedido() {
@@ -7,12 +9,14 @@ function FinalizarPedido() {
   const [endereco, setEndereco] = useState(null);
   const [produtos, setProdutos] = useState([]);
   const [itensSelecionados, setItensSelecionados] = useState([]);
-  const [metodoPagamento, setMetodoPagamento] = useState("pix");
+  const [metodoPagamento, setMetodoPagamento] = useState("credito");
   const [enviando, setEnviando] = useState(false);
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [cartaoSelecionado, setCartaoSelecionado] = useState(null);
   const [parcelamento, setParcelamento] = useState(1);
   const [step, setStep] = useState(1);
+
+  const [modalEnderecosAberto, setModalEnderecosAberto] = useState(false);
 
   const email = localStorage.getItem("email");
   const nomeCompleto = localStorage.getItem("nomeCompletoUser");
@@ -73,6 +77,13 @@ function FinalizarPedido() {
   }, [email]);
 
   const getProduto = (idProduto) => produtos.find(p => p.id === idProduto) || {};
+
+  const abrirModalEnderecos = () => setModalEnderecosAberto(true);
+  const fecharModalEnderecos = () => setModalEnderecosAberto(false);
+
+  const trocarEnderecoAtivo = (novoEndereco) => {
+    setEndereco(novoEndereco);
+  };
 
   const total = itensSelecionados.reduce((acc, item) => {
     const produto = getProduto(item.idProduto);
@@ -220,29 +231,40 @@ function FinalizarPedido() {
     <div className="finalizar-container">
       {/* Steps indicator */}
       <div className="steps-indicator">
-        <button disabled={step === 1} onClick={() => setStep(1)}>1. Endereço</button>
-        <button disabled={step === 2 || step < 2} onClick={() => setStep(2)}>2. Pagamento</button>
-        <button disabled={step === 3 || step < 3} onClick={() => setStep(3)}>3. Revisão</button>
+        <button disabled={step === 1} onClick={() => setStep(1)}>1 - Endereço</button>
+        <button disabled={step === 2 || step < 2} onClick={() => setStep(2)}>2 - Pagamento</button>
+        <button disabled={step === 3 || step < 3} onClick={() => setStep(3)}>3 - Revisão</button>
       </div>
 
       {/* Step 1 */}
+
       {step === 1 && (
-        <div className="step endereco">
+        <div className="step-endereco">
           <h2 className="title-endereco"><i className="fa-solid fa-location-dot"></i> Endereço de Entrega</h2>
           <div className="edereco-content">
             <div className="dados-endereco">
-              <p className="nome">{usuarioLogado?.nome || "Carregando..."}</p>
-              <p><span>Rua:</span> {endereco?.rua || "-"}</p>
-              <p><span>Número:</span> {endereco?.numero || "-"}</p>
-              <p><span>Bairro:</span> {endereco?.bairro || "-"}</p>
-              <p><span>Cidade:</span> {endereco?.cidade || "-"}</p>
-              <p><span>CEP:</span> {endereco?.cep || "-"}</p>
+              <div className="endereco-container">
+                <div className="endereco-header">
+                  <h4>{usuarioLogado?.nome || "Carregando..."}</h4>
+                </div>
+                <div className="endereco-hero">
+                  <p>{endereco?.rua || "-"}, {endereco?.numero || "-"} - {endereco?.bairro || "-"}</p>
+                  <p>{endereco?.estado || "-"} -  {endereco?.cep || "-"} - {endereco?.cidade || "-"}</p>
+                </div>
+              </div>
             </div>
             <div className="btns-endereco">
-              <button>Alterar</button>
+              <button onClick={abrirModalEnderecos}>Alterar</button>
             </div>
           </div>
-          <button onClick={irParaProximoStep}>Próximo</button>
+          <button onClick={irParaProximoStep} className="proximo-btn">Próximo</button>
+
+          <ModalEnderecos
+            usuarioId={usuario?.id || localStorage.getItem("idUsuario")}
+            aberto={modalEnderecosAberto}
+            onFechar={fecharModalEnderecos}
+            onSelecionarEndereco={trocarEnderecoAtivo}
+          />
         </div>
       )}
 
@@ -271,7 +293,7 @@ function FinalizarPedido() {
             Cartão de Débito
           </label>
 
-          <label>
+          {/* <label>
             <input
               type="radio"
               value="pix"
@@ -279,7 +301,7 @@ function FinalizarPedido() {
               onChange={(e) => setMetodoPagamento(e.target.value)}
             />
             Pix
-          </label>
+          </label> */}
 
           {(metodoPagamento === "credito" || metodoPagamento === "debito") && usuario && (
             <div className="lista-cartoes">
@@ -337,8 +359,9 @@ function FinalizarPedido() {
                         : "https://placehold.co/300x200.png?text=Sem+Imagem"
                     }
                     alt={produto.nome}
+                    className="img-item"
                   />
-                  <div>
+                  <div className="info-item">
                     <p><strong>{produto.nome}</strong></p>
                     <p>Quantidade: {item.quantidade}</p>
                     <p>Tamanho: {item.tamanho}</p>
@@ -365,8 +388,9 @@ function FinalizarPedido() {
           </div>
         </div>
       )}
+
     </div>
-  );  
+  );
 }
 
 export default FinalizarPedido;

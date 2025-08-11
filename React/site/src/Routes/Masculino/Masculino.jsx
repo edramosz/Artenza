@@ -22,6 +22,7 @@ const Masculino = () => {
   const [produtosPorPagina, setProdutosPorPagina] = useState(12);
   const [mostrarTamanhosId, setMostrarTamanhosId] = useState(null);
   const [favoritos, setFavoritos] = useState([]);
+  const [mensagem, setMensagem] = useState("");
 
 
   const [filtros, setFiltros] = useState({
@@ -60,7 +61,7 @@ const Masculino = () => {
   ];
 
 
-  
+
 
   useEffect(() => {
     const buscarDados = async () => {
@@ -177,7 +178,7 @@ const Masculino = () => {
 
   const favoritarProduto = async (produtoId) => {
     if (!idUsuario) {
-      alert("Você precisa estar logado para favoritar.");
+      exibirMensagem("Você precisa estar logado para favoritar.");
       return;
     }
 
@@ -198,7 +199,7 @@ const Masculino = () => {
           });
 
           setFavoritos(prev => prev.filter(id => id !== produtoId));
-          alert("Produto removido dos favoritos.");
+          exibirMensagem("Produto removido dos favoritos.");
         }
       } else {
         const response = await fetch(`https://artenza.onrender.com/Favorito`, {
@@ -216,11 +217,11 @@ const Masculino = () => {
         }
 
         setFavoritos(prev => [...prev, produtoId]);
-        alert('Produto adicionado aos favoritos!');
+        exibirMensagem('Produto adicionado aos favoritos!');
       }
     } catch (erro) {
       console.error('Erro ao favoritar/desfavoritar produto:', erro);
-      alert('Erro ao processar favorito.');
+      exibirMensagem('Erro ao processar favorito.');
     }
   };
 
@@ -246,9 +247,16 @@ const Masculino = () => {
     verificarFavoritos();
   }, [idUsuario]);
 
+  const exibirMensagem = (texto) => {
+    setMensagem(texto);
+    setTimeout(() => setMensagem(""), 3000);
+  };
+
+
+
   const adicionarAoCarrinho = async (idProduto, tamanhoSelecionado) => {
     if (!idUsuario) {
-      alert("Você precisa estar logado.");
+      exibirMensagem("Você precisa estar logado.");
       return;
     }
 
@@ -288,10 +296,10 @@ const Masculino = () => {
         });
       }
 
-      alert(`Produto adicionado ao carrinho (tamanho ${tamanhoSelecionado})`);
+      exibirMensagem(`Produto adicionado ao carrinho (tamanho ${tamanhoSelecionado})`);
     } catch (err) {
       console.error("Erro ao adicionar:", err);
-      alert("Erro ao adicionar ao carrinho.");
+      exibirMensagem("Erro ao adicionar ao carrinho.");
     }
   };
 
@@ -322,6 +330,7 @@ const Masculino = () => {
           />
 
           <main className="content">
+            {mensagem && <p className="mensagem-topo">{mensagem}</p>}
             {loading ? (
               <div className="carregando"><h3>Carregando...</h3></div>
             ) : erro ? (
@@ -349,86 +358,88 @@ const Masculino = () => {
                 {produtosFiltrados.length === 0 ? (
                   <p className="nenhum-resultado masc-nenhum-resultado">Nenhum produto encontrado com os filtros aplicados.</p>
                 ) : (
-                  <div className="masc-produtos">{produtosFiltrados
-                    .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
-                    .map((prod) => {
+                  <div className="masc-produtos">
 
-                      return (
-                        <div className="card-prods" key={prod.id}>
-                          <Link to={`/produto/${prod.id}`}>
-                            <img
-                              src={prod.urlImagens[0]}
-                              alt={prod.nome}
-                              onError={(e) => {
-                                e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
-                              }}
-                            />
-                          </Link>                         
+                    {produtosFiltrados
+                      .slice((pagina - 1) * produtosPorPagina, pagina * produtosPorPagina)
+                      .map((prod) => {
 
-                          <div
-                            className="btn-carrinho-wrapper"
-                          >
-                            {mostrarTamanhosId === prod.id ? (
-                              <div className="tamanhos-disponiveis">
-                                {prod.tamanhos?.map((t, i) => (
-                                  <button
-                                    key={i}
-                                    className="btn-tamanho"
-                                    onClick={() => {
-                                      adicionarAoCarrinho(prod.id, t);
-                                      setMostrarTamanhosId(null); // esconde após clique
-                                    }}
-                                  >
-                                    {t}
-                                  </button>
-                                ))}
-                                <button onClick={() => setMostrarTamanhosId(false)} className='cancelar-tamanho'><i className="fa-solid fa-xmark"></i></button>
-                              </div>
-                            ) : (         
-                              <button
-                                className="add-carr"
-                                onClick={() =>
-                                  setMostrarTamanhosId(mostrarTamanhosId === prod.id ? null : prod.id)
-                                }
-                              >
-                                <FontAwesomeIcon icon={faBagShopping} />                             
-                                  <span className="texto-hover">Adicionar ao Carrinho</span>                                
-                              </button>
-
-                              
-                            )}
-                          </div>                            
-                          <div className="text-card">
-                            <div className="head-prod">
-                              <p className="categoria">{prod.categoria}</p>
-                              <button
-                                className='favoritar-btn'
-                                type="button"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  favoritarProduto(prod.id);
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={favoritos.includes(prod.id) ? faHeartSolid : faHeartRegular}
-                                  style={{ color: favoritos.includes(prod.id) ? 'red' : 'black' }}
-                                />
-                              </button>
-                            </div>
-
+                        return (
+                          <div className="card-prods" key={prod.id}>
                             <Link to={`/produto/${prod.id}`}>
-                              <h4 className="nome">{prod.nome}</h4>
-                              <p className="preco">
-                                {prod.preco.toLocaleString("pt-BR", {
-                                  style: "currency",
-                                  currency: "BRL",
-                                })}
-                              </p>
+                              <img
+                                src={prod.urlImagens[0]}
+                                alt={prod.nome}
+                                onError={(e) => {
+                                  e.target.src = "http://via.placeholder.com/300x200.png?text=Produto+sem+imagem";
+                                }}
+                              />
                             </Link>
+
+                            <div
+                              className="btn-carrinho-wrapper"
+                            >
+                              {mostrarTamanhosId === prod.id ? (
+                                <div className="tamanhos-disponiveis">
+                                  {prod.tamanhos?.map((t, i) => (
+                                    <button
+                                      key={i}
+                                      className="btn-tamanho"
+                                      onClick={() => {
+                                        adicionarAoCarrinho(prod.id, t);
+                                        setMostrarTamanhosId(null); // esconde após clique
+                                      }}
+                                    >
+                                      {t}
+                                    </button>
+                                  ))}
+                                  <button onClick={() => setMostrarTamanhosId(false)} className='cancelar-tamanho'><i className="fa-solid fa-xmark"></i></button>
+                                </div>
+                              ) : (
+                                <button
+                                  className="add-carr"
+                                  onClick={() =>
+                                    setMostrarTamanhosId(mostrarTamanhosId === prod.id ? null : prod.id)
+                                  }
+                                >
+                                  <FontAwesomeIcon icon={faBagShopping} />
+                                  <span className="texto-hover">Adicionar ao Carrinho</span>
+                                </button>
+
+
+                              )}
+                            </div>
+                            <div className="text-card">
+                              <div className="head-prod">
+                                <p className="categoria">{prod.categoria}</p>
+                                <button
+                                  className='favoritar-btn'
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    favoritarProduto(prod.id);
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={favoritos.includes(prod.id) ? faHeartSolid : faHeartRegular}
+                                    style={{ color: favoritos.includes(prod.id) ? 'red' : 'black' }}
+                                  />
+                                </button>
+                              </div>
+
+                              <Link to={`/produto/${prod.id}`}>
+                                <h4 className="nome">{prod.nome}</h4>
+                                <p className="preco">
+                                  {prod.preco.toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                  })}
+                                </p>
+                              </Link>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                   </div>
 
                 )}
