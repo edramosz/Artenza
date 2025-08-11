@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Favoritos.css';
 import NavProfile from '../NavProfile';
 import { } from '@fortawesome/free-regular-svg-icons';
@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const Favoritos = () => {
   const [favoritos, setFavoritos] = useState([]);
   const [carregando, setCarregando] = useState(true);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const carregarFavoritosComProdutos = async () => {
@@ -54,6 +56,10 @@ const Favoritos = () => {
     }
   };
 
+  const navegar = () =>{
+    navigate("/Colecao")
+  }
+
   return (
     <div className='perfil-page'>
       <NavProfile />
@@ -64,7 +70,7 @@ const Favoritos = () => {
           <div className='sem-favoritos'>
             <span><FontAwesomeIcon icon={faHeart} /></span>
             <p>Você ainda não tem favoritos, procure em nossos produtos.</p>
-            <button>Ver Produtos</button>
+            <button onClick={navegar}>Ver Produtos</button>
           </div>
         ) : (
 

@@ -138,10 +138,10 @@ const AdminUsuario = () => {
                   <td>{usuario.telefone}</td>
                   <td>
                     {usuario.isAdmin && (
-                      <button className="editar" onClick={() => navigate(`/admin/editar-usuario/${usuario.id}`)}>Editar</button>
+                      <button className="editar" onClick={() => navigate(`/admin/editar-usuario/${usuario.id}`)}><i class="fa-solid fa-pencil"></i></button>
                     )}
                     {searchTerm && (
-                      <button className="excluir" onClick={() => handleDeleteUsuario(usuario.id)}>Excluir</button>
+                      <button className="excluir" onClick={() => handleDeleteUsuario(usuario.id)}><i class="fa-solid fa-xmark"></i></button>
                     )}
                   </td>
                 </tr>

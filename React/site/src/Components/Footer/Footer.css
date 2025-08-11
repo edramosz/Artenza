@@ -141,11 +141,11 @@
 }
 
 .footer-container .footer-aside {
-  background-color: #333;
+  background-color: #555;
   display: flex;
   justify-content: space-between;
   padding: 20px 50px;
-  color: #9999;
+  color: #b3b3b3;
 }
 
 .footer-container .footer-aside div {

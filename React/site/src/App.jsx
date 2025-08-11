@@ -56,6 +56,8 @@ function AppContent() {
         <Route path="/Carrinho" element={<Carrinho />} />
         <Route path="/FinalizarPedido" element={<FinalizarPedido />} />
         <Route path="/Busca" element={<Busca />} />
+        <Route path="/Colecao" element={<Colecao />} />
+
 
         {/* Rotas protegidas - só usuário logado */}
         <Route element={<RequireAuth />}>

@@ -54,12 +54,12 @@ const EditarProduto = () => {
   // Função para enviar os dados atualizados
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!nome || !preco || !descricao) {
       setErro("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
-  
+
     const produtoAtualizado = {
       id, // Adiciona o id no corpo da requisição
       nome,
@@ -75,7 +75,7 @@ const EditarProduto = () => {
       tipo,
       marca
     };
-  
+
     try {
       const response = await fetch(`https://artenza.onrender.com/Produto/${id}`, {
         method: "PUT",
@@ -84,12 +84,12 @@ const EditarProduto = () => {
         },
         body: JSON.stringify(produtoAtualizado)
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error("Erro ao atualizar produto: " + errorText);
       }
-  
+
       alert("Produto atualizado com sucesso!");
       navigate("/AdminProduto"); // Redireciona para o painel de administração
     } catch (error) {
@@ -97,17 +97,17 @@ const EditarProduto = () => {
       console.error("Erro detalhado:", error.message);
     }
   };
-  
+
 
   return (
-    <div className="editar-produto">
-      
-      <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
-      <h2>Editar Produto</h2>
+    <div className="form-container">
+      <button onClick={() => navigate(-1)} className="form-button-back">Voltar</button>
+      <h2 className="form-title">Editar Produto</h2>
       {erro && <p style={{ color: "red" }}>{erro}</p>}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="nome">Nome:</label>
+        <label className="form-label" htmlFor="nome">Nome:</label>
         <input
+          className="form-input"
           type="text"
           id="nome"
           value={nome}
@@ -115,8 +115,9 @@ const EditarProduto = () => {
           required
         />
 
-        <label htmlFor="preco">Preço:</label>
+        <label className="form-label" htmlFor="preco">Preço:</label>
         <input
+          className="form-input"
           type="number"
           id="preco"
           value={preco}
@@ -124,80 +125,103 @@ const EditarProduto = () => {
           required
         />
 
-        <label htmlFor="descricao">Descrição:</label>
+        <label className="form-label" htmlFor="descricao">Descrição:</label>
         <textarea
           id="descricao"
+          className="form-input"
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
           required
         ></textarea>
 
-        <label htmlFor="urlImagem">URL da Imagem:</label>
+        <label className="form-label" htmlFor="urlImagem">URL da Imagem:</label>
         <input
+          className="form-input"
           type="text"
           id="urlImagem"
           value={urlImagem}
           onChange={(e) => setUrlImagem(e.target.value)}
         />
 
-        <label htmlFor="categoria">Categoria:</label>
-        <input
-          type="text"
+        <label className="form-label" htmlFor="categoria">Categoria:</label>
+        <select
           id="categoria"
+          className="form-input"
           value={categoria}
           onChange={(e) => setCategoria(e.target.value)}
-        />
+          required
+        >
+          <option value="">Selecione</option>
+          <option value="Blusa">Blusa</option>
+          <option value="Calçado">Calçado</option>
+          <option value="Acessórios">Acessórios</option>
+          <option value="Calças">Calças</option>
+          <option value="Short">Short</option>
+        </select>
 
-        <label htmlFor="estoque">Estoque:</label>
+        <label className="form-label" htmlFor="estoque">Estoque:</label>
         <input
+          className="form-input"
           type="number"
           id="estoque"
           value={estoque}
           onChange={(e) => setEstoque(e.target.value)}
         />
 
-        <label htmlFor="tamanho">Tamanho:</label>
+        <label className="form-label" htmlFor="tamanho">Tamanho:</label>
         <input
+          className="form-input"
           type="text"
           id="tamanho"
           value={tamanho}
           onChange={(e) => setTamanho(e.target.value)}
         />
 
-        <label htmlFor="material">Material:</label>
+        <label className="form-label" htmlFor="material">Material:</label>
         <input
+          className="form-input"
           type="text"
           id="material"
           value={material}
           onChange={(e) => setMaterial(e.target.value)}
         />
 
-        <label htmlFor="cor">Cor:</label>
+        <label className="form-label" htmlFor="cor">Cor:</label>
         <input
+          className="form-input"
           type="text"
           id="cor"
           value={cor}
           onChange={(e) => setCor(e.target.value)}
         />
 
-        <label htmlFor="genero">Gênero:</label>
-        <input
-          type="text"
+
+        <label className="form-label" htmlFor="genero">Gênero:</label>
+        <select
           id="genero"
+          className="form-input"
           value={genero}
           onChange={(e) => setGenero(e.target.value)}
-        />
+          required
+        >
+          <option value="">Selecione</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Unissex">Unissex</option>
+        </select>
 
-        <label htmlFor="tipo">Tipo:</label>
+        <label className="form-label" htmlFor="tipo">Tipo:</label>
         <input
+          className="form-input"
           type="text"
           id="tipo"
           value={tipo}
           onChange={(e) => setTipo(e.target.value)}
         />
 
-        <label htmlFor="marca">Marca:</label>
+        <label className="form-label" htmlFor="marca">Marca:</label>
         <input
+          className="form-input"
           type="text"
           id="marca"
           value={marca}

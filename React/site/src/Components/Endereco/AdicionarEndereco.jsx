@@ -57,7 +57,7 @@ const AdicionarEndereco = () => {
       }
 
       alert("Endereço cadastrado com sucesso!");
-      navigate("/AdminEndereco"); // ajuste conforme sua rota
+      navigate("/AdminEndereco");
     } catch (error) {
       console.error(error);
       setErro("Erro ao cadastrar endereço: " + error.message);
@@ -66,33 +66,92 @@ const AdicionarEndereco = () => {
 
   return (
     <div className="form-container">
-      <button onClick={() => navigate(-1)} className="form-button-back">Voltar</button>
+      <button onClick={() => navigate(-1)} className="form-button-back">
+        Voltar
+      </button>
       <h2 className="form-title">Adicionar Endereço</h2>
       {erro && <p className="form-error">{erro}</p>}
 
       <form onSubmit={handleSubmit}>
         <label className="form-label">CEP:</label>
-        <input className="form-input" type="text" name="cep" value={formData.cep} onChange={handleChange} required />
+        <input
+          className="form-input"
+          type="text"
+          name="cep"
+          value={formDataEndereco.cep}
+          onChange={(e) => {
+            handleChangeEndereco(e);
+            if (e.target.value.length === 8) {
+              buscarEnderecoPorCEP(e.target.value);
+            }
+          }}
+          required
+        />
 
         <label className="form-label">Rua:</label>
-        <input className="form-input" type="text" name="rua" value={formData.rua} onChange={handleChange} required />
+        <input
+          className="form-input"
+          type="text"
+          name="rua"
+          value={formDataEndereco.rua}
+          onChange={handleChangeEndereco}
+          required
+        />
 
         <label className="form-label">Número:</label>
-        <input className="form-input" type="text" name="numero" value={formData.numero} onChange={handleChange} required />
+        <input
+          className="form-input"
+          type="text"
+          name="numero"
+          value={formDataEndereco.numero}
+          onChange={handleChangeEndereco}
+          required
+        />
 
         <label className="form-label">Bairro:</label>
-        <input className="form-input" type="text" name="bairro" value={formData.bairro} onChange={handleChange} required />
+        <input
+          className="form-input"
+          type="text"
+          name="bairro"
+          value={formDataEndereco.bairro}
+          onChange={handleChangeEndereco}
+          required
+        />
 
         <label className="form-label">Cidade:</label>
-        <input className="form-input" type="text" name="cidade" value={formData.cidade} onChange={handleChange} required />
+        <input
+          className="form-input"
+          type="text"
+          name="cidade"
+          value={formDataEndereco.cidade}
+          onChange={handleChangeEndereco}
+          required
+        />
 
         <label className="form-label">Estado:</label>
-        <input className="form-input" type="text" name="estado" value={formData.estado} onChange={handleChange} required />
+        <input
+          className="form-input"
+          type="text"
+          name="estado"
+          value={formDataEndereco.estado}
+          onChange={handleChangeEndereco}
+          required
+        />
 
-        <button type="submit" className="form-button">Adicionar Endereço</button>
+        <label className="form-label">Complemento:</label>
+        <input
+          className="form-input"
+          type="text"
+          name="complemento"
+          value={formDataEndereco.complemento}
+          onChange={handleChangeEndereco}
+        />
+
+        <button type="submit" className="form-button">
+          Adicionar Endereço
+        </button>
       </form>
     </div>
-
   );
 };
 

@@ -38,3 +38,49 @@
   background: none;
   border: none;
 }
+
+.sem-favoritos {
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 40px;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex; 
+  flex-direction: column; 
+}
+
+.sem-favoritos span > svg, 
+.sem-favoritos span > i {
+  font-size: 5rem;
+  margin: 30px;
+  margin-bottom: 5px;
+  color: #222;
+}
+
+.sem-favoritos p {
+  font-size: 1.5rem;
+  color: #222;
+  padding: 0 240px;
+  margin: 0; 
+}
+
+.sem-favoritos button {
+  padding: 8px 12px;
+  border: 2px solid #333;
+  background: none;
+  color: #333;
+  border-radius: 25px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sem-favoritos button:hover{
+  background-color: #222;
+  color: #fff;
+  transition: 0.4s;
+  border: #222;
+}
