@@ -27,7 +27,7 @@ public class EmailService : IEmailService
     public async Task EnviarContatoAsync(CreateContato contatoDto)
     {
         var contato = _mapper.Map<Contato>(contatoDto);
-
+        contato.DataEnvio = DateTime.UtcNow;
         var response = await _firebaseClient
             .Child("contatos")
             .PostAsync(contato);

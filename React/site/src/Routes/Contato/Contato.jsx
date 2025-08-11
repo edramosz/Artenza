@@ -16,11 +16,11 @@ const Contato = () => {
         e.preventDefault(); // evita recarregar a página
 
         const novoContato = {
-            emailContato: EmailContato,
-            nome: Nome,
-            telefone: Telefone,
-            servico: Servico,
-            mensagem: Mensagem
+            Email: EmailContato,
+            Nome: Nome,
+            Telefone: Telefone,
+            Servico: Servico,
+            Mensagem: Mensagem
         }
         try {
       const response = await fetch("https://artenza.onrender.com/Email/contato", {
@@ -46,7 +46,7 @@ const Contato = () => {
     e.preventDefault(); // evita recarregar a página
 
     const novoNewsletter = {
-      emailNewsletter: EmailNewsletter
+      Email: EmailNewsletter
     };
     try {
       const response = await fetch("https://artenza.onrender.com/Email/newsletter", {
