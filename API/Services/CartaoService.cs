@@ -57,8 +57,21 @@ namespace API.Services
         }
 
         // Adicionar um novo Cartao
+        // Adicionar um novo Cartao
         public async Task<Cartao> AddCartaoAsync(CreateCartao cartaoDto)
         {
+            // 🔍 Verificar se já existe cartão igual para o mesmo usuário
+            var cartoesUsuario = await GetCartaoPorIdUsuario(cartaoDto.UsuarioId);
+
+            bool jaExiste = cartoesUsuario.Any(c =>
+                c.NumeroCartao == cartaoDto.NumeroCartao // ou c.Number dependendo do modelo
+            );
+
+            if (jaExiste)
+            {
+                throw new InvalidOperationException("Este cartão já está cadastrado para este usuário.");
+            }
+
             var cartao = _mapper.Map<Cartao>(cartaoDto);
 
             // Primeiro cria o documento no Firebase
@@ -75,9 +88,9 @@ namespace API.Services
                 .Child(cartao.Id)
                 .PutAsync(cartao);
 
-            // Adicionar o ID do cartao ao usuario através de algum modo
             return cartao;
         }
+
 
         // Atualizar um Cartao pelo ID
         public async Task UpdateCartaoAsync(string id, UpdateCartao cartaoDto)
@@ -101,5 +114,7 @@ namespace API.Services
                 .Child(id)
                 .DeleteAsync();
         }
+
+
     }
 }
