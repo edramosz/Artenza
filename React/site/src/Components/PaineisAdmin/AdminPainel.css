@@ -4,7 +4,7 @@
   max-width: 2000px;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: #f4f6f8;
+  background-color: #706c6c;
   box-sizing: border-box;
 }
 
@@ -14,11 +14,10 @@
   top: 0;                 
   align-self: flex-start;  
   width: 250px;
-  height: 100vh;          
-  background-color: #f5f5f5;
+  height: 100vh;         
   padding: 30px 10px;
-  border-right: 2px solid #e0e0e0;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  background-color: #706c6c;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -26,10 +25,11 @@
 
 .container-dashboard .sidebar .title {
   font-size: 1.6rem;
-  color: #333;
+  color: #ffffff;
   font-weight: 600;
   text-align: center;
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .container-dashboard .pages {
@@ -52,7 +52,7 @@
   width: 100%;
   background: none;
   border: none;
-  color: #333;
+  color: #f0eeee;
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -65,13 +65,13 @@
 }
 
 .container-dashboard .pages button:hover {
-  background-color: #e6e6e6;
+  background-color: #5e5d5d;
 }
 
 .container-dashboard .pages button svg {
   width: 18px;
   height: 18px;
-  color: #666;
+  color: #ffff;
 }
 
 .container-dashboard .pages button.active {
@@ -93,13 +93,11 @@
 
 .admin-painel .title {
   font-size: 1.9rem;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 2rem;
   color: #333;
-  background-color: #fff;
   padding: 5px 25px;
   border-radius: 10px;
-  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.1);
 }
 
 .admin-painel .erro {
@@ -117,33 +115,35 @@
 .admin-painel .btn-actions button {
   padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 25px;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .admin-painel .btn-actions button:first-child {
-  background-color: #0077cc;
+  background-color: #111;
   color: white;
 }
 
 .admin-painel .btn-actions .logout-btn {
-  background-color: #4caf50;
-  color: white;
+  background-color: #ffffff;
+  color: #222;
+  border: 2px solid #222;
 }
 
 .admin-painel .btn-actions button:hover {
   opacity: 0.9;
 }
 
+
 /* Cabeçalho da tabela */
 .admin-painel .top-table {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
-  background-color: #2196f3;
+  background-color: #222;
   color: #fff;
   border-radius: 12px 12px 0 0;
   box-sizing: border-box;
@@ -152,22 +152,20 @@
 .admin-painel .top-table h2 {
   margin: 0;
   font-size: 1.5rem;
+  width: 400px;
+  font-weight: 500;
 }
 
-.admin-painel .top-table .search {
+.admin-painel .top-table .search-item {
   display: flex;
   align-items: center;
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1rem;
   background: #fff;
   border: 1px solid #ccc;
-  border-radius: 15px;
+  border-radius: 25px;
 }
 
-.admin-painel .top-table .search i {
-  color: #777;
-}
-
-.admin-painel .top-table .search input {
+.admin-painel .top-table .search-item input {
   border: none;
   background: transparent;
   margin-left: 15px;
@@ -176,11 +174,104 @@
   font-size: 1rem;
 }
 
-/* os card os componente */
+.admin-painel .top-table .search-item button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #777;
+  margin-left: 10px;
+}
+
+.admin-painel .top-table .search-item button:hover {
+  color: #333;
+}
+
+.admin-painel .top-table .search-item .clear-btn {
+  margin-right: -5px;
+}
+
+/* Tabela */
+.admin-painel .table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.1);
+}
+
+.admin-painel .table thead th {
+  padding: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  background-color: #333;
+  color: #fff;
+}
+
+/* Novo estilo para o último th */
+.admin-painel .table thead th:last-child {
+  width: 20%;
+}
+
+/* Restante do seu CSS... */
+
+.admin-painel .table tbody td {
+  padding: 1rem;
+  text-align: center;
+  color: #555;
+}
+
+.admin-painel .table tbody td:last-child{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.admin-painel .table tbody tr:nth-child(even) {
+  background: #f0f0f0;
+}
+
+.admin-painel .table tbody tr td[colspan="5"] {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+/* Botões na tabela */
+.admin-painel .table button {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  width: 40px;  
+  height: 40px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.admin-painel .table .editar {
+  background-color: #222;
+  color: white;
+}
+
+.admin-painel .table .excluir {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.admin-painel .table button:hover {
+  opacity: 0.9;
+}
+
+
 
 .render {
   flex: 1;
   padding: 30px 80px;
+  background-color: #fff;
+  border-radius: 25px 0px 0px 25px;
 }
 
 .content {
@@ -239,61 +330,11 @@
     font-size: 14px;
 }
 
-
-
-
-/*tabela */
-.admin-painel .table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: 0 0 10px 10px;
-  overflow: hidden;
-  box-shadow: 2px 5px 11px rgba(0, 0, 0, 0.1);
+.admin-painel{
+  background-color: #ffffff;
+  border-radius: 25px 0px 0px 25px;
 }
 
-.admin-painel .table thead th {
-  padding: 1rem;
-  text-align: center;
-  font-size: 1rem;
-  background-color: #0077cc;
-  color: #fff;
-}
-
-.admin-painel .table tbody td {
-  padding: 1rem;
-  text-align: center;
-  color: #555;
-}
-
-.admin-painel .table tbody tr:nth-child(even) {
-  background: #f0f0f0;
-}
-
-/* Botões na tabela */
-.admin-painel .table button {
-  margin-right: 0.5rem;
-  padding: 0.4rem 0.8rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.admin-painel .table .editar {
-  background-color: #2ecc71;
-  color: white;
-}
-
-.admin-painel .table .excluir {
-  background-color: #e74c3c;
-  color: white;
-}
-
-.admin-painel .table button:hover {
-  opacity: 0.9;
-}
 
 
 @media (max-width: 768px) {

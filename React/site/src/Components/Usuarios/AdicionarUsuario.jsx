@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import '../PaineisAdmin/AdminForms.css'
 
 const AdicionarUsuario = () => {
 
@@ -121,6 +122,9 @@ const AdicionarUsuario = () => {
 
   return (
     <div className="form-container">
+      <button onClick={() => navigate(-1)} className="form-button-back">
+        Voltar
+      </button>
       <h2 className="form-title">Adicionar Usuário</h2>
 
       <form onSubmit={handleSubmit}>

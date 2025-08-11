@@ -134,9 +134,9 @@ const AdminProduto = () => {
                   <td>R$ {parseFloat(produto.preco).toFixed(2)}</td>
                   <td>{produto.categoria}</td>
                   <td>
-                    <button className="editar" onClick={() => navigate(`/admin/editar-produto/${produto.id}`)}>Editar</button>
+                    <button className="editar" onClick={() => navigate(`/admin/editar-produto/${produto.id}`)}><i class="fa-solid fa-pencil"></i></button>
                     {searchTerm && (
-                      <button className="excluir" onClick={() => handleDeleteProduct(produto.id)}>Excluir</button>
+                      <button className="excluir" onClick={() => handleDeleteProduct(produto.id)}><i class="fa-solid fa-xmark"></i></button>
                     )}
                   </td>
                 </tr>

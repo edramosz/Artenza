@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './AdicionarProduto.css';
+import '../PaineisAdmin/AdminForms.css';
 
 const AdicionarProduto = () => {
   const navigate = useNavigate();
@@ -101,22 +101,24 @@ const AdicionarProduto = () => {
   };
 
   return (
-    <div className="adicionar-produto">
-      <h2>Adicionar Produto</h2>
-      <button onClick={() => navigate(-1)} className="btn-voltar">Voltar</button>
+    <div className="form-container">
+      <button onClick={() => navigate(-1)} className="form-button-back">
+        Voltar
+      </button>
+      <h2 className="form-title">Adicionar Produto</h2>
       {erro && <p style={{ color: "red" }}>{erro}</p>}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="nome">Nome:</label>
-        <input type="text" id="nome" required value={nome} onChange={(e) => setNome(e.target.value)} />
+        <label className="form-label" htmlFor="nome">Nome:</label>
+        <input className="form-input" type="text" id="nome" required value={nome} onChange={(e) => setNome(e.target.value)} />
 
-        <label htmlFor="preco">Preço:</label>
-        <input type="number" id="preco" required value={preco} onChange={(e) => setPreco(e.target.value)} />
+        <label className="form-label" htmlFor="preco">Preço:</label>
+        <input className="form-input" type="number" id="preco" required value={preco} onChange={(e) => setPreco(e.target.value)} />
 
-        <label htmlFor="descricao">Descrição:</label>
+        <label className="form-label" htmlFor="descricao">Descrição:</label>
         <textarea id="descricao" required value={descricao} onChange={(e) => setDescricao(e.target.value)} />
 
-        <label htmlFor="imagem">Imagens:</label>
-        <input
+        <label className="form-label" htmlFor="imagem">Imagens:</label>
+        <input className="form-input"
           type="file"
           id="imagem"
           accept="image/*"
@@ -137,54 +139,60 @@ const AdicionarProduto = () => {
           </div>
         )}
 
-        <label htmlFor="categoria">Categoria:</label>
-        <select name="categoria" id="categoria"> 
+        <label className="form-label" htmlFor="categoria">Categoria:</label>
+        <select
+          id="categoria"
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+          required
+          className="form-input"
+        >
+          <option value="">Selecione</option>
           <option value="Blusa">Blusa</option>
           <option value="Calçado">Calçado</option>
           <option value="Acessórios">Acessórios</option>
-          <option value="Calças">Blusa</option>
+          <option value="Calças">Calças</option>
           <option value="Short">Short</option>
         </select>
-        <input type="text" required id="categoria" value={categoria} onChange={(e) => setCategoria(e.target.value)} />
 
-        <label htmlFor="estoque">Estoque:</label>
-        <input type="number" required id="estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} />
 
-        <label htmlFor="tamanhos">Tamanhos:</label>
-        <select name="tamanhos" id="tamanhos"> 
-          <option value="PP">PP</option>
-          <option value="P">P</option>
-          <option value="M">M</option>
-          <option value="G">G</option>
-          <option value="GG">GG</option>
-        </select>
-        <input type="text" required id="tamanhos"
+        <label className="form-label" htmlFor="estoque">Estoque:</label>
+        <input className="form-input" type="number" required id="estoque" value={estoque} onChange={(e) => setEstoque(e.target.value)} />
+
+        <label className="form-label" htmlFor="tamanhos">Tamanhos:</label>
+        <input className="form-input" type="text" required id="tamanhos"
           value={tamanhos.join(", ")}
           onChange={(e) => setTamanhos(e.target.value.split(",").map(t => t.trim()))}
         />
 
 
-        <label htmlFor="material">Material:</label>
-        <input type="text" required id="material" value={material} onChange={(e) => setMaterial(e.target.value)} />
+        <label className="form-label" htmlFor="material">Material:</label>
+        <input className="form-input" type="text" required id="material" value={material} onChange={(e) => setMaterial(e.target.value)} />
 
-        <label htmlFor="cor">Cor:</label>
-        <input type="text" required id="cor" value={cor} onChange={(e) => setCor(e.target.value)} />
+        <label className="form-label" htmlFor="cor">Cor:</label>
+        <input className="form-input" type="text" required id="cor" value={cor} onChange={(e) => setCor(e.target.value)} />
 
-        <label htmlFor="genero">Gênero:</label>
-        <select name="genero" id="genero"> 
+        <label className="form-label" htmlFor="genero">Gênero:</label>
+        <select
+          id="genero"
+          value={genero}
+          onChange={(e) => setGenero(e.target.value)}
+          required
+          className="form-input"
+        >
+          <option value="">Selecione</option>
           <option value="Masculino">Masculino</option>
           <option value="Feminino">Feminino</option>
           <option value="Unissex">Unissex</option>
         </select>
-        <input type="text" required id="genero" value={genero} onChange={(e) => setGenero(e.target.value)} />
+        
+        <label className="form-label" htmlFor="tipo">Tipo:</label>
+        <input className="form-input" type="text" required id="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} />
 
-        <label htmlFor="tipo">Tipo:</label>
-        <input type="text" required id="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} />
+        <label className="form-label" htmlFor="marca">Marca:</label>
+        <input className="form-input" type="text" required id="marca" value={marca} onChange={(e) => setMarca(e.target.value)} />
 
-        <label htmlFor="marca">Marca:</label>
-        <input type="text" required id="marca" value={marca} onChange={(e) => setMarca(e.target.value)} />
-
-        <button type="submit">Adicionar Produto</button>
+        <button type="submit" className="form-button">Adicionar Produto</button>
       </form>
     </div>
   );

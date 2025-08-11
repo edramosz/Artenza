@@ -140,14 +140,14 @@ const AdminCupom = () => {
                       className="editar"
                       onClick={() => navigate(`/admin/editar-cupom/${cupom.id}`)}
                     >
-                      Editar
+                      <i class="fa-solid fa-pencil"></i>
                     </button>
                     {searchTerm && (
                       <button
                         className="excluir"
                         onClick={() => handleDeleteCupom(cupom.id)}
                       >
-                        Excluir
+                        <i class="fa-solid fa-xmark"></i>
                       </button>
                     )}
                   </td>

@@ -149,8 +149,8 @@ const AdminEndereco = () => {
                   <td>{endereco.estado}</td>
                   <td>{endereco.cidade}</td>
                   <td>
-                    <button className="editar" onClick={() => navigate(`/Admin/editar-endereco/${endereco.id}`)}>Editar</button>
-                    <button className="excluir" onClick={() => handleDeleteEndereco(endereco.id)}>Excluir</button>
+                    <button className="editar" onClick={() => navigate(`/Admin/editar-endereco/${endereco.id}`)}><i class="fa-solid fa-pencil"></i></button>
+                    <button className="excluir" onClick={() => handleDeleteEndereco(endereco.id)}><i class="fa-solid fa-xmark"></i></button>
                   </td>
                 </tr>
               ))
