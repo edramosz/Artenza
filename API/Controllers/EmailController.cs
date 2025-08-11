@@ -33,9 +33,9 @@ namespace API.Controllers
         }
 
         [HttpPost("recuperar-senha")]
-        public async Task<IActionResult> EnviarCodigoRecuperacao([FromBody] string email)
+        public async Task<IActionResult> EnviarCodigoRecuperacao([FromBody] CreateCodigoVerificacao codVerDTO)
         {
-            await _emailService.EnviarCodigoRecuperacaoAsync(email);
+            await _emailService.EnviarCodigoRecuperacaoAsync(codVerDTO);
             return Ok(new { mensagem = "Código de recuperação enviado com sucesso!" });
         }
     }

@@ -12,6 +12,6 @@ namespace Core.Interfaces
     {
         Task EnviarContatoAsync(CreateContato contatoDto);
         Task EnviarNewsletterAsync(CreateNewsletter newsletterDto);
-        Task EnviarCodigoRecuperacaoAsync(string email);
+        Task EnviarCodigoRecuperacaoAsync(CreateCodigoVerificacao codVerDTO);
     }
 }
