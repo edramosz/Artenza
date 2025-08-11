@@ -121,56 +121,58 @@ const AdicionarUsuario = () => {
 
   return (
     <div className="form-container">
-      <h2>Adicionar Usuário</h2>
+      <h2 className="form-title">Adicionar Usuário</h2>
+
       <form onSubmit={handleSubmit}>
-        <h3>Dados do Usuário</h3>
-        <label>Nome Completo:</label>
-        <input type="text" name="nomeCompleto" value={formData.nomeCompleto} onChange={handleChange} required />
+        <h3 className="form-subtitle">Dados do Usuário</h3>
 
-        <label>Email:</label>
-        <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+        <label className="form-label">Nome Completo:</label>
+        <input className="form-input" type="text" name="nomeCompleto" value={formData.nomeCompleto} onChange={handleChange} required />
 
-        <label>Telefone:</label>
-        <input type="text" name="telefone" value={formData.telefone} onChange={handleChange} required />
+        <label className="form-label">Email:</label>
+        <input className="form-input" type="email" name="email" value={formData.email} onChange={handleChange} required />
 
-        <label>Data de Nascimento:</label>
-        <input type="date" name="dataNascimento" value={formData.dataNascimento} onChange={handleChangeDate} required />
+        <label className="form-label">Telefone:</label>
+        <input className="form-input" type="text" name="telefone" value={formData.telefone} onChange={handleChange} required />
 
-        <label>Senha:</label>
-        <input type="password" name="senhaHash" value={formData.senhaHash} onChange={handleChange} required />
+        <label className="form-label">Data de Nascimento:</label>
+        <input className="form-input" type="date" name="dataNascimento" value={formData.dataNascimento} onChange={handleChangeDate} required />
 
-        <label>
-          <input type="checkbox" name="isAdmin" checked={formData.isAdmin} onChange={(e) =>
-            setFormData((prev) => ({ ...prev, isAdmin: e.target.checked }))
-          } />
+        <label className="form-label">Senha:</label>
+        <input className="form-input" type="password" name="senhaHash" value={formData.senhaHash} onChange={handleChange} required />
+
+        <label className="form-label form-checkbox">
+          <input type="checkbox" name="isAdmin" checked={formData.isAdmin} onChange={(e) => setFormData(prev => ({ ...prev, isAdmin: e.target.checked }))} />
           Usuário administrador
         </label>
 
-        <h3>Endereço</h3>
-        <label>CEP:</label>
-        <input type="text" name="cep" value={formDataEndereco.cep} onChange={handleChangeEndereco} onBlur={() => buscarEnderecoPorCEP(formDataEndereco.cep)} required />
+        <h3 className="form-subtitle">Endereço</h3>
 
-        <label>Estado:</label>
-        <input type="text" name="estado" value={formDataEndereco.estado} onChange={handleChangeEndereco} required />
+        <label className="form-label">CEP:</label>
+        <input className="form-input" type="text" name="cep" value={formDataEndereco.cep} onChange={handleChangeEndereco} onBlur={() => buscarEnderecoPorCEP(formDataEndereco.cep)} required />
 
-        <label>Cidade:</label>
-        <input type="text" name="cidade" value={formDataEndereco.cidade} onChange={handleChangeEndereco} required />
+        <label className="form-label">Estado:</label>
+        <input className="form-input" type="text" name="estado" value={formDataEndereco.estado} onChange={handleChangeEndereco} required />
 
-        <label>Bairro:</label>
-        <input type="text" name="bairro" value={formDataEndereco.bairro} onChange={handleChangeEndereco} required />
+        <label className="form-label">Cidade:</label>
+        <input className="form-input" type="text" name="cidade" value={formDataEndereco.cidade} onChange={handleChangeEndereco} required />
 
-        <label>Rua:</label>
-        <input type="text" name="rua" value={formDataEndereco.rua} onChange={handleChangeEndereco} required />
+        <label className="form-label">Bairro:</label>
+        <input className="form-input" type="text" name="bairro" value={formDataEndereco.bairro} onChange={handleChangeEndereco} required />
 
-        <label>Número:</label>
-        <input type="text" name="numero" value={formDataEndereco.numero} onChange={handleChangeEndereco} required />
+        <label className="form-label">Rua:</label>
+        <input className="form-input" type="text" name="rua" value={formDataEndereco.rua} onChange={handleChangeEndereco} required />
 
-        <label>Complemento:</label>
-        <input type="text" name="complemento" value={formDataEndereco.complemento} onChange={handleChangeEndereco} />
+        <label className="form-label">Número:</label>
+        <input className="form-input" type="text" name="numero" value={formDataEndereco.numero} onChange={handleChangeEndereco} required />
 
-        <button type="submit">Cadastrar</button>
+        <label className="form-label">Complemento:</label>
+        <input className="form-input" type="text" name="complemento" value={formDataEndereco.complemento} onChange={handleChangeEndereco} />
+
+        <button className="form-button" type="submit">Cadastrar</button>
       </form>
     </div>
+
   );
 };
 
