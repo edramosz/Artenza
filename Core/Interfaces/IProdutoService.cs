@@ -16,5 +16,6 @@ namespace Core.Interfaces
         Task UpdateProdutoAsync(string id, UpdateProduto produto);
         Task DeleteProdutoAsync(string id);
         Task<List<Produto>> ObterLancamentosAsync();
+        Task AtualizarEstoqueEQuantidadeVendidaAsync(List<ItemVenda> produtosVendidos);
     }
 }
