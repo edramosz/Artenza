@@ -47,12 +47,16 @@ namespace API.Controllers
         /// <summary>
         /// Endpoint para adicionar uma transação.
         /// </summary>
-        /// <param name="transacao"></param>
+        /// <param name="transacaoDto"></param>
         /// 
         [HttpPost]
-        public async Task<ActionResult> CreateTransacao(CreateTransacao transacaoDto)
+        public async Task<ActionResult> CreateTransacao([FromBody] CreateTransacao transacaoDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var transacaoCriado = await _transacaoService.AddTransacaoAsync(transacaoDto);
+
             return CreatedAtAction(nameof(GetTransacao), new { id = transacaoCriado.Id }, transacaoCriado);
         }
 

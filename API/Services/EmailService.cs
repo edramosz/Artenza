@@ -6,6 +6,7 @@ using MimeKit;
 using Firebase.Database.Query;
 using MailKit.Net.Smtp;
 using Core.Interfaces;
+using static Google.Rpc.Context.AttributeContext.Types;
 
 public class EmailService : IEmailService
 {
@@ -88,27 +89,31 @@ public class EmailService : IEmailService
     }
 
     // ------------------- CÓDIGO DE RECUPERAÇÃO DE SENHA -------------------
-    public async Task EnviarCodigoRecuperacaoAsync(string email)
+    public async Task EnviarCodigoRecuperacaoAsync(CreateCodigoVerificacao codVerDTO)
     {
+        var CodVer = _mapper.Map<CodigoVerificacao>(codVerDTO);
         // Gera código de 6 dígitos
         var codigo = new Random().Next(100000, 999999).ToString();
 
-        // Salva no Firebase (opcional: com validade de tempo)
-        var dadosCodigo = new
-        {
-            Email = email,
-            Codigo = codigo,
-            CriadoEm = DateTime.UtcNow
-        };
+        CodVer.Codigo = codigo;
+        CodVer.DataExpiracao = DateTime.UtcNow.AddMinutes(10);
 
+        var response = await _firebaseClient
+            .Child("codigos_recuperacao")
+            .PostAsync(CodVer);
+
+        CodVer.Id = response.Key;
+
+        // Atualiza o registro no Firebase já com o Id
         await _firebaseClient
             .Child("codigos_recuperacao")
-            .PostAsync(dadosCodigo);
+            .Child(CodVer.Id)
+            .PutAsync(CodVer);
 
         // Envia o e-mail
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress("Artenza", _smtpUser));
-        message.To.Add(new MailboxAddress(email, email));
+        message.To.Add(new MailboxAddress(CodVer.Email, CodVer.Email));
         message.Subject = "Código de recuperação de senha";
         message.Body = new TextPart("plain")
         {
