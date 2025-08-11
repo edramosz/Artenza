@@ -15,7 +15,7 @@ const AdicionarProduto = () => {
   const [material, setMaterial] = useState("");
   const [cor, setCor] = useState("");
   const [genero, setGenero] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [subCategoria, setsubCategoria] = useState("");
   const [marca, setMarca] = useState("");
   const [erro, setErro] = useState("");
 
@@ -64,7 +64,7 @@ const AdicionarProduto = () => {
       Material: material,
       Cor: cor,
       Genero: genero,
-      Tipo: tipo,
+      SubCategoria: subCategoria,
       Marca: marca
     };
 
@@ -72,7 +72,7 @@ const AdicionarProduto = () => {
 
     try {
 
-      if (!nome || !descricao || !cor || !tipo || !marca || !genero || !material || !categoria || tamanhos.length === 0) {
+      if (!nome || !descricao || !cor || !subCategoria || !marca || !genero || !material || !categoria || tamanhos.length === 0) {
         setErro("Por favor, preencha todos os campos obrigatórios.");
         return;
       }
@@ -186,8 +186,8 @@ const AdicionarProduto = () => {
           <option value="Unissex">Unissex</option>
         </select>
         
-        <label className="form-label" htmlFor="tipo">Tipo:</label>
-        <input className="form-input" type="text" required id="tipo" value={tipo} onChange={(e) => setTipo(e.target.value)} />
+        <label className="form-label" htmlFor="subCategoria">SubCategoria:</label>
+        <input className="form-input" type="text" required id="subCategoria" value={subCategoria} onChange={(e) => setsubCategoria(e.target.value)} />
 
         <label className="form-label" htmlFor="marca">Marca:</label>
         <input className="form-input" type="text" required id="marca" value={marca} onChange={(e) => setMarca(e.target.value)} />

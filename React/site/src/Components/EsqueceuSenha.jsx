@@ -16,10 +16,25 @@ const EsqueceuSenha = () => {
     const handleEnviarEmail = async () => {
         setErro("");
 
+          if (!email) {
+            setErro("Por favor, digite seu email.");
+            return;
+        }
+        const novoCodigo = {
+            Email: email
+        }
         try {
             // 🔹 CONSUMIR SEU ENDPOINT DE ENVIO DE EMAIL AQUI:
-            // await fetch("/api/enviar-codigo", { method: "POST", body: JSON.stringify({ email }) })
-
+             await fetch("https://artenza.onrender.com/Email/recuperar-senha", 
+                { 
+                    method: "POST", 
+                    headers: {
+                    "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify( novoCodigo ) 
+                    
+                })
+            console.log(novoCodigo);
             setStep(2); // Avança para inserir código
         } catch (err) {
             setErro("Erro ao enviar email. Tente novamente.");
