@@ -76,76 +76,34 @@ const EditarEndereco = () => {
   };
 
   return (
-    <div className="editar-endereco">
-      <button onClick={() => navigate(-1)}>Voltar</button>
-      <h2>Editar Endereço</h2>
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
+    <div className="form-container">
+      <button onClick={() => navigate(-1)} className="form-button-back">Voltar</button>
+      <h2 className="form-title">Editar Endereço</h2>
+      {erro && <p className="form-error">{erro}</p>}
+
       <form onSubmit={handleSubmit}>
-        <label>CEP:</label>
-        <input
-          type="text"
-          name="cep"
-          value={formData.cep}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">CEP:</label>
+        <input className="form-input" type="text" name="cep" value={formData.cep} onChange={handleChange} required />
 
-        <label>Estado:</label>
-        <input
-          type="text"
-          name="estado"
-          value={formData.estado}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Rua:</label>
+        <input className="form-input" type="text" name="rua" value={formData.rua} onChange={handleChange} required />
 
-        <label>Cidade:</label>
-        <input
-          type="text"
-          name="cidade"
-          value={formData.cidade}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Número:</label>
+        <input className="form-input" type="text" name="numero" value={formData.numero} onChange={handleChange} required />
 
-        <label>Bairro:</label>
-        <input
-          type="text"
-          name="bairro"
-          value={formData.bairro}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Bairro:</label>
+        <input className="form-input" type="text" name="bairro" value={formData.bairro} onChange={handleChange} required />
 
-        <label>Rua:</label>
-        <input
-          type="text"
-          name="rua"
-          value={formData.rua}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Cidade:</label>
+        <input className="form-input" type="text" name="cidade" value={formData.cidade} onChange={handleChange} required />
 
-        <label>Número:</label>
-        <input
-          type="text"
-          name="numero"
-          value={formData.numero}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Estado:</label>
+        <input className="form-input" type="text" name="estado" value={formData.estado} onChange={handleChange} required />
 
-        <label>Complemento:</label>
-        <input
-          type="text"
-          name="complemento"
-          value={formData.complemento}
-          onChange={handleChange}
-        />
-
-        <button type="submit">Atualizar Endereço</button>
+        <button type="submit" className="form-button">Atualizar Endereço</button>
       </form>
     </div>
+
   );
 };
 

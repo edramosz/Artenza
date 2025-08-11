@@ -104,68 +104,36 @@ const EditarUsuario = () => {
   };
 
   return (
-    <div className="editar-usuario">
-      <button onClick={() => navigate(-1)}>Voltar</button>
-      <h2>Editar Usuário</h2>
-      {erro && <p style={{ color: "red" }}>{erro}</p>}
+    <div className="form-container">
+      <button className="form-button-back" onClick={() => navigate(-1)}>Voltar</button>
+      <h2 className="form-title">Editar Usuário</h2>
+      {erro && <p className="form-error">{erro}</p>}
+
       <form onSubmit={handleSubmit}>
-        <label>Nome Completo:</label>
-        <input
-          type="text"
-          name="nomeCompleto"
-          value={formData.nomeCompleto}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Nome Completo:</label>
+        <input className="form-input" type="text" name="nomeCompleto" value={formData.nomeCompleto} onChange={handleChange} required />
 
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Email:</label>
+        <input className="form-input" type="email" name="email" value={formData.email} onChange={handleChange} required />
 
-        <label>Telefone:</label>
-        <input
-          type="text"
-          name="telefone"
-          value={formData.telefone}
-          onChange={handleChange}
-          required
-        />
+        <label className="form-label">Telefone:</label>
+        <input className="form-input" type="text" name="telefone" value={formData.telefone} onChange={handleChange} required />
 
-        <label>Data de Nascimento:</label>
-        <input
-          type="date"
-          name="dataNascimento"
-          value={formData.dataNascimento}
-          onChange={handleDateChange}
-          required
-        />
+        <label className="form-label">Data de Nascimento:</label>
+        <input className="form-input" type="date" name="dataNascimento" value={formData.dataNascimento} onChange={handleDateChange} required />
 
-        <label>Senha (opcional):</label>
-        <input
-          type="password"
-          name="senhaHash"
-          value={formData.senhaHash}
-          onChange={handleChange}
-        />
+        <label className="form-label">Senha (opcional):</label>
+        <input className="form-input" type="password" name="senhaHash" value={formData.senhaHash} onChange={handleChange} />
 
-        <label>
-          <input
-            type="checkbox"
-            name="isAdmin"
-            checked={formData.isAdmin}
-            onChange={handleChange}
-          />
+        <label className="form-label form-checkbox">
+          <input type="checkbox" name="isAdmin" checked={formData.isAdmin} onChange={handleChange} />
           Usuário administrador
         </label>
 
-        <button type="submit">Atualizar Usuário</button>
+        <button className="form-button" type="submit">Atualizar Usuário</button>
       </form>
     </div>
+
   );
 };
 

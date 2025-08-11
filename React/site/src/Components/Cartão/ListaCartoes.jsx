@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import creditCardType from "credit-card-type";
 
-function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
+function ListaCartoes({ usuarioId, atualizar, onAtualizar, onSelecionar, mostrarTextoProtecao = true }) {
   const [cartoes, setCartoes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
   const [deletandoId, setDeletandoId] = useState(null);
   const [modalAberto, setModalAberto] = useState(false);
   const [cartaoParaExcluir, setCartaoParaExcluir] = useState(null);
-
-  // Estado para forçar atualização
-
+  const [cartaoSelecionadoId, setCartaoSelecionadoId] = useState(null);
 
   useEffect(() => {
     async function fetchCartoes() {
       setLoading(true);
       setErro(null);
-
       try {
         const response = await fetch(`https://artenza.onrender.com/Cartao/usuario/${usuarioId}`);
         if (!response.ok) {
@@ -34,12 +31,11 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
     if (usuarioId) {
       fetchCartoes();
     }
-  }, [usuarioId, atualizar]); 
+  }, [usuarioId, atualizar]);
 
   const mascararNumero = (num) => {
     if (!num || num.length < 4) return num;
-    const ultimos4 = num.slice(-4);
-    return "**** **** **** " + ultimos4;
+    return "**** **** **** " + num.slice(-4);
   };
 
   const pegarBandeira = (num) => {
@@ -75,7 +71,7 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
     setCartaoParaExcluir(null);
   };
 
-   const confirmarExclusao = async () => {
+  const confirmarExclusao = async () => {
     if (!cartaoParaExcluir) return;
 
     setDeletandoId(cartaoParaExcluir.id);
@@ -89,7 +85,6 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
       if (!response.ok) {
         throw new Error(`Erro ao deletar cartão: ${response.status}`);
       }
-
       if (onAtualizar) {
         onAtualizar();
       }
@@ -98,6 +93,13 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
     } finally {
       setDeletandoId(null);
       setCartaoParaExcluir(null);
+    }
+  };
+
+  const handleSelecionar = (cartao) => {
+    setCartaoSelecionadoId(cartao.id);
+    if (onSelecionar) {
+      onSelecionar(cartao);
     }
   };
 
@@ -112,8 +114,17 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
           const bandeira = pegarBandeira(cartao.numeroCartao);
           return (
             <li key={cartao.id} className="item-cartao">
-              <span> <p className="bandeira">{logoBandeira(bandeira)}</p>
-                <p>{mascararNumero(cartao.numeroCartao)}</p></span>
+              <input
+                type="radio"
+                name="cartaoSelecionado"
+                value={cartao.id}
+                checked={cartaoSelecionadoId === cartao.id}
+                onChange={() => handleSelecionar(cartao)}
+              />
+              <span>
+                <p className="bandeira">{logoBandeira(bandeira)}</p>
+                <p>{mascararNumero(cartao.numeroCartao)}</p>
+              </span>
               <button
                 onClick={() => abrirModalExcluir(cartao)}
                 disabled={deletandoId === cartao.id}
@@ -127,17 +138,20 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar }) {
           );
         })}
       </ul>
-      <div className="text-cartoes">
-        <h4><i class="fa-regular fa-circle-check"></i> As informações do seu cartão de crédito são protegidas</h4>
-        <p>tabelecemos parcerias com plataformas de pagamento para garantir que os detalhes do seu cartão de crédito sejam bem protegidos.</p>
-      </div>
+
+      {mostrarTextoProtecao && (
+        <div className="text-cartoes">
+          <h4><i className="fa-regular fa-circle-check"></i> As informações do seu cartão de crédito são protegidas</h4>
+          <p>tabelecemos parcerias com plataformas de pagamento para garantir que os detalhes do seu cartão de crédito sejam bem protegidos.</p>
+        </div>
+      )}
 
       {modalAberto && (
         <div className="modal-overlay" onClick={fecharModal}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <p>
               Deseja realmente excluir o cartão{" "}
-              <strong>{mascararNumero(cartaoParaExcluir?.numeroCartao)}</strong>?
+              <span>{mascararNumero(cartaoParaExcluir?.numeroCartao)}</span>?
             </p>
             <div className="modal-buttons">
               <button className="cancel" onClick={fecharModal}>

@@ -13,9 +13,9 @@ const AdicionarCupom = () => {
     e.preventDefault();
 
     const novoCupom = {
-      Codigo: codigo,               // Maiúscula no início
-      Valor: parseFloat(desconto),  // Maiúscula no início
-      Ativo: ativo                  // Maiúscula no início
+      Codigo: codigo,
+      Valor: parseFloat(desconto),
+      Ativo: ativo
     };
 
     try {
@@ -43,18 +43,19 @@ const AdicionarCupom = () => {
     <div className="container-dashboard">
       <SideBar />
       <div className="admin-painel">
-        <h2 className="title">Adicionar Novo Cupom</h2>
+        <h2 className="form-title">Adicionar Novo Cupom</h2>
 
         {mensagem && (
-          <p style={{ color: mensagem.includes("sucesso") ? "green" : "red" }}>
+          <p className={`form-message ${mensagem.includes("sucesso") ? "success" : "error"}`}>
             {mensagem}
           </p>
         )}
 
-        <form className="form-endereco" onSubmit={handleSubmit}>
-          <div className="form-group-endereco">
-            <label htmlFor="codigo">Código do Cupom:</label>
+        <form className="form-container" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label" htmlFor="codigo">Código do Cupom:</label>
             <input
+              className="form-input"
               type="text"
               id="codigo"
               value={codigo}
@@ -64,9 +65,10 @@ const AdicionarCupom = () => {
             />
           </div>
 
-          <div className="form-group-endereco">
-            <label htmlFor="desconto">Desconto (%):</label>
+          <div className="form-group">
+            <label className="form-label" htmlFor="desconto">Desconto (%):</label>
             <input
+              className="form-input"
               type="number"
               id="desconto"
               value={desconto}
@@ -79,9 +81,9 @@ const AdicionarCupom = () => {
             />
           </div>
 
-          <div className="form-group-endereco">
-            <label>Status:</label>
-            <div>
+          <div className="form-group">
+            <label className="form-label">Status:</label>
+            <div className="form-radio-group">
               <label>
                 <input
                   type="radio"
@@ -91,7 +93,7 @@ const AdicionarCupom = () => {
                 />
                 Ativo
               </label>
-              <label style={{ marginLeft: "20px" }}>
+              <label>
                 <input
                   type="radio"
                   value={false}
@@ -103,7 +105,7 @@ const AdicionarCupom = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn-salvar">
+          <button type="submit" className="form-button">
             Salvar Cupom
           </button>
         </form>

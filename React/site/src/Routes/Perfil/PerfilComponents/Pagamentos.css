@@ -115,6 +115,46 @@
   z-index: 9999;
 }
 
+.pagamento-container .modal-overlay .modal-container p{
+  margin-bottom: 10px;
+}
+
+.pagamento-container .modal-overlay .modal-container .modal-buttons{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.pagamento-container .modal-overlay .modal-container .modal-buttons button{
+  width: 100px;
+  padding: 8px;
+  border: none;
+  background-color: #222;
+  border-radius: 25px;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.pagamento-container .modal-overlay .modal-container .modal-buttons button:hover{
+  opacity: 0.9;
+  transition: 0.4s;
+}
+
+.pagamento-container .modal-overlay .modal-container .modal-buttons button:nth-child(2){
+  background-color: transparent;
+  color: rgb(216, 17, 17);
+  border: 2px solid rgb(216, 17, 17);
+}
+
+
+.pagamento-container .modal-overlay .modal-container .modal-buttons button:nth-child(2):hover{
+  background-color: rgb(216, 17, 17);
+  color: #fff;
+  transition: 0.4s;
+}
+
 .pagamento-container .add-cartao-form {
   flex: 1;
   max-width: 400px;
