@@ -1,0 +1,77 @@
+
+
+.modal-backdrop-end .lista-enderecos {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  padding: 10px 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-backdrop-end .endereco-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
+  padding: 10px 10px 0 10px;
+  border-top: 1px solid #99999991;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border-radius: 5px;
+}
+
+.modal-backdrop-end .endereco-card:nth-child(1) {
+  border: none;
+}
+
+.modal-backdrop-end .endereco-card:hover {
+  background-color: #f7f7f7;
+  border-color: #111;
+}
+
+.modal-backdrop-end .endereco-card.ativo {
+  border: 2px solid #111;
+  background-color: #eaeaea;
+}
+
+.modal-backdrop-end .endereco-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #222;
+}
+
+.modal-backdrop-end .endereco-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.modal-backdrop-end .endereco-header h4 {
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.modal-backdrop-end small {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.modal-backdrop-end button {
+  margin-top: 15px;
+  padding: 7px 14px;
+  cursor: pointer;
+  background-color: #111;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 3px 3px 12px #5e5d5dc9;
+  transition: background-color 0.3s ease;
+}
+
+.modal-backdrop-end button:hover {
+  background-color: #333;
+}

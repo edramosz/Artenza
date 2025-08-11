@@ -114,14 +114,15 @@ function ListaCartoes({ usuarioId, atualizar, onAtualizar, onSelecionar, mostrar
           const bandeira = pegarBandeira(cartao.numeroCartao);
           return (
             <li key={cartao.id} className="item-cartao">
-              <input
-                type="radio"
-                name="cartaoSelecionado"
-                value={cartao.id}
-                checked={cartaoSelecionadoId === cartao.id}
-                onChange={() => handleSelecionar(cartao)}
-              />
               <span>
+                <input
+                  type="radio"
+                  name="cartaoSelecionado"
+                  value={cartao.id}
+                  checked={cartaoSelecionadoId === cartao.id}
+                  onChange={() => handleSelecionar(cartao)}
+                />
+
                 <p className="bandeira">{logoBandeira(bandeira)}</p>
                 <p>{mascararNumero(cartao.numeroCartao)}</p>
               </span>

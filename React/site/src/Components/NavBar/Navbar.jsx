@@ -23,11 +23,8 @@ const Navbar = () => {
     { id: 1, url: "/", label: "Home" },
     { id: 2, url: "/masculino", label: "Masculino" },
     { id: 3, url: "/feminino", label: "Feminino" },
-    { id: 4, url: "/acessorios", label: "Acessórios" },
-    { id: 5, url: "/novidades", label: "Novidades" },
-    { id: 6, url: "/promocoes", label: "Promoções" },
-    { id: 7, url: "/contato", label: "Contato" },
-    { id: 8, url: "/sobre", label: "Sobre" },
+    { id: 4, url: "/contato", label: "Contato" },
+    { id: 5, url: "/sobre", label: "Sobre" },
   ];
 
   const carregarDadosUsuario = () => {

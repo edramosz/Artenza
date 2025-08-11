@@ -7,9 +7,9 @@ const Flag = () => {
 
   let bgImage = 'url("/img/fundo-default.png")';
   if (location.pathname.includes('masculino')) {
-    bgImage = ' url("../../../public/img/fundo.png")';
+    bgImage = ' url("../../../public/img/masculino.jpg")';
   } else if (location.pathname.includes('feminino')) {
-    bgImage = 'url("/img/fundo-feminino.png")';
+    bgImage = 'url("/img/feminino.jpg")';
   }
 
   return (

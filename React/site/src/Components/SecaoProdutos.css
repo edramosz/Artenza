@@ -8,13 +8,16 @@
   font-weight: 700;
   display: flex;
   justify-content: center;
+  padding-bottom: 50px;
 
 }
 
 .secao-titulo {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin-bottom: 20px;
   text-transform: uppercase;
+  font-weight: 600;
+  margin-left: 5%;
 }
 
 .secao-prod .secao-produtos {
