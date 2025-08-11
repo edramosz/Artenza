@@ -3,7 +3,6 @@ import "./FinalizarPedido.css";
 import ListaCartoes from "../../Components/Cartão/ListaCartoes";
 
 function FinalizarPedido() {
-  // Estados principais
   const [usuario, setUsuario] = useState(null);
   const [endereco, setEndereco] = useState(null);
   const [produtos, setProdutos] = useState([]);
@@ -13,7 +12,7 @@ function FinalizarPedido() {
   const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [cartaoSelecionado, setCartaoSelecionado] = useState(null);
   const [parcelamento, setParcelamento] = useState(1);
-  const [step, setStep] = useState(1); // controle do step atual
+  const [step, setStep] = useState(1);
 
   const email = localStorage.getItem("email");
   const nomeCompleto = localStorage.getItem("nomeCompletoUser");
@@ -27,29 +26,34 @@ function FinalizarPedido() {
     }
   }, [nomeCompleto]);
 
-  // Carregamento dos dados ao abrir a página
   useEffect(() => {
     const carregarDados = async () => {
       try {
+        // Buscar usuário
         const resUsuario = await fetch(`https://artenza.onrender.com/Usuario/por-email/${email}`);
+        if (!resUsuario.ok) throw new Error("Erro ao buscar usuário");
         const usuarioData = await resUsuario.json();
+        console.log("Dados do usuário:", usuarioData);
         setUsuario(usuarioData);
 
+        // Buscar endereços
         const resEndereco = await fetch(`https://artenza.onrender.com/Endereco/por-usuario/${usuarioData.id}`);
+        if (!resEndereco.ok) throw new Error("Erro ao buscar endereços");
         const enderecosData = await resEndereco.json();
+        console.log("Endereços do usuário:", enderecosData);
         const enderecoAtivo = enderecosData.find(e => e.ativo === true);
-        if (enderecoAtivo) {
-          setEndereco(enderecoAtivo);
-        } else {
-          setEndereco(null);
-          console.warn("Nenhum endereço ativo encontrado para o usuário.");
-        }
+        console.log("Endereço ativo:", enderecoAtivo);
+        setEndereco(enderecoAtivo || null);
 
+        // Buscar produtos
         const resProdutos = await fetch("https://artenza.onrender.com/Produto");
+        if (!resProdutos.ok) throw new Error("Erro ao buscar produtos");
         const listaProdutos = await resProdutos.json();
         setProdutos(listaProdutos);
 
+        // Buscar carrinho e filtrar itens do usuário
         const resCarrinho = await fetch("https://artenza.onrender.com/Carrinho");
+        if (!resCarrinho.ok) throw new Error("Erro ao buscar carrinho");
         const listaCarrinho = await resCarrinho.json();
 
         const selecionadosIds = JSON.parse(localStorage.getItem("itensSelecionados") || "[]");
@@ -63,7 +67,9 @@ function FinalizarPedido() {
       }
     };
 
-    carregarDados();
+    if (email) {
+      carregarDados();
+    }
   }, [email]);
 
   const getProduto = (idProduto) => produtos.find(p => p.id === idProduto) || {};
@@ -73,7 +79,9 @@ function FinalizarPedido() {
     return acc + (produto.preco || 0) * item.quantidade;
   }, 0);
 
-  // Função para avançar para o próximo step, com validação simples
+  const desconto = 0;
+  const totalComDesconto = total * (1 - desconto);
+
   const irParaProximoStep = () => {
     if (step === 1 && !endereco) {
       alert("Selecione ou cadastre um endereço.");
@@ -90,54 +98,68 @@ function FinalizarPedido() {
     if (step > 1) setStep(step - 1);
   };
 
-  // Depois do cálculo do total, antes do finalizarPedido:
-  const desconto = 0;
-  const totalComDesconto = total * (1 - desconto);
-
   const finalizarPedido = async () => {
     if (enviando) return;
 
-    if (!usuario || !endereco || itensSelecionados.length === 0) {
-      alert("Dados incompletos.");
+    // IDs do usuário e endereço do state ou localStorage
+    const usuarioId = usuario?.id || localStorage.getItem("idUsuario");
+    const enderecoId = endereco?.id || localStorage.getItem("idEndereco");
+
+    // Logs detalhados para debug
+    console.log("localStorage idUsuario:", localStorage.getItem("idUsuario"));
+    console.log("localStorage idEndereco:", localStorage.getItem("idEndereco"));
+    console.log("state usuario:", usuario);
+    console.log("state endereco:", endereco);
+    console.log("usuarioId antes validação:", usuarioId);
+    console.log("enderecoId antes validação:", enderecoId);
+
+    const usuarioIdValid = usuarioId && usuarioId !== "null" && usuarioId !== "undefined" ? usuarioId : null;
+    const enderecoIdValid = enderecoId && enderecoId !== "null" && enderecoId !== "undefined" ? enderecoId : null;
+
+    console.log("usuarioId validado:", usuarioIdValid);
+    console.log("enderecoId validado:", enderecoIdValid);
+
+    if (!usuarioIdValid || !enderecoIdValid) {
+      alert("Usuário ou endereço não carregados corretamente. Recarregue a página e tente novamente.");
       return;
     }
 
-    // Preparar array produtos com campos corretos
+    if (itensSelecionados.length === 0) {
+      alert("Nenhum item selecionado para venda.");
+      return;
+    }
+
+    // Preparar array de produtos para venda
     const produtosVenda = itensSelecionados.map(item => {
       const produto = getProduto(item.idProduto);
       return {
-        id: item.id,  // obrigatório para o backend
+        id: item.id,
         produtoId: String(item.idProduto),
         quantidade: item.quantidade > 0 ? item.quantidade : 1,
         precoUnitario: produto.preco > 0 ? produto.preco : 0.01
       };
     });
 
-
-    // Somar total com base nos produtos preparados
-    const total = produtosVenda.reduce(
+    const totalVenda = produtosVenda.reduce(
       (acc, p) => acc + p.precoUnitario * p.quantidade,
       0
     );
 
-    const desconto = 0; // ajustar se tiver desconto
-    const totalComDesconto = total * (1 - desconto);
+    const totalComDescontoVenda = totalVenda * (1 - desconto);
 
-    // Construir objeto venda com dados corretos
     const venda = {
-      usuarioId: String(usuario.id),
-      enderecoId: String(endereco.id),
+      usuarioId: String(usuarioIdValid),
+      enderecoId: String(enderecoIdValid),
       dataVenda: new Date().toISOString(),
-      valorTotal: totalComDesconto,
+      valorTotal: totalComDescontoVenda,
       produtos: produtosVenda
     };
 
-    console.log("Objeto venda:", venda);
+    console.log("Objeto venda final para enviar:", venda);
 
     setEnviando(true);
 
     try {
-      // Enviar venda
       const res = await fetch("https://artenza.onrender.com/Venda", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -152,7 +174,7 @@ function FinalizarPedido() {
       const vendaCriada = await res.json();
       console.log("Venda criada:", vendaCriada);
 
-      // Construir objeto transacao (data só com yyyy-mm-dd)
+      // Criar transação
       const transacao = {
         vendaId: vendaCriada.id,
         data: new Date().toISOString().split("T")[0],
@@ -162,7 +184,6 @@ function FinalizarPedido() {
 
       console.log("Objeto transacao:", transacao);
 
-      // Enviar transacao
       const resTransacao = await fetch("https://artenza.onrender.com/Transacao", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -174,7 +195,7 @@ function FinalizarPedido() {
         throw new Error(`Erro ao registrar transação: ${errorBody}`);
       }
 
-      // Limpar itens do carrinho no backend
+      // Remover itens do carrinho
       await Promise.all(
         itensSelecionados.map(item =>
           fetch(`https://artenza.onrender.com/Carrinho/${item.id}`, {
@@ -195,34 +216,27 @@ function FinalizarPedido() {
     }
   };
 
-
-
-
-  if (!usuario || !endereco || produtos.length === 0) {
-    return <p>Carregando informações do pedido...</p>;
-  }
-
   return (
     <div className="finalizar-container">
-      {/* Steps indicator simples */}
+      {/* Steps indicator */}
       <div className="steps-indicator">
         <button disabled={step === 1} onClick={() => setStep(1)}>1. Endereço</button>
         <button disabled={step === 2 || step < 2} onClick={() => setStep(2)}>2. Pagamento</button>
         <button disabled={step === 3 || step < 3} onClick={() => setStep(3)}>3. Revisão</button>
       </div>
 
-      {/* Step 1: Endereço */}
+      {/* Step 1 */}
       {step === 1 && (
         <div className="step endereco">
           <h2 className="title-endereco"><i className="fa-solid fa-location-dot"></i> Endereço de Entrega</h2>
           <div className="edereco-content">
             <div className="dados-endereco">
-              <p className="nome">{usuarioLogado.nome}</p>
-              <p><span>Rua:</span> {endereco.rua}</p>
-              <p><span>Número:</span> {endereco.numero}</p>
-              <p><span>Bairro:</span> {endereco.bairro}</p>
-              <p><span>Cidade:</span> {endereco.cidade}</p>
-              <p><span>CEP:</span> {endereco.cep}</p>
+              <p className="nome">{usuarioLogado?.nome || "Carregando..."}</p>
+              <p><span>Rua:</span> {endereco?.rua || "-"}</p>
+              <p><span>Número:</span> {endereco?.numero || "-"}</p>
+              <p><span>Bairro:</span> {endereco?.bairro || "-"}</p>
+              <p><span>Cidade:</span> {endereco?.cidade || "-"}</p>
+              <p><span>CEP:</span> {endereco?.cep || "-"}</p>
             </div>
             <div className="btns-endereco">
               <button>Alterar</button>
@@ -232,7 +246,7 @@ function FinalizarPedido() {
         </div>
       )}
 
-      {/* Step 2: Pagamento */}
+      {/* Step 2 */}
       {step === 2 && (
         <div className="step pagamento">
           <h2>Forma de Pagamento</h2>
@@ -274,7 +288,7 @@ function FinalizarPedido() {
                 usuarioId={usuario.id}
                 atualizar={false}
                 onSelecionar={(cartao) => setCartaoSelecionado(cartao)}
-                mostrarTextoProtecao={false} // para ocultar texto de proteção se desejar
+                mostrarTextoProtecao={false}
               />
             </div>
           )}
@@ -288,7 +302,7 @@ function FinalizarPedido() {
               >
                 {[...Array(12).keys()].map((i) => {
                   const parcelas = i + 1;
-                  const valorParcela = totalComDesconto / parcelas; // aqui também
+                  const valorParcela = totalComDesconto / parcelas;
                   return (
                     <option key={parcelas} value={parcelas}>
                       {parcelas}x de R$ {valorParcela.toFixed(2)}
@@ -299,7 +313,6 @@ function FinalizarPedido() {
             </div>
           )}
 
-
           <div className="botoes-navegacao">
             <button onClick={irParaStepAnterior}>Voltar</button>
             <button onClick={irParaProximoStep}>Próximo</button>
@@ -307,7 +320,7 @@ function FinalizarPedido() {
         </div>
       )}
 
-      {/* Step 3: Revisão e Finalização */}
+      {/* Step 3 */}
       {step === 3 && (
         <div className="step revisao">
           <h2>Revisar Pedido</h2>
@@ -338,7 +351,7 @@ function FinalizarPedido() {
           </div>
 
           <div className="resumo-final">
-            <h2>Total: R$ {valorTotal.toFixed(2)}</h2>
+            <h2>Total: R$ {valorTotal?.toFixed(2) || totalComDesconto.toFixed(2)}</h2>
             <button
               onClick={finalizarPedido}
               disabled={enviando || (metodoPagamento !== "pix" && !cartaoSelecionado)}
@@ -353,7 +366,7 @@ function FinalizarPedido() {
         </div>
       )}
     </div>
-  );
+  );  
 }
 
 export default FinalizarPedido;

@@ -8,6 +8,8 @@ namespace Core.Models.DTO_s.Create
 {
     public class CreateVenda
     {
+        public string UsuarioId { get; set; } 
+        public string EnderecoId { get; set; }
         public DateTime DataVenda { get; set; }
         public decimal ValorTotal { get; set; }
         public List<ItemVenda> Produtos { get; set; } = new List<ItemVenda>();

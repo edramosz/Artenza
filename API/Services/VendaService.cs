@@ -12,12 +12,16 @@ namespace API.Services
         private readonly FirebaseClient _firebaseClient;
         private readonly IMapper _mapper;
 
-        public VendaService(IConfiguration configuration, IMapper mapper)
+        private readonly IProdutoService _produtoService;
+
+        public VendaService(IConfiguration configuration, IMapper mapper, IProdutoService produtoService)
         {
             var firebaseUrl = configuration["Firebase:DatabaseUrl"];
             _firebaseClient = new FirebaseClient(firebaseUrl);
             _mapper = mapper;
+            _produtoService = produtoService;
         }
+
 
         // Obter todos os vendas
         public async Task<List<Venda>> GetVendasAsync()
@@ -46,20 +50,22 @@ namespace API.Services
             var venda = _mapper.Map<Venda>(vendaDto);
 
             var result = await _firebaseClient
-            .Child("vendas")
-            .PostAsync(venda);
+                .Child("vendas")
+                .PostAsync(venda);
 
-            // Atualizar o ID do venda com a chave gerada
             venda.Id = result.Key;
 
-            // Se quiser, você pode atualizar no Firebase também:
             await _firebaseClient
                 .Child("vendas")
                 .Child(venda.Id)
                 .PutAsync(venda);
 
+            // Atualiza estoque e quantidade vendida dos produtos vendidos
+            await _produtoService.AtualizarEstoqueEQuantidadeVendidaAsync(venda.Produtos);
+
             return venda;
         }
+
 
         // Atualizar um venda pelo ID
         //public async Task UpdateVendaAsync(string id, Venda venda)
