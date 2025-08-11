@@ -39,6 +39,7 @@ import Busca from './Components/Busca';
 import Sobre from './Routes/Sobre/Sobre';
 import Contato from './Routes/Contato/Contato';
 import { RequireAuth, RequireAdmin, RequireNoAuth } from './Routes/ProtecaoPastas/RotaProtegida';
+import EsqueceuSenha from './Components/EsqueceuSenha';
 
 
 
@@ -92,6 +93,7 @@ function AppContent() {
         <Route element={<RequireNoAuth />}>
           <Route path="/Cadastro" element={<Cadastro />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/esqueceu-senha" element={<EsqueceuSenha />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
