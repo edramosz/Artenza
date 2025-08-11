@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import NavProfile from './NavProfile';
-import defaultProfile from '../../../public/img/userDefault.png'
+import defaultProfile from '../../../public/img/userDefault.png';
 import './Perfil.css';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
-
 const Perfil = () => {
-  // Estado que guarda os dados do usuário exibidos no perfil
   const [usuario, setUsuario] = useState({
     nome: '',
     email: '',
@@ -17,29 +13,26 @@ const Perfil = () => {
     perfilUrl: ''
   });
 
-  // Estado para controlar se o perfil está em modo de edição ou visualização
   const [editando, setEditando] = useState(false);
-
-  // Estado para controlar os valores do formulário de edição
   const [form, setForm] = useState({
     nome: '',
     telefone: '',
     dataNascimento: ''
   });
-
-  // Estado para mensagens de erro de validação
   const [erros, setErros] = useState({});
-
-  // Estado para mensagem de sucesso após salvar
   const [mensagemSucesso, setMensagemSucesso] = useState('');
-
-  // Estado para controle de carregamento durante requisições
   const [carregando, setCarregando] = useState(false);
 
-  // Função para atualizar somente a imagem do perfil via PATCH na API
+  // Modal redefinir senha
+  const [mostrarModalSenha, setMostrarModalSenha] = useState(false);
+  const [stepSenha, setStepSenha] = useState(1);
+  const [senhaAtual, setSenhaAtual] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [erroSenha, setErroSenha] = useState('');
+
   const atualizarPerfilImagem = async (novoUsuario) => {
     const id = localStorage.getItem("idUsuario");
-
     try {
       const response = await fetch(`https://artenza.onrender.com/Usuario/${id}/perfil`, {
         method: "PATCH",
@@ -52,7 +45,6 @@ const Perfil = () => {
         console.error("Erro ao atualizar imagem de perfil:", erro);
         return false;
       }
-
       return true;
     } catch (error) {
       console.error("Erro ao fazer PATCH do perfil:", error);
@@ -60,10 +52,8 @@ const Perfil = () => {
     }
   };
 
-  // Função para tratar a edição da imagem do perfil: faz upload na Cloudinary e atualiza a URL no backend
   const editImage = async (files) => {
     if (!files || files.length === 0) return;
-
     try {
       const file = files[0];
       const formData = new FormData();
@@ -71,7 +61,6 @@ const Perfil = () => {
       formData.append("upload_preset", "Artenza");
       formData.append("cloud_name", "drit350g5");
 
-      // Envia a imagem para Cloudinary
       const res = await fetch("https://api.cloudinary.com/v1_1/drit350g5/image/upload", {
         method: "POST",
         body: formData
@@ -80,30 +69,24 @@ const Perfil = () => {
       const data = await res.json();
       const novaUrl = data.secure_url;
 
-      // Prepara o objeto usuário para atualizar somente a imagem
       const novoUsuario = {
         nome: usuario.nome,
         telefone: usuario.telefone,
         perfilUrl: novaUrl
       };
 
-      // Atualiza a imagem no backend
       await atualizarPerfilImagem(novoUsuario);
-
-      // Dispara um evento customizado para recarregar os dados do perfil após atualização
       window.dispatchEvent(new Event("perfilAtualizado"));
     } catch (err) {
       console.error("Erro ao fazer upload da imagem:", err);
     }
   };
 
-  // Atualiza o estado do formulário ao digitar nos inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Valida os campos do formulário
   const validarCampos = () => {
     const novosErros = {};
     if (!form.nome.trim()) novosErros.nome = "O nome é obrigatório.";
@@ -113,7 +96,6 @@ const Perfil = () => {
     return Object.keys(novosErros).length === 0;
   };
 
-  // Função para salvar as alterações feitas no perfil
   const salvarEdicao = async (e) => {
     e.preventDefault();
     if (!validarCampos()) return;
@@ -169,12 +151,69 @@ const Perfil = () => {
         setMensagemSucesso("");
       }, 3000);
 
-
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
       setErros({ geral: "Erro ao atualizar." });
     } finally {
       setCarregando(false);
+    }
+  };
+
+  const verificarSenhaAtual = async () => {
+    const id = localStorage.getItem("idUsuario");
+    try {
+      const res = await fetch(`https://artenza.onrender.com/Usuario/${id}`);
+      const user = await res.json();
+
+      if (senhaAtual === user.senhaHash) {
+        setErroSenha('');
+        setStepSenha(2);
+      } else {
+        setErroSenha('Senha atual incorreta.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErroSenha('Erro ao verificar senha.');
+    }
+  };
+
+  const salvarNovaSenha = async () => {
+    if (novaSenha !== confirmarSenha) {
+      setErroSenha('As senhas não coincidem.');
+      return;
+    }
+
+    const id = localStorage.getItem("idUsuario");
+
+    try {
+      const resGet = await fetch(`https://artenza.onrender.com/Usuario/${id}`);
+      const usuarioExistente = await resGet.json();
+
+      const corpoCompleto = {
+        ...usuarioExistente,
+        senhaHash: novaSenha
+      };
+
+      const res = await fetch(`https://artenza.onrender.com/Usuario/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(corpoCompleto),
+      });
+
+      if (!res.ok) {
+        throw new Error("Erro ao atualizar senha");
+      }
+
+      alert('Senha alterada com sucesso!');
+      setMostrarModalSenha(false);
+      setStepSenha(1);
+      setSenhaAtual('');
+      setNovaSenha('');
+      setConfirmarSenha('');
+      setErroSenha('');
+    } catch (err) {
+      console.error(err);
+      setErroSenha('Erro ao alterar senha.');
     }
   };
 
@@ -224,7 +263,7 @@ const Perfil = () => {
   }, []);
 
   return (
-    <div className="perfil-page-main">
+    <div className="perfil-page-main perfil-page-main-user">
       <NavProfile />
       <div className="perfil-container">
         <div className="perfil-info">
@@ -233,87 +272,32 @@ const Perfil = () => {
             <h3>Gerenciar sua conta</h3>
           </div>
           <div className={`perfil-detalhes ${editando ? 'editando' : ''}`}>
-            {editando ? (
-              <form className='form-perfil' onSubmit={salvarEdicao}>
-                <div className='perfil-edit'>
-                  <label>Nome:</label>
-                  <input
-                    name="nome"
-                    value={form.nome}
-                    onChange={handleChange}
-                    placeholder='Altere seu nome'
-                  />
-                  {erros.nome && <p className="erro-campo">{erros.nome}</p>}
-                </div>
-
-                <div className='perfil-edit'>
-                  <label>Telefone:</label>
-                  <input
-                    name="telefone"
-                    value={form.telefone}
-                    onChange={handleChange}
-                    placeholder='Altere seu telefone'
-                  />
-                  {erros.telefone && <p className="erro-campo">{erros.telefone}</p>}
-                </div>
-
-                <div className='perfil-edit'>
-                  <label>Data de Nascimento:</label>
-                  <input
-                    name="dataNascimento"
-                    type="date"
-                    value={form.dataNascimento}
-                    onChange={handleChange}
-                  />
-                  {erros.dataNascimento && <p className="erro-campo">{erros.dataNascimento}</p>}
-                </div>
-
-                {erros.geral && <p className="erro-campo">{erros.geral}</p>}
-
-
-                <div className='perfil-actions'>
-                  {mensagemSucesso && <p className="mensagem-sucesso">{mensagemSucesso}</p>}
-                  <div className='btns-edit'>
-                    <button
-                      className="btn-salvar"
-                      type="submit"
-                      disabled={carregando}
-                    >
-                      {carregando ? 'Salvando...' : 'Salvar'}
-                    </button>
-                    <button
-                      type="button"
-                      id="btn-cancelar"
-                      onClick={() => setEditando(false)}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              </form>
-            ) : (
+            {!editando ? (
               <>
                 <div className="perfil-info-container">
                   <div className="form-group-hero">
                     <div className="form-group-perfil">
                       <label>Nome:</label>
-                      <div className='group-prop'> {usuario.nome}</div>
+                      <div className='group-prop'>{usuario.nome}</div>
                     </div>
                     <div className="form-group-perfil">
                       <label>Email:</label>
-                      <div className='group-prop'> {usuario.email}</div>
+                      <div className='group-prop'>{usuario.email}</div>
                     </div>
                     <div className="form-group-perfil">
                       <label>Telefone:</label>
-                      <div className='group-prop'> {usuario.telefone}</div>
+                      <div className='group-prop'>{usuario.telefone}</div>
+                    </div>
+                    <div className="form-group-perfil redefinir-senha">
+                      <button type="button" className="btn-redefinir-senha" onClick={() => setMostrarModalSenha(true)}>
+                        Redefinir Senha
+                      </button>
                     </div>
                     <div className="form-group-nasc">
-                      <label >Data de Nascimento:</label>
-                      <div className='data-prop' > {usuario.dataNascimento || '---'}</div>
+                      <label>Data de Nascimento:</label>
+                      <div className='data-prop'>{usuario.dataNascimento || '---'}</div>
                     </div>
                   </div>
-
-
                   <div className="perfil-actions">
                     <button
                       className="btn-editar"
@@ -326,48 +310,88 @@ const Perfil = () => {
                         setEditando(true);
                       }}
                     >
-                      <i class="fa-solid fa-pencil"></i> Editar
+                      Editar
                     </button>
                   </div>
                 </div>
-
                 <div className="data-perfil">
                   <label>Data de Cadastro:</label>
                   <p>{usuario.dataCadastro || '---'}</p>
                 </div>
               </>
+            ) : (
+              <form className='form-perfil' onSubmit={salvarEdicao}>
+                <div className='perfil-edit'>
+                  <label>Nome:</label>
+                  <input name="nome" value={form.nome} onChange={handleChange} />
+                  {erros.nome && <p className="erro-campo">{erros.nome}</p>}
+                </div>
+                <div className='perfil-edit'>
+                  <label>Telefone:</label>
+                  <input name="telefone" value={form.telefone} onChange={handleChange} />
+                  {erros.telefone && <p className="erro-campo">{erros.telefone}</p>}
+                </div>
+                <div className='perfil-edit'>
+                  <label>Data de Nascimento:</label>
+                  <input name="dataNascimento" type="date" value={form.dataNascimento} onChange={handleChange} />
+                  {erros.dataNascimento && <p className="erro-campo">{erros.dataNascimento}</p>}
+                </div>
+                {erros.geral && <p className="erro-campo">{erros.geral}</p>}
+                <div className='perfil-actions'>
+                  {mensagemSucesso && <p className="mensagem-sucesso">{mensagemSucesso}</p>}
+                  <div className='btns-edit'>
+                    <button className="btn-salvar" type="submit" disabled={carregando}>
+                      {carregando ? 'Salvando...' : 'Salvar'}
+                    </button>
+                    <button type="button" id="btn-cancelar" onClick={() => setEditando(false)}>Cancelar</button>
+                  </div>
+                </div>
+              </form>
             )}
           </div>
         </div>
         <div className="perfil-photo">
-            <div className="perfil-img-wrapper">
-              <img
-                src={usuario.perfilUrl || defaultProfile}
-                alt="Foto de Perfil"
-                className="perfil-img"
-                onError={(e) => e.currentTarget.src = defaultProfile}
-              />
-
-              <button
-                  onClick={() => document.getElementById('inputFile').click()}
-                  className="btn-edit-img"
-                  title="Alterar foto de perfil"
-                >
-                  Selecionar a imagem
-                </button> 
-              <input
-                id="inputFile"
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={e => editImage(e.target.files)}
-              />
-              
-              <p className="img-extensao">Extensão de arquivo: JPEG, PNG</p>
-
-            </div>
+          <div className="perfil-img-wrapper">
+            <img src={usuario.perfilUrl || defaultProfile} alt="Foto de Perfil" className="perfil-img" onError={(e) => e.currentTarget.src = defaultProfile} />
+            <button onClick={() => document.getElementById('inputFile').click()} className="btn-edit-img">Selecionar a imagem</button>
+            <input id="inputFile" type="file" accept="image/*" style={{ display: 'none' }} onChange={e => editImage(e.target.files)} />
+            <p className="img-extensao">Extensão de arquivo: JPEG, PNG</p>
+          </div>
         </div>
       </div>
+
+      {/* Modal Redefinir Senha */}
+      {mostrarModalSenha && (
+        <div className="modal-senha-overlay">
+          <div className="modal-senha">
+            <h3>Redefinir Senha</h3>
+            {stepSenha === 1 && (
+              <>
+                <label>Digite sua senha atual:</label>
+                <input type="password" value={senhaAtual} onChange={(e) => setSenhaAtual(e.target.value)} placeholder="Senha atual" />
+                {erroSenha && <p className="erro-campo">{erroSenha}</p>}
+                <div className="modal-actions">
+                  <button onClick={() => setMostrarModalSenha(false)}>Cancelar</button>
+                  <button onClick={verificarSenhaAtual}>Avançar</button>
+                </div>
+              </>
+            )}
+            {stepSenha === 2 && (
+              <>
+                <label>Nova senha:</label>
+                <input type="password" value={novaSenha} onChange={(e) => setNovaSenha(e.target.value)} placeholder="Nova senha" />
+                <label>Confirmar nova senha:</label>
+                <input type="password" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} placeholder="Confirmar senha" />
+                {erroSenha && <p className="erro-campo">{erroSenha}</p>}
+                <div className="modal-actions">
+                  <button onClick={() => setStepSenha(1)}>Voltar</button>
+                  <button onClick={salvarNovaSenha}>Salvar</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
