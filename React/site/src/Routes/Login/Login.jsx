@@ -39,7 +39,7 @@ function Login() {
     try {
       const response = await fetch(`https://artenza.onrender.com/Usuario/por-email/${emailUsuario}`);
       if (!response.ok) throw new Error("Usuário não encontrado na API");
-          
+
       const usuario = await response.json();
       const { diaNascimento, mesNascimento, anoNascimento } = usuario;
       const dataNascimentoCompleta = `${anoNascimento}-${String(mesNascimento).padStart(2, '0')}-${String(diaNascimento).padStart(2, '0')}`;
@@ -47,6 +47,18 @@ function Login() {
 
       const nomes = usuario.nomeCompleto.trim().split(" ");
       const primeiroNome = nomes.length >= 2 ? `${nomes[0]} ${nomes[1]}` : nomes[0];
+
+      if (usuario.id) {
+        localStorage.setItem("idUsuario", usuario.id);
+      } else {
+        localStorage.removeItem("idUsuario");
+      }
+
+      if (usuario.idEndereco) {
+        localStorage.setItem("idEndereco", usuario.idEndereco);
+      } else {
+        localStorage.removeItem("idEndereco");
+      }
 
       localStorage.setItem("idUsuario", usuario.id);
       localStorage.setItem("idEndereco", usuario.idEndereco);
